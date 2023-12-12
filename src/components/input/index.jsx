@@ -9,9 +9,11 @@ const Input = ({
   onChange,
   onBlur,
   value,
+  min,
   maxLength,
-  minLength,
-  pattern,
+  inputMode,
+  disabled,
+  pattern={pattern}
 }) => {
   return (
     <>
@@ -25,8 +27,10 @@ const Input = ({
           name={name}
           onBlur={onBlur}
           value={value}
+          min={min}
           maxLength={maxLength}
-          minLength={minLength}
+          disabled={disabled}
+          inputMode={inputMode}
           pattern={pattern}
         />
       </div>

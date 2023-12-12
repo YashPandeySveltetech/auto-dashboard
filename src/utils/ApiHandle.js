@@ -1,9 +1,9 @@
-import { getCookie } from "cookies-next";
+// import { getCookie } from "cookies-next";
 import Toaster from "./toaster/Toaster";
 let status;
 const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
   console.log(endPoint, "endPoint");
-  const token = getCookie("access_token");
+  // const token = getCookie("access_token");
   const myHeaders = new Headers();
   console.log(endPoint, "endPoint");
 

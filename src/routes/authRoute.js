@@ -4,8 +4,8 @@ import LoginPage from "../pages/loginPage";
 // import { getLocalStorage } from "utils/localStorageUtils";
 
 const AuthRoute = () => {
-  // const token = getLocalStorage("token");
-  const token = true;
+  const token = localStorage.getItem("token");
+  // const token = true;
   if (token) {
     return <Outlet />;
   } else {
@@ -14,9 +14,9 @@ const AuthRoute = () => {
 };
 
 const PublicRoute = () => {
-  // const token = getLocalStorage("token");
-  const token = false;
-  if (token) {
+  const token = localStorage.getItem("token");
+  // const token = false;
+  if (!token) {
     return <LoginPage />;
   } else {
     return <Navigate to="/" />;

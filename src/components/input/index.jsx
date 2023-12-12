@@ -13,7 +13,7 @@ const Input = ({
   maxLength,
   inputMode,
   disabled,
-  pattern={pattern}
+  // pattern={pattern}
 }) => {
   return (
     <>
@@ -31,7 +31,7 @@ const Input = ({
           maxLength={maxLength}
           disabled={disabled}
           inputMode={inputMode}
-          pattern={pattern}
+          // pattern={pattern}
         />
       </div>
     </>

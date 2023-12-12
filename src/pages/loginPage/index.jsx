@@ -1,15 +1,17 @@
 /** @format */
 
-import React, { useState } from 'react';
-import { XLg } from 'react-bootstrap-icons';
-import Input from '../../components/input';
+import React, { useState } from "react";
+import { XLg } from "react-bootstrap-icons";
+import Input from "../../components/input";
 // import { apiHandler } from '../../services/axios';
 // import { sendOTP, verifyOTP } from '../../services/Login';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { ApiHandle } from "../../utils/ApiHandle";
+import { OTP_SEND, OTP_VERIFY } from "../../utils/constants";
+import Toaster from "../../utils/toaster/Toaster";
 
 function LoginPage() {
-
- const [loginWith, setLoginWith] = useState("email");
+  const [loginWith, setLoginWith] = useState("email");
   const [formValue, setFormValue] = useState({});
   const [isOtp, setIsOtp] = useState(false);
   const [verifyUser, setVerifyUser] = useState({});
@@ -31,58 +33,47 @@ function LoginPage() {
   };
   const SubmitOTP = async (e) => {
     e.preventDefault();
-	// apiHandler(() => verifyOTP({ payload: verifyUser }), {
-    //     onSuccess: (data) => {
-	// 		localStorage.setItem("ss_tkn",data?.data?.access)
-         
-    //     },
-    //     onError: (e) => {
-    //      console.log("eror")
-    //     },
-    //     final: () => {
-        
-    //     },
-    //   });
+    const res = await ApiHandle(OTP_VERIFY, verifyUser, "POST");
+    if (res.statusCode === 201) {
+		localStorage.setItem("token",res.data.access)
+      Toaster("success", "User Verify Successfully!");
+
+      return;
+    }
   };
- 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-	// apiHandler(() => sendOTP({ payload: formValue }), {
-    //     onSuccess: (data) => {
-	// 		setIsOtp(true);
-         
-    //     },
-    //     onError: (e) => {
-    //      console.log("eror")
-	// 	 setIsOtp(false);
-    //     },
-    //     final: () => {
-        
-    //     },
-    //   });
-   
-  };
+    const res = await ApiHandle(OTP_SEND, formValue, "POST");
+    if (res.statusCode === 201) {
+      setIsOtp(true);
+      Toaster("success", "OTP SENT Successfully!");
 
- 
+      return;
+    }
+  };
 
   const LoginWithMobile = () => (
     <>
       <div className="input-group mb-3 flex align-items-center ">
-	  <Input onChange={handleChange} label={"Mobile No."} type='text'  name="mobile_no"  
-            value={formValue?.mobile_no || ""}
-            disabled={isOtp}   min={6}
-            maxLength="10"
-            inputMode="numeric"/>
-
-     
+        <Input
+          onChange={handleChange}
+          label={"Mobile No."}
+          type="text"
+          name="mobile_no"
+          value={formValue?.mobile_no || ""}
+          disabled={isOtp}
+          min={6}
+          maxLength="10"
+          inputMode="numeric"
+        />
       </div>
 
       <div className="text-primary text-end">
         <button
           type="button"
           onClick={() => {
-            return setLoginWith("email"), setFormValue({}),setIsOtp(false);
+            return setLoginWith("email"), setFormValue({}), setIsOtp(false);
           }}
           className="btn btn-outline-primary"
         >
@@ -94,18 +85,21 @@ function LoginPage() {
   const LoginWithEmail = () => (
     <>
       <div className="input-group mb-3 flex align-items-center ">
-	  <Input onChange={handleChange} label={"Email"} type='email'  name="email"  
-           value={formValue?.email || ""}
-		   disabled={isOtp}/>
-
-      
+        <Input
+          onChange={handleChange}
+          label={"Email"}
+          type="email"
+          name="email"
+          value={formValue?.email || ""}
+          disabled={isOtp}
+        />
       </div>
 
       <div className="text-primary text-end">
         <button
           type="button"
           onClick={() => {
-            return setLoginWith("mobile"), setFormValue({}),setIsOtp(false)
+            return setLoginWith("mobile"), setFormValue({}), setIsOtp(false);
           }}
           className="btn btn-outline-primary"
         >
@@ -117,39 +111,44 @@ function LoginPage() {
 
   const Otp = () => (
     <div>
-      <div className="input-group mb-3 flex align-items-center">
-	  <Input   onChange={handleOTP} label={"Enter OTP"} type='number'  name="otp"  
-         value={verifyUser?.otp}
-		   disabled={isOtp} />
+      <div className="input-group mb-3 flex flex-col align-items-center">
+        <Input
+          onChange={handleOTP}
+          label={"Enter OTP"}
+          type="number"
+          name="otp"
+          value={verifyUser?.otp}
+        />
 
         <div className="col flex align-items-center justify-center">
-          <button type="submit" className="btn btn-primary my-3 ms-4 ">
-           Verify OTP
+          <button type="submit" className="btn  my-3 ms-4 ">
+            Verify OTP
           </button>
         </div>
       </div>
     </div>
   );
 
-
-	return (
-		<div className='bg-gradient-to-r from-cyan-300 to-purple-700 h-[100vh]  flex justify-center items-center w-[100%] '>
-			<div className='bg-white flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem]'>
-       
-				<div className='text-2xl font-extrabold	text-center '>Login</div>
-				<div className=' flex justify-center gap-5 flex-col'>
-				<form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
-          
+  return (
+    <div className="bgimg h-[100vh]  flex justify-center items-center w-[100%] ">
+      <div className="bg-white flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem]">
+        <div className="text-2xl font-extrabold	text-center ">Login</div>
+        <div className=" flex justify-center gap-5 flex-col">
+          <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
             {loginWith === "email"
               ? LoginWithEmail()
               : loginWith === "mobile"
               ? LoginWithMobile()
               : ""}
             <div className="input-group mb-3 flex align-items-center">
-			<Input   onChange={handleChange} label={"Password"} type='password'  name="password"  
-         value={formValue?.password || ""}
-		   disabled={isOtp} />
-             
+              <Input
+                onChange={handleChange}
+                label={"Password"}
+                type="password"
+                name="password"
+                value={formValue?.password || ""}
+                disabled={isOtp}
+              />
             </div>
             {isOtp ? (
               <>{Otp()}</>
@@ -157,7 +156,7 @@ function LoginPage() {
               <div className="flex align-items-end justify-center">
                 <button
                   type="submit"
-                  className="btn buttonColor my-3 ms-4 text-white"
+                  className="btn  my-3 ms-4 "
                   style={{
                     fontSize: "18px",
                   }}
@@ -167,15 +166,10 @@ function LoginPage() {
               </div>
             )}
           </form>
-
-				</div>
-				</div>
-				
-
-			
-			
-		</div>
-	);
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default LoginPage;

@@ -1,9 +1,14 @@
 // RegistrationPage.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import axios from "axios";
 import Input from "../../components/input"; // Adjust the path based on your file structure
 import DropDown from "../../components/dropdown";
-import { REGISTRATION } from "../../utils/constants";
+import {
+  GET_DISTRICT,
+  GET_POLICE_STATION_LIST,
+  GET_STATES,
+  REGISTRATION,
+} from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 
@@ -58,39 +63,40 @@ const RegistrationPage = () => {
     };
     const res = await ApiHandle(REGISTRATION, payload, "POST");
     if (res.statusCode === 200) {
-      //   const token = res?.responsePayload?.data?.accessToken;
       Toaster("success", "User Registered Successfully!");
-
       return;
     }
-
-    // try {
-    //   const response = await axios.post("YOUR_API_ENDPOINT", formData);
-    //   console.log("Registration successful:", response.data);
-    // } catch (error) {
-    //   console.error("Registration failed:", error.message);
-    // } finally {
-    //   setSubmitting(false);
-    // }
   };
 
-  //   useEffect(() => {
-  //     fetch("API_ENDPOINT_1")
-  //       .then((response) => response.json())
-  //       .then((data) => setDistrictOptions(data));
-
-  //     fetch("API_ENDPOINT_2")
-  //       .then((response) => response.json())
-  //       .then((data) => setStateOptions(data));
-
-  //     fetch("API_ENDPOINT_3")
-  //       .then((response) => response.json())
-  //       .then((data) => setPoliceStationOptions(data));
-
-  //     fetch("API_ENDPOINT_4")
-  //       .then((response) => response.json())
-  //       .then((data) => setReportingToOptions(data));
-  //   }, []);
+  useEffect(() => {
+    getStates();
+    getDistrict();
+    getPoliceStaionList();
+  }, []);
+  const getDistrict = async () => {
+    const res = await ApiHandle(GET_DISTRICT, {}, "GET");
+    if (res.statusCode === 200) {
+      const data = res?.responsePayload;
+      setDistrictOptions(data);
+      return;
+    }
+  };
+  const getPoliceStaionList = async () => {
+    const res = await ApiHandle(GET_POLICE_STATION_LIST, {}, "GET");
+    if (res.statusCode === 200) {
+      const data = res?.responsePayload;
+      setPoliceStationOptions(data);
+      return;
+    }
+  };
+  const getStates = async () => {
+    const res = await ApiHandle(GET_STATES, {}, "GET");
+    if (res.statusCode === 200) {
+      const data = res?.responsePayload;
+      setStateOptions(data);
+      return;
+    }
+  };
 
   const rankOptions = ["INSPECTOR", "SHO", "ACP", "DCP"];
 

@@ -15,9 +15,19 @@ const AppRoute = memo(() => {
       <Suspense fallback={"LOADING"}>
         <Routes>
           <Route element={<AuthRoute />}>
+		  {/* <Route path="/" element={<HomePage />} /> */}
+              <Route
+                path="/"
+                element={
+                  <Layout>
+                    <RequestForm />
+                  </Layout>
+                }
+              />
+           
             {/* //admin routes */}
 
-            <Route element={<RoleBaseRouting role={"admin"} />}>
+            {/* <Route element={<RoleBaseRouting role={"admin"} />}>
               <Route
                 path="/"
                 element={
@@ -26,14 +36,14 @@ const AppRoute = memo(() => {
                   </Layout>
                 }
               />
-            </Route>
+            </Route> */}
             {/* user|| police route */}
-            <Route element={<RoleBaseRouting role={"initiator"} />}>
+            {/* <Route element={<RoleBaseRouting role={"initiator"} />}>
               <Route path="/" element={<HomePage />} />
-            </Route>
+            </Route> */}
 
             {/* recomender route */}
-            <Route element={<RoleBaseRouting role={"recomender"} />}>
+            {/* <Route element={<RoleBaseRouting role={"recomender"} />}>
               <Route path="/" element={<HomePage />} />
               <Route
                 path="/request-form"
@@ -43,12 +53,12 @@ const AppRoute = memo(() => {
                   </Layout>
                 }
               />
-            </Route>
+            </Route> */}
 
             {/* approver route */}
-            <Route element={<RoleBaseRouting role={"approver"} />}>
+            {/* <Route element={<RoleBaseRouting role={"approver"} />}>
               <Route path="/" element={<HomePage />} />
-            </Route>
+            </Route> */}
           </Route>
           <Route element={<PublicRoute />}>
             <Route

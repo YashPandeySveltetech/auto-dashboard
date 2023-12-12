@@ -5,7 +5,7 @@ import LoginPage from "../pages/loginPage";
 
 const AuthRoute = () => {
   // const token = getLocalStorage("token");
-const token=true;
+  const token = true;
   if (token) {
     return <Outlet />;
   } else {
@@ -15,7 +15,7 @@ const token=true;
 
 const PublicRoute = () => {
   // const token = getLocalStorage("token");
-const token=false;
+  const token = false;
   if (token) {
     return <LoginPage />;
   } else {
@@ -23,4 +23,4 @@ const token=false;
   }
 };
 
-export  {AuthRoute,PublicRoute};
+export { AuthRoute, PublicRoute };

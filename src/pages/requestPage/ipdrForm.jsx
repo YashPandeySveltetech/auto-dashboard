@@ -42,14 +42,14 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
     list.splice(index, 1);
     setipdrMobileList(list);
   };
-  // imei_number
+  // imei
   const [ipdrImeiList, setipdrImeiList] = useState([
     {
       date_from: "",
       date_to: "",
       time_from: "",
       time_to: "",
-      imei_number: "",
+      imei: "",
       tsp:""
     },
   ]);
@@ -66,7 +66,7 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
     setipdrImeiList([
       ...ipdrImeiList,
       {
-        imei_number: "",
+        imei: "",
         date_from: "",
         date_to: "",
         time_from: "",
@@ -232,7 +232,7 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
       {ipdrImeiList.map((val, i) => (
         <>
           <div className="flex gap-5 items-center">
-            <Input label={"IMEI "} name="imei_number" onChange={(e) => ipdrimeiChange(e, i)}/>
+            <Input label={"IMEI "} name="imei" onChange={(e) => ipdrimeiChange(e, i)}/>
 
             {/* CDR DATE TIME */}
             {/* date  */}

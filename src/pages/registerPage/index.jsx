@@ -11,7 +11,7 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import "./style.css";
 const RegistrationPage = () => {
-  const [formData, setFormData] = useState({
+  const defaultFormaData={
     username: "",
     mobile_no: "",
     password: "",
@@ -22,19 +22,22 @@ const RegistrationPage = () => {
       district: "",
       state: "",
       police_station: "",
-    },
-  });
+    }}
+  
+  const [formData, setFormData] = useState(defaultFormaData);
   console.log(formData, "formData");
   const [districtOptions, setDistrictOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [policeStationOptions, setPoliceStationOptions] = useState([]);
-  const [reportingToOptions, setReportingToOptions] = useState([]);
+ 
   const [selectedRank, setSelectedRank] = useState("");
   const [userData, setUserData] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedReportingTo, setSelectedReportingTo] = useState("");
   const [userOptions, setUserOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
+ 
 
   const handleUserProfileChange = (e) => {
     const { name, value } = e.target;
@@ -85,7 +88,9 @@ const RegistrationPage = () => {
     e.preventDefault();
     setSubmitting(true);
     const res = await ApiHandle(REGISTRATION, formData, "POST");
-    if (res.statusCode === 200) {
+    if (res.statusCode === 201) {
+      setFormData(defaultFormaData)
+      setSelectedReportingTo("")
       Toaster("success", "User Registered Successfully!");
       return;
     }
@@ -93,20 +98,21 @@ const RegistrationPage = () => {
 
   useEffect(() => {
     getStates();
-    getDistrict();
-    getPoliceStaionList();
+    // getDistrict();
+    // getPoliceStaionList();
   }, []);
 
-  const getDistrict = async () => {
-    const res = await ApiHandle(GET_DISTRICT, {}, "GET");
+
+  const getDistrict = async (StateValue) => {
+    const res = await ApiHandle(`${GET_DISTRICT}?state_id=${StateValue}`, {}, "GET");
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
       setDistrictOptions(data);
       return;
     }
   };
-  const getPoliceStaionList = async () => {
-    const res = await ApiHandle(GET_POLICE_STATION_LIST, {}, "GET");
+  const getPoliceStaionList = async (DistrictValue) => {
+    const res = await ApiHandle(`${GET_POLICE_STATION_LIST}?district_id=${DistrictValue}`, {}, "GET");
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
       setPoliceStationOptions(data);
@@ -155,6 +161,8 @@ const RegistrationPage = () => {
             value={formData.username}
             maxLength={250}
             minLength={1}
+            star={true}
+            required={true}
           />
 
           <Input
@@ -166,6 +174,8 @@ const RegistrationPage = () => {
             maxLength={20}
             minLength={1}
             pattern="^\+?1?\d{9,15}$"
+            star={true}
+            required={true}
           />
 
           <Input
@@ -175,6 +185,8 @@ const RegistrationPage = () => {
             onChange={handleUserProfileChange}
             value={formData.password}
             minLength={6}
+            star={true}
+            required={true}
           />
 
           <Input
@@ -185,6 +197,8 @@ const RegistrationPage = () => {
             value={formData.email}
             maxLength={250}
             minLength={1}
+            star={true}
+            required={true}
           />
 
           <DropDown
@@ -203,6 +217,7 @@ const RegistrationPage = () => {
               options={rankOptions}
               onChange={handleReportingToSelect}
               value={selectedReportingTo}
+              name="selectedReportingTo"
             />
 
             {selectedReportingTo && (
@@ -212,25 +227,55 @@ const RegistrationPage = () => {
                 onChange={handleUserSelect}
                 value={selectedUser}
                 checkId={true}
+                name="user_profile.reporting_to"
               />
             )}
+
+          <DropDown
+              label="State"
+              options={stateOptions}
+              onChange={(e)=>{handleUserProfileChange(e);
+                e?.target?.value &&  getDistrict(e.target.value);      
+                setFormData((prev)=>({
+                  ...prev,
+                  user_profile: {
+                    ...prev.user_profile,
+                    "district": "",
+                    "police_station":""
+                  },
+                }));
+                setPoliceStationOptions([]);
+                
+              }}
+              value={formData.user_profile.state}
+              name="user_profile.state"
+              checkId={true}
+              star={true}
+              required={true}
+              
+            />
 
             <DropDown
               label="District"
               options={districtOptions}
-              onChange={handleUserProfileChange}
+              onChange={(e)=> {handleUserProfileChange(e);
+                e?.target?.value && getPoliceStaionList(e.target.value); 
+                setFormData((prev)=>({
+                  ...prev,
+                  user_profile: {
+                    ...prev.user_profile,
+                    "police_station":""
+                  },
+                }));
+              }}
               value={formData.user_profile.district}
               name="user_profile.district"
               checkId={true}
+              disabledSelect={!formData.user_profile.state}
+              star={true}
+              required={true}
             />
-            <DropDown
-              label="State"
-              options={stateOptions}
-              onChange={handleUserProfileChange}
-              value={formData.user_profile.state}
-              name="user_profile.state"
-              checkId={true}
-            />
+            
 
             <DropDown
               label="Police Station"
@@ -239,12 +284,15 @@ const RegistrationPage = () => {
               value={formData.user_profile.police_station}
               name="user_profile.police_station"
               checkId={true}
+              disabledSelect={!formData.user_profile.district}
+              star={true} 
+              required={true} 
             />
           </div>
 
           <button
             type="submit"
-            disabled={submitting}
+            // disabled={submitting}
             className="w-full p-2.5 mb-4 border border-gray-300 text-gray-900 rounded-lg bg-blue-500  cursor-pointer mt-4"
           >
             Register

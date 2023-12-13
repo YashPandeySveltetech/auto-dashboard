@@ -12,13 +12,21 @@ const Input = ({
   min,
   maxLength,
   inputMode,
-  disabled,
-  // pattern={pattern}
+  disabledSelect,
+  star,
+  required,
+  pattern
+ 
 }) => {
   return (
     <>
       <div>
+      <div className="flex">
         <label className="text-sm font-medium text-gray-900">{label}</label>
+        <span className={star ? "text-red-600" : ""}>
+              {star ? "*" : ""}
+            </span>
+      </div>
         <input
           type={type}
           placeholder={placeholder}
@@ -29,9 +37,10 @@ const Input = ({
           value={value}
           min={min}
           maxLength={maxLength}
-          disabled={disabled}
+          disabled={disabledSelect}
           inputMode={inputMode}
-          // pattern={pattern}
+          required={required}
+          pattern={pattern}
         />
       </div>
     </>

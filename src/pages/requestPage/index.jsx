@@ -9,14 +9,17 @@ import CAF_FORM from "./cafForm";
 import IPDR_FORM from "./ipdrForm";
 import TOWER_DUMP_FORM from "./towerdumpForm";
 import Input from "../../components/input";
+import { FORM_REQUEST } from "../../utils/constants";
+import { ApiHandle } from "../../utils/ApiHandle";
 
+// export class RequestForm extends Component {
 
 function RequestForm() {
   const [activeForm, setActiveForm] = useState({
     target_type:"",
     request_to_provide:""
   });
- 
+ let station_id=localStorage.getItem("p_station")
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
   const [apiPayload,setApiPayload]=useState({})
@@ -25,60 +28,10 @@ function RequestForm() {
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
   }, []);
   
-// CDRMOBILE HANDLEs
-let arry={"CELL_ID": "cell_id","IP_ADDRESS": "ip_port","MOBILE_NUMBER": "multiple_mobile","IMEI_NUMBER":"imei_number"}
-
-const [cdrMobileList, setCdrMobileList] = useState([
-  {
-    date_from: "",
-    date_to: "",
-    time_from: "",
-    time_to: "",
-    mobile_number: "",
-    tsp:""
-  },
-]);
-console.log(cdrMobileList,">>>>")
-const [cdrModel, setCdrModel] = useState({
-  // generic_target_type_val: "",
-  multiple_mobile: cdrMobileList,
-  // case_ref: "",
-  // case_type: "",
-});
-
-const cdrMobileInputChange = (e, index) => {
-  const { name, value } = e.target;
-
-  const list = [...cdrMobileList];
-  list[index][name] = value;
-  setCdrMobileList(list);
-};
-
-const cdrAddMobileClick = () => {
-  setCdrMobileList([
-    ...cdrMobileList,
-    {
-      mobile_number: "",
-      date_from: "",
-      date_to: "",
-      time_from: "",
-      time_to: "",
-    },
-  ]);
-};
-
-const cdrMobileRemoveClick = (index) => {
-  const list = [...cdrMobileList];
-  list.splice(index, 1);
-  setCdrMobileList(list);
-};
-useEffect(()=>{
-  setApiPayload({...apiPayload,form_request_for:{[arry[apiPayload?.target_type]]:cdrMobileList}})
-},[cdrMobileList])
 
   const formHandler = useCallback(() => {
     if (activeForm.request_to_provide === "CDR") {
-      return <CDR_FORM handleChange={handleChange} setApiPayload={setApiPayload} apiPayload={apiPayload} setActiveForm={setActiveForm} activeForm={activeForm} setCdrMobileList={setCdrMobileList} cdrMobileList={cdrMobileList} cdrMobileInputChange={cdrMobileInputChange} cdrAddMobileClick={cdrAddMobileClick} cdrMobileRemoveClick={cdrMobileRemoveClick} arry={arry}/>;
+      return <CDR_FORM handleChange={handleChange} setApiPayload={setApiPayload} apiPayload={apiPayload} setActiveForm={setActiveForm} activeForm={activeForm}/>;
     }
     if (activeForm.request_to_provide === "TOWER_DUMP") {
       return <TOWER_DUMP_FORM />;
@@ -93,25 +46,41 @@ useEffect(()=>{
 
 
   const handleChange=(e,callfrom,fromval)=>{
+    console.log(fromval,"::::")
 const {name,value}=e.target
 if(callfrom){
   setActiveForm({...activeForm,[callfrom]:fromval})
-  setApiPayload({...apiPayload,[callfrom]:fromval})
+  setApiPayload((prev)=>{return{...prev,[callfrom]:fromval}})
 }
 
 else{
 
-  setApiPayload({...apiPayload,sys_date:currentDate,sys_time:currentTime,[name]:value})
+  setApiPayload({...apiPayload, police_station:station_id ,sys_date:currentDate,sys_time:currentTime,[name]:value})
 }
   }
 
-console.log(apiPayload)
+
+// console.log(apiPayload)
+const handleSubmit=async(e)=>{
+  e.preventDefault();
+
+
+  const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
+  console.log(res,":::")
+  // if (res.statusCode === 201) {
+  //   setIsOtp(true);
+  //   Toaster("success", "OTP SENT Successfully!");
+
+  //   return;
+  // }
+
+}
 
   return (
     <>
 	  <form
                 action=""
-                // onSubmit={handleSubmit}
+                onSubmit={handleSubmit}
                
               >
       <div className="gap-5 flex flex-col">
@@ -211,19 +180,19 @@ console.log(apiPayload)
         {/* Slect TSP */}
         <div className="input-group mb-3 flex gap-5 items-center justify-start mt-5">
          
-          <div className="col-md-3 ms-5">
+          {/* <div className="col-md-3 ms-5">
             <input
               type="file"
               name="user_file"
               className="form-control"
               aria-describedby="basic-addon1"
               accept=".xlsx,.xls,.doc, .docx, .zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam, .xla,.xlw, .xlr, .csv"
-              //   onChange={setFile}
+                onChange={(e)=>handleChange(e,"user_file",e.target.files[0])}
             />
-          </div>
+          </div> */}
         </div>
         <div class="w-full mb-4">
-          <textarea className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"></textarea>
+          <textarea className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" name="brief_summary" onChange={handleChange}></textarea>
         </div>
         <div>
           <button className="text-white bg-blue-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">

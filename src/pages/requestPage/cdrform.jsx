@@ -4,9 +4,52 @@ import Input from "../../components/input";
 import Radio from "../../components/radio";
 import { tspList } from "../../constants/tspList";
 
-function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setCdrMobileList,cdrMobileList,cdrMobileInputChange,cdrAddMobileClick,cdrMobileRemoveClick ,arry}) {
+function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveForm }) {
  
-  
+  const [cdrMobileList, setCdrMobileList] = useState([
+    {
+      date_from: "",
+      date_to: "",
+      time_from: "",
+      time_to: "",
+      mobile_number: "",
+      tsp:""
+    },
+  ]);
+// console.log(cdrMobileList,">>>")
+  const [cdrModel, setCdrModel] = useState({
+    // generic_target_type_val: "",
+    multiple_mobile: cdrMobileList,
+    // case_ref: "",
+    // case_type: "",
+  });
+
+  const cdrMobileInputChange = (e, index) => {
+    const { name, value } = e.target;
+
+    const list = [...cdrMobileList];
+    list[index][name] = value;
+    setCdrMobileList(list);
+  };
+
+  const cdrAddMobileClick = () => {
+    setCdrMobileList([
+      ...cdrMobileList,
+      {
+        mobile_number: "",
+        date_from: "",
+        date_to: "",
+        time_from: "",
+        time_to: "",
+      },
+    ]);
+  };
+
+  const cdrMobileRemoveClick = (index) => {
+    const list = [...cdrMobileList];
+    list.splice(index, 1);
+    setCdrMobileList(list);
+  };
   // imei
   const [cdrImeiList, setCdrImeiList] = useState([
     {
@@ -50,8 +93,11 @@ function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setCdrMobi
     list.splice(index, 1);
     setCdrImeiList(list);
   };
+  let arry={"CELL_ID": "cell_id","IP_ADDRESS": "ip_port","MOBILE_NUMBER": "multiple_mobile","IMEI_NUMBER":"imei_number"}
 
-
+useEffect(()=>{
+  apiPayload?.target_type&& setApiPayload({...apiPayload,form_request_for:{[arry[apiPayload?.target_type]]:cdrMobileList}})
+},[cdrMobileList])
 
 const handleFormRequest=(e,callfrom,fromval)=>{
 const {name,value}=e.target

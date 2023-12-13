@@ -24,7 +24,7 @@ const RegistrationPage = () => {
       police_station: "",
     },
   });
-  console.log(formData, "formData");
+ 
   const [districtOptions, setDistrictOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [policeStationOptions, setPoliceStationOptions] = useState([]);
@@ -56,7 +56,7 @@ const RegistrationPage = () => {
   };
   const handleUserSelect = (e) => {
     const { name, value } = e.target;
-    console.log(value, "value");
+   
     setSelectedUser(value);
     setFormData({
       ...formData,
@@ -81,7 +81,7 @@ const RegistrationPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("first");
+
     e.preventDefault();
     setSubmitting(true);
     const res = await ApiHandle(REGISTRATION, formData, "POST");

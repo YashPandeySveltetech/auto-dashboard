@@ -32,7 +32,7 @@ function Sidebar() {
   ];
   const navigate = useNavigate();
   const ListItem = ({ icon, text, url }) => {
-    console.log(icon, text, "icon,text");
+   
     return (
       <div
         onClick={() => {

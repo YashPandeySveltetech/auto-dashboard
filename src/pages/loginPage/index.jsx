@@ -35,9 +35,8 @@ function LoginPage() {
     e.preventDefault();
     const res = await ApiHandle(OTP_VERIFY, verifyUser, "POST");
     if (res.statusCode === 201) {
-
-		
 		localStorage.setItem("token",res.responsePayload.access)
+		localStorage.setItem("p_station",res.responsePayload?.user_profile?.police_station?.id)
 		navigate("/")
       Toaster("success", "User Verify Successfully!");
 

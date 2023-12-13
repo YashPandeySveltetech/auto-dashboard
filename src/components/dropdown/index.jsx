@@ -12,7 +12,7 @@ function CommonDropDown({
   name,
   checkId,
 }) {
-  console.log(value, name, "b");
+ 
   return (
     <div>
       <label

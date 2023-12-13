@@ -5,7 +5,7 @@ const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
   const token = localStorage.getItem("token");
   const myHeaders = new Headers();
   console.log(endPoint, "endPoint");
-  console.log(token, "token");
+  console.log(token,process.env.REACT_APP_API_KEY, "token");
   if (!isFormData) {
     myHeaders.append("Content-Type", "application/json");
   }

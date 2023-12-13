@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { OTP_SEND, OTP_VERIFY } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/reducers/userReducer";
 
 function LoginPage() {
   const [loginWith, setLoginWith] = useState("email");
   const [formValue, setFormValue] = useState({});
   const [isOtp, setIsOtp] = useState(false);
   const [verifyUser, setVerifyUser] = useState({});
-
+const dispatch=useDispatch()
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -38,6 +40,7 @@ function LoginPage() {
 
 		
 		localStorage.setItem("token",res.responsePayload.access)
+    dispatch(setUserData(res?.responsePayload))
 		navigate("/")
       Toaster("success", "User Verify Successfully!");
 

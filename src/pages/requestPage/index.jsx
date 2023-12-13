@@ -13,6 +13,19 @@ import { FORM_REQUEST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 
 function RequestForm() {
+  const initialobj={
+    request_to_provide: "CDR",
+    police_station: "",
+    fir_no: "",
+    case_type: "",
+    io_name: "",
+    io_mobile_no: "",
+    target_type: "",
+    form_request_for: {
+       
+    },
+    brief_summary: ""
+}
   const [activeForm, setActiveForm] = useState({
     target_type: "",
     request_to_provide: "",
@@ -20,7 +33,7 @@ function RequestForm() {
   let station_id = localStorage.getItem("p_station");
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
-  const [apiPayload, setApiPayload] = useState({});
+  const [apiPayload, setApiPayload] = useState(initialobj);
   useEffect(() => {
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
@@ -40,18 +53,30 @@ function RequestForm() {
       );
     }
     if (activeForm.request_to_provide === "TOWER_DUMP") {
-      return <TOWER_DUMP_FORM />;
+      return <TOWER_DUMP_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
     if (activeForm.request_to_provide === "IPDR") {
-      return <IPDR_FORM />;
+      return <IPDR_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
     if (activeForm.request_to_provide === "CAF") {
-      return <CAF_FORM />;
+      return <CAF_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
   }, [activeForm]);
 
   const handleChange = (e, callfrom, fromval) => {
-    console.log(fromval, "::::");
+    
     const { name, value } = e.target;
     if (callfrom) {
       setActiveForm({ ...activeForm, [callfrom]: fromval });
@@ -74,13 +99,15 @@ function RequestForm() {
     e.preventDefault();
 
     const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
-    console.log(res, ":::");
-    // if (res.statusCode === 201) {
-    //   setIsOtp(true);
-    //   Toaster("success", "OTP SENT Successfully!");
 
-    //   return;
-    // }
+    if (res.statusCode === 201) {
+      setActiveForm({
+        target_type: "",
+        request_to_provide: "",
+      })
+      setApiPayload(initialobj)
+      return;
+    }
   };
 
   return (
@@ -156,7 +183,7 @@ function RequestForm() {
                 name="fir_no"
                 required
                 onChange={handleChange}
-                value={apiPayload.fir_no}
+                value={apiPayload?.fir_no}
               />
             </div>
             <label className="form-label me-4 font-bold"> Case Type:</label>
@@ -212,6 +239,7 @@ function RequestForm() {
             <textarea
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               name="brief_summary"
+              value={apiPayload?.brief_summary}
               onChange={handleChange}
             ></textarea>
           </div>

@@ -40,18 +40,30 @@ function RequestForm() {
       );
     }
     if (activeForm.request_to_provide === "TOWER_DUMP") {
-      return <TOWER_DUMP_FORM />;
+      return <TOWER_DUMP_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
     if (activeForm.request_to_provide === "IPDR") {
-      return <IPDR_FORM />;
+      return <IPDR_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
     if (activeForm.request_to_provide === "CAF") {
-      return <CAF_FORM />;
+      return <CAF_FORM   handleChange={handleChange}
+      setApiPayload={setApiPayload}
+      apiPayload={apiPayload}
+      setActiveForm={setActiveForm}
+      activeForm={activeForm}/>;
     }
   }, [activeForm]);
 
   const handleChange = (e, callfrom, fromval) => {
-    console.log(fromval, "::::");
+    
     const { name, value } = e.target;
     if (callfrom) {
       setActiveForm({ ...activeForm, [callfrom]: fromval });

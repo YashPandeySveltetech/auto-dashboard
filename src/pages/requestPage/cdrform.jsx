@@ -1,7 +1,7 @@
 import React, {  useEffect, useState } from "react";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
-import { tspList } from "../../constants/tspList";
+import { tspList,arry } from "../../constants/tspList";
 
 function CDRform({
   handleChange,
@@ -83,12 +83,7 @@ function CDRform({
     list.splice(index, 1);
     setCdrImeiList(list);
   };
-  let arry = {
-    CELL_ID: "cell_id",
-    IP_ADDRESS: "ip_port",
-    MOBILE_NUMBER: "multiple_mobile",
-    IMEI_NUMBER: "imei_number",
-  };
+ 
 
   useEffect(() => {
     if (apiPayload?.target_type === "MOBILE_NUMBER") {

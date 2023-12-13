@@ -16,7 +16,7 @@ function CommonDropDown({
   hidden=false,
   disabled=false
 }) {
-  console.log(value, name, "b");
+ 
   return (
     <div>
       <div className="flex">

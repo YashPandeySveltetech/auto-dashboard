@@ -10,7 +10,11 @@ import {
 import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import "./style.css";
+import { useDispatch } from "react-redux";
+
+import { setLoading } from "../../redux/reducers/commonReducer";
 const RegistrationPage = () => {
+  const dispatch = useDispatch();
   const defaultFormaData={
     username: "",
     mobile_no: "",
@@ -36,7 +40,7 @@ const RegistrationPage = () => {
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedReportingTo, setSelectedReportingTo] = useState("");
   const [userOptions, setUserOptions] = useState([]);
-  const [loading, setLoading] = useState(false);
+
  
 
   const handleUserProfileChange = (e) => {
@@ -59,7 +63,7 @@ const RegistrationPage = () => {
   };
   const handleUserSelect = (e) => {
     const { name, value } = e.target;
-    console.log(value, "value");
+   
     setSelectedUser(value);
     setFormData({
       ...formData,
@@ -84,16 +88,16 @@ const RegistrationPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("first");
     e.preventDefault();
+    dispatch(setLoading(true));
     setSubmitting(true);
     const res = await ApiHandle(REGISTRATION, formData, "POST");
     if (res.statusCode === 201) {
       setFormData(defaultFormaData)
       setSelectedReportingTo("")
       Toaster("success", "User Registered Successfully!");
-      return;
     }
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {

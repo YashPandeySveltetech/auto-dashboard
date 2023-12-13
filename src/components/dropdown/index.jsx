@@ -1,6 +1,18 @@
 import React from "react";
 
-function CommonDropDown({ label = "Select", options = [], onChange, value }) {
+function CommonDropDown({
+  label = "Select",
+  options = [
+    { id: 1, name: "option 1" },
+    { id: 2, name: "option 2" },
+  ],
+  onChange,
+  value,
+  id,
+  name,
+  checkId,
+}) {
+  console.log(value, name, "b");
   return (
     <div>
       <label
@@ -10,15 +22,21 @@ function CommonDropDown({ label = "Select", options = [], onChange, value }) {
         {label}
       </label>
       <select
-        id="dropdown"
-        name="dropdown"
+        id={id}
+        name={name}
         onChange={onChange}
         value={value}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       >
+        <option value="" disabled hidden>
+          {`Please Select ${label}`}
+        </option>
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option
+            key={option.id}
+            value={checkId ? option.id : option.name || option.username}
+          >
+            {option.name || option.username}
           </option>
         ))}
       </select>

@@ -7,6 +7,7 @@ import LoginPage from "../pages/loginPage";
 import RoleBaseRouting from "./roleBaseRouting";
 import Layout from "../layout";
 import RequestForm from "../pages/requestPage";
+import RegistrationPage from "../pages/registerPage";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -15,16 +16,24 @@ const AppRoute = memo(() => {
       <Suspense fallback={"LOADING"}>
         <Routes>
           <Route element={<AuthRoute />}>
-		  {/* <Route path="/" element={<HomePage />} /> */}
-              <Route
-                path="/"
-                element={
-                  <Layout>
-                    <RequestForm />
-                  </Layout>
-                }
-              />
-           
+            {/* <Route path="/" element={<HomePage />} /> */}
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <RequestForm />
+                </Layout>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Layout>
+                  <RegistrationPage />
+                </Layout>
+              }
+            />
+
             {/* //admin routes */}
 
             {/* <Route element={<RoleBaseRouting role={"admin"} />}>

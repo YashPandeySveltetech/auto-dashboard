@@ -1,7 +1,5 @@
-// RegistrationPage.js
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-import Input from "../../components/input"; // Adjust the path based on your file structure
+import Input from "../../components/input";
 import DropDown from "../../components/dropdown";
 import {
   GET_DISTRICT,
@@ -11,7 +9,7 @@ import {
 } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
-
+import "./style.css";
 const RegistrationPage = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -19,49 +17,74 @@ const RegistrationPage = () => {
     password: "",
     email: "",
     rank: "SHO",
-    is_active: false,
     user_profile: {
-      id: "",
-      user: "",
       reporting_to: "",
       district: "",
       state: "",
       police_station: "",
     },
   });
+  console.log(formData, "formData");
   const [districtOptions, setDistrictOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [policeStationOptions, setPoliceStationOptions] = useState([]);
   const [reportingToOptions, setReportingToOptions] = useState([]);
-
+  const [selectedRank, setSelectedRank] = useState("");
+  const [userData, setUserData] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedReportingTo, setSelectedReportingTo] = useState("");
+  const [userOptions, setUserOptions] = useState([]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
   const handleUserProfileChange = (e) => {
     const { name, value } = e.target;
+
+    if (name.startsWith("user_profile.")) {
+      setFormData({
+        ...formData,
+        user_profile: {
+          ...formData.user_profile,
+          [name.substring("user_profile.".length)]: value,
+        },
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  };
+  const handleUserSelect = (e) => {
+    const { name, value } = e.target;
+    console.log(value, "value");
+    setSelectedUser(value);
     setFormData({
       ...formData,
       user_profile: {
         ...formData.user_profile,
-        [name]: value,
+        reporting_to: value,
       },
     });
+    setSelectedRank("");
+  };
+
+  const handleReportingToSelect = async (e) => {
+    const { name, value } = e.target;
+    setSelectedReportingTo(value);
+    setSelectedRank("");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");
+
+    if (res.statusCode === 200) {
+      const data = res.responsePayload.results;
+      setUserOptions(data);
+    }
   };
 
   const handleSubmit = async (e) => {
+    console.log("first");
     e.preventDefault();
     setSubmitting(true);
-    let payload = {
-      //   email: user.email,
-      //   password: user.password,
-    };
-    const res = await ApiHandle(REGISTRATION, payload, "POST");
+    const res = await ApiHandle(REGISTRATION, formData, "POST");
     if (res.statusCode === 200) {
       Toaster("success", "User Registered Successfully!");
       return;
@@ -73,6 +96,7 @@ const RegistrationPage = () => {
     getDistrict();
     getPoliceStaionList();
   }, []);
+
   const getDistrict = async () => {
     const res = await ApiHandle(GET_DISTRICT, {}, "GET");
     if (res.statusCode === 200) {
@@ -98,8 +122,22 @@ const RegistrationPage = () => {
     }
   };
 
-  const rankOptions = ["INSPECTOR", "SHO", "ACP", "DCP"];
+  const rankOptions = [
+    { id: 1, name: "SHO" },
+    { id: 2, name: "INSPECTOR" },
+    { id: 3, name: "ACP" },
+    { id: 4, name: "DCP" },
+  ];
 
+  const handleRankClick = async (rank) => {
+    setSelectedRank(rank);
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "GET");
+
+    if (res.statusCode === 200) {
+      const data = res.responsePayload.results;
+      setUserData(data);
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center custom-background">
       <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-96 flex flex-col items-center">
@@ -113,7 +151,7 @@ const RegistrationPage = () => {
             label="Username"
             type="text"
             name="username"
-            onChange={handleInputChange}
+            onChange={handleUserProfileChange}
             value={formData.username}
             maxLength={250}
             minLength={1}
@@ -123,7 +161,7 @@ const RegistrationPage = () => {
             label="Mobile Number"
             type="text"
             name="mobile_no"
-            onChange={handleInputChange}
+            onChange={handleUserProfileChange}
             value={formData.mobile_no}
             maxLength={20}
             minLength={1}
@@ -134,7 +172,7 @@ const RegistrationPage = () => {
             label="Password"
             type="password"
             name="password"
-            onChange={handleInputChange}
+            onChange={handleUserProfileChange}
             value={formData.password}
             minLength={6}
           />
@@ -143,7 +181,7 @@ const RegistrationPage = () => {
             label="Email"
             type="email"
             name="email"
-            onChange={handleInputChange}
+            onChange={handleUserProfileChange}
             value={formData.email}
             maxLength={250}
             minLength={1}
@@ -152,57 +190,46 @@ const RegistrationPage = () => {
           <DropDown
             label="Rank"
             options={rankOptions}
-            onChange={handleInputChange}
+            onChange={handleUserProfileChange}
             value={formData.rank}
+            name="rank"
           />
 
-          <label className="mb-4 flex gap-5 items-center mt-4">
-            <span className="text-sm font-medium text-gray-900 ">
-              Is Active:
-            </span>
-
-            <input
-              type="checkbox"
-              name="is_active"
-              className=" accent-blue-500  h-4 w-4 cursor-pointer  rounded-md border "
-              //   className=" "
-              checked={formData.is_active}
-              onChange={() =>
-                setFormData({
-                  ...formData,
-                  is_active: !formData.is_active,
-                })
-              }
-            />
-          </label>
           <div className="mt-2">
-            <label className="text-[16px] font-bold mb-4">User Profile</label>
+            <span className="text-[16px] font-bold mb-8">User Profile</span>
 
-            <Input
-              label="User"
-              type="text"
-              name="user_profile.user"
-              onChange={handleUserProfileChange}
-              value={formData.user_profile.user}
-            />
             <DropDown
               label="Reporting To"
-              options={reportingToOptions}
-              onChange={handleUserProfileChange}
-              value={formData.user_profile.reporting_to}
+              options={rankOptions}
+              onChange={handleReportingToSelect}
+              value={selectedReportingTo}
             />
+
+            {selectedReportingTo && (
+              <DropDown
+                label="Select User"
+                options={userOptions}
+                onChange={handleUserSelect}
+                value={selectedUser}
+                checkId={true}
+              />
+            )}
+
             <DropDown
               label="District"
               options={districtOptions}
               onChange={handleUserProfileChange}
               value={formData.user_profile.district}
+              name="user_profile.district"
+              checkId={true}
             />
-
             <DropDown
               label="State"
               options={stateOptions}
               onChange={handleUserProfileChange}
               value={formData.user_profile.state}
+              name="user_profile.state"
+              checkId={true}
             />
 
             <DropDown
@@ -210,6 +237,8 @@ const RegistrationPage = () => {
               options={policeStationOptions}
               onChange={handleUserProfileChange}
               value={formData.user_profile.police_station}
+              name="user_profile.police_station"
+              checkId={true}
             />
           </div>
 

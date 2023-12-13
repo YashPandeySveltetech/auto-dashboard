@@ -2,15 +2,16 @@
 import Toaster from "./toaster/Toaster";
 let status;
 const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
-  console.log(endPoint, "endPoint");
-  // const token = getCookie("access_token");
+  const token = localStorage.getItem("token");
   const myHeaders = new Headers();
   console.log(endPoint, "endPoint");
-
+  console.log(token, "token");
   if (!isFormData) {
     myHeaders.append("Content-Type", "application/json");
   }
-
+  if (token) {
+    myHeaders.append("Authorization", `Bearer ${token}`);
+  }
   let fetchData = {
     method,
     headers: myHeaders,

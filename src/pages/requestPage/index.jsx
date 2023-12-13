@@ -12,7 +12,7 @@ import Input from "../../components/input";
 import { FORM_REQUEST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 
-function RequestForm() {
+function RequestForm({ requestData }) {
   const [activeForm, setActiveForm] = useState({
     target_type: "",
     request_to_provide: "",
@@ -22,6 +22,26 @@ function RequestForm() {
   const [currentTime, setCurrentTime] = useState();
   const [apiPayload, setApiPayload] = useState({});
   useEffect(() => {
+    if (requestData) {
+      setCurrentDate(requestData?.sys_date);
+      setCurrentTime(requestData?.sys_time);
+      setActiveForm((prev) => ({
+        ...prev,
+        ["request_to_provide"]: requestData?.request_to_provide,
+        ["target_type"]: requestData?.target_type,
+      }));
+      setApiPayload((prev) => {
+        return {
+          ...prev,
+          ["fir_no"]: requestData?.fir_no,
+          ["case_type"]: requestData?.case_type,
+          ["io_name"]: requestData?.io_name,
+          ["io_mobile_no"]: requestData?.io_mobile_no,
+        };
+      });
+
+      return;
+    }
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
   }, []);
@@ -40,30 +60,41 @@ function RequestForm() {
       );
     }
     if (activeForm.request_to_provide === "TOWER_DUMP") {
-      return <TOWER_DUMP_FORM   handleChange={handleChange}
-      setApiPayload={setApiPayload}
-      apiPayload={apiPayload}
-      setActiveForm={setActiveForm}
-      activeForm={activeForm}/>;
+      return (
+        <TOWER_DUMP_FORM
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
     if (activeForm.request_to_provide === "IPDR") {
-      return <IPDR_FORM   handleChange={handleChange}
-      setApiPayload={setApiPayload}
-      apiPayload={apiPayload}
-      setActiveForm={setActiveForm}
-      activeForm={activeForm}/>;
+      return (
+        <IPDR_FORM
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
     if (activeForm.request_to_provide === "CAF") {
-      return <CAF_FORM   handleChange={handleChange}
-      setApiPayload={setApiPayload}
-      apiPayload={apiPayload}
-      setActiveForm={setActiveForm}
-      activeForm={activeForm}/>;
+      return (
+        <CAF_FORM
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
   }, [activeForm]);
 
   const handleChange = (e, callfrom, fromval) => {
-    
     const { name, value } = e.target;
     if (callfrom) {
       setActiveForm({ ...activeForm, [callfrom]: fromval });
@@ -94,6 +125,7 @@ function RequestForm() {
     //   return;
     // }
   };
+  console.log(activeForm, "activeForm");
 
   return (
     <>

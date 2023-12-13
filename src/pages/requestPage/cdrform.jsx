@@ -1,50 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DropDown from "../../components/dropdown";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
+import { tspList } from "../../constants/tspList";
 
-function IPDRform() {
-  const [activeForm, setActiveForm] = useState("");
-  const [ipdrMobileList, setipdrMobileList] = useState([
-    {
-      date_from: "",
-      date_to: "",
-      time_from: "",
-      time_to: "",
-      mobile_number: "",
-    },
-  ]);
-
+function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setCdrMobileList,cdrMobileList,cdrMobileInputChange,cdrAddMobileClick,cdrMobileRemoveClick ,arry}) {
  
-
-  const ipdrInputChange = (e, index) => {
-    const { name, value } = e.target;
-
-    const list = [...ipdrMobileList];
-    list[index][name] = value;
-    setipdrMobileList(list);
-  };
-
-  const ipdrAddHandle = () => {
-    setipdrMobileList([
-      ...ipdrMobileList,
-      {
-        mobile_number: "",
-        date_from: "",
-        date_to: "",
-        time_from: "",
-        time_to: "",
-      },
-    ]);
-  };
-
-  const ipdrHandleRemove = (index) => {
-    const list = [...ipdrMobileList];
-    list.splice(index, 1);
-    setipdrMobileList(list);
-  };
+  
   // imei
-  const [ipdrImeiList, setipdrImeiList] = useState([
+  const [cdrImeiList, setCdrImeiList] = useState([
     {
       date_from: "",
       date_to: "",
@@ -54,18 +18,23 @@ function IPDRform() {
     },
   ]);
 
+  const [cdrImeiModel, setCdrimeiModel] = useState({
+    // case_ref: "",
+    // case_type: "",
+    imei_number: cdrImeiList,
+  });
 
-  const ipdrhandleInput = (e, index) => {
+  const cdrImeiInputChange = (e, index) => {
     const { name, value } = e.target;
 
-    const list = [...ipdrImeiList];
+    const list = [...cdrImeiList];
     list[index][name] = value;
-    setipdrImeiList(list);
+    setCdrImeiList(list);
   };
 
-  const ipdrImeiAdd = () => {
-    setipdrImeiList([
-      ...ipdrImeiList,
+  const cdrAddImeiClick = () => {
+    setCdrImeiList([
+      ...cdrImeiList,
       {
         mobile_number: "",
         date_from: "",
@@ -76,57 +45,25 @@ function IPDRform() {
     ]);
   };
 
-  const handleRemoveImei = (index) => {
-    const list = [...ipdrImeiList];
+  const cdrImeiRemoveClick = (index) => {
+    const list = [...cdrImeiList];
     list.splice(index, 1);
-    setipdrImeiList(list);
+    setCdrImeiList(list);
   };
 
 
-  const [ipdrReverseIpList, setIpdrReverseIpList] = useState([
-    {
-      ip: "",
-      port: "",
-      date: "",
-      time: "",
-    },
-  ]);
 
-  const [ipdrReverseIpModel, setIpdrReverseIpModel] = useState({
-    // case_ref: "",
-    ip_port: ipdrReverseIpList,
-    // mobile_number: "",
-  });
+const handleFormRequest=(e,callfrom,fromval)=>{
+const {name,value}=e.target
 
-  const ipdrReverseIpInputChange = (e, index) => {
-    const { name, value } = e.target;
-    const list = [...ipdrReverseIpList];
-    list[index][name] = value;
-    setIpdrReverseIpList(list);
-  };
 
-  const ipdrAddReverseIpClick = () => {
-    setIpdrReverseIpList([
-      ...ipdrReverseIpList,
-      {
-        ip: "",
-        port: "",
-        date: "",
-        time: "",
-      },
-    ]);
-  };
+  setApiPayload({...apiPayload,form_request_for:{...apiPayload.form_request_for,[arry[apiPayload?.target_type]]:[{...apiPayload?.target_type[arry[apiPayload?.target_type]],[name]:value}]}})
 
-  const ipdrReverseIpRemoveClick = (index) => {
-    const list = [...ipdrReverseIpList];
-    list.splice(index, 1);
-    setIpdrReverseIpList(list);
-  };
-
+}
 
   const Mobile = () => (
     <>
-      {ipdrMobileList.map((val, i) => (
+      {cdrMobileList.map((val, i) => (
         <>
           <div key={i} className="flex gap-5 items-center justify-start">
             <Input
@@ -134,7 +71,7 @@ function IPDRform() {
               type="text"
               value={val.mobile_number}
               name="mobile_number"
-              onChange={(e) => ipdrInputChange(e, i)}
+              onChange={(e) => cdrMobileInputChange(e, i)}
             />
             {/* CDR DATE TIME */}
             {/* date  */}
@@ -146,13 +83,17 @@ function IPDRform() {
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="date" />
+                  <Input label={" "}    name="date_from" type="date"  onChange={(e) =>
+                                        cdrMobileInputChange(e, i)
+                                      }/>
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="date" />
+                  <Input label={" "}    name="date_to" type="date"  onChange={(e) =>
+                                        cdrMobileInputChange(e, i)
+                                      }/>
                 </div>
               </div>
             </div>
@@ -166,56 +107,62 @@ function IPDRform() {
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="time" name="time_from" />
+                  <Input label={" "}  type="time" name="time_from" onChange={(e) =>
+                                        cdrMobileInputChange(e, i)
+                                      }/>
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" />
+                  <Input label={" "} type="time" name="time_to" onChange={(e) =>
+                                        cdrMobileInputChange(e, i)
+                                      }/>
                 </div>
               </div>
             </div>
 
             <div className="col-md-3">
               <select
-                name="select_tsp"
-                //   onChange={handleChange}
+                name="tsp"
+                onChange={(e) => cdrMobileInputChange(e, i)}
                 className="form-control col-md-4"
                 required
               >
                 <option value="select " className="text-uppercase">
                   Select TSP
                 </option>
-                {/* {getTSPList.map((tspVal) => {
+                {tspList?.map((tspVal,key) => {
                         return (
                           <option
-                            key={tspVal?.id}
-                            value={tspVal?.id}
+                            key={key}
+                            value={tspVal}
                             className="text-uppercase"
+                            name="tsp"
                             required
+                           
                           >
-                            {tspVal?.name}
+                            {tspVal}
                           </option>
                         );
-                      })} */}
+                      })}
               </select>
             </div>
 
             <div>
               <div className="flex gap-5">
-                {ipdrMobileList.length !== 1 && (
+                {cdrMobileList.length !== 1 && (
                   <button
                     className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => ipdrHandleRemove(i)}
+                    onClick={() => cdrMobileRemoveClick(i)}
                   >
                     Remove
                   </button>
                 )}
-                {ipdrMobileList.length - 1 === i && (
+                {cdrMobileList.length - 1 === i && (
                   <button
                     className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={ipdrAddHandle}
+                    onClick={cdrAddMobileClick}
                   >
                     Add
                   </button>
@@ -230,7 +177,7 @@ function IPDRform() {
   );
   const IMEI = () => (
     <>
-      {ipdrImeiList.map((val, i) => (
+      {cdrImeiList.map((val, i) => (
         <>
           <div className="flex gap-5 items-center">
             <Input label={"IMEI "} />
@@ -301,17 +248,17 @@ function IPDRform() {
             </div>
 
             <div className="flex gap-5">
-              {ipdrImeiList.length !== 1 && (
+              {cdrImeiList.length !== 1 && (
                 <button
                   className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  onClick={() => handleRemoveImei(i)}
+                  onClick={() => cdrImeiRemoveClick(i)}
                 >
                   Remove
                 </button>
               )}
-              {ipdrImeiList.length - 1 === i && (
+              {cdrImeiList.length - 1 === i && (
                 <button
-                  onClick={ipdrImeiAdd}
+                  onClick={cdrAddImeiClick}
                   className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 >
                   Add
@@ -323,149 +270,43 @@ function IPDRform() {
       ))}
     </>
   );
-
- const ReverseIp=()=>(
-  <>
-  {ipdrReverseIpList.map((val, i) => (
-    <>
-      <div className="flex gap-5 items-center">
-      <div className="input-group flex items-center justify-start gap-5 m-3">
-          <label className="form-label me-4 col-md-1 font-bold">
-            IP Address
-          </label>
-
-          <div className=" flex gap-5">
-            <div className="w-15  input-group flex items-center gap-3">
-            
-              <Input label={" "} type="text" />
-            </div>
-            <div className="flex items-center gap-3">
-            <label className="form-label me-4 col-md-1 font-bold">
-            Port
-          </label>
-              <Input label={" "} type="text" name="port" />
-            </div>
-          </div>
-        
-        <Input label={"Mobile "} />
-        </div>
-
-      
-        {/* date  */}
-        <div className="input-group flex items-center justify-start gap-5 m-3">
-          <label className="form-label me-4 col-md-1 font-bold">
-            Date
-          </label>
-
-          <div className=" flex gap-5">
-            <div className="w-15  input-group flex items-center gap-3">
-            
-              <Input label={" "} type="date" />
-            </div>
-            <div className="flex items-center gap-3">
-            <label className="form-label me-4 col-md-1 font-bold">
-            Time
-          </label>
-              <Input label={" "} type="time" name="time_from" />
-            </div>
-          </div>
-          <div className="col-md-3">
-              <select
-                name="select_tsp"
-                //   onChange={handleChange}
-                className="form-control col-md-4"
-                required
-              >
-                <option value="select " className="text-uppercase">
-                  Select TSP
-                </option>
-                {/* {getTSPList.map((tspVal) => {
-                        return (
-                          <option
-                            key={tspVal?.id}
-                            value={tspVal?.id}
-                            className="text-uppercase"
-                            required
-                          >
-                            {tspVal?.name}
-                          </option>
-                        );
-                      })} */}
-              </select>
-            </div>
-        
-        </div>
-    
-
-      
-
-        <div className="flex gap-5">
-          {ipdrReverseIpList.length !== 1 && (
-            <button
-              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              onClick={() => ipdrReverseIpRemoveClick(i)}
-            >
-              Remove
-            </button>
-          )}
-          {ipdrReverseIpList.length - 1 === i && (
-            <button
-              onClick={ipdrAddReverseIpClick}
-              className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-              Add
-            </button>
-          )}
-        </div>
-      </div>
-    </>
-  ))}
-</>
- )
+ 
+  
 
   return (
     <div>
-       <div className="radioselect">
+      <div className="radioselect">
         <label className="form-label me-4 font-bold">Target Type :</label>
         <div className="flex gap-5">
           <Radio
-            value={"MOBILE_NUMBER" == activeForm}
-            label="MOBILE_NUMBER"
+            value={"MOBILE_NUMBER" == activeForm?.target_type}
+            label="MOBILE NUMBER"
             name="target_type"
             id="target_type"
-            handleChange={() => {
-              setActiveForm("MOBILE_NUMBER");
+            handleChange={(e) => {
+              handleChange(e,"target_type","MOBILE_NUMBER");
             }}
           />{" "}
           <Radio
-            value={"IMEI_NUMBER" == activeForm}
-            label="IMEI_NUMBER"
+            value={"IMEI_NUMBER" ==  activeForm?.target_type}
+            label="IMEI NUMBER"
             name="target_type"
             id="target_type"
-            handleChange={() => {
-              setActiveForm("IMEI_NUMBER");
-            }}
-          />
-          <Radio
-            value={"IP_ADDRESS" == activeForm}
-            label="Reverse IP Addres"
-            name="target_type"
-            id="target_type"
-            handleChange={() => {
-              setActiveForm("IP_ADDRESS");
+            handleChange={(e) => {
+              handleChange(e,"target_type","IMEI_NUMBER");
             }}
           />
         </div>
       </div>
       <div className="flex flex-col gap-5">
-        {activeForm === "MOBILE_NUMBER"
+        { activeForm?.target_type === "MOBILE_NUMBER"
           ? Mobile()
-          : activeForm === "IMEI_NUMBER"
+          :  activeForm?.target_type === "IMEI_NUMBER"
           ? IMEI()
-          : activeForm === "IP_ADDRESS"? ReverseIp(): ""}
+          : ""}
       </div>
-     </div>
-  )
+    </div>
+  );
 }
 
-export default IPDRform
+export default CDRform;

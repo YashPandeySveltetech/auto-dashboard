@@ -53,7 +53,7 @@ function CDRform({
       date_to: "",
       time_from: "",
       time_to: "",
-      imei: "",
+      imei_number: "",
     },
   ]);
 
@@ -236,7 +236,7 @@ function CDRform({
           <div className="flex gap-5 items-center">
             <Input
               label={"IMEI "}
-              name="imei"
+              name="imei_number"
               onChange={(e) => cdrImeiInputChange(e, i)}
             />
 
@@ -301,7 +301,7 @@ function CDRform({
               </div>
               <div className="col-md-3">
                 <select
-                  name="select_tsp"
+                  name="tsp"
                   onChange={(e) => cdrImeiInputChange(e, i)}
                   className="form-control col-md-4"
                   required

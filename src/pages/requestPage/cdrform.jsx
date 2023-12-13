@@ -1,11 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import DropDown from "../../components/dropdown";
+import React, {  useEffect, useState } from "react";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 import { tspList } from "../../constants/tspList";
 
-function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveForm }) {
- 
+function CDRform({
+  handleChange,
+  setApiPayload,
+  apiPayload,
+  activeForm,
+}) {
   const [cdrMobileList, setCdrMobileList] = useState([
     {
       date_from: "",
@@ -13,16 +16,9 @@ function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveF
       time_from: "",
       time_to: "",
       mobile_number: "",
-      tsp:""
+      tsp: "",
     },
   ]);
-// console.log(cdrMobileList,">>>")
-  const [cdrModel, setCdrModel] = useState({
-    // generic_target_type_val: "",
-    multiple_mobile: cdrMobileList,
-    // case_ref: "",
-    // case_type: "",
-  });
 
   const cdrMobileInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -36,11 +32,11 @@ function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveF
     setCdrMobileList([
       ...cdrMobileList,
       {
-        mobile_number: "",
         date_from: "",
         date_to: "",
         time_from: "",
         time_to: "",
+        tsp: "",
       },
     ]);
   };
@@ -60,12 +56,6 @@ function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveF
       imei: "",
     },
   ]);
-
-  const [cdrImeiModel, setCdrimeiModel] = useState({
-    // case_ref: "",
-    // case_type: "",
-    imei_number: cdrImeiList,
-  });
 
   const cdrImeiInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -93,19 +83,29 @@ function CDRform({ handleChange, setApiPayload, apiPayload,activeForm,setActiveF
     list.splice(index, 1);
     setCdrImeiList(list);
   };
-  let arry={"CELL_ID": "cell_id","IP_ADDRESS": "ip_port","MOBILE_NUMBER": "multiple_mobile","IMEI_NUMBER":"imei_number"}
+  let arry = {
+    CELL_ID: "cell_id",
+    IP_ADDRESS: "ip_port",
+    MOBILE_NUMBER: "multiple_mobile",
+    IMEI_NUMBER: "imei_number",
+  };
 
-useEffect(()=>{
-  apiPayload?.target_type&& setApiPayload({...apiPayload,form_request_for:{[arry[apiPayload?.target_type]]:cdrMobileList}})
-},[cdrMobileList])
-
-const handleFormRequest=(e,callfrom,fromval)=>{
-const {name,value}=e.target
-
-
-  setApiPayload({...apiPayload,form_request_for:{...apiPayload.form_request_for,[arry[apiPayload?.target_type]]:[{...apiPayload?.target_type[arry[apiPayload?.target_type]],[name]:value}]}})
-
-}
+  useEffect(() => {
+    if (apiPayload?.target_type === "MOBILE_NUMBER") {
+      apiPayload?.target_type &&
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: { [arry[apiPayload?.target_type]]: cdrMobileList },
+        });
+    }
+    if (apiPayload?.target_type === "IMEI_NUMBER") {
+      apiPayload?.target_type &&
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: { [arry[apiPayload?.target_type]]: cdrImeiList },
+        });
+    }
+  }, [cdrMobileList, cdrImeiList]);
 
   const Mobile = () => (
     <>
@@ -129,17 +129,23 @@ const {name,value}=e.target
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "}    name="date_from" type="date"  onChange={(e) =>
-                                        cdrMobileInputChange(e, i)
-                                      }/>
+                  <Input
+                    label={" "}
+                    name="date_from"
+                    type="date"
+                    onChange={(e) => cdrMobileInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "}    name="date_to" type="date"  onChange={(e) =>
-                                        cdrMobileInputChange(e, i)
-                                      }/>
+                  <Input
+                    label={" "}
+                    name="date_to"
+                    type="date"
+                    onChange={(e) => cdrMobileInputChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -153,17 +159,23 @@ const {name,value}=e.target
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "}  type="time" name="time_from" onChange={(e) =>
-                                        cdrMobileInputChange(e, i)
-                                      }/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_from"
+                    onChange={(e) => cdrMobileInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" onChange={(e) =>
-                                        cdrMobileInputChange(e, i)
-                                      }/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_to"
+                    onChange={(e) => cdrMobileInputChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -178,20 +190,19 @@ const {name,value}=e.target
                 <option value="select " className="text-uppercase">
                   Select TSP
                 </option>
-                {tspList?.map((tspVal,key) => {
-                        return (
-                          <option
-                            key={key}
-                            value={tspVal}
-                            className="text-uppercase"
-                            name="tsp"
-                            required
-                           
-                          >
-                            {tspVal}
-                          </option>
-                        );
-                      })}
+                {tspList?.map((tspVal, key) => {
+                  return (
+                    <option
+                      key={key}
+                      value={tspVal}
+                      className="text-uppercase"
+                      name="tsp"
+                      required
+                    >
+                      {tspVal}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -199,6 +210,7 @@ const {name,value}=e.target
               <div className="flex gap-5">
                 {cdrMobileList.length !== 1 && (
                   <button
+                    type="button"
                     className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     onClick={() => cdrMobileRemoveClick(i)}
                   >
@@ -207,6 +219,7 @@ const {name,value}=e.target
                 )}
                 {cdrMobileList.length - 1 === i && (
                   <button
+                    type="button"
                     className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     onClick={cdrAddMobileClick}
                   >
@@ -226,7 +239,11 @@ const {name,value}=e.target
       {cdrImeiList.map((val, i) => (
         <>
           <div className="flex gap-5 items-center">
-            <Input label={"IMEI "} />
+            <Input
+              label={"IMEI "}
+              name="imei"
+              onChange={(e) => cdrImeiInputChange(e, i)}
+            />
 
             {/* CDR DATE TIME */}
             {/* date  */}
@@ -238,13 +255,23 @@ const {name,value}=e.target
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="date" />
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_from"
+                    onChange={(e) => cdrImeiInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="date" />
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_to"
+                    onChange={(e) => cdrImeiInputChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -258,37 +285,48 @@ const {name,value}=e.target
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="time" name="time_from" />
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_from"
+                    onChange={(e) => cdrImeiInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" />
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_to"
+                    onChange={(e) => cdrImeiInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3">
                 <select
                   name="select_tsp"
-                  //   onChange={handleChange}
+                  onChange={(e) => cdrImeiInputChange(e, i)}
                   className="form-control col-md-4"
                   required
                 >
                   <option value="select " className="text-uppercase">
                     Select TSP
                   </option>
-                  {/* {getTSPList.map((tspVal) => {
-                        return (
-                          <option
-                            key={tspVal?.id}
-                            value={tspVal?.id}
-                            className="text-uppercase"
-                            required
-                          >
-                            {tspVal?.name}
-                          </option>
-                        );
-                      })} */}
+                  {tspList?.map((tspVal, key) => {
+                    return (
+                      <option
+                        key={key}
+                        value={tspVal}
+                        className="text-uppercase"
+                        name="tsp"
+                        required
+                      >
+                        {tspVal}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
@@ -296,6 +334,7 @@ const {name,value}=e.target
             <div className="flex gap-5">
               {cdrImeiList.length !== 1 && (
                 <button
+                  type="button"
                   className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                   onClick={() => cdrImeiRemoveClick(i)}
                 >
@@ -305,6 +344,7 @@ const {name,value}=e.target
               {cdrImeiList.length - 1 === i && (
                 <button
                   onClick={cdrAddImeiClick}
+                  type="button"
                   className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 >
                   Add
@@ -316,8 +356,6 @@ const {name,value}=e.target
       ))}
     </>
   );
- 
-  
 
   return (
     <div>
@@ -330,24 +368,24 @@ const {name,value}=e.target
             name="target_type"
             id="target_type"
             handleChange={(e) => {
-              handleChange(e,"target_type","MOBILE_NUMBER");
+              handleChange(e, "target_type", "MOBILE_NUMBER");
             }}
           />{" "}
           <Radio
-            value={"IMEI_NUMBER" ==  activeForm?.target_type}
+            value={"IMEI_NUMBER" == activeForm?.target_type}
             label="IMEI NUMBER"
             name="target_type"
             id="target_type"
             handleChange={(e) => {
-              handleChange(e,"target_type","IMEI_NUMBER");
+              handleChange(e, "target_type", "IMEI_NUMBER");
             }}
           />
         </div>
       </div>
       <div className="flex flex-col gap-5">
-        { activeForm?.target_type === "MOBILE_NUMBER"
+        {activeForm?.target_type === "MOBILE_NUMBER"
           ? Mobile()
-          :  activeForm?.target_type === "IMEI_NUMBER"
+          : activeForm?.target_type === "IMEI_NUMBER"
           ? IMEI()
           : ""}
       </div>

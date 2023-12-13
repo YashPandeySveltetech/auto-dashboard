@@ -1,60 +1,57 @@
 /** @format */
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Amd, Boxes } from "react-bootstrap-icons";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { USER_DETAIL } from "../../utils/constants";
-import { ApiHandle } from "../../utils/ApiHandle";
+
 function Sidebar() {
+  const { rank } = useSelector((state) => state.user?.userData);
+  console.log(!["ACP", "DCP"].includes(rank), rank, "rank");
   const list = [
     {
       icon: <Boxes />,
       text: "Dashboard",
       url: "/",
+      isShow: true,
     },
     {
       icon: <Boxes />,
       text: "Request Form",
       url: "/request-form",
+      isShow: !["ACP", "DCP"].includes(rank),
     },
     {
       icon: <Boxes />,
-      text: "dashboard",
-    },
-    {
-      icon: <Boxes />,
-      text: "dashboard",
+      text: "Request List",
+      url: "/request-list",
+      isShow: true,
     },
     {
       icon: <Boxes />,
       text: "Register",
       url: "/register",
+      isShow: ["ACP", "DCP"].includes(rank),
     },
   ];
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    handleUserDetail();
-  }, []);
-  const handleUserDetail = async () => {
-    const res = await ApiHandle(USER_DETAIL, {}, "GET");
-    if (res.statusCode === 200) {
-      const data = res?.responsePayload;
-    }
-  };
-  const ListItem = ({ icon, text, url }) => {
-   
+  const ListItem = ({ icon, text, url, isShow }) => {
+    console.log(isShow, "text", text);
     return (
-      <div
-        onClick={() => {
-          navigate(url);
-        }}
-        className="hover:bg-blue-800 w-[100%] text-[1.2rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3"
-      >
-        <div className="font-bold">{icon}</div>
-        <div className="font-bold ">{text}</div>
-      </div>
+      <>
+        {" "}
+        {isShow && (
+          <div
+            onClick={() => {
+              navigate(url);
+            }}
+            className="hover:bg-blue-800 w-[100%] text-[1.2rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3"
+          >
+            <div className="font-bold">{icon}</div>
+            <div className="font-bold ">{text}</div>
+          </div>
+        )}
+      </>
     );
   };
   return (

@@ -9,14 +9,22 @@ import Layout from '../layout';
 import RequestForm from '../pages/requestPage';
 import RegistrationPage from '../pages/registerPage';
 import RequestList from '../pages/requestList';
+import Loader from '../components/loader/Loader';
+import {  useSelector } from "react-redux";
 const HomePage = lazy(() => import('../pages/homePage'));
 
 const AppRoute = memo(() => {
+  const Loading = useSelector(
+    (state) => state?.common?.loading
+  );
+  
 	return (
 		<main>
+      { Loading &&  <Loader />}
 			<Suspense fallback={'LOADING'}>
 				<Routes>
 					<Route element={<AuthRoute />}>
+         
 						<Route
 							path='/'
 							element={

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import Card from "../common/card";
+import Card from "../card/index";
 import { useDispatch, useSelector } from "react-redux";
 import { commonCloseModal } from "../../redux/reducers/modalsReducer";
 

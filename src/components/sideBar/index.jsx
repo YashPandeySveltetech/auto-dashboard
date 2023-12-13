@@ -1,9 +1,10 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Amd, Boxes } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
-
+import { USER_DETAIL } from "../../utils/constants";
+import { ApiHandle } from "../../utils/ApiHandle";
 function Sidebar() {
   const list = [
     {
@@ -30,7 +31,18 @@ function Sidebar() {
       url: "/register",
     },
   ];
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    handleUserDetail();
+  }, []);
+  const handleUserDetail = async () => {
+    const res = await ApiHandle(USER_DETAIL, {}, "GET");
+    if (res.statusCode === 200) {
+      const data = res?.responsePayload;
+    }
+  };
   const ListItem = ({ icon, text, url }) => {
    
     return (

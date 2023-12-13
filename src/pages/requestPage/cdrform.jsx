@@ -301,7 +301,7 @@ function CDRform({
               </div>
               <div className="col-md-3">
                 <select
-                  name="select_tsp"
+                  name="tsp"
                   onChange={(e) => cdrImeiInputChange(e, i)}
                   className="form-control col-md-4"
                   required

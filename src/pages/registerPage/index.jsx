@@ -150,7 +150,7 @@ const RegistrationPage = () => {
   };
   return (
     <div className="min-h-screen flex items-center justify-center custom-background">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-96 flex flex-col items-center">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full md:w-96 flex flex-col items-center" style={{width:"35rem"}}>
         <h1 className="text-2xl font-bold mb-4">Registration Page</h1>
 
         <form

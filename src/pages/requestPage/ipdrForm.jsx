@@ -275,7 +275,7 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
               </div>
               <div className="col-md-3">
                 <select
-                  name="select_tsp"
+                  name="tsp"
                   onChange={(e) => ipdrimeiChange(e, i)}
                   className="form-control col-md-4"
                   required
@@ -405,7 +405,7 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
 
               <div className="col-md-3">
                 <select
-                  name="select_tsp"
+                  name="tsp"
                   //   onChange={handleChange}
                   className="form-control col-md-4"
                   required

@@ -13,6 +13,17 @@ import { FORM_REQUEST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 
 function RequestForm({ requestData }) {
+  const initialobj = {
+    request_to_provide: "",
+    police_station: "",
+    fir_no: "",
+    case_type: "",
+    io_name: "",
+    io_mobile_no: "",
+    target_type: "",
+    form_request_for: {},
+    brief_summary: "",
+  };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
     request_to_provide: "",
@@ -20,7 +31,7 @@ function RequestForm({ requestData }) {
   let station_id = localStorage.getItem("p_station");
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
-  const [apiPayload, setApiPayload] = useState({});
+  const [apiPayload, setApiPayload] = useState(initialobj);
   useEffect(() => {
     if (requestData) {
       setCurrentDate(requestData?.sys_date);
@@ -117,13 +128,15 @@ function RequestForm({ requestData }) {
     e.preventDefault();
 
     const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
-    console.log(res, ":::");
-    // if (res.statusCode === 201) {
-    //   setIsOtp(true);
-    //   Toaster("success", "OTP SENT Successfully!");
 
-    //   return;
-    // }
+    if (res.statusCode === 201) {
+      setActiveForm({
+        target_type: "",
+        request_to_provide: "",
+      });
+      setApiPayload(initialobj);
+      return;
+    }
   };
   console.log(activeForm, "activeForm");
 
@@ -200,7 +213,7 @@ function RequestForm({ requestData }) {
                 name="fir_no"
                 required
                 onChange={handleChange}
-                value={apiPayload.fir_no}
+                value={apiPayload?.fir_no}
               />
             </div>
             <label className="form-label me-4 font-bold"> Case Type:</label>
@@ -256,6 +269,7 @@ function RequestForm({ requestData }) {
             <textarea
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               name="brief_summary"
+              value={apiPayload?.brief_summary}
               onChange={handleChange}
             ></textarea>
           </div>

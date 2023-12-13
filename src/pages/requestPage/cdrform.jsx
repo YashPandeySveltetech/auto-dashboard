@@ -53,7 +53,7 @@ function CDRform({
       date_to: "",
       time_from: "",
       time_to: "",
-      imei_number: "",
+      imei: "",
     },
   ]);
 
@@ -236,7 +236,7 @@ function CDRform({
           <div className="flex gap-5 items-center">
             <Input
               label={"IMEI "}
-              name="imei_number"
+              name="imei"
               onChange={(e) => cdrImeiInputChange(e, i)}
             />
 

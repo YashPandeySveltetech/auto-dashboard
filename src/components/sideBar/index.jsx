@@ -9,7 +9,8 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import { setUserData } from "../../redux/reducers/userReducer";
 
 function Sidebar() {
-  const { rank } = useSelector((state) => state.user?.userData);
+  const { rank,email} = useSelector((state) => state.user?.userData)
+
   console.log(!["ACP", "DCP"].includes(rank), rank, "rank");
   const list = [
     {
@@ -82,7 +83,16 @@ function Sidebar() {
         <Amd className="w-[3rem] h-[3rem] text-white " />
       </div>
       <div className="flex justify-between flex-col h-[78vh] m-2">
+     
       <div className="flex flex-col gap-2 p-3">
+      <div
+          
+          className="hover:bg-blue-800 w-[100%] text-[1.2rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3"
+        >
+        
+          <div className="font-bold text-[.8rem] ">{email}</div>
+        </div>
+        <hr/>
         {list.map((item) => (
           <>
             <ListItem {...item} />

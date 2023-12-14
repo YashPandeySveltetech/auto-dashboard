@@ -158,7 +158,7 @@ const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
   return (
     <>
       <form action="" onSubmit={handleSubmit}>
-        <div className="max-w-screen-lg mx-auto mt-5 p-3 bg-white shadow-md rounded-lg">
+        <div className="mx-auto mt-5 p-3 bg-white shadow-md rounded-lg" style={{width:"96%"}}>
           <div style={{ textAlign: "center" }}>
             <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
           </div>

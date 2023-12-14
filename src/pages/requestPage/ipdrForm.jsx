@@ -27,7 +27,7 @@ function IPDRform({
       const list = [];
       const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
       for (let i = 0; i < 4; i++) {
-        let obj = { ...ipdrMobileList[0], "tsp": tspl[i] };
+        let obj = { ...ipdrMobileList[0], tsp: tspl[i] };
         list.push(obj);
       }
       setipdrMobileList(list);
@@ -37,7 +37,6 @@ function IPDRform({
 
       setipdrMobileList(list);
     }
-  
   };
 
   const ipdrAddHandle = () => {
@@ -77,7 +76,7 @@ function IPDRform({
       const list = [];
       const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
       for (let i = 0; i < 4; i++) {
-        let obj = { ...ipdrImeiList[0], "tsp": tspl[i] };
+        let obj = { ...ipdrImeiList[0], tsp: tspl[i] };
         list.push(obj);
       }
       setipdrImeiList(list);
@@ -87,8 +86,6 @@ function IPDRform({
 
       setipdrImeiList(list);
     }
-  
-  
   };
 
   const ipdrImeiAdd = () => {
@@ -150,7 +147,7 @@ function IPDRform({
       const list = [];
       const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
       for (let i = 0; i < 4; i++) {
-        let obj = { ...ipdrReverseIpList[0], "tsp": tspl[i] };
+        let obj = { ...ipdrReverseIpList[0], tsp: tspl[i] };
         list.push(obj);
       }
       setIpdrReverseIpList(list);
@@ -186,7 +183,7 @@ function IPDRform({
     <>
       {ipdrMobileList.map((val, i) => (
         <>
-          <div key={i} className="flex gap-5 items-center justify-start">
+          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
             <Input
               label={"Mobile "}
               type="text"
@@ -194,6 +191,7 @@ function IPDRform({
               name="mobile_number"
               onChange={(e) => ipdrmobilechange(e, i)}
               disabledSelect={requestData}
+              className='w-[49%]'
             />
             {/* CDR DATE TIME */}
             {/* date  */}
@@ -228,186 +226,51 @@ function IPDRform({
                   />
                 </div>
               </div>
-            </div>
 
-            {/*  Time */}
-            <div className="flex items-center justify-start gap-5 m-3 ">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Time :
-              </label>
+              {/*  Time */}
+              <div className="flex items-center justify-start gap-5 m-3 ">
+                <label className="form-label me-4 col-md-1 font-bold">
+                  Time :
+                </label>
 
-              <div className="col-md-3">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_from"
-                    value={val.time_from}
-                    onChange={(e) => ipdrmobilechange(e, i)}
-                    disabledSelect={requestData}
-                  />
+                <div className="col-md-3">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_from"
+                      value={val.time_from}
+                      onChange={(e) => ipdrmobilechange(e, i)}
+                      disabledSelect={requestData}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3 ms-4">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_to"
+                      value={val.time_to}
+                      onChange={(e) => ipdrmobilechange(e, i)}
+                      disabledSelect={requestData}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="col-md-3 ms-4">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_to"
-                    value={val.time_to}
-                    onChange={(e) => ipdrmobilechange(e, i)}
-                    disabledSelect={requestData}
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div className="col-md-3">
-              <select
-                name="tsp"
-                onChange={(e) => ipdrmobilechange(e, i)}
-                className="form-control col-md-4"
-                required
-                disabled={requestData}
-                value={val.tsp}
-              >
-                <option value="select " className="text-uppercase">
-                  Select TSP
-                </option>
-                {tspList?.map((tspVal, key) => {
-                  return (
-                    <option
-                      key={key}
-                      value={tspVal}
-                      className="text-uppercase"
-                      name="tsp"
-                      required
-                    >
-                      {tspVal}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            {!requestData && (
-              <div>
-                <div className="flex gap-5">
-                  {ipdrMobileList.length !== 1 && (
-                    <button
-                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                      onClick={() => ipdrHandleRemove(i)}
-                    >
-                      Remove
-                    </button>
-                  )}
-                  {ipdrMobileList.length - 1 === i && (
-                    <button
-                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                      onClick={ipdrAddHandle}
-                    >
-                      Add
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-          <hr className="font-bold" />
-        </>
-      ))}
-    </>
-  );
-  const IMEI = () => (
-    <>
-      {ipdrImeiList.map((val, i) => (
-        <>
-          <div className="flex gap-5 items-center">
-            <Input
-              label={"IMEI "}
-              name="imei"
-              value={val.imei}
-              onChange={(e) => ipdrimeiChange(e, i)}
-              disabledSelect={requestData}
-            />
-
-            {/* CDR DATE TIME */}
-            {/* date  */}
-            <div className="input-group flex items-center justify-start gap-5 m-3">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Date :
-              </label>
-
-              <div className=" flex gap-5">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="date"
-                    name="date_from"
-                    value={val.date_from}
-                    onChange={(e) => ipdrimeiChange(e, i)}
-                    disabledSelect={requestData}
-                  />
-                </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="date"
-                    name="date_to"
-                    value={val.date_to}
-                    onChange={(e) => ipdrimeiChange(e, i)}
-                    disabledSelect={requestData}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/*  Time */}
-            <div className="flex items-center justify-start gap-5 m-3 ">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Time :
-              </label>
-
-              <div className="col-md-3">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_from"
-                    value={val.time_from}
-                    onChange={(e) => ipdrimeiChange(e, i)}
-                    disabledSelect={requestData}
-                  />
-                </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_to"
-                    value={val.time_to}
-                    onChange={(e) => ipdrimeiChange(e, i)}
-                    disabledSelect={requestData}
-                  />
-                </div>
-              </div>
               <div className="col-md-3">
                 <select
                   name="tsp"
-                  onChange={(e) => ipdrimeiChange(e, i)}
+                  onChange={(e) => ipdrmobilechange(e, i)}
                   className="form-control col-md-4"
-                  value={val.tsp}
-                  disabled={requestData}
                   required
+                  disabled={requestData}
+                  value={val.tsp}
+                  style={{border:"2px solid green", padding:"5px",borderRadius:"10px"}}
+
                 >
                   <option value="select " className="text-uppercase">
                     Select TSP
@@ -427,28 +290,167 @@ function IPDRform({
                   })}
                 </select>
               </div>
-            </div>
 
-            {!requestData && (
-              <div className="flex gap-5">
-                {ipdrImeiList.length !== 1 && (
-                  <button
-                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => handleRemoveImei(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {ipdrImeiList.length - 1 === i && (
-                  <button
-                    onClick={ipdrImeiAdd}
-                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    Add
-                  </button>
-                )}
+              {!requestData && (
+                <div>
+                  <div className="flex gap-5">
+                    {ipdrMobileList.length !== 1 && (
+                      <button
+                        className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        onClick={() => ipdrHandleRemove(i)}
+                      >
+                        Remove
+                      </button>
+                    )}
+                    {ipdrMobileList.length - 1 === i && (
+                      <button
+                        className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        onClick={ipdrAddHandle}
+                      >
+                        Add
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          <hr className="font-bold" />
+        </>
+      ))}
+    </>
+  );
+  const IMEI = () => (
+    <>
+      {ipdrImeiList.map((val, i) => (
+        <>
+          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
+            <Input
+              label={"IMEI "}
+              name="imei"
+              value={val.imei}
+              onChange={(e) => ipdrimeiChange(e, i)}
+              disabledSelect={requestData}
+              className='w-[49%]'
+            />
+
+            {/* CDR DATE TIME */}
+            {/* date  */}
+            <div className="input-group flex items-center justify-start gap-5 m-3">
+              <label className="form-label me-4 col-md-1 font-bold">
+                Date :
+              </label>
+
+              <div className=" flex gap-5">
+                <div className="w-15  input-group flex items-center gap-3">
+                  <span className="input-group-text font-bold">From</span>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_from"
+                    value={val.date_from}
+                    onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
+                  />
+                </div>
               </div>
-            )}
+              <div className="col-md-3 ms-4">
+                <div className="w-15  input-group flex items-center gap-3">
+                  <span className="input-group-text font-bold">To</span>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_to"
+                    value={val.date_to}
+                    onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
+                  />
+                </div>
+              </div>
+
+              {/*  Time */}
+              <div className="flex items-center justify-start gap-5 m-3 ">
+                <label className="form-label me-4 col-md-1 font-bold">
+                  Time :
+                </label>
+
+                <div className="col-md-3">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_from"
+                      value={val.time_from}
+                      onChange={(e) => ipdrimeiChange(e, i)}
+                      disabledSelect={requestData}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3 ms-4">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_to"
+                      value={val.time_to}
+                      onChange={(e) => ipdrimeiChange(e, i)}
+                      disabledSelect={requestData}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <select
+                    name="tsp"
+                    onChange={(e) => ipdrimeiChange(e, i)}
+                    className="form-control col-md-4"
+                    value={val.tsp}
+                    disabled={requestData}
+                    required
+                    style={{border:"2px solid green", padding:"5px",borderRadius:"10px"}}
+                  >
+                    <option value="select " className="text-uppercase">
+                      Select TSP
+                    </option>
+                    {tspList?.map((tspVal, key) => {
+                      return (
+                        <option
+                          key={key}
+                          value={tspVal}
+                          className="text-uppercase"
+                          name="tsp"
+                          required
+                        >
+                          {tspVal}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+
+              {!requestData && (
+                <div className="flex gap-5">
+                  {ipdrImeiList.length !== 1 && (
+                    <button
+                      className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => handleRemoveImei(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {ipdrImeiList.length - 1 === i && (
+                    <button
+                      onClick={ipdrImeiAdd}
+                      className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </>
       ))}
@@ -459,14 +461,14 @@ function IPDRform({
     <>
       {ipdrReverseIpList.map((val, i) => (
         <>
-          <div className="flex gap-5 items-center">
+          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
             <div className="input-group flex items-center justify-start gap-5 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
                 IP Address
               </label>
 
-              <div className=" flex gap-5">
-                <div className="w-15  input-group flex items-center gap-3">
+              
+                <div className="input-group flex items-center gap-3">
                   <Input
                     label={" "}
                     name="ip"
@@ -474,9 +476,10 @@ function IPDRform({
                     onChange={(e) => ipdrIpChange(e, i)}
                     type="text"
                     disabledSelect={requestData}
+                    className='w-[49%]'
                   />
                 </div>
-              </div>
+              
             </div>
 
             {/* date  */}
@@ -557,6 +560,7 @@ function IPDRform({
                   value={val.tsp}
                   disabled={requestData}
                   required
+                  style={{border:"2px solid green", padding:"5px",borderRadius:"10px"}}
                 >
                   <option value="select " className="text-uppercase">
                     Select TSP
@@ -576,28 +580,28 @@ function IPDRform({
                   })}
                 </select>
               </div>
-            </div>
 
-            {!requestData && (
-              <div className="flex gap-5">
-                {ipdrReverseIpList.length !== 1 && (
-                  <button
-                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => ipdrReverseIpRemoveClick(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {ipdrReverseIpList.length - 1 === i && (
-                  <button
-                    onClick={ipdrAddReverseIpClick}
-                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    Add
-                  </button>
-                )}
-              </div>
-            )}
+              {!requestData && (
+                <div className="flex gap-5">
+                  {ipdrReverseIpList.length !== 1 && (
+                    <button
+                      className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => ipdrReverseIpRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {ipdrReverseIpList.length - 1 === i && (
+                    <button
+                      onClick={ipdrAddReverseIpClick}
+                      className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </>
       ))}
@@ -630,9 +634,9 @@ function IPDRform({
   }, [ipdrImeiList, ipdrReverseIpList, ipdrMobileList]);
   return (
     <div>
-      <div className="radioselect">
+      <div className="radioselect flex gap-2">
         <label className="form-label me-4 font-bold">Target Type :</label>
-        <div className="flex gap-5">
+        <div className="flex gap-5 mt-1">
           <Radio
             value={"MOBILE_NUMBER" == activeForm?.target_type}
             label="MOBILE NUMBER"

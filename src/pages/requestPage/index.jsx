@@ -149,7 +149,7 @@ function RequestForm({ requestData }) {
     <>
       <form action="" onSubmit={handleSubmit}>
         <div className="max-w-screen-lg mx-auto mt-5 p-3 bg-white shadow-md rounded-lg">
-          <div style={{textAlign:"center"}}>
+          <div style={{ textAlign: "center" }}>
             <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
           </div>
 
@@ -159,16 +159,16 @@ function RequestForm({ requestData }) {
               <div className="rounded-md border border-gray-300 p-2">
                 {currentDate}
               </div>
-</div>
+            </div>
 
-              <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <label className="font-bold">Time:</label>
               <div className="rounded-md border border-gray-300 p-2">
                 {currentTime ?? "00:00:00"}
               </div>
             </div>
           </div>
-          
+
           <div className="mt-6 flex items-center gap-6">
             <label className="font-bold">Request to Provide:</label>
             <div className="flex gap-4 mt-5">
@@ -179,6 +179,7 @@ function RequestForm({ requestData }) {
                 handleChange={(e) =>
                   handleChange(e, "request_to_provide", "CDR")
                 }
+                disabled={requestData}
               />
               <Radio
                 value={"IPDR" === activeForm.request_to_provide}
@@ -187,6 +188,7 @@ function RequestForm({ requestData }) {
                 handleChange={(e) =>
                   handleChange(e, "request_to_provide", "IPDR")
                 }
+                disabled={requestData}
               />
               <Radio
                 value={"TOWER_DUMP" === activeForm.request_to_provide}
@@ -195,6 +197,7 @@ function RequestForm({ requestData }) {
                 handleChange={(e) =>
                   handleChange(e, "request_to_provide", "TOWER_DUMP")
                 }
+                disabled={requestData}
               />
               <Radio
                 value={"CAF" === activeForm.request_to_provide}
@@ -203,12 +206,13 @@ function RequestForm({ requestData }) {
                 handleChange={(e) =>
                   handleChange(e, "request_to_provide", "CAF")
                 }
+                disabled={requestData}
               />
             </div>
           </div>
-          
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-{/* FIR NO. */}
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* FIR NO. */}
             <div>
               <label className="font-bold">FIR NO.:</label>
               <Input
@@ -217,9 +221,10 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.fir_no}
+                disabledSelect={requestData}
               />
             </div>
-            
+
             {/* Case Type */}
             <div>
               <label className="font-bold">Case Type:</label>
@@ -229,9 +234,10 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.case_type}
+                disabledSelect={requestData}
               />
             </div>
-            
+
             {/* IO Name */}
             <div>
               <label className="font-bold">IO Name:</label>
@@ -241,9 +247,10 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.io_name}
+                disabledSelect={requestData}
               />
             </div>
-            
+
             {/* IO Mobile no. */}
             <div>
               <label className="font-bold">IO Mobile no.:</label>
@@ -253,26 +260,28 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.io_mobile_no}
+                disabledSelect={requestData}
               />
             </div>
           </div>
-          
+
           <div className="mt-6">
             {/* Additional Form Elements */}
             {formHandler()}
           </div>
 
           {/* File Upload */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <label className="font-bold">File Upload:</label>&nbsp;
             <input
               type="file"
               name="user_file"
               className="form-control mt-2"
               accept=".xlsx,.xls,.doc,.docx,.zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam,.xla,.xlw,.xlr,.csv"
-                            />
-                    </div>
-          
+              disabled={requestData}
+            />
+          </div> */}
+
           {/* Comments */}
           <div className="mt-6">
             <label className="font-bold">Comments:</label>
@@ -281,15 +290,18 @@ function RequestForm({ requestData }) {
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
+              disabled={requestData}
             ></textarea>
           </div>
-          
+
           {/* Submit Button */}
-          <div className="mt-6">
-            <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
-              Submit
-            </button>
-          </div>
+          {!requestData && (
+            <div className="mt-6">
+              <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
+                Submit
+              </button>
+            </div>
+          )}
         </div>
       </form>
     </>

@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { ApiHandle } from '../../utils/ApiHandle';
-import { FORM_REQUEST, APPROVE_REQUEST } from '../../utils/constants';
+import { FORM_REQUEST, APPROVE_REQUEST, VIEW_ATTACHMENTS } from '../../utils/constants';
 import Toaster from '../../utils/toaster/Toaster';
 import { useNavigate } from 'react-router';
 import FilterSection from './filterSection';
 import { useDispatch } from 'react-redux';
 import { openRejectModal, openViewLogModal } from '../../redux/reducers/modalsReducer';
+import { async } from 'q';
 
 function RequestList() {
 	const navigate = useNavigate();
@@ -55,6 +56,23 @@ function RequestList() {
 			return;
 		}
 	};
+    
+const viewAttachment=async({requets_form_id})=>{
+    const res = await ApiHandle(
+        VIEW_ATTACHMENTS+`?request_form=${requets_form_id}`,
+        { },
+        'GET'
+    );
+    if (res.statusCode === 200) {
+        console.log(process.env.REACT_APP_MEDIA_URI+res?.responsePayload?.results[0].file,'responsePayload?.results[0]?.file');
+      window.open(process.env.REACT_APP_MEDIA_URI+res?.responsePayload?.results[0].file)
+        // getAllRequest()
+        Toaster('success', 'Request Approved Successfully!');
+
+        return;
+    }
+}
+
 	return (
 		<>
 			<FilterSection
@@ -95,7 +113,7 @@ function RequestList() {
 									scope='col'
 									class='px-6 py-3'
 								>
-									DURATION (DATE & TIME)
+									View Attachment
 								</th>
 								<th
 									scope='col'
@@ -125,7 +143,7 @@ function RequestList() {
 									<td class='px-6 py-4'>{item?.target_type}</td>
 									<td class='px-6 py-4'>
 										{/* <button className='bg-green-300'>Approve</button> */}
-										<button className='bg-blue-300'>Click</button>
+										<button onClick={()=>viewAttachment({requets_form_id:item?.id})} className='bg-blue-300'>Click</button>
 										{/* <button className='bg-red-900'>Reject</button> */}
 									</td>
 									<td class='px-6 py-4'>

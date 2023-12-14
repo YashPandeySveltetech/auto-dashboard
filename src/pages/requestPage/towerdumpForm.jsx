@@ -39,7 +39,7 @@ function TowerDumpForm({
       const list = [];
       const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
       for (let i = 0; i < 4; i++) {
-        let obj = { ...tdrModelList[0], "tsp": tspl[i] };
+        let obj = { ...tdrModelList[0], tsp: tspl[i] };
         list.push(obj);
       }
       settdrModelList(list);
@@ -79,12 +79,12 @@ function TowerDumpForm({
         });
     }
   }, [tdrModelList]);
-  console.log(apiPayload,">>>>")
+
   const CellID = () => (
     <>
       {tdrModelList.map((val, i) => (
         <>
-          <div key={i} className="flex gap-5 items-center justify-start">
+          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}} key={i}>
             <Input
               label={"CELL ID"}
               type="text"
@@ -92,6 +92,7 @@ function TowerDumpForm({
               value={val.cell_id}
               onChange={(e) => tdrModelListChange(e, i)}
               disabled={requestData}
+              className='w-[49%]'
             />
 
             {/* date  */}
@@ -126,104 +127,105 @@ function TowerDumpForm({
                   />
                 </div>
               </div>
-            </div>
 
-            {/*  Time */}
-            <div className="flex items-center justify-start gap-5 m-3 ">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Time :
-              </label>
+              {/*  Time */}
+              <div className="flex items-center justify-start gap-5 m-3 ">
+                <label className="form-label me-4 col-md-1 font-bold">
+                  Time :
+                </label>
+
+                <div className="col-md-3">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_from"
+                      value={val.time_from}
+                      onChange={(e) => tdrModelListChange(e, i)}
+                      disabled={requestData}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3 ms-4">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_to"
+                      value={val.time_to}
+                      onChange={(e) => tdrModelListChange(e, i)}
+                      disabled={requestData}
+                    />
+                  </div>
+                </div>
+              </div>
 
               <div className="col-md-3">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_from"
-                    value={val.time_from}
-                    onChange={(e) => tdrModelListChange(e, i)}
-                    disabled={requestData}
-                  />
-                </div>
+                <select
+                  name="tsp"
+                  onChange={(e) => tdrModelListChange(e, i)}
+                  className="form-control col-md-4"
+                  value={val.tsp}
+                  required
+                  disabled={requestData}
+                  style={{border:"2px solid green", padding:"5px",borderRadius:"10px"}}
+                >
+                  <option value="select " className="text-uppercase">
+                    Select TSP
+                  </option>
+                  {tspList?.map((tspVal, key) => {
+                    return (
+                      <option
+                        key={key}
+                        value={tspVal}
+                        className="text-uppercase"
+                        name="tsp"
+                        required
+                      >
+                        {tspVal}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
-              <div className="col-md-3 ms-4">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_to"
-                    value={val.time_to}
-                    onChange={(e) => tdrModelListChange(e, i)}
-                    disabled={requestData}
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div className="col-md-3">
-              <select
-                name="tsp"
-                onChange={(e) => tdrModelListChange(e, i)}
-                className="form-control col-md-4"
-                value={val.tsp}
-                required
-                disabled={requestData}
-              >
-                <option value="select " className="text-uppercase">
-                  Select TSP
-                </option>
-                {tspList?.map((tspVal, key) => {
-                  return (
-                    <option
-                      key={key}
-                      value={tspVal}
-                      className="text-uppercase"
-                      name="tsp"
-                      required
-                    >
-                      {tspVal}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-
-            {!requestData && (
-              <div>
-                <div className="flex gap-5">
-                  {tdrModelList.length !== 1 && (
-                    <button
-                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                      onClick={() => tdrRemoveClick(i)}
-                    >
-                      Remove
-                    </button>
-                  )}
-                  {tdrModelList.length - 1 === i && (
-                    <button
-                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                      onClick={tdrAddClick}
-                    >
-                      Add
-                    </button>
-                  )}
+              {!requestData && (
+                <div>
+                  <div className="flex gap-5">
+                    {tdrModelList.length !== 1 && (
+                      <button
+                        className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        onClick={() => tdrRemoveClick(i)}
+                      >
+                        Remove
+                      </button>
+                    )}
+                    {tdrModelList.length - 1 === i && (
+                      <button
+                        className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        onClick={tdrAddClick}
+                      >
+                        Add
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <hr className="font-bold" />
         </>
       ))}
     </>
   );
-  let dump=["GPRS_DUMP","IP_DUMP","CDR_DUMP"]
+  let dump = ["GPRS_DUMP", "IP_DUMP", "CDR_DUMP"];
   return (
     <div>
-      <div className="radioselect">
+      <div className="radioselect flex gap-2">
         <label className="form-label me-4 font-bold">Target Type :</label>
-        <div className="flex gap-5">
+        <div className="flex gap-5 mt-1">
           <Radio
             value={"GPRS_DUMP" == activeForm?.target_type}
             label="GPRS DUMP"
@@ -256,7 +258,7 @@ function TowerDumpForm({
           />
         </div>
       </div>
-      {dump?.includes(activeForm?.target_type)&& CellID()}
+      {dump?.includes(activeForm?.target_type) && CellID()}
     </div>
   );
 }

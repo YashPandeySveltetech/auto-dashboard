@@ -65,7 +65,11 @@ function Sidebar() {
     );
   };
   return (
-    <div className="w-[100%] bg-blue-700 h-[100vh]">
+    <div className="w-[100%] bg-blue-700 h-[100vh]" style={{
+        background:
+          "linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%)",
+        height: "100vh",
+      }}>
       <div className="p-10">
         {" "}
         <Amd className="w-[3rem] h-[3rem] text-white " />

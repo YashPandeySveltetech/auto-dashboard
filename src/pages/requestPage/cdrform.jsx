@@ -176,7 +176,7 @@ function CDRform({
                   />
                 </div>
               </div>
-            </div>
+            
 
             {/*  Time */}
             <div className="flex items-center justify-start gap-5 m-3 ">
@@ -233,6 +233,7 @@ function CDRform({
                 })}
               </select>
             </div>
+            </div>
 
             <div>
               <div className="flex gap-5">
@@ -266,7 +267,7 @@ function CDRform({
     <>
       {cdrImeiList.map((val, i) => (
         <>
-          <div className="flex gap-5 items-center">
+          <div>
             <Input
               label={"IMEI "}
               name="imei"
@@ -302,7 +303,7 @@ function CDRform({
                   />
                 </div>
               </div>
-            </div>
+           
 
             {/*  Time */}
             <div className="flex items-center justify-start gap-5 m-3 ">
@@ -336,7 +337,8 @@ function CDRform({
                 <select
                   name="tsp"
                   onChange={(e) => cdrImeiInputChange(e, i)}
-                  className="form-control col-md-4"
+                  className="form-control col-md-4 border border-black-300 p-1 rounded"
+                  
                   required
                 >
                   <option value="select " className="text-uppercase">
@@ -357,6 +359,7 @@ function CDRform({
                   })}
                 </select>
               </div>
+            </div>
             </div>
 
             <div className="flex gap-5">
@@ -392,7 +395,7 @@ function CDRform({
 
       <div className="radioselect">
         <label className="form-label me-4 font-bold">Target Type :</label>
-        <div className="flex gap-5">
+        <div className="flex gap-5 mt-1">
           <Radio
             value={"MOBILE_NUMBER" == activeForm?.target_type}
             label="MOBILE NUMBER"

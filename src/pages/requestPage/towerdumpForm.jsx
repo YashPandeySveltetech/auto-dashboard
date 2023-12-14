@@ -3,7 +3,13 @@ import { tspList, arry } from "../../constants/tspList";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 
-function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) {
+function TowerDumpForm({
+  handleChange,
+  setApiPayload,
+  apiPayload,
+  activeForm,
+  requestData,
+}) {
   const [tdrModelList, settdrModelList] = useState([
     {
       date_from: "",
@@ -11,11 +17,22 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
       time_from: "",
       time_to: "",
       cell_id: "",
-      tsp:""
+      tsp: "",
     },
   ]);
+  useEffect(() => {
+    if (requestData) {
+      handleview();
+    }
+  }, []);
 
+  const handleview = () => {
+    if (requestData?.target_type === "CELL_ID") {
+      settdrModelList(requestData.form_request_for.cell_id);
 
+      return;
+    }
+  };
   const tdrModelListChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...tdrModelList];
@@ -32,7 +49,7 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
         time_from: "",
         time_to: "",
         cell_id: "",
-        tsp:""
+        tsp: "",
       },
     ]);
   };
@@ -58,11 +75,12 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
           <div key={i} className="flex gap-5 items-center justify-start">
             <Input
               label={"CELL ID"}
-              type="text"     
-              name="cell_id "
+              type="text"
+              name="cell_id"
+              value={val.cell_id}
               onChange={(e) => tdrModelListChange(e, i)}
             />
-           
+
             {/* date  */}
             <div className="input-group flex items-center justify-start gap-5 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
@@ -72,13 +90,25 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="date"  name="date_from" onChange={(e) => tdrModelListChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_from"
+                    value={val.date_from}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="date" name="date_to" onChange={(e) => tdrModelListChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_to"
+                    value={val.date_to}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -92,13 +122,25 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="time" name="time_from" onChange={(e) => tdrModelListChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_from"
+                    value={val.time_from}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" onChange={(e) => tdrModelListChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_to"
+                    value={val.time_to}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -108,6 +150,7 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
                 name="tsp"
                 onChange={(e) => tdrModelListChange(e, i)}
                 className="form-control col-md-4"
+                value={val.tsp}
                 required
               >
                 <option value="select " className="text-uppercase">
@@ -157,7 +200,7 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
   );
   return (
     <div>
-       <div className="radioselect">
+      <div className="radioselect">
         <label className="form-label me-4 font-bold">Target Type :</label>
         <div className="flex gap-5">
           <Radio
@@ -171,9 +214,9 @@ function TowerDumpForm({ handleChange, setApiPayload, apiPayload, activeForm }) 
           />{" "}
         </div>
       </div>
-      {activeForm?.target_type==="CELL_ID"&& CellID()}
+      {activeForm?.target_type === "CELL_ID" && CellID()}
     </div>
-  )
+  );
 }
 
-export default TowerDumpForm
+export default TowerDumpForm;

@@ -23,6 +23,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
 	rejectModal: false,
     viewLogModal:false,
+    updateReqList:false,
     requestId:NaN
 }
 
@@ -41,6 +42,10 @@ export const userSlice = createSlice({
         state.viewLogModal= true
         state.requestId=payload
       },
+      updateRequestList: (state,{payload}) => {
+        state.updateReqList= payload
+    
+      },
     commonCloseModal: (state) => {
 		state.rejectModal= false
         state.viewLogModal= false
@@ -53,6 +58,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { commonCloseModal, openRejectModal,openViewLogModal } = userSlice.actions
+export const { commonCloseModal, openRejectModal,openViewLogModal,updateRequestList } = userSlice.actions
 
 export default userSlice.reducer

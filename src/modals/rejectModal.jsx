@@ -4,7 +4,7 @@ import { REJECT_REQUEST } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { ApiHandle } from '../utils/ApiHandle';
 import Toaster from '../utils/toaster/Toaster';
-import { commonCloseModal } from '../redux/reducers/modalsReducer';
+import { commonCloseModal, updateRequestList } from '../redux/reducers/modalsReducer';
 
 function RejectModal() {
     const [reson,setReson]=useState("")
@@ -20,6 +20,7 @@ const dispatch=useDispatch()
 			
 			// setRequestList(res?.responsePayload);
 			// setIsOtp(true);
+            dispatch(updateRequestList(true))
             dispatch(commonCloseModal());
 			Toaster('success', 'Request Reject Successfully!');
 

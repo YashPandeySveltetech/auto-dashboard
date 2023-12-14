@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { tspList, arry } from "../../constants/tspList";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
-function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
+function CAFform({
+  handleChange,
+  setApiPayload,
+  apiPayload,
+  activeForm,
+  requestData,
+}) {
   const [cafList, setCafList] = useState([
     {
       mobile_number: "",
@@ -13,6 +19,19 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
       time_to: "",
     },
   ]);
+  useEffect(() => {
+    if (requestData) {
+      handleview();
+    }
+  }, []);
+
+  const handleview = () => {
+    if (requestData?.target_type === "MOBILE_NUMBER") {
+      setCafList(requestData.form_request_for.multiple_mobile);
+
+      return;
+    }
+  };
 
   const cafInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -69,10 +88,11 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
             <Input
               label={"Mobile no."}
               name="mobile_number"
+              value={val.mobile_number}
               onChange={(e) => cafInputChange(e, i)}
             />
-              {/* date  */}
-              <div className="input-group flex items-center justify-start gap-5 m-3">
+            {/* date  */}
+            <div className="input-group flex items-center justify-start gap-5 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
@@ -80,13 +100,25 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="date" name="date_from" onChange={(e) => cafInputChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_from"
+                    value={val.date_from}
+                    onChange={(e) => cafInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="date" name="date_to" onChange={(e) => cafInputChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_to"
+                    value={val.date_to}
+                    onChange={(e) => cafInputChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -100,13 +132,25 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="time" name="time_from" onChange={(e) => cafInputChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_from"
+                    value={val.time_from}
+                    onChange={(e) => cafInputChange(e, i)}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" onChange={(e) => cafInputChange(e, i)}/>
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_to"
+                    value={val.time_to}
+                    onChange={(e) => cafInputChange(e, i)}
+                  />
                 </div>
               </div>
             </div>
@@ -115,6 +159,7 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
                 name="tsp"
                 onChange={(e) => cafInputChange(e, i)}
                 className="form-control col-md-4"
+                value={val.tsp}
                 required
               >
                 <option value="select " className="text-uppercase">

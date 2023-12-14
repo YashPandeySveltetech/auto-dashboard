@@ -87,25 +87,21 @@ function CDRform({
   const handleview = () => {
     if (requestData?.target_type === "MOBILE_NUMBER") {
       setCdrMobileList(requestData.form_request_for.multiple_mobile);
-
-      setApiPayload({
-        ...apiPayload,
-        form_request_for: {
-          [arry[requestData?.target_type]]:
-            requestData.form_request_for.ip_port,
-        },
-      });
-      console.log(
-        requestData.form_request_for.ip_port,
-        "requestData.form_request_for.ip_port"
-      );
-      return;
-    }
-    console.log("gh");
-    if (requestData?.target_type === "IMEI_NUMBER") {
       // setApiPayload({
       //   ...apiPayload,
-      //   form_request_for: { [arry[requestData?.target_type]]: cdrImeiList },
+      //   form_request_for: {
+      //     [arry[requestData?.target_type]]:
+      //       requestData.form_request_for.multiple_mobile,
+      //   },
+      // });
+      return;
+    }
+
+    if (requestData?.target_type === "IMEI_NUMBER") {
+      setCdrImeiList(requestData.form_request_for.imei_number);
+      // setApiPayload({
+      //   ...apiPayload,
+      //   form_request_for: { [arry[apiPayload?.target_type]]: cdrImeiList },
       // });
     }
   };
@@ -161,6 +157,7 @@ function CDRform({
                     label={" "}
                     name="date_from"
                     type="date"
+                    value={val.date_from}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
@@ -172,6 +169,7 @@ function CDRform({
                     label={" "}
                     name="date_to"
                     type="date"
+                    value={val.date_to}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
@@ -191,6 +189,7 @@ function CDRform({
                     label={" "}
                     type="time"
                     name="time_from"
+                    value={val.time_from}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
@@ -202,6 +201,7 @@ function CDRform({
                     label={" "}
                     type="time"
                     name="time_to"
+                    value={val.time_to}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
@@ -214,6 +214,7 @@ function CDRform({
                 onChange={(e) => cdrMobileInputChange(e, i)}
                 className="form-control col-md-4"
                 required
+                value={val.tsp}
               >
                 <option value="select " className="text-uppercase">
                   Select TSP
@@ -270,6 +271,7 @@ function CDRform({
             <Input
               label={"IMEI "}
               name="imei"
+              value={val.imei}
               onChange={(e) => cdrImeiInputChange(e, i)}
             />
 
@@ -287,6 +289,7 @@ function CDRform({
                     label={" "}
                     type="date"
                     name="date_from"
+                    value={val.date_from}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
@@ -298,6 +301,7 @@ function CDRform({
                     label={" "}
                     type="date"
                     name="date_to"
+                    value={val.date_to}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
@@ -317,6 +321,7 @@ function CDRform({
                     label={" "}
                     type="time"
                     name="time_from"
+                    value={val.time_from}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
@@ -328,6 +333,7 @@ function CDRform({
                     label={" "}
                     type="time"
                     name="time_to"
+                    value={val.time_to}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
@@ -337,6 +343,7 @@ function CDRform({
                   name="tsp"
                   onChange={(e) => cdrImeiInputChange(e, i)}
                   className="form-control col-md-4"
+                  value={val.tsp}
                   required
                 >
                   <option value="select " className="text-uppercase">

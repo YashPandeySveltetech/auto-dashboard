@@ -48,6 +48,7 @@ function RequestForm({ requestData }) {
           ["case_type"]: requestData?.case_type,
           ["io_name"]: requestData?.io_name,
           ["io_mobile_no"]: requestData?.io_mobile_no,
+          ["brief_summary"]: requestData?.brief_summary,
         };
       });
 

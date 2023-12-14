@@ -59,9 +59,9 @@ function FilterSection({ filter, setFilter, getAllRequest }) {
       </div>
       <button
         onClick={getAllRequest}
-		style={{width:"100px", border:"1px solid blue"}}
+		style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}
       >
-        Search
+        <b>Search</b>
       </button>
     </div>
   );

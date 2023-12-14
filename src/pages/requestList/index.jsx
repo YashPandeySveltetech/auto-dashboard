@@ -23,7 +23,7 @@ function RequestList() {
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
 
-  const [currentpage,setCurrentpage]=useState(0)
+  const [current,setCurrent]=useState(0)
   const [isNext,setIsNext]=useState(false)
   const [isPrevious,setIsPrevious]=useState(false)
 
@@ -46,12 +46,18 @@ function RequestList() {
       console.log(res?.responsePayload, "res");
       setRequestList(res?.responsePayload);
 	  if(res?.responsePayload?.next){
+		console.log("next call");
+		
 		// setCurrentpage(currentpage+1)
 		setIsNext(true)
 	}
+	console.log(res?.responsePayload?.previous,'oooooooooooooooo',res?.responsePayload?.next,'nexxttt');
+	
 	if(res?.responsePayload?.previous){
+		console.log("prev call");
+		
 		// setCurrentpage(currentpage+1)
-		setIsNext(true)
+		setIsPrevious(true)
 	}
       // setIsOtp(true);
       // Toaster('success', 'OTP SENT Successfully!');
@@ -60,6 +66,8 @@ function RequestList() {
     }
   };
   const handleNext=()=>{
+	console.log("clickkkkk");
+	
 	setCurrent(current+1)
 	getAllRequest({active:current+1})
   }
@@ -199,7 +207,7 @@ function RequestList() {
                   >
                     {item?.fir_no}
                   </td>
-                  <td class="px-6 py-4">
+                  <td class="px-6 py-4 text-center">
                     {/* <button className='bg-green-300'>Approve</button> */}
                     <button
                       onClick={() =>
@@ -211,8 +219,8 @@ function RequestList() {
                     {/* <button className='bg-red-900'>Reject</button> */}
                   </td>
                   <td class="px-6 py-4 flex gap-2">
-                    {["ACP", "DCP"].includes(rank) ||
-                      (item?.decision == "PENDING" && (
+                    {(["ACP", "DCP"].includes(rank) &&
+                      (item?.decision == "PENDING") (
                         <button
                           onClick={() => {
                             approveRequest({
@@ -243,8 +251,8 @@ function RequestList() {
                     >
                       View
                     </button>
-                    {["ACP", "DCP"].includes(rank) ||
-                      (item?.decision == "PENDING" && (
+                    {(["ACP", "DCP"].includes(rank) &&
+                      (item?.decision == "PENDING")(
                         <button
                           onClick={() => dispatch(openRejectModal(item?.id))}
                           className="bg-red-900 p-2 rounded-lg font-bold"
@@ -257,16 +265,26 @@ function RequestList() {
                         </button>
                       ))}
                   </td>
-                  <td class="px-6 py-4 ">
+                  <td class="px-6 py-4">
+					<div>
                     {item?.decision}
+					</div>
+					<div>
+
+					
                     {item?.decision == "REJECT" && (
                       <button
                         onClick={() => dispatch(openViewLogModal(item?.id))}
-                        className="bg-red-900 mx-4 p-2"
+						className="bg-red-900 p-2 rounded-lg font-bold"
+						style={{
+						  color: "white",
+						  boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+						}}
                       >
                         View Log
                       </button>
                     )}
+					</div>
                   </td>
                 </tr>
               ))}
@@ -276,10 +294,10 @@ function RequestList() {
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">
 
-       {isPrevious&& <button  onclick={()=>handlePrevious()}className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md">
+       {isPrevious? <button  onClick={()=>handlePrevious()}className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md">
           PREV
-        </button>}
-       {isNext&& <button onclick={()=>handleNext()} className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md">
+        </button>:<div></div>}
+       {isNext&& <button onClick={()=>handleNext()} className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md">
           NEXT
         </button>}
       </div>

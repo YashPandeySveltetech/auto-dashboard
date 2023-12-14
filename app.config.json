@@ -4,7 +4,7 @@
         "name"      : "r2_dashboard",
         "script"    : "npx",
         "interpreter": "none",
-        "args": "serve -s build -p 3000"
+        "args": "serve -s build -p 3002"
       }
     ]
   }

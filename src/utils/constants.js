@@ -11,3 +11,4 @@ export const FORM_REQUEST = "/form/request/";
 export const REJECT_REQUEST = "/form/reject-forms/";
 export const APPROVE_REQUEST = "/form/approve-decisions/";
 export const VIEW_ATTACHMENTS="/form/request-attachments/"
+export const MAKE_PDF="/form/make-pdf/"

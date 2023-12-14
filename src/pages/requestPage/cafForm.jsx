@@ -16,10 +16,20 @@ function CAFform({ handleChange, setApiPayload, apiPayload, activeForm }) {
 
   const cafInputChange = (e, index) => {
     const { name, value } = e.target;
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...cafList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setCafList(list);
+    } else {
+      const list = [...cafList];
+      list[index][name] = value;
 
-    const list = [...cafList];
-    list[index][name] = value;
-    setCafList(list);
+      setCafList(list);
+    }
   };
 
   const cafAddClick = () => {

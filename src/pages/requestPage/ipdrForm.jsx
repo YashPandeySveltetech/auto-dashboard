@@ -17,10 +17,21 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
 
   const ipdrmobilechange = (e, index) => {
     const { name, value } = e.target;
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...ipdrMobileList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setipdrMobileList(list);
+    } else {
+      const list = [...ipdrMobileList];
+      list[index][name] = value;
 
-    const list = [...ipdrMobileList];
-    list[index][name] = value;
-    setipdrMobileList(list);
+      setipdrMobileList(list);
+    }
+  
   };
 
   const ipdrAddHandle = () => {
@@ -56,10 +67,22 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
 
   const ipdrimeiChange = (e, index) => {
     const { name, value } = e.target;
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...ipdrImeiList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setipdrImeiList(list);
+    } else {
+      const list = [...ipdrImeiList];
+      list[index][name] = value;
 
-    const list = [...ipdrImeiList];
-    list[index][name] = value;
-    setipdrImeiList(list);
+      setipdrImeiList(list);
+    }
+  
+  
   };
 
   const ipdrImeiAdd = () => {
@@ -97,9 +120,20 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
 
   const ipdrIpChange = (e, index) => {
     const { name, value } = e.target;
-    const list = [...ipdrReverseIpList];
-    list[index][name] = value;
-    setIpdrReverseIpList(list);
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...ipdrReverseIpList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setIpdrReverseIpList(list);
+    } else {
+      const list = [...ipdrReverseIpList];
+      list[index][name] = value;
+
+      setIpdrReverseIpList(list);
+    }
   };
 
   const ipdrAddReverseIpClick = () => {
@@ -501,7 +535,7 @@ function IPDRform({ handleChange, setApiPayload, apiPayload, activeForm }) {
           />
           <Radio
             value={"IP_ADDRESS" === activeForm.target_type}
-            label="IP Addres"
+            label="IP Address"
             name="target_type"
             id="target_type"
             handleChange={(e) => {

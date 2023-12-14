@@ -59,7 +59,7 @@ function FilterSection({ filter, setFilter, getAllRequest }) {
       </div>
       <button
         onClick={getAllRequest}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
+		style={{width:"100px", border:"1px solid blue"}}
       >
         Search
       </button>

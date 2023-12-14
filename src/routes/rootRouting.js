@@ -59,7 +59,7 @@ const AppRoute = memo(() => {
 							}
 						/>
             <Route
-							path='/request/view/:id'
+							path='/request/view/:type/:id'
 							element={
 								<Layout>
 									<RequestList />

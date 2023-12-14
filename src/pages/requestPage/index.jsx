@@ -9,8 +9,9 @@ import CAF_FORM from "./cafForm";
 import IPDR_FORM from "./ipdrForm";
 import TOWER_DUMP_FORM from "./towerdumpForm";
 import Input from "../../components/input";
-import { FORM_REQUEST } from "../../utils/constants";
+import { FORM_REQUEST, MAKE_PDF } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
+import Toaster from "../../utils/toaster/Toaster";
 
 function RequestForm({ requestData }) {
   const initialobj = {
@@ -56,9 +57,9 @@ function RequestForm({ requestData }) {
     }
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
-  }, []);
+  }, [apiPayload]);
 
-  console.log(apiPayload, "L");
+ 
   const formHandler = useCallback(() => {
     if (activeForm.request_to_provide === "CDR") {
       return (
@@ -135,15 +136,24 @@ function RequestForm({ requestData }) {
     const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
 
     if (res.statusCode === 201) {
+      
+      getFormPdf(res?.responsePayload?.id)
       setActiveForm({
         target_type: "",
         request_to_provide: "",
-      });
-      setApiPayload(initialobj);
+      })
+      setApiPayload(initialobj)
+      Toaster("success","SuccessFully Submitted Form")
       return;
     }
   };
-  console.log(activeForm, "activeForm");
+  console.log(apiPayload, "activeForm");
+
+  const getFormPdf=async(id)=>{
+
+const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
+
+  }
 
   return (
     <>
@@ -278,10 +288,9 @@ function RequestForm({ requestData }) {
               name="user_file"
               className="form-control mt-2"
               accept=".xlsx,.xls,.doc,.docx,.zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam,.xla,.xlw,.xlr,.csv"
-              disabled={requestData}
-            />
-          </div> */}
-
+                            />
+                    </div> */}
+          
           {/* Comments */}
           <div className="mt-6">
             <label className="font-bold">Comments:</label>

@@ -23,7 +23,7 @@ function RequestList() {
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
 
-  const [currentpage,setCurrentpage]=useState(0)
+  const [current,setCurrent]=useState(0)
   const [isNext,setIsNext]=useState(false)
   const [isPrevious,setIsPrevious]=useState(false)
 

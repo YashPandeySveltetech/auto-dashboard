@@ -24,10 +24,10 @@ const AppRoute = memo(() => {
         <Routes>
           <Route element={<AuthRoute />}>
             <Route
-              path="/"
+              path="/request/view/:type/:id"
               element={
                 <Layout>
-                  <HomePage />
+                  <RequestList />
                 </Layout>
               }
             />

@@ -17,7 +17,7 @@ const dispatch=useDispatch()
 			'POST'
 		);
 		if (res.statusCode === 201) {
-			// console.log(res?.responsePayload, 'res');
+			
 			// setRequestList(res?.responsePayload);
 			// setIsOtp(true);
             dispatch(commonCloseModal());

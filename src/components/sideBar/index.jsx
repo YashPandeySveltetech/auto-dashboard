@@ -11,7 +11,6 @@ import { setUserData } from "../../redux/reducers/userReducer";
 function Sidebar() {
   const { rank,email} = useSelector((state) => state.user?.userData)
 
-  console.log(!["ACP", "DCP"].includes(rank), rank, "rank");
   const list = [
     {
       icon: <Boxes />,
@@ -47,14 +46,14 @@ function Sidebar() {
 
   const handleUserDetail = async () => {
     const res = await ApiHandle(USER_DETAIL, {}, "GET");
-    console.log(res, ".1");
+   
     if (res.statusCode === 200) {
-      console.log(res?.responsePayload, "res?.responsePayload");
+    
       dispatch(setUserData(res?.responsePayload));
     }
   };
   const ListItem = ({ icon, text, url, isShow }) => {
-    console.log(isShow, "text", text);
+  
     return (
       <>
         {" "}

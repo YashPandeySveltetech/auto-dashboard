@@ -18,7 +18,7 @@ const dispatch=useDispatch()
 		);
 		if (res.statusCode === 200) {
             setLogs(res?.responsePayload?.results)
-            // console.log(res?.responsePayload?.results);
+          
 			Toaster('success', 'Get Logs Successfully!');
 
 			return;

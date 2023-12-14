@@ -5,7 +5,7 @@ import CommonDropDown from "../../components/dropdown";
 import Input from "../../components/input";
 
 function FilterSection({ filter, setFilter, getAllRequest }) {
-  console.log(filter, "filter");
+
   const from_status_option = [
     { id: 1, name: "PENDING", value: "PENDING" },
     { id: 2, name: "APPROVE", value: "APPROVE" },

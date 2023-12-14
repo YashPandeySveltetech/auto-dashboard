@@ -29,7 +29,7 @@ const RegistrationPage = () => {
     }}
   
   const [formData, setFormData] = useState(defaultFormaData);
-  console.log(formData, "formData");
+ 
   const [districtOptions, setDistrictOptions] = useState([]);
   const [stateOptions, setStateOptions] = useState([]);
   const [policeStationOptions, setPoliceStationOptions] = useState([]);

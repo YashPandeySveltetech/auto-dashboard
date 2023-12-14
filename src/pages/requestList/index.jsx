@@ -43,30 +43,30 @@ function RequestList() {
       "GET"
     );
     if (res.statusCode === 200) {
-      console.log(res?.responsePayload, "res");
+     
       setRequestList(res?.responsePayload);
 	  if(res?.responsePayload?.next){
-		console.log("next call");
+
 		
 		// setCurrentpage(currentpage+1)
 		setIsNext(true)
 	}
 	if(!res?.responsePayload?.next){
-		console.log("next call");
+		
 		
 		// setCurrentpage(currentpage+1)
 		setIsNext(false)
 	}
-	console.log(res?.responsePayload?.previous,'oooooooooooooooo',res?.responsePayload?.next,'nexxttt');
+
 	
 	if(res?.responsePayload?.previous){
-		console.log("prev call");
+	
 		
 		// setCurrentpage(currentpage+1)
 		setIsPrevious(true)
 	}
 	if(!res?.responsePayload?.previous){
-		console.log("prev call");
+
 		
 		// setCurrentpage(currentpage+1)
 		setIsPrevious(false)
@@ -78,7 +78,7 @@ function RequestList() {
     }
   };
   const handleNext=()=>{
-	console.log("clickkkkk");
+
 	
 	setCurrent(current+1)
 	getAllRequest({active:current+1})
@@ -102,7 +102,7 @@ function RequestList() {
       "PATCH"
     );
     if (res.statusCode === 200) {
-      // console.log(res?.responsePayload, 'res');
+ 
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
       getAllRequest();
@@ -119,15 +119,12 @@ function RequestList() {
       "GET"
     );
     if (res.statusCode === 200) {
-      console.log(
-        process.env.REACT_APP_MEDIA_URI + res?.responsePayload?.results[0].file,
-        "responsePayload?.results[0]?.file"
-      );
+     
      if(res?.responsePayload?.results[0].file){ window.open(
         process.env.REACT_APP_MEDIA_URI + res?.responsePayload?.results[0].file
       );}
       // getAllRequest()
-      Toaster("success", "Request Approved Successfully!");
+      // Toaster("success", "Request Approved Successfully!");
 
       return;
     }

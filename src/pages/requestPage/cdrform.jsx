@@ -11,7 +11,7 @@ function CDRform({
   activeForm,
   requestData,
 }) {
-  console.log(requestData, "requestData={requestData}");
+ 
   const [cdrMobileList, setCdrMobileList] = useState([
     {
       date_from: "",
@@ -89,7 +89,7 @@ function CDRform({
     }
   };
 
-  console.log(cdrImeiList, ">>>>");
+
   const cdrAddImeiClick = () => {
     setCdrImeiList([
       ...cdrImeiList,
@@ -154,10 +154,10 @@ function CDRform({
 
   const Mobile = () => (
     <>
-      {/* {console.log(cdrMobileList, "cdrMobileList")} */}
+
       {cdrMobileList.map((val, i) => (
         <>
-          {/* {console.log(val, "val")} */}
+         
           <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
             <Input
               label={"Mobile "}
@@ -438,8 +438,7 @@ function CDRform({
 
   return (
     <div>
-      {console.log(apiPayload, "apiPayload")}
-      {console.log(cdrMobileList, "cdrMobileList")}
+    
 
       <div className="radioselect flex gap-2">
         <label className="form-label me-4 font-bold">Target Type :</label>
@@ -466,7 +465,7 @@ function CDRform({
           />
         </div>
       </div>
-      {console.log(activeForm?.target_type, "activeForm?.target_type")}
+  
       <div className="flex flex-col gap-5">
         {activeForm?.target_type === "MOBILE_NUMBER" ||
         requestData?.target_type === "MOBILE_NUMBER"

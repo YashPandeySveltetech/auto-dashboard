@@ -62,6 +62,7 @@ function RequestForm({ requestData }) {
     if (activeForm.request_to_provide === "CDR") {
       return (
         <CDR_FORM
+          requestData={requestData}
           handleChange={handleChange}
           setApiPayload={setApiPayload}
           apiPayload={apiPayload}
@@ -73,6 +74,7 @@ function RequestForm({ requestData }) {
     if (activeForm.request_to_provide === "TOWER_DUMP") {
       return (
         <TOWER_DUMP_FORM
+          requestData={requestData}
           handleChange={handleChange}
           setApiPayload={setApiPayload}
           apiPayload={apiPayload}
@@ -84,6 +86,7 @@ function RequestForm({ requestData }) {
     if (activeForm.request_to_provide === "IPDR") {
       return (
         <IPDR_FORM
+          requestData={requestData}
           handleChange={handleChange}
           setApiPayload={setApiPayload}
           apiPayload={apiPayload}
@@ -95,6 +98,7 @@ function RequestForm({ requestData }) {
     if (activeForm.request_to_provide === "CAF") {
       return (
         <CAF_FORM
+          requestData={requestData}
           handleChange={handleChange}
           setApiPayload={setApiPayload}
           apiPayload={apiPayload}

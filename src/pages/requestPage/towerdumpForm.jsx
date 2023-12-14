@@ -82,7 +82,7 @@ function TowerDumpForm({
 
   const CellID = () => (
     <>
-      {tdrModelList.map((val, i) => (
+      {tdrModelList?.map((val, i) => (
         <>
           <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}} key={i}>
             <Input

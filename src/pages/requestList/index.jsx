@@ -105,7 +105,7 @@ function RequestList() {
  
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
-      getAllRequest();
+      getAllRequest({active:1});
       Toaster("success", "Request Approved Successfully!");
 
       return;

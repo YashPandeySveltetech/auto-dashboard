@@ -29,7 +29,7 @@ const dispatch=useDispatch()
   return (
     <ModalWrapper handleClick={rejectRequest} btnName={"Reject"}>
         <div> 
-            <span className='text-xl text-white'>Reson For Reject</span>
+            <span className='text-xl text-white'>Reason For Reject</span>
             <textarea onChange={(e)=>setReson(e.target.value)} value={reson} className='w-full' rows="4" type='text'/>
         </div>
     </ModalWrapper >

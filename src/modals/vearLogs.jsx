@@ -12,8 +12,8 @@ function ViewLogsModal() {
 const dispatch=useDispatch()
     const rejectRequest = async () => {
 		const res = await ApiHandle(
-			REJECT_REQUEST,
-			{request_form:requestId},
+			REJECT_REQUEST+`?request_form=${requestId}`,
+			{},
 			'GET'
 		);
 		if (res.statusCode === 200) {

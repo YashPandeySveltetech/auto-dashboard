@@ -51,6 +51,12 @@ function RequestList() {
 		// setCurrentpage(currentpage+1)
 		setIsNext(true)
 	}
+	if(!res?.responsePayload?.next){
+		console.log("next call");
+		
+		// setCurrentpage(currentpage+1)
+		setIsNext(false)
+	}
 	console.log(res?.responsePayload?.previous,'oooooooooooooooo',res?.responsePayload?.next,'nexxttt');
 	
 	if(res?.responsePayload?.previous){
@@ -58,6 +64,12 @@ function RequestList() {
 		
 		// setCurrentpage(currentpage+1)
 		setIsPrevious(true)
+	}
+	if(!res?.responsePayload?.previous){
+		console.log("prev call");
+		
+		// setCurrentpage(currentpage+1)
+		setIsPrevious(false)
 	}
       // setIsOtp(true);
       // Toaster('success', 'OTP SENT Successfully!');
@@ -111,9 +123,9 @@ function RequestList() {
         process.env.REACT_APP_MEDIA_URI + res?.responsePayload?.results[0].file,
         "responsePayload?.results[0]?.file"
       );
-      window.open(
+     if(res?.responsePayload?.results[0].file){ window.open(
         process.env.REACT_APP_MEDIA_URI + res?.responsePayload?.results[0].file
-      );
+      );}
       // getAllRequest()
       Toaster("success", "Request Approved Successfully!");
 

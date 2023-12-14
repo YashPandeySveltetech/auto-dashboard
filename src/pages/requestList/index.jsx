@@ -220,7 +220,7 @@ function RequestList() {
                   </td>
                   <td class="px-6 py-4 flex gap-2">
                     {(["ACP", "DCP"].includes(rank) &&
-                      (item?.decision == "PENDING") (
+                      (item?.decision == "PENDING")&& (
                         <button
                           onClick={() => {
                             approveRequest({
@@ -252,7 +252,7 @@ function RequestList() {
                       View
                     </button>
                     {(["ACP", "DCP"].includes(rank) &&
-                      (item?.decision == "PENDING")(
+                      (item?.decision == "PENDING")&&(
                         <button
                           onClick={() => dispatch(openRejectModal(item?.id))}
                           className="bg-red-900 p-2 rounded-lg font-bold"

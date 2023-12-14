@@ -1,9 +1,12 @@
 /** @format */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Amd, Boxes } from "react-bootstrap-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { USER_DETAIL } from "../../utils/constants";
+import { ApiHandle } from "../../utils/ApiHandle";
+import { setUserData } from "../../redux/reducers/userReducer";
 
 function Sidebar() {
   const { rank } = useSelector((state) => state.user?.userData);
@@ -34,7 +37,14 @@ function Sidebar() {
       isShow: ["ACP", "DCP"].includes(rank),
     },
   ];
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {
+    const res = ApiHandle(USER_DETAIL, {}, "GET");
+    if (res.statusCode === 200) {
+      dispatch(setUserData(res?.responsePayload));
+    }
+  }, []);
   const ListItem = ({ icon, text, url, isShow }) => {
     console.log(isShow, "text", text);
     return (
@@ -55,25 +65,20 @@ function Sidebar() {
     );
   };
   return (
-    <div
-      className="w-full"
-      style={{
+    <div className="w-[100%] bg-blue-700 h-[100vh]" style={{
         background:
           "linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%)",
         height: "100vh",
-      }}
-    >
+      }}>
       <div className="p-10">
-        {/* Assuming Amd is a component or icon */}
-        <Amd
-          className="w-12 h-12 text-white"
-          style={{ fontSize: "2rem", fontFamily: "cursive", color: "#ffcc00" }}
-        />
+        {" "}
+        <Amd className="w-[3rem] h-[3rem] text-white " />
       </div>
-
       <div className="flex flex-col gap-2 p-3">
-        {list.map((item, index) => (
-          <ListItem key={index} {...item} />
+        {list.map((item) => (
+          <>
+            <ListItem {...item} />
+          </>
         ))}
       </div>
     </div>

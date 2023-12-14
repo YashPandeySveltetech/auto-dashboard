@@ -1,14 +1,17 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
-import { tspList,arry } from "../../constants/tspList";
+import { tspList, arry } from "../../constants/tspList";
+import { CLOSING } from "ws";
 
 function CDRform({
   handleChange,
   setApiPayload,
   apiPayload,
   activeForm,
+  requestData,
 }) {
+  console.log(requestData, "requestData={requestData}");
   const [cdrMobileList, setCdrMobileList] = useState([
     {
       date_from: "",
@@ -19,7 +22,6 @@ function CDRform({
       tsp: "",
     },
   ]);
-
   const cdrMobileInputChange = (e, index) => {
     const { name, value } = e.target;
 
@@ -59,7 +61,6 @@ function CDRform({
 
   const cdrImeiInputChange = (e, index) => {
     const { name, value } = e.target;
-
     const list = [...cdrImeiList];
     list[index][name] = value;
     setCdrImeiList(list);
@@ -83,7 +84,37 @@ function CDRform({
     list.splice(index, 1);
     setCdrImeiList(list);
   };
- 
+  const handleview = () => {
+    if (requestData?.target_type === "MOBILE_NUMBER") {
+      setCdrMobileList(requestData.form_request_for.multiple_mobile);
+
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+          [arry[requestData?.target_type]]:
+            requestData.form_request_for.ip_port,
+        },
+      });
+      console.log(
+        requestData.form_request_for.ip_port,
+        "requestData.form_request_for.ip_port"
+      );
+      return;
+    }
+    console.log("gh");
+    if (requestData?.target_type === "IMEI_NUMBER") {
+      // setApiPayload({
+      //   ...apiPayload,
+      //   form_request_for: { [arry[requestData?.target_type]]: cdrImeiList },
+      // });
+    }
+  };
+
+  useEffect(() => {
+    if (requestData) {
+      handleview();
+    }
+  }, []);
 
   useEffect(() => {
     if (apiPayload?.target_type === "MOBILE_NUMBER") {
@@ -104,9 +135,11 @@ function CDRform({
 
   const Mobile = () => (
     <>
+      {console.log(cdrMobileList, "cdrMobileList")}
       {cdrMobileList.map((val, i) => (
         <>
-          <div key={i}>
+          {console.log(val, "val")}
+          <div key={i} className="flex gap-5 items-center justify-start">
             <Input
               label={"Mobile "}
               type="text"
@@ -357,7 +390,10 @@ function CDRform({
 
   return (
     <div>
-      <div className="radioselect flex gap-3">
+      {console.log(apiPayload, "apiPayload")}
+      {console.log(cdrMobileList, "cdrMobileList")}
+
+      <div className="radioselect">
         <label className="form-label me-4 font-bold">Target Type :</label>
         <div className="flex gap-5 mt-1">
           <Radio
@@ -380,10 +416,13 @@ function CDRform({
           />
         </div>
       </div>
+      {console.log(activeForm?.target_type, "activeForm?.target_type")}
       <div className="flex flex-col gap-5">
-        {activeForm?.target_type === "MOBILE_NUMBER"
+        {activeForm?.target_type === "MOBILE_NUMBER" ||
+        requestData?.target_type === "MOBILE_NUMBER"
           ? Mobile()
-          : activeForm?.target_type === "IMEI_NUMBER"
+          : activeForm?.target_type === "IMEI_NUMBER" ||
+            requestData?.target_type === "IMEI_NUMBER"
           ? IMEI()
           : ""}
       </div>

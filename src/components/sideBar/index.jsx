@@ -24,17 +24,17 @@ function Sidebar() {
       url: "/request-form",
       isShow: !["ACP", "DCP"].includes(rank),
     },
-    {
-      icon: <Boxes />,
-      text: "Request List",
-      url: "/request-list",
-      isShow: true,
-    },
+    // {
+    //   icon: <Boxes />,
+    //   text: "Request List",
+    //   url: "/request-list",
+    //   isShow: true,
+    // },
     {
       icon: <Boxes />,
       text: "Register",
       url: "/register",
-      isShow: ["ACP", "DCP"].includes(rank),
+      isShow: ["ADMIN"].includes(rank),
     },
   ];
   const dispatch = useDispatch();

@@ -159,6 +159,7 @@ function IPDRform({
               value={val.mobile_number}
               name="mobile_number"
               onChange={(e) => ipdrmobilechange(e, i)}
+              disabledSelect={requestData}
             />
             {/* CDR DATE TIME */}
             {/* date  */}
@@ -176,6 +177,7 @@ function IPDRform({
                     name="date_from"
                     value={val.date_from}
                     onChange={(e) => ipdrmobilechange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -188,6 +190,7 @@ function IPDRform({
                     name="date_to"
                     value={val.date_to}
                     onChange={(e) => ipdrmobilechange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -208,6 +211,7 @@ function IPDRform({
                     name="time_from"
                     value={val.time_from}
                     onChange={(e) => ipdrmobilechange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -220,6 +224,7 @@ function IPDRform({
                     name="time_to"
                     value={val.time_to}
                     onChange={(e) => ipdrmobilechange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -231,6 +236,7 @@ function IPDRform({
                 onChange={(e) => ipdrmobilechange(e, i)}
                 className="form-control col-md-4"
                 required
+                disabled={requestData}
                 value={val.tsp}
               >
                 <option value="select " className="text-uppercase">
@@ -252,26 +258,28 @@ function IPDRform({
               </select>
             </div>
 
-            <div>
-              <div className="flex gap-5">
-                {ipdrMobileList.length !== 1 && (
-                  <button
-                    className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => ipdrHandleRemove(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {ipdrMobileList.length - 1 === i && (
-                  <button
-                    className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={ipdrAddHandle}
-                  >
-                    Add
-                  </button>
-                )}
+            {!requestData && (
+              <div>
+                <div className="flex gap-5">
+                  {ipdrMobileList.length !== 1 && (
+                    <button
+                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => ipdrHandleRemove(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {ipdrMobileList.length - 1 === i && (
+                    <button
+                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={ipdrAddHandle}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <hr className="font-bold" />
         </>
@@ -288,6 +296,7 @@ function IPDRform({
               name="imei"
               value={val.imei}
               onChange={(e) => ipdrimeiChange(e, i)}
+              disabledSelect={requestData}
             />
 
             {/* CDR DATE TIME */}
@@ -306,6 +315,7 @@ function IPDRform({
                     name="date_from"
                     value={val.date_from}
                     onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -318,6 +328,7 @@ function IPDRform({
                     name="date_to"
                     value={val.date_to}
                     onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -338,6 +349,7 @@ function IPDRform({
                     name="time_from"
                     value={val.time_from}
                     onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -350,6 +362,7 @@ function IPDRform({
                     name="time_to"
                     value={val.time_to}
                     onChange={(e) => ipdrimeiChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -359,6 +372,7 @@ function IPDRform({
                   onChange={(e) => ipdrimeiChange(e, i)}
                   className="form-control col-md-4"
                   value={val.tsp}
+                  disabled={requestData}
                   required
                 >
                   <option value="select " className="text-uppercase">
@@ -381,24 +395,26 @@ function IPDRform({
               </div>
             </div>
 
-            <div className="flex gap-5">
-              {ipdrImeiList.length !== 1 && (
-                <button
-                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  onClick={() => handleRemoveImei(i)}
-                >
-                  Remove
-                </button>
-              )}
-              {ipdrImeiList.length - 1 === i && (
-                <button
-                  onClick={ipdrImeiAdd}
-                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >
-                  Add
-                </button>
-              )}
-            </div>
+            {!requestData && (
+              <div className="flex gap-5">
+                {ipdrImeiList.length !== 1 && (
+                  <button
+                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    onClick={() => handleRemoveImei(i)}
+                  >
+                    Remove
+                  </button>
+                )}
+                {ipdrImeiList.length - 1 === i && (
+                  <button
+                    onClick={ipdrImeiAdd}
+                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    Add
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </>
       ))}
@@ -423,6 +439,7 @@ function IPDRform({
                     value={val.ip}
                     onChange={(e) => ipdrIpChange(e, i)}
                     type="text"
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -445,6 +462,7 @@ function IPDRform({
                       value={val.date_from}
                       type="date"
                       onChange={(e) => ipdrIpChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -457,6 +475,7 @@ function IPDRform({
                       value={val.date_to}
                       type="date"
                       onChange={(e) => ipdrIpChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -477,6 +496,7 @@ function IPDRform({
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => ipdrIpChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -489,6 +509,7 @@ function IPDRform({
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => ipdrIpChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -500,6 +521,7 @@ function IPDRform({
                   onChange={(e) => ipdrIpChange(e, i)}
                   className="form-control col-md-4"
                   value={val.tsp}
+                  disabled={requestData}
                   required
                 >
                   <option value="select " className="text-uppercase">
@@ -522,24 +544,26 @@ function IPDRform({
               </div>
             </div>
 
-            <div className="flex gap-5">
-              {ipdrReverseIpList.length !== 1 && (
-                <button
-                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  onClick={() => ipdrReverseIpRemoveClick(i)}
-                >
-                  Remove
-                </button>
-              )}
-              {ipdrReverseIpList.length - 1 === i && (
-                <button
-                  onClick={ipdrAddReverseIpClick}
-                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >
-                  Add
-                </button>
-              )}
-            </div>
+            {!requestData && (
+              <div className="flex gap-5">
+                {ipdrReverseIpList.length !== 1 && (
+                  <button
+                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    onClick={() => ipdrReverseIpRemoveClick(i)}
+                  >
+                    Remove
+                  </button>
+                )}
+                {ipdrReverseIpList.length - 1 === i && (
+                  <button
+                    onClick={ipdrAddReverseIpClick}
+                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    Add
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </>
       ))}
@@ -583,6 +607,7 @@ function IPDRform({
             handleChange={(e) => {
               handleChange(e, "target_type", "MOBILE_NUMBER");
             }}
+            disabled={requestData}
           />
           <Radio
             value={"IMEI_NUMBER" == activeForm.target_type}
@@ -592,6 +617,7 @@ function IPDRform({
             handleChange={(e) => {
               handleChange(e, "target_type", "IMEI_NUMBER");
             }}
+            disabled={requestData}
           />
           <Radio
             value={"IP_ADDRESS" === activeForm.target_type}
@@ -601,6 +627,7 @@ function IPDRform({
             handleChange={(e) => {
               handleChange(e, "target_type", "IP_ADDRESS");
             }}
+            disabled={requestData}
           />
         </div>
       </div>

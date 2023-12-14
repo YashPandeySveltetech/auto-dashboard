@@ -142,6 +142,7 @@ function CDRform({
               value={val.mobile_number}
               name="mobile_number"
               onChange={(e) => cdrMobileInputChange(e, i)}
+              disabledSelect={requestData}
             />
             {/* CDR DATE TIME */}
             {/* date  */}
@@ -159,6 +160,7 @@ function CDRform({
                     type="date"
                     value={val.date_from}
                     onChange={(e) => cdrMobileInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -171,6 +173,7 @@ function CDRform({
                     type="date"
                     value={val.date_to}
                     onChange={(e) => cdrMobileInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -190,6 +193,7 @@ function CDRform({
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => cdrMobileInputChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -202,6 +206,7 @@ function CDRform({
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => cdrMobileInputChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -213,6 +218,7 @@ function CDRform({
                   onChange={(e) => cdrMobileInputChange(e, i)}
                   className="form-control col-md-4"
                   required
+                  disabled={requestData}
                   value={val.tsp}
                 >
                   <option value="select " className="text-uppercase">
@@ -235,28 +241,30 @@ function CDRform({
               </div>
             </div>
 
-            <div>
-              <div className="flex gap-5">
-                {cdrMobileList.length !== 1 && (
-                  <button
-                    type="button"
-                    className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => cdrMobileRemoveClick(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {cdrMobileList.length - 1 === i && (
-                  <button
-                    type="button"
-                    className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={cdrAddMobileClick}
-                  >
-                    Add
-                  </button>
-                )}
+            {!requestData && (
+              <div>
+                <div className="flex gap-5">
+                  {cdrMobileList.length !== 1 && (
+                    <button
+                      type="button"
+                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => cdrMobileRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {cdrMobileList.length - 1 === i && (
+                    <button
+                      type="button"
+                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={cdrAddMobileClick}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <hr className="font-bold" />
         </>
@@ -273,6 +281,7 @@ function CDRform({
               name="imei"
               value={val.imei}
               onChange={(e) => cdrImeiInputChange(e, i)}
+              disabledSelect={requestData}
             />
 
             {/* CDR DATE TIME */}
@@ -291,6 +300,7 @@ function CDRform({
                     name="date_from"
                     value={val.date_from}
                     onChange={(e) => cdrImeiInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -303,6 +313,7 @@ function CDRform({
                     name="date_to"
                     value={val.date_to}
                     onChange={(e) => cdrImeiInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -322,6 +333,7 @@ function CDRform({
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => cdrImeiInputChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -334,6 +346,7 @@ function CDRform({
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => cdrImeiInputChange(e, i)}
+                      disabledSelect={requestData}
                     />
                   </div>
                 </div>
@@ -343,6 +356,7 @@ function CDRform({
                     onChange={(e) => cdrImeiInputChange(e, i)}
                     className="form-control col-md-4 border border-black-300 p-1 rounded"
                     value={val.tsp}
+                    disabled={requestData}
                     required
                   >
                     <option value="select " className="text-uppercase">
@@ -366,26 +380,28 @@ function CDRform({
               </div>
             </div>
 
-            <div className="flex gap-5">
-              {cdrImeiList.length !== 1 && (
-                <button
-                  type="button"
-                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  onClick={() => cdrImeiRemoveClick(i)}
-                >
-                  Remove
-                </button>
-              )}
-              {cdrImeiList.length - 1 === i && (
-                <button
-                  onClick={cdrAddImeiClick}
-                  type="button"
-                  className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >
-                  Add
-                </button>
-              )}
-            </div>
+            {!requestData && (
+              <div className="flex gap-5">
+                {cdrImeiList.length !== 1 && (
+                  <button
+                    type="button"
+                    className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    onClick={() => cdrImeiRemoveClick(i)}
+                  >
+                    Remove
+                  </button>
+                )}
+                {cdrImeiList.length - 1 === i && (
+                  <button
+                    onClick={cdrAddImeiClick}
+                    type="button"
+                    className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    Add
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </>
       ))}
@@ -408,6 +424,7 @@ function CDRform({
             handleChange={(e) => {
               handleChange(e, "target_type", "MOBILE_NUMBER");
             }}
+            disabled={requestData}
           />{" "}
           <Radio
             value={"IMEI_NUMBER" == activeForm?.target_type}
@@ -417,6 +434,7 @@ function CDRform({
             handleChange={(e) => {
               handleChange(e, "target_type", "IMEI_NUMBER");
             }}
+            disabled={requestData}
           />
         </div>
       </div>

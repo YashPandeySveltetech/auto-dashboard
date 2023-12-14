@@ -15,18 +15,15 @@ const Input = ({
   disabledSelect,
   star,
   required,
-  pattern
- 
+  pattern,
 }) => {
   return (
     <>
       <div>
-      <div className="flex">
-        <label className="text-sm font-medium text-gray-900">{label}</label>
-        <span className={star ? "text-red-600" : ""}>
-              {star ? "*" : ""}
-            </span>
-      </div>
+        <div className="flex">
+          <label className="text-sm font-medium text-gray-900">{label}</label>
+          <span className={star ? "text-red-600" : ""}>{star ? "*" : ""}</span>
+        </div>
         <input
           type={type}
           placeholder={placeholder}

@@ -79,6 +79,7 @@ function TowerDumpForm({
               name="cell_id"
               value={val.cell_id}
               onChange={(e) => tdrModelListChange(e, i)}
+              disabled={requestData}
             />
 
             {/* date  */}
@@ -96,6 +97,7 @@ function TowerDumpForm({
                     name="date_from"
                     value={val.date_from}
                     onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
                   />
                 </div>
               </div>
@@ -108,6 +110,7 @@ function TowerDumpForm({
                     name="date_to"
                     value={val.date_to}
                     onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
                   />
                 </div>
               </div>
@@ -128,6 +131,7 @@ function TowerDumpForm({
                     name="time_from"
                     value={val.time_from}
                     onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
                   />
                 </div>
               </div>
@@ -140,6 +144,7 @@ function TowerDumpForm({
                     name="time_to"
                     value={val.time_to}
                     onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
                   />
                 </div>
               </div>
@@ -152,6 +157,7 @@ function TowerDumpForm({
                 className="form-control col-md-4"
                 value={val.tsp}
                 required
+                disabled={requestData}
               >
                 <option value="select " className="text-uppercase">
                   Select TSP
@@ -172,26 +178,28 @@ function TowerDumpForm({
               </select>
             </div>
 
-            <div>
-              <div className="flex gap-5">
-                {tdrModelList.length !== 1 && (
-                  <button
-                    className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => tdrRemoveClick(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {tdrModelList.length - 1 === i && (
-                  <button
-                    className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={tdrAddClick}
-                  >
-                    Add
-                  </button>
-                )}
+            {!requestData && (
+              <div>
+                <div className="flex gap-5">
+                  {tdrModelList.length !== 1 && (
+                    <button
+                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => tdrRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {tdrModelList.length - 1 === i && (
+                    <button
+                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={tdrAddClick}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <hr className="font-bold" />
         </>
@@ -211,6 +219,7 @@ function TowerDumpForm({
             handleChange={(e) => {
               handleChange(e, "target_type", "CELL_ID");
             }}
+            disabled={requestData}
           />{" "}
         </div>
       </div>

@@ -79,6 +79,7 @@ function CAFform({
             handleChange={(e) => {
               handleChange(e, "target_type", "MOBILE_NUMBER");
             }}
+            disabled={requestData}
           />{" "}
         </div>
       </div>
@@ -90,6 +91,7 @@ function CAFform({
               name="mobile_number"
               value={val.mobile_number}
               onChange={(e) => cafInputChange(e, i)}
+              disabledSelect={requestData}
             />
             {/* date  */}
             <div className="input-group flex items-center justify-start gap-5 m-3">
@@ -106,6 +108,7 @@ function CAFform({
                     name="date_from"
                     value={val.date_from}
                     onChange={(e) => cafInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -118,6 +121,7 @@ function CAFform({
                     name="date_to"
                     value={val.date_to}
                     onChange={(e) => cafInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -138,6 +142,7 @@ function CAFform({
                     name="time_from"
                     value={val.time_from}
                     onChange={(e) => cafInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -150,6 +155,7 @@ function CAFform({
                     name="time_to"
                     value={val.time_to}
                     onChange={(e) => cafInputChange(e, i)}
+                    disabledSelect={requestData}
                   />
                 </div>
               </div>
@@ -160,6 +166,7 @@ function CAFform({
                 onChange={(e) => cafInputChange(e, i)}
                 className="form-control col-md-4"
                 value={val.tsp}
+                disabled={requestData}
                 required
               >
                 <option value="select " className="text-uppercase">
@@ -180,28 +187,30 @@ function CAFform({
                 })}
               </select>
             </div>
-            <div>
-              <div className="flex gap-5">
-                {cafList.length !== 1 && (
-                  <button
-                    type="button"
-                    className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => cafRemoveClick(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {cafList.length - 1 === i && (
-                  <button
-                    type="button"
-                    className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={cafAddClick}
-                  >
-                    Add
-                  </button>
-                )}
+            {!requestData && (
+              <div>
+                <div className="flex gap-5">
+                  {cafList.length !== 1 && (
+                    <button
+                      type="button"
+                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => cafRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {cafList.length - 1 === i && (
+                    <button
+                      type="button"
+                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={cafAddClick}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
     </div>

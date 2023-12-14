@@ -81,6 +81,7 @@ function Sidebar() {
         {" "}
         <Amd className="w-[3rem] h-[3rem] text-white " />
       </div>
+      <div className="flex justify-between flex-col h-[78vh] m-2">
       <div className="flex flex-col gap-2 p-3">
         {list.map((item) => (
           <>
@@ -88,6 +89,22 @@ function Sidebar() {
           </>
         ))}
       </div>
+      <button
+                            onClick={() => {
+                              localStorage.clear();
+                              navigate("/login")
+                              // window.location.reload();
+                            }}
+                          className="bg-red-900 p-2 rounded-lg font-bold"
+                          style={{
+                            color: "white",
+                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                          }}
+                        >
+                          Logout
+      </button>
+      </div>
+     
     </div>
   );
 }

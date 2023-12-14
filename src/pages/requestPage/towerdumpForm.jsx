@@ -27,7 +27,7 @@ function TowerDumpForm({
   }, []);
 
   const handleview = () => {
-    if (requestData?.target_type === "CELL_ID") {
+    if ( dump?.includes(requestData?.target_type)) {
       settdrModelList(requestData.form_request_for.cell_id);
 
       return;
@@ -71,7 +71,7 @@ function TowerDumpForm({
     settdrModelList(list);
   };
   useEffect(() => {
-    if (apiPayload?.target_type === "CELL_ID") {
+    if (dump?.includes(apiPayload?.target_type)) {
       apiPayload?.target_type &&
         setApiPayload({
           ...apiPayload,
@@ -79,6 +79,7 @@ function TowerDumpForm({
         });
     }
   }, [tdrModelList]);
+  console.log(apiPayload,">>>>")
   const CellID = () => (
     <>
       {tdrModelList.map((val, i) => (
@@ -231,6 +232,7 @@ function TowerDumpForm({
             handleChange={(e) => {
               handleChange(e, "target_type", "GPRS_DUMP");
             }}
+            disabled={requestData}
           />
           <Radio
             value={"IP_DUMP" == activeForm?.target_type}
@@ -240,6 +242,7 @@ function TowerDumpForm({
             handleChange={(e) => {
               handleChange(e, "target_type", "IP_DUMP");
             }}
+            disabled={requestData}
           />
           <Radio
             value={"CDR_DUMP" == activeForm?.target_type}
@@ -253,7 +256,7 @@ function TowerDumpForm({
           />
         </div>
       </div>
-      {dump?.includes( activeForm?.target_type)&& CellID()}
+      {dump?.includes(activeForm?.target_type)&& CellID()}
     </div>
   );
 }

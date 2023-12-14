@@ -115,7 +115,7 @@ function RequestList() {
         process.env.REACT_APP_MEDIA_URI + res?.responsePayload?.results[0].file
       );
       // getAllRequest()
-      Toaster("success", "Request Approved Successfully!");
+      // Toaster("success", "Request Approved Successfully!");
 
       return;
     }

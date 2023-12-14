@@ -24,10 +24,21 @@ function CDRform({
   ]);
   const cdrMobileInputChange = (e, index) => {
     const { name, value } = e.target;
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...cdrMobileList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setCdrMobileList(list);
+    } else {
+      const list = [...cdrMobileList];
+      list[index][name] = value;
 
-    const list = [...cdrMobileList];
-    list[index][name] = value;
-    setCdrMobileList(list);
+      setCdrMobileList(list);
+    }
+   
   };
 
   const cdrAddMobileClick = () => {
@@ -56,16 +67,30 @@ function CDRform({
       time_from: "",
       time_to: "",
       imei: "",
+      tsp: "",
     },
   ]);
 
   const cdrImeiInputChange = (e, index) => {
     const { name, value } = e.target;
-    const list = [...cdrImeiList];
-    list[index][name] = value;
-    setCdrImeiList(list);
+
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...cdrImeiList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      setCdrImeiList(list);
+    } else {
+      const list = [...cdrImeiList];
+      list[index][name] = value;
+
+      setCdrImeiList(list);
+    }
   };
 
+  console.log(cdrImeiList, ">>>>");
   const cdrAddImeiClick = () => {
     setCdrImeiList([
       ...cdrImeiList,
@@ -96,7 +121,6 @@ function CDRform({
       // });
       return;
     }
-
     if (requestData?.target_type === "IMEI_NUMBER") {
       setCdrImeiList(requestData.form_request_for.imei_number);
       // setApiPayload({

@@ -1,4 +1,4 @@
-export const tspList=[ "AIRTEL", "VI", "BSNL", "JIO" ]
+export const tspList=["ALL", "AIRTEL", "VI", "BSNL", "JIO" ]
 export let arry = {
     CELL_ID: "cell_id",
     IP_ADDRESS: "ip_port",

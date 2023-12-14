@@ -35,9 +35,20 @@ function TowerDumpForm({
   };
   const tdrModelListChange = (e, index) => {
     const { name, value } = e.target;
-    const list = [...tdrModelList];
-    list[index][name] = value;
-    settdrModelList(list);
+    if (name === "tsp" && value === "ALL") {
+      const list = [];
+      const tspl = ["AIRTEL", "VI", "BSNL", "JIO"];
+      for (let i = 0; i < 4; i++) {
+        let obj = { ...tdrModelList[0], "tsp": tspl[i] };
+        list.push(obj);
+      }
+      settdrModelList(list);
+    } else {
+      const list = [...tdrModelList];
+      list[index][name] = value;
+
+      settdrModelList(list);
+    }
   };
 
   const tdrAddClick = () => {
@@ -206,24 +217,43 @@ function TowerDumpForm({
       ))}
     </>
   );
+  let dump=["GPRS_DUMP","IP_DUMP","CDR_DUMP"]
   return (
     <div>
       <div className="radioselect">
         <label className="form-label me-4 font-bold">Target Type :</label>
         <div className="flex gap-5">
           <Radio
-            value={"CELL_ID" == activeForm?.target_type}
-            label="CELL ID"
+            value={"GPRS_DUMP" == activeForm?.target_type}
+            label="GPRS DUMP"
             name="target_type"
             id="target_type"
             handleChange={(e) => {
-              handleChange(e, "target_type", "CELL_ID");
+              handleChange(e, "target_type", "GPRS_DUMP");
+            }}
+          />
+          <Radio
+            value={"IP_DUMP" == activeForm?.target_type}
+            label="IP DUMP"
+            name="target_type"
+            id="target_type"
+            handleChange={(e) => {
+              handleChange(e, "target_type", "IP_DUMP");
+            }}
+          />
+          <Radio
+            value={"CDR_DUMP" == activeForm?.target_type}
+            label="CDR DUMP"
+            name="target_type"
+            id="target_type"
+            handleChange={(e) => {
+              handleChange(e, "target_type", "CDR_DUMP");
             }}
             disabled={requestData}
-          />{" "}
+          />
         </div>
       </div>
-      {activeForm?.target_type === "CELL_ID" && CellID()}
+      {dump?.includes( activeForm?.target_type)&& CellID()}
     </div>
   );
 }

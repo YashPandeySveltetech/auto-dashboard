@@ -40,19 +40,20 @@ const AppRoute = memo(() => {
               }
             />
 
-            <Route
+            {/* <Route
               path="/request-list"
               element={
                 <Layout>
                   <RequestList />
                 </Layout>
               }
-            />
+            /> */}
             <Route
               path="/"
               element={
                 <Layout>
-                  <HomePage />
+                  {/* <HomePage /> */}
+                  <RequestList />
                 </Layout>
               }
             />

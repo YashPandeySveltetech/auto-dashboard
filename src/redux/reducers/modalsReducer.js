@@ -21,19 +21,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-	rejectModal: false
+	rejectModal: false,
+    requestId:NaN
 }
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
+
   reducers: {
     openRejectModal: (state,{payload}) => {
  
       state.rejectModal= true
+      state.requestId=payload
     },
     commonCloseModal: (state) => {
 		state.rejectModal= false
+        state.requestId=NaN
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload

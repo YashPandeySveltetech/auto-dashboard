@@ -6,13 +6,15 @@ import { FORM_REQUEST, APPROVE_REQUEST, VIEW_ATTACHMENTS } from '../../utils/con
 import Toaster from '../../utils/toaster/Toaster';
 import { useNavigate } from 'react-router';
 import FilterSection from './filterSection';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openRejectModal, openViewLogModal } from '../../redux/reducers/modalsReducer';
 import { async } from 'q';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function RequestList() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { rank } = useSelector((state) => state.user?.userData);
 	useEffect(() => {
 		getAllRequest();
 	}, []);
@@ -81,9 +83,9 @@ const viewAttachment=async({requets_form_id})=>{
 				setFilter={setFilter}
 			/>
 			<div>
-				<div class='relative overflow-x-auto'>
-					<table class='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-						<thead class='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+				<div class='relative overflow-x-auto p-3'>
+					<table class='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ' style={{border:"1px solid black"}}>
+						<thead class='text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400' style={{backgroundColor:"black",color:"white"}}>
 							<tr>
 								<th
 									scope='col'
@@ -138,41 +140,45 @@ const viewAttachment=async({requets_form_id})=>{
 									>
 										{item?.created_on?.split('T')[0]}
 									</th>
-									<td class='px-6 py-4'>{item?.district}</td>
-									<td class='px-6 py-4'>{item?.request_to_provide}</td>
-									<td class='px-6 py-4'>{item?.target_type}</td>
+									<td class='px-6 py-4 font-semibold' style={{color:"black"}}>{item?.district}</td>
+									<td class='px-6 py-4 font-semibold' style={{color:"black"}}>{item?.request_to_provide}</td>
+									<td class='px-6 py-4 font-semibold'style={{color:"black"}}>{item?.target_type}</td>
+								
 									<td class='px-6 py-4'>
 										{/* <button className='bg-green-300'>Approve</button> */}
-										<button onClick={()=>viewAttachment({requets_form_id:item?.id})} className='bg-blue-300'>Click</button>
+										<button onClick={()=>viewAttachment({requets_form_id:item?.id})}><VisibilityIcon className="text-green-800" /></button>
 										{/* <button className='bg-red-900'>Reject</button> */}
 									</td>
-									<td class='px-6 py-4'>
-										<button
+									<td class='px-6 py-4 flex gap-2'>
+										{["ACP", "DCP"].includes(rank)||item?.decision == 'PENDING'&&<button
 											onClick={() => {
 												approveRequest({requestId:item?.id,approved_desion_id:item?.approve_decision_id});
 											}}
-											className='bg-green-300'
+											className='bg-green-300 p-2 rounded-lg font-bold'
+											style={{color:"black",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}
 										>
 											Approve
-										</button>
+										</button>}
 										<button
 											onClick={() => {
 												navigate(
 													`/request/view/${item?.request_to_provide}/${item?.id}`
 												);
 											}}
-											className='bg-blue-300'
+											className='bg-blue-300 p-2 rounded-lg font-bold'
+											style={{color:"black",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}
 										>
 											View
 										</button>
-										<button
+										{["ACP", "DCP"].includes(rank)||item?.decision == 'PENDING'&&<button
 											onClick={() => dispatch(openRejectModal(item?.id))}
-											className='bg-red-900'
+											className='bg-red-900 p-2 rounded-lg font-bold'
+											style={{color:"white",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}
 										>
 											Reject
-										</button>
+										</button>}
 									</td>
-									<td class='px-6 py-4'>
+									<td class='px-6 py-4 '>
 										{item?.decision}
 										{item?.decision == 'REJECT' && (
 											<button onClick={() => dispatch(openViewLogModal(item?.id))} className='bg-red-900 mx-4 p-2'>View Log</button>

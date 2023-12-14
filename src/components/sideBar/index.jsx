@@ -39,12 +39,19 @@ function Sidebar() {
   ];
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
-    const res = ApiHandle(USER_DETAIL, {}, "GET");
+    handleUserDetail();
+  }, []);
+
+  const handleUserDetail = async () => {
+    const res = await ApiHandle(USER_DETAIL, {}, "GET");
+    console.log(res, ".1");
     if (res.statusCode === 200) {
+      console.log(res?.responsePayload, "res?.responsePayload");
       dispatch(setUserData(res?.responsePayload));
     }
-  }, []);
+  };
   const ListItem = ({ icon, text, url, isShow }) => {
     console.log(isShow, "text", text);
     return (

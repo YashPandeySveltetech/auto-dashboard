@@ -87,25 +87,21 @@ function CDRform({
   const handleview = () => {
     if (requestData?.target_type === "MOBILE_NUMBER") {
       setCdrMobileList(requestData.form_request_for.multiple_mobile);
-
-      setApiPayload({
-        ...apiPayload,
-        form_request_for: {
-          [arry[requestData?.target_type]]:
-            requestData.form_request_for.ip_port,
-        },
-      });
-      console.log(
-        requestData.form_request_for.ip_port,
-        "requestData.form_request_for.ip_port"
-      );
-      return;
-    }
-    console.log("gh");
-    if (requestData?.target_type === "IMEI_NUMBER") {
       // setApiPayload({
       //   ...apiPayload,
-      //   form_request_for: { [arry[requestData?.target_type]]: cdrImeiList },
+      //   form_request_for: {
+      //     [arry[requestData?.target_type]]:
+      //       requestData.form_request_for.multiple_mobile,
+      //   },
+      // });
+      return;
+    }
+
+    if (requestData?.target_type === "IMEI_NUMBER") {
+      setCdrImeiList(requestData.form_request_for.imei_number);
+      // setApiPayload({
+      //   ...apiPayload,
+      //   form_request_for: { [arry[apiPayload?.target_type]]: cdrImeiList },
       // });
     }
   };
@@ -161,6 +157,7 @@ function CDRform({
                     label={" "}
                     name="date_from"
                     type="date"
+                    value={val.date_from}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
@@ -172,67 +169,70 @@ function CDRform({
                     label={" "}
                     name="date_to"
                     type="date"
+                    value={val.date_to}
                     onChange={(e) => cdrMobileInputChange(e, i)}
                   />
                 </div>
               </div>
-            
 
-            {/*  Time */}
-            <div className="flex items-center justify-start gap-5 m-3 ">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Time :
-              </label>
+              {/*  Time */}
+              <div className="flex items-center justify-start gap-5 m-3 ">
+                <label className="form-label me-4 col-md-1 font-bold">
+                  Time :
+                </label>
+
+                <div className="col-md-3">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_from"
+                      value={val.time_from}
+                      onChange={(e) => cdrMobileInputChange(e, i)}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3 ms-4">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_to"
+                      value={val.time_to}
+                      onChange={(e) => cdrMobileInputChange(e, i)}
+                    />
+                  </div>
+                </div>
+              </div>
 
               <div className="col-md-3">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_from"
-                    onChange={(e) => cdrMobileInputChange(e, i)}
-                  />
-                </div>
+                <select
+                  name="tsp"
+                  onChange={(e) => cdrMobileInputChange(e, i)}
+                  className="form-control col-md-4"
+                  required
+                  value={val.tsp}
+                >
+                  <option value="select " className="text-uppercase">
+                    Select TSP
+                  </option>
+                  {tspList?.map((tspVal, key) => {
+                    return (
+                      <option
+                        key={key}
+                        value={tspVal}
+                        className="text-uppercase"
+                        name="tsp"
+                        required
+                      >
+                        {tspVal}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
-              <div className="col-md-3 ms-4">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_to"
-                    onChange={(e) => cdrMobileInputChange(e, i)}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-3">
-              <select
-                name="tsp"
-                onChange={(e) => cdrMobileInputChange(e, i)}
-                className="form-control col-md-4"
-                required
-              >
-                <option value="select " className="text-uppercase">
-                  Select TSP
-                </option>
-                {tspList?.map((tspVal, key) => {
-                  return (
-                    <option
-                      key={key}
-                      value={tspVal}
-                      className="text-uppercase"
-                      name="tsp"
-                      required
-                    >
-                      {tspVal}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
             </div>
 
             <div>
@@ -271,6 +271,7 @@ function CDRform({
             <Input
               label={"IMEI "}
               name="imei"
+              value={val.imei}
               onChange={(e) => cdrImeiInputChange(e, i)}
             />
 
@@ -288,6 +289,7 @@ function CDRform({
                     label={" "}
                     type="date"
                     name="date_from"
+                    value={val.date_from}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
@@ -299,67 +301,69 @@ function CDRform({
                     label={" "}
                     type="date"
                     name="date_to"
+                    value={val.date_to}
                     onChange={(e) => cdrImeiInputChange(e, i)}
                   />
                 </div>
               </div>
-           
 
-            {/*  Time */}
-            <div className="flex items-center justify-start gap-5 m-3 ">
-              <label className="form-label me-4 col-md-1 font-bold">
-                Time :
-              </label>
+              {/*  Time */}
+              <div className="flex items-center justify-start gap-5 m-3 ">
+                <label className="form-label me-4 col-md-1 font-bold">
+                  Time :
+                </label>
 
-              <div className="col-md-3">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_from"
+                <div className="col-md-3">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_from"
+                      value={val.time_from}
+                      onChange={(e) => cdrImeiInputChange(e, i)}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3 ms-4">
+                  <div className="flex items-center gap-3 ">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      type="time"
+                      name="time_to"
+                      value={val.time_to}
+                      onChange={(e) => cdrImeiInputChange(e, i)}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <select
+                    name="tsp"
                     onChange={(e) => cdrImeiInputChange(e, i)}
-                  />
+                    className="form-control col-md-4 border border-black-300 p-1 rounded"
+                    value={val.tsp}
+                    required
+                  >
+                    <option value="select " className="text-uppercase">
+                      Select TSP
+                    </option>
+                    {tspList?.map((tspVal, key) => {
+                      return (
+                        <option
+                          key={key}
+                          value={tspVal}
+                          className="text-uppercase"
+                          name="tsp"
+                          required
+                        >
+                          {tspVal}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
               </div>
-              <div className="col-md-3 ms-4">
-                <div className="flex items-center gap-3 ">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    type="time"
-                    name="time_to"
-                    onChange={(e) => cdrImeiInputChange(e, i)}
-                  />
-                </div>
-              </div>
-              <div className="col-md-3">
-                <select
-                  name="tsp"
-                  onChange={(e) => cdrImeiInputChange(e, i)}
-                  className="form-control col-md-4 border border-black-300 p-1 rounded"
-                  
-                  required
-                >
-                  <option value="select " className="text-uppercase">
-                    Select TSP
-                  </option>
-                  {tspList?.map((tspVal, key) => {
-                    return (
-                      <option
-                        key={key}
-                        value={tspVal}
-                        className="text-uppercase"
-                        name="tsp"
-                        required
-                      >
-                        {tspVal}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-            </div>
             </div>
 
             <div className="flex gap-5">

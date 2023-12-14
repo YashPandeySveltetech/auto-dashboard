@@ -7,7 +7,7 @@ import Toaster from '../../utils/toaster/Toaster';
 import { useNavigate } from 'react-router';
 import FilterSection from './filterSection';
 import { useDispatch } from 'react-redux';
-import { openRejectModal } from '../../redux/reducers/modalsReducer';
+import { openRejectModal, openViewLogModal } from '../../redux/reducers/modalsReducer';
 
 function RequestList() {
 	const navigate = useNavigate();
@@ -157,7 +157,7 @@ function RequestList() {
 									<td class='px-6 py-4'>
 										{item?.decision}
 										{item?.decision == 'REJECT' && (
-											<button className='bg-red-900 mx-4 p-2'>View Log</button>
+											<button onClick={() => dispatch(openViewLogModal(item?.id))} className='bg-red-900 mx-4 p-2'>View Log</button>
 										)}
 									</td>
 								</tr>

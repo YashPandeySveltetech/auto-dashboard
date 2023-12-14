@@ -22,6 +22,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	rejectModal: false,
+    viewLogModal:false,
     requestId:NaN
 }
 
@@ -35,8 +36,14 @@ export const userSlice = createSlice({
       state.rejectModal= true
       state.requestId=payload
     },
+    openViewLogModal: (state,{payload}) => {
+ 
+        state.viewLogModal= true
+        state.requestId=payload
+      },
     commonCloseModal: (state) => {
 		state.rejectModal= false
+        state.viewLogModal= false
         state.requestId=NaN
     },
     // incrementByAmount: (state, action) => {
@@ -46,6 +53,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { commonCloseModal, openRejectModal } = userSlice.actions
+export const { commonCloseModal, openRejectModal,openViewLogModal } = userSlice.actions
 
 export default userSlice.reducer

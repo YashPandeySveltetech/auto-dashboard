@@ -9,10 +9,10 @@ function Layout({ children }) {
         <Sidebar />
       </div>
       <div className="w-[84%]">
-        <div>
+        {/* <div>
           <Header />
-        </div>
-        <div className="p-10 rounded">{children}</div>
+        </div> */}
+        <div  style={{height:"100vh" ,overflow:'scroll'}} >{children}</div>
       </div>
     </div>
   );

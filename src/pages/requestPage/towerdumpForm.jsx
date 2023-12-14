@@ -1,9 +1,15 @@
-import React, { useCallback, useState } from "react";
-import DropDown from "../../components/dropdown";
+import React, { useCallback, useEffect, useState } from "react";
+import { tspList, arry } from "../../constants/tspList";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 
-function TowerDumpForm() {
+function TowerDumpForm({
+  handleChange,
+  setApiPayload,
+  apiPayload,
+  activeForm,
+  requestData,
+}) {
   const [tdrModelList, settdrModelList] = useState([
     {
       date_from: "",
@@ -11,15 +17,22 @@ function TowerDumpForm() {
       time_from: "",
       time_to: "",
       cell_id: "",
+      tsp: "",
     },
   ]);
+  useEffect(() => {
+    if (requestData) {
+      handleview();
+    }
+  }, []);
 
-  const [tdrModel, setTdrModel] = useState({
-    // case_ref: "",
-    // case_type: "",
-    cell_data: tdrModelList,
-  });
+  const handleview = () => {
+    if (requestData?.target_type === "CELL_ID") {
+      settdrModelList(requestData.form_request_for.cell_id);
 
+      return;
+    }
+  };
   const tdrModelListChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...tdrModelList];
@@ -31,10 +44,12 @@ function TowerDumpForm() {
     settdrModelList([
       ...tdrModelList,
       {
-        ip: "",
-        port: "",
-        date: "",
-        time: "",
+        date_from: "",
+        date_to: "",
+        time_from: "",
+        time_to: "",
+        cell_id: "",
+        tsp: "",
       },
     ]);
   };
@@ -44,6 +59,15 @@ function TowerDumpForm() {
     list.splice(index, 1);
     settdrModelList(list);
   };
+  useEffect(() => {
+    if (apiPayload?.target_type === "CELL_ID") {
+      apiPayload?.target_type &&
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: { [arry[apiPayload?.target_type]]: tdrModelList },
+        });
+    }
+  }, [tdrModelList]);
   const CellID = () => (
     <>
       {tdrModelList.map((val, i) => (
@@ -52,11 +76,12 @@ function TowerDumpForm() {
             <Input
               label={"CELL ID"}
               type="text"
-              
-              name="CELL_ID "
-             
+              name="cell_id"
+              value={val.cell_id}
+              onChange={(e) => tdrModelListChange(e, i)}
+              disabled={requestData}
             />
-           
+
             {/* date  */}
             <div className="input-group flex items-center justify-start gap-5 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
@@ -66,13 +91,27 @@ function TowerDumpForm() {
               <div className=" flex gap-5">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="date" />
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_from"
+                    value={val.date_from}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="date" />
+                  <Input
+                    label={" "}
+                    type="date"
+                    name="date_to"
+                    value={val.date_to}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
+                  />
                 </div>
               </div>
             </div>
@@ -86,62 +125,81 @@ function TowerDumpForm() {
               <div className="col-md-3">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">From</span>
-                  <Input label={" "} type="time" name="time_from" />
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_from"
+                    value={val.time_from}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
+                  />
                 </div>
               </div>
               <div className="col-md-3 ms-4">
                 <div className="flex items-center gap-3 ">
                   <span className="input-group-text font-bold">To</span>
-                  <Input label={" "} type="time" name="time_to" />
+                  <Input
+                    label={" "}
+                    type="time"
+                    name="time_to"
+                    value={val.time_to}
+                    onChange={(e) => tdrModelListChange(e, i)}
+                    disabled={requestData}
+                  />
                 </div>
               </div>
             </div>
 
             <div className="col-md-3">
               <select
-                name="select_tsp"
-                //   onChange={handleChange}
+                name="tsp"
+                onChange={(e) => tdrModelListChange(e, i)}
                 className="form-control col-md-4"
+                value={val.tsp}
                 required
+                disabled={requestData}
               >
                 <option value="select " className="text-uppercase">
                   Select TSP
                 </option>
-                {/* {getTSPList.map((tspVal) => {
-                        return (
-                          <option
-                            key={tspVal?.id}
-                            value={tspVal?.id}
-                            className="text-uppercase"
-                            required
-                          >
-                            {tspVal?.name}
-                          </option>
-                        );
-                      })} */}
+                {tspList?.map((tspVal, key) => {
+                  return (
+                    <option
+                      key={key}
+                      value={tspVal}
+                      className="text-uppercase"
+                      name="tsp"
+                      required
+                    >
+                      {tspVal}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
-            <div>
-              <div className="flex gap-5">
-                {tdrModelList.length !== 1 && (
-                  <button
-                    className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={() => tdrRemoveClick(i)}
-                  >
-                    Remove
-                  </button>
-                )}
-                {tdrModelList.length - 1 === i && (
-                  <button
-                    className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                    onClick={tdrAddClick}
-                  >
-                    Add
-                  </button>
-                )}
+            {!requestData && (
+              <div>
+                <div className="flex gap-5">
+                  {tdrModelList.length !== 1 && (
+                    <button
+                      className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={() => tdrRemoveClick(i)}
+                    >
+                      Remove
+                    </button>
+                  )}
+                  {tdrModelList.length - 1 === i && (
+                    <button
+                      className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      onClick={tdrAddClick}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <hr className="font-bold" />
         </>
@@ -150,9 +208,24 @@ function TowerDumpForm() {
   );
   return (
     <div>
-      {CellID()}
+      <div className="radioselect">
+        <label className="form-label me-4 font-bold">Target Type :</label>
+        <div className="flex gap-5">
+          <Radio
+            value={"CELL_ID" == activeForm?.target_type}
+            label="CELL ID"
+            name="target_type"
+            id="target_type"
+            handleChange={(e) => {
+              handleChange(e, "target_type", "CELL_ID");
+            }}
+            disabled={requestData}
+          />{" "}
+        </div>
+      </div>
+      {activeForm?.target_type === "CELL_ID" && CellID()}
     </div>
-  )
+  );
 }
 
-export default TowerDumpForm
+export default TowerDumpForm;

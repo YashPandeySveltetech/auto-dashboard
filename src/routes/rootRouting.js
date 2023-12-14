@@ -8,17 +8,23 @@ import RoleBaseRouting from "./roleBaseRouting";
 import Layout from "../layout";
 import RequestForm from "../pages/requestPage";
 import RegistrationPage from "../pages/registerPage";
+import RequestList from "../pages/requestList";
+import Loader from "../components/loader/Loader";
+import { useSelector } from "react-redux";
+import RequestView from "../pages/requestView";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
+  const Loading = useSelector((state) => state?.common?.loading);
+
   return (
     <main>
+      {Loading && <Loader />}
       <Suspense fallback={"LOADING"}>
         <Routes>
           <Route element={<AuthRoute />}>
-            {/* <Route path="/" element={<HomePage />} /> */}
             <Route
-              path="/"
+              path="/request-form"
               element={
                 <Layout>
                   <RequestForm />
@@ -30,6 +36,72 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   <RegistrationPage />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/request-list"
+              element={
+                <Layout>
+                  <RequestList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <HomePage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request-form"
+              element={
+                <Layout>
+                  <RequestForm />
+                </Layout>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Layout>
+                  <RegistrationPage />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/request-list"
+              element={
+                <Layout>
+                  <RequestList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request/view/:type/:id"
+              element={
+                <Layout>
+                  <RequestView />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request/approve/:id"
+              element={
+                <Layout>
+                  <RequestList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request/approve/:id"
+              element={
+                <Layout>
+                  <RequestList />
                 </Layout>
               }
             />

@@ -1,11 +1,10 @@
 // import { getCookie } from "cookies-next";
-import Toaster from "./toaster/Toaster";
+import { Error400_401 } from "./Error400_401";
+import { toast } from "react-toastify";
 let status;
 const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
   const token = localStorage.getItem("token");
   const myHeaders = new Headers();
-  console.log(endPoint, "endPoint");
-  console.log(token, "token");
   if (!isFormData) {
     myHeaders.append("Content-Type", "application/json");
   }
@@ -40,7 +39,11 @@ const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
     .catch((error) => {
       handleLoader && handleLoader();
       error?.json()?.then((json) => {
-        return Toaster("error", json.message);
+         let message=
+              Error400_401(error?.status, json) ||
+              "Something went wrong."
+             return toast.error(message, {autoClose: 2000});
+        // return Toaster("error", message);
       });
       return {
         statusCode: error?.response?.status,

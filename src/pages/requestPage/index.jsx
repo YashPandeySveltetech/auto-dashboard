@@ -9,229 +9,301 @@ import CAF_FORM from "./cafForm";
 import IPDR_FORM from "./ipdrForm";
 import TOWER_DUMP_FORM from "./towerdumpForm";
 import Input from "../../components/input";
+import { FORM_REQUEST } from "../../utils/constants";
+import { ApiHandle } from "../../utils/ApiHandle";
 
-
-function RequestForm() {
+function RequestForm({ requestData }) {
+  const initialobj = {
+    request_to_provide: "",
+    police_station: "",
+    fir_no: "",
+    case_type: "",
+    io_name: "",
+    io_mobile_no: "",
+    target_type: "",
+    form_request_for: {},
+    brief_summary: "",
+  };
   const [activeForm, setActiveForm] = useState({
-    target_type:"",
-    request_to_provide:""
+    target_type: "",
+    request_to_provide: "",
   });
- 
+  let station_id = localStorage.getItem("p_station");
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
-  const [apiPayload,setApiPayload]=useState({})
+  const [apiPayload, setApiPayload] = useState(initialobj);
   useEffect(() => {
+    if (requestData) {
+      setCurrentDate(requestData?.sys_date);
+      setCurrentTime(requestData?.sys_time);
+      setActiveForm((prev) => ({
+        ...prev,
+        ["request_to_provide"]: requestData?.request_to_provide,
+        ["target_type"]: requestData?.target_type,
+      }));
+      setApiPayload((prev) => {
+        return {
+          ...prev,
+          ["fir_no"]: requestData?.fir_no,
+          ["case_type"]: requestData?.case_type,
+          ["io_name"]: requestData?.io_name,
+          ["io_mobile_no"]: requestData?.io_mobile_no,
+          ["brief_summary"]: requestData?.brief_summary,
+        };
+      });
+
+      return;
+    }
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
   }, []);
-  
-// CDRMOBILE HANDLEs
-let arry={"CELL_ID": "cell_id","IP_ADDRESS": "ip_port","MOBILE_NUMBER": "multiple_mobile","IMEI_NUMBER":"imei_number"}
 
-const [cdrMobileList, setCdrMobileList] = useState([
-  {
-    date_from: "",
-    date_to: "",
-    time_from: "",
-    time_to: "",
-    mobile_number: "",
-    tsp:""
-  },
-]);
-console.log(cdrMobileList,">>>>")
-const [cdrModel, setCdrModel] = useState({
-  // generic_target_type_val: "",
-  multiple_mobile: cdrMobileList,
-  // case_ref: "",
-  // case_type: "",
-});
-
-const cdrMobileInputChange = (e, index) => {
-  const { name, value } = e.target;
-
-  const list = [...cdrMobileList];
-  list[index][name] = value;
-  setCdrMobileList(list);
-};
-
-const cdrAddMobileClick = () => {
-  setCdrMobileList([
-    ...cdrMobileList,
-    {
-      mobile_number: "",
-      date_from: "",
-      date_to: "",
-      time_from: "",
-      time_to: "",
-    },
-  ]);
-};
-
-const cdrMobileRemoveClick = (index) => {
-  const list = [...cdrMobileList];
-  list.splice(index, 1);
-  setCdrMobileList(list);
-};
-useEffect(()=>{
-  setApiPayload({...apiPayload,form_request_for:{[arry[apiPayload?.target_type]]:cdrMobileList}})
-},[cdrMobileList])
-
+  console.log(apiPayload, "L");
   const formHandler = useCallback(() => {
     if (activeForm.request_to_provide === "CDR") {
-      return <CDR_FORM handleChange={handleChange} setApiPayload={setApiPayload} apiPayload={apiPayload} setActiveForm={setActiveForm} activeForm={activeForm} setCdrMobileList={setCdrMobileList} cdrMobileList={cdrMobileList} cdrMobileInputChange={cdrMobileInputChange} cdrAddMobileClick={cdrAddMobileClick} cdrMobileRemoveClick={cdrMobileRemoveClick} arry={arry}/>;
+      return (
+        <CDR_FORM
+          requestData={requestData}
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
     if (activeForm.request_to_provide === "TOWER_DUMP") {
-      return <TOWER_DUMP_FORM />;
+      return (
+        <TOWER_DUMP_FORM
+          requestData={requestData}
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
     if (activeForm.request_to_provide === "IPDR") {
-      return <IPDR_FORM />;
+      return (
+        <IPDR_FORM
+          requestData={requestData}
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
     if (activeForm.request_to_provide === "CAF") {
-      return <CAF_FORM />;
+      return (
+        <CAF_FORM
+          requestData={requestData}
+          handleChange={handleChange}
+          setApiPayload={setApiPayload}
+          apiPayload={apiPayload}
+          setActiveForm={setActiveForm}
+          activeForm={activeForm}
+        />
+      );
     }
   }, [activeForm]);
 
+  const handleChange = (e, callfrom, fromval) => {
+    const { name, value } = e.target;
+    if (callfrom) {
+      setActiveForm({ ...activeForm, [callfrom]: fromval });
+      setApiPayload((prev) => {
+        return { ...prev, [callfrom]: fromval };
+      });
+    } else {
+      setApiPayload({
+        ...apiPayload,
+        police_station: station_id,
+        sys_date: currentDate,
+        sys_time: currentTime,
+        [name]: value,
+      });
+    }
+  };
 
-  const handleChange=(e,callfrom,fromval)=>{
-const {name,value}=e.target
-if(callfrom){
-  setActiveForm({...activeForm,[callfrom]:fromval})
-  setApiPayload({...apiPayload,[callfrom]:fromval})
-}
+  // console.log(apiPayload)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-else{
+    const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
 
-  setApiPayload({...apiPayload,sys_date:currentDate,sys_time:currentTime,[name]:value})
-}
-  }
-
-console.log(apiPayload)
+    if (res.statusCode === 201) {
+      setActiveForm({
+        target_type: "",
+        request_to_provide: "",
+      });
+      setApiPayload(initialobj);
+      return;
+    }
+  };
+  console.log(activeForm, "activeForm");
 
   return (
     <>
-	  <form
-                action=""
-                // onSubmit={handleSubmit}
-               
-              >
-      <div className="gap-5 flex flex-col">
-        <div>
-          <h1 className="font-bold">NEW REQUEST FORM</h1>
-        </div>
-        <div>
-          <div className="input-group mb-3 flex items-center justify-start mt-5 gap-3">
-            <label className="form-label me-4 font-bold">Date :</label>
+      <form action="" onSubmit={handleSubmit}>
+        <div className="max-w-screen-lg mx-auto mt-5 p-3 bg-white shadow-md rounded-lg">
+          <div style={{ textAlign: "center" }}>
+            <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
+          </div>
 
-            <div className="w-15 me-5 rounded-3  border-1 border border-secondary py-2 px-4 items-center text-center ">
-              {currentDate}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-center gap-4">
+              <label className="font-bold">Date:</label>
+              <div className="rounded-md border border-gray-300 p-2">
+                {currentDate}
+              </div>
             </div>
 
-            <label className="form-label me-5 font-bold">Time :</label>
-
-            <div className="w-15 rounded-3 border-1 border  border-secondary  py-2 px-4 items-center text-center ">
-              {currentTime ?? "00:00:00"}
+            <div className="flex items-center gap-4">
+              <label className="font-bold">Time:</label>
+              <div className="rounded-md border border-gray-300 p-2">
+                {currentTime ?? "00:00:00"}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="radioselect">
-          <label className="form-label me-4 font-bold">
-            Request to provide :
-          </label>
-          <div className="flex gap-5">
-          <Radio
-              value={"CDR" == activeForm.request_to_provide}
-              label="CDR"
-              name="request_to_provide"
-              handleChange={(e) => {
-               handleChange(e,"request_to_provide","CDR")
-               
-              }}
-            />{" "}
-            <Radio
-              value={"IPDR" == activeForm.request_to_provide}
-              label="IPDR"
-              name="request_to_provide"
-              handleChange={(e) => {
-                handleChange(e,"request_to_provide","IPDR")
-               
-              }}
-            />{" "}
-            <Radio
-              value={"TOWER_DUMP" == activeForm.request_to_provide}
-              label="TOWER DUMP"
-              name="request_to_provide"
-              handleChange={(e) => {
-                handleChange(e,"request_to_provide","TOWER_DUMP")
-              }}
-            />{" "}
-            <Radio
-              value={"CAF" == activeForm.request_to_provide}
-              label="CAF"
-              name="request_to_provide"
-              handleChange={(e) => {
-                handleChange(e,"request_to_provide","CAF")
-              }}
-            />
-          </div>
-        </div>
-        {/* Case Ref & Case Type */}
-        <div className="input-group mb-3 flex items-center justify-start mt-5 gap-3">
-          <label className="form-label font-bold me-4 col-md-1">
-            FIR NO. :
-          </label>
 
-          <div className="w-15 me-5 col-md-3">
-            <Input type="text" name="fir_no" required onChange={handleChange}
-			 value={apiPayload.fir_no}/>
+          <div className="mt-6 flex items-center gap-6">
+            <label className="font-bold">Request to Provide:</label>
+            <div className="flex gap-4 mt-5">
+              <Radio
+                value={"CDR" === activeForm.request_to_provide}
+                label="CDR"
+                name="request_to_provide"
+                handleChange={(e) =>
+                  handleChange(e, "request_to_provide", "CDR")
+                }
+                disabled={requestData}
+              />
+              <Radio
+                value={"IPDR" === activeForm.request_to_provide}
+                label="IPDR"
+                name="request_to_provide"
+                handleChange={(e) =>
+                  handleChange(e, "request_to_provide", "IPDR")
+                }
+                disabled={requestData}
+              />
+              <Radio
+                value={"TOWER_DUMP" === activeForm.request_to_provide}
+                label="TOWER DUMP"
+                name="request_to_provide"
+                handleChange={(e) =>
+                  handleChange(e, "request_to_provide", "TOWER_DUMP")
+                }
+                disabled={requestData}
+              />
+              <Radio
+                value={"CAF" === activeForm.request_to_provide}
+                label="CAF"
+                name="request_to_provide"
+                handleChange={(e) =>
+                  handleChange(e, "request_to_provide", "CAF")
+                }
+                disabled={requestData}
+              />
+            </div>
           </div>
-          <label className="form-label me-4 font-bold"> Case Type:</label>
 
-          <div className="w-15 me-5 col-md-3">
-            <Input type="text" name="case_type" required onChange={handleChange}
-			 value={apiPayload.case_type}
-			/>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* FIR NO. */}
+            <div>
+              <label className="font-bold">FIR NO.:</label>
+              <Input
+                type="text"
+                name="fir_no"
+                required
+                onChange={handleChange}
+                value={apiPayload.fir_no}
+                disabledSelect={requestData}
+              />
+            </div>
+
+            {/* Case Type */}
+            <div>
+              <label className="font-bold">Case Type:</label>
+              <Input
+                type="text"
+                name="case_type"
+                required
+                onChange={handleChange}
+                value={apiPayload.case_type}
+                disabledSelect={requestData}
+              />
+            </div>
+
+            {/* IO Name */}
+            <div>
+              <label className="font-bold">IO Name:</label>
+              <Input
+                type="text"
+                name="io_name"
+                required
+                onChange={handleChange}
+                value={apiPayload.io_name}
+                disabledSelect={requestData}
+              />
+            </div>
+
+            {/* IO Mobile no. */}
+            <div>
+              <label className="font-bold">IO Mobile no.:</label>
+              <Input
+                type="number"
+                name="io_mobile_no"
+                required
+                onChange={handleChange}
+                value={apiPayload.io_mobile_no}
+                disabledSelect={requestData}
+              />
+            </div>
           </div>
-          <label className="form-label me-4 font-bold"> IO Name:</label>
 
-          <div className="w-15 me-5 col-md-3">
-            <Input type="text" name="io_name" required onChange={handleChange}
-			 value={apiPayload.io_name}
-			/>
+          <div className="mt-6">
+            {/* Additional Form Elements */}
+            {formHandler()}
           </div>
-          <label className="form-label me-4 font-bold"> IO Mobile no.-</label>
 
-          <div className="w-15 me-5 col-md-3">
-            <Input type="number" name="io_mobile_no" required onChange={handleChange}
-			 value={apiPayload.io_mobile_no}
-			/>
-          </div>
-        </div>
-        <div>{formHandler()}</div>
-
-        {/* Slect TSP */}
-        <div className="input-group mb-3 flex gap-5 items-center justify-start mt-5">
-         
-          <div className="col-md-3 ms-5">
+          {/* File Upload */}
+          {/* <div className="mt-6">
+            <label className="font-bold">File Upload:</label>&nbsp;
             <input
               type="file"
               name="user_file"
-              className="form-control"
-              aria-describedby="basic-addon1"
-              accept=".xlsx,.xls,.doc, .docx, .zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam, .xla,.xlw, .xlr, .csv"
-              //   onChange={setFile}
+              className="form-control mt-2"
+              accept=".xlsx,.xls,.doc,.docx,.zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam,.xla,.xlw,.xlr,.csv"
+              disabled={requestData}
             />
+          </div> */}
+
+          {/* Comments */}
+          <div className="mt-6">
+            <label className="font-bold">Comments:</label>
+            <textarea
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              name="brief_summary"
+              value={apiPayload?.brief_summary}
+              onChange={handleChange}
+              disabled={requestData}
+            ></textarea>
           </div>
+
+          {/* Submit Button */}
+          {!requestData && (
+            <div className="mt-6">
+              <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
+                Submit
+              </button>
+            </div>
+          )}
         </div>
-        <div class="w-full mb-4">
-          <textarea className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"></textarea>
-        </div>
-        <div>
-          <button className="text-white bg-blue-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Submit
-          </button>
-        </div>
-      </div>
-	  </form>
+      </form>
     </>
   );
 }

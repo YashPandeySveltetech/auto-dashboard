@@ -12,6 +12,7 @@ import Input from "../../components/input";
 import { FORM_REQUEST, MAKE_PDF } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
+import { useLocation } from "react-router-dom";
 
 function RequestForm({ requestData }) {
   const initialobj = {
@@ -29,7 +30,9 @@ function RequestForm({ requestData }) {
     target_type: "",
     request_to_provide: "",
   });
+  const location=useLocation()
   let station_id = localStorage.getItem("p_station");
+  
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
   const [apiPayload, setApiPayload] = useState(initialobj);
@@ -45,11 +48,15 @@ function RequestForm({ requestData }) {
       setApiPayload((prev) => {
         return {
           ...prev,
+          ["request_to_provide"]: requestData?.request_to_provide,
+          ["target_type"]: requestData?.target_type,
+          ["police_station"]: requestData?.police_station,
           ["fir_no"]: requestData?.fir_no,
           ["case_type"]: requestData?.case_type,
           ["io_name"]: requestData?.io_name,
           ["io_mobile_no"]: requestData?.io_mobile_no,
           ["brief_summary"]: requestData?.brief_summary,
+          ["form_request_for"]:requestData?.form_request_for
         };
       });
 
@@ -57,7 +64,7 @@ function RequestForm({ requestData }) {
     }
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
     setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
-  }, [apiPayload]);
+  }, [requestData]);
 
  
   const formHandler = useCallback(() => {

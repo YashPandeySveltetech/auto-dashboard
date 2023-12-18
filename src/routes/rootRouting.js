@@ -12,6 +12,7 @@ import RequestList from "../pages/requestList";
 import Loader from "../components/loader/Loader";
 import { useSelector } from "react-redux";
 import RequestView from "../pages/requestView";
+import RequestEdit from "../pages/requestEditpage";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -87,6 +88,14 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   <RequestView />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request/edit/:type/:id"
+              element={
+                <Layout>
+                  <RequestEdit />
                 </Layout>
               }
             />

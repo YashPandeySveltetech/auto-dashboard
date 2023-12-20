@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -7,47 +7,74 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
   const mobileInputChange = (e, index) => {
     const { name, value } = e?.target;
     const list = [...MobileList];
-    console.log(MobileList,"list")
     list[index][name] = value;
     list[index]["target_type"]=activeForm?.target_type_id
  
     setMobileList(list);
   };
-  // const dropdownChange = (e, data, index) => {
-  //   const list = [...MobileList];
-  //   list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
-  //   setMobileList(list);
-  // };
- 
+  const dropdownChange = (e, data, index) => {
+    const list = [...MobileList];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
+    setMobileList(list);
+  };
+//  useEffect(()=>{
+// if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
+//   setMobileList(requestData?.form_request_for?.multiple_mobile
+//     )
+// }
+//  },[requestData])
 
-  // const addMobileClick = () => {
-  //   setMobileList([
-  //     ...MobileList,
-  //     {
-  //       date_from: "",
-  //       date_to: "",
-  //       time_from: "",
-  //       time_to: "",
-  //       mobile_number: "",
-  //       tsp: "",
-  //       target_type: activeForm?.target_type,
-  //       request_to_provide: "",
-  //     },
-  //   ]);
-  // };
-  // const removeMobileClick = (index) => {
-  //   const list = [...MobileList];
-  //   list.splice(index, 1);
-  //   setMobileList(list);
-  // };
-  // const clearHandle=()=>{
-  //   setMobileList([])
-  // }
+  const addMobileClick = () => {
+    setMobileList([
+      ...MobileList,
+      {
+        date_from: "",
+        date_to: "",
+        time_from: "",
+        time_to: "",
+        mobile_number: "",
+        tsp: "",
+        target_type: activeForm?.target_type_id,
+        request_to_provide: "",
+      },
+    ]);
+  };
+  const removeMobileClick = (index) => {
+    const list = [...MobileList];
+    list.splice(index, 1);
+    setMobileList(list);
+  };
+  const clearHandle=()=>{
+    setMobileList([])
+  }
+function check()
+{
+
+    var mobile = document.getElementById('mobile');
+   
+    
+    var message = document.getElementById('message');
+
+     var goodColor = "#0C6";
+    var badColor = "#FF9B37";
+  
+    if(mobile.value.length!=10){
+       
+  
+        message.style.color = badColor;
+        message.innerHTML = "required 10 digits mobile number"
+    }else{
+   
+      message.style.color = goodColor;
+      message.innerHTML = ""
+    }
+  
+  }
 
 
   return (
     <>
-      {MobileList?.multiple_mobile?.map((val, i) => (
+      {MobileList?.map((val, i) => (
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
@@ -64,12 +91,19 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
                   onChange={(e) => mobileInputChange(e, i)}
                   disabledSelect={requestData}
                   className="w-[100%]"
+                  min={10}
+                  maxLength="10"
+                  inputMode="numeric"
+                  id="mobile"
+                  onKeyUp={check}
+                  
                 />
+                <span id="message"></span>
               </div>
 
               <div className="flex justify-start items-center gap-5">
                 <label htmlFor="">Request to provide</label>
-                {/* <Select
+                <Select
                   isMulti
                   name="request_to_provide"
                   options={requestprovide}
@@ -79,7 +113,8 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                /> */}
+                  isDisabled={requestData}
+                />
               </div>
             </div>
             {/* CDR DATE TIME */}
@@ -152,7 +187,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
               </div>
 
               <div className="col">
-                {/* <Select
+                <Select
                   isMulti
                   name="tsp"
                   placeholder="Select TSP"
@@ -163,11 +198,12 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                /> */}
+                  isDisabled={requestData}
+                />
             
               </div>
 
-              {/* {!requestData && (
+              {!requestData && (
                 <div>
                   <div className="flex gap-5">
                     {MobileList.length !== 1 && (
@@ -190,7 +226,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
                     )}
                   </div>
                 </div>
-              )} */}
+              )}
             
             </div>
           </div>

@@ -1,22 +1,11 @@
 /** @format */
 
-import React, {
-  Component,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import DropDown from "../../components/dropdown";
-import Radio from "../../components/radio";
-import CDR_FORM from "./cdrform";
-import CAF_FORM from "./cafForm";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import IPDR_FORM from "./ipdrForm";
-import TOWER_DUMP_FORM from "./towerdumpForm";
 import Select from "react-select";
 import Input from "../../components/input";
 import {
+  CASE_TYPE,
   FORM_REQUEST,
   MAKE_PDF,
   REQUEST_TO_PROVIDE,
@@ -29,6 +18,7 @@ import Mobile from "./Mobile";
 import Imei from "./Imei";
 import { arry, firType } from "../../constants/List";
 import IpAddress from "./IpAddress";
+import CellId from "./CellId";
 
 function RequestForm({ requestData }) {
   const initialobj = {
@@ -45,10 +35,10 @@ function RequestForm({ requestData }) {
     target_type: "",
     request_to_provide: "",
     dump_type: "",
-    target_type_id:""
+    target_type_id: "",
   });
   // mobile
-  const [MobileList, setMobileList] = useState({multiple_mobile:[
+  const [MobileList, setMobileList] = useState([
     {
       date_from: "",
       date_to: "",
@@ -59,8 +49,7 @@ function RequestForm({ requestData }) {
       target_type: "",
       request_to_provide: "",
     },
-  ]});
-  // console.log(MobileList,"MobileList")
+  ]);
   const [ImeiList, setImeiList] = useState([
     {
       date_from: "",
@@ -85,29 +74,40 @@ function RequestForm({ requestData }) {
       request_to_provide: "",
     },
   ]);
+  const [cellIdList, setCellIdList] = useState([
+    {
+      date_from: "",
+      date_to: "",
+      time_from: "",
+      time_to: "",
+      cell_id: "",
+      tsp: "",
+      target_type: "",
+      request_to_provide: "",
+    },
+  ]);
 
   let station_id = localStorage.getItem("p_station");
 
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
   const [targetType, setTargetType] = useState([]);
+  const [caseType, setCaseType] = useState([]);
   const [tspList, setTspList] = useState([]);
   const [apiPayload, setApiPayload] = useState(initialobj);
-  console.log(apiPayload,"payload")
-  useEffect(() => {
 
+  useEffect(() => {
     if (requestData) {
       setCurrentDate(requestData?.sys_date);
       setCurrentTime(requestData?.sys_time);
       setActiveForm((prev) => ({
         ...prev,
-        ["request_to_provide"]: requestData?.request_to_provide,
-        ["target_type"]: requestData?.target_type,
+        ["target_type"]: "" ,
       }));
+  
       setApiPayload((prev) => {
         return {
           ...prev,
-          ["police_station"]: requestData?.police_station,
           ["fir_or_complaint"]: requestData?.fir_or_complaint,
           ["fir_no"]: requestData?.fir_no,
           ["case_type"]: requestData?.case_type,
@@ -117,14 +117,30 @@ function RequestForm({ requestData }) {
           ["form_request_for"]: requestData?.form_request_for,
         };
       });
+      setMobileList(requestData?.form_request_for?.multiple_mobile
+        )
+        setImeiList(requestData?.form_request_for?.imei_number
+          )
+          setCellIdList(requestData?.form_request_for?.cell_id)
+          setIpList(requestData?.form_request_for?.ip_port)
+  
 
       return;
     }
-    setCurrentDate(new Date().toLocaleDateString("en-CA"));
-    setCurrentTime(new Date().toLocaleTimeString("en-US")?.split(" ")[0]);
-  }, [requestData,apiPayload]);
-  useEffect(()=>{    getTspList();
-    getTargetType()},[])
+
+  }, [requestData]);
+  useEffect(()=>{
+    if(!requestData){
+      
+      setCurrentDate(new Date().toLocaleDateString("en-CA"));
+      setCurrentTime(new Date().toLocaleTimeString("en-US")?.split(" ")[0]);
+    }
+  },[apiPayload])
+  useEffect(() => {
+    getTspList();
+    getTargetType();
+    getCaseType()
+  }, []);
 
   const getTspList = async () => {
     const res = await ApiHandle(`${TSP_LIST}`, "", "GET");
@@ -137,11 +153,27 @@ function RequestForm({ requestData }) {
     try {
       const res = await ApiHandle(`${TARGET_TYPE}`, "", "GET");
       if (res?.statusCode === 200) {
-        // let target = res?.responsePayload?.filter(
-        //   (item) => item?.name !== "CELL_ID"
-        // );
+
 
         setTargetType(res?.responsePayload);
+
+        return;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getCaseType = async () => {
+    try {
+      const res = await ApiHandle(`${CASE_TYPE}`, "", "GET");
+      if (res?.statusCode === 200) {
+       let data= res?.responsePayload?.map((val) => ({
+          id: val.id,
+          value: val.name,
+          label: val.name,
+        }))
+
+        setCaseType(data);
 
         return;
       }
@@ -163,6 +195,7 @@ function RequestForm({ requestData }) {
       label: val.name,
     }));
   }, [activeForm]);
+
 
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
@@ -201,10 +234,35 @@ function RequestForm({ requestData }) {
         />
       );
     }
-  }, [activeForm, MobileList, ImeiList,IpList]);
+    if (activeForm?.target_type === "CELL_ID") {
+      return (
+        <CellId
+          requestData={requestData}
+          setCellIdList={setCellIdList}
+          cellIdList={cellIdList}
+          activeForm={activeForm}
+          tspdata={tspdata}
+          requestprovide={requestprovide}
+        />
+      );
+    }
+  }, [activeForm, MobileList, ImeiList, IpList, cellIdList,requestData]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
-      activeForm.target_type && 
+      let isok = MobileList.map((obj) => {
+        const newObj = { ...obj };
+        delete newObj.target_type;
+        for (let key in newObj) {
+          if (newObj.hasOwnProperty(key)) {
+            if (newObj[key] === "" || newObj[key] === undefined) {
+              return false;
+            }
+          }
+        }
+        return true;
+      });
+
+      if (isok[0]) {
         setApiPayload({
           ...apiPayload,
           form_request_for: {
@@ -212,9 +270,25 @@ function RequestForm({ requestData }) {
             [arry[activeForm.target_type]]: MobileList,
           },
         });
+      } else {
+        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      }
     }
     if (activeForm.target_type === "IMEI_NUMBER") {
-      activeForm.target_type &&
+      let isok = ImeiList.map((obj) => {
+        const newObj = { ...obj };
+        delete newObj.target_type;
+        for (let key in newObj) {
+          if (newObj.hasOwnProperty(key)) {
+            if (newObj[key] === "" || newObj[key] === undefined) {
+              return false;
+            }
+          }
+        }
+        return true;
+      });
+
+      if (isok[0]) {
         setApiPayload({
           ...apiPayload,
           form_request_for: {
@@ -222,9 +296,25 @@ function RequestForm({ requestData }) {
             [arry[activeForm.target_type]]: ImeiList,
           },
         });
+      } else {
+        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      }
     }
     if (activeForm.target_type === "IP_ADDRESS") {
-      activeForm.target_type &&
+      let isok = IpList.map((obj) => {
+        const newObj = { ...obj };
+        delete newObj.target_type;
+        for (let key in newObj) {
+          if (newObj.hasOwnProperty(key)) {
+            if (newObj[key] === "" || newObj[key] === undefined) {
+              return false;
+            }
+          }
+        }
+        return true;
+      });
+
+      if (isok[0]) {
         setApiPayload({
           ...apiPayload,
           form_request_for: {
@@ -232,14 +322,46 @@ function RequestForm({ requestData }) {
             [arry[activeForm?.target_type]]: IpList,
           },
         });
+      } else {
+        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      }
     }
-  }, [ImeiList, MobileList,IpList]);
+    if (activeForm.target_type === "CELL_ID") {
+      let isok = cellIdList.map((obj) => {
+        const newObj = { ...obj };
+        delete newObj.target_type;
+        for (let key in newObj) {
+          if (newObj.hasOwnProperty(key)) {
+            if (newObj[key] === "" || newObj[key] === undefined) {
+              return false;
+            }
+          }
+        }
+        return true;
+      });
+
+      if (isok[0]) {
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: {
+            ...apiPayload?.form_request_for,
+            [arry[activeForm?.target_type]]: cellIdList,
+          },
+        });
+      } else {
+        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      }
+    }
+  }, [ImeiList, MobileList, IpList, cellIdList,requestData]);
 
   const handleChange = (e, callfrom, fromval) => {
     const { name, value } = e.target;
     if (callfrom) {
-      console.log(fromval,"from")
-      setActiveForm({ ...activeForm, [callfrom]: fromval.name,target_type_id:fromval.id });
+      setActiveForm({
+        ...activeForm,
+        [callfrom]: fromval.name,
+        target_type_id: fromval.id,
+      });
     } else {
       setApiPayload({
         ...apiPayload,
@@ -253,7 +375,14 @@ function RequestForm({ requestData }) {
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
-    } else {
+    }
+    if(data.name==="case_type"){
+      setApiPayload({
+        ...apiPayload,
+        [data?.name]: e?.id,
+      });
+    } 
+    else {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.value,
@@ -271,7 +400,7 @@ function RequestForm({ requestData }) {
       setActiveForm({
         target_type: "",
         request_to_provide: "",
-        target_type_id:""
+        target_type_id: "",
       });
       setApiPayload(initialobj);
       Toaster("success", "SuccessFully Submitted Form");
@@ -282,7 +411,30 @@ function RequestForm({ requestData }) {
   const getFormPdf = async (id) => {
     const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
   };
-
+  function check()
+  {
+  
+      var mobile = document.getElementById("mobile");
+     
+      
+      var message = document.getElementById('message');
+  
+       var goodColor = "#0C6";
+      var badColor = "#FF9B37";
+    
+      if(mobile.value.length!=10){
+         
+    
+          message.style.color = badColor;
+          message.innerHTML = "required 10 digits mobile number"
+      }else{
+     
+        message.style.color = goodColor;
+        message.innerHTML = ""
+      }
+    
+    }
+  
   return (
     <>
       <form action="" onSubmit={handleSubmit}>
@@ -325,11 +477,13 @@ function RequestForm({ requestData }) {
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data)}
                   isSearchable={false}
+                  isDisabled={requestData}
                 />
                 <Input
                   type="text"
                   name="fir_no"
                   required
+                  
                   onChange={handleChange}
                   value={apiPayload.fir_no}
                   disabledSelect={requestData}
@@ -340,53 +494,32 @@ function RequestForm({ requestData }) {
             {/* Case Type */}
             <div>
               <label className="font-bold">Case Type:</label>
-              <Input
-                type="text"
-                name="case_type"
-                required
-                onChange={handleChange}
-                value={apiPayload.case_type}
-                disabledSelect={requestData}
-              />
+              <Select
+                  name="case_type"
+                  options={caseType}
+                  value={caseType?.filter(
+                    (obj) => apiPayload?.case_type == obj?.id
+                  )}
+                  className="basic-multi-select w-[50%]"
+                  classNamePrefix="select"
+                  onChange={(e, data) => dropdownChange(e, data)}
+                  isDisabled={requestData}
+                />
+           
             </div>
 
-            {/* IO Name */}
-            <div>
-              <label className="font-bold">IO Name:</label>
-              <Input
-                type="text"
-                name="io_name"
-                required
-                onChange={handleChange}
-                value={apiPayload.io_name}
-                disabledSelect={requestData}
-              />
-            </div>
-
-            {/* IO Mobile no. */}
-            <div>
-              <label className="font-bold">IO Mobile no.:</label>
-              <Input
-                type="number"
-                name="io_mobile_no"
-                required
-                onChange={handleChange}
-                value={apiPayload.io_mobile_no}
-                disabledSelect={requestData}
-              />
-            </div>
+           
           </div>
           <div className="mt-6 flex items-center gap-6">
             <label className="font-bold">Target Type:</label>
-
-            {/* sdfghjk */}
             <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px">
                 {targetType?.map((val, key) => (
-                  <li className="me-2">
+                  <li className="me-2"    key={key}>
                     <button
                       onClick={(e) => handleChange(e, "target_type", val)}
-                      key={key}
+                   disabled={ requestData &&!requestData?.form_request_for[arry[val?.name]]?.length >
+                    0}
                       type="button"
                       className={
                         activeForm?.target_type === val?.name
@@ -395,7 +528,7 @@ function RequestForm({ requestData }) {
                       }
                       id={key}
                     >
-                      {val?.name}{" "}
+                      {String(val?.name).replace("_", ' ')}
                       <span className="text-cyan-400">
                         (
                         {apiPayload?.form_request_for[arry[val?.name]]?.length >
@@ -418,7 +551,7 @@ function RequestForm({ requestData }) {
 
           {/* Comments */}
           <div className="mt-6">
-            <label className="font-bold">Comments:</label>
+            <label className="font-bold">Case Reference:</label>
             <textarea
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               name="brief_summary"
@@ -426,6 +559,47 @@ function RequestForm({ requestData }) {
               onChange={handleChange}
               disabled={requestData}
             ></textarea>
+            
+          </div>
+          <div className="flex justify-start items-center gap-5 mt-6">
+             {/* IO Name */}
+             <div className="flex items-center gap-3">
+              <label className="font-bold">Requesting Officer Name:</label>
+              <Input
+                type="text"
+                name="io_name"
+                required
+                onChange={handleChange}
+                value={apiPayload.io_name}
+                disabledSelect={requestData}
+              />
+            </div>
+
+            {/* IO Mobile no. */}
+            <div className="flex items-center gap-3">
+              <label className="font-bold">Requesting Officer Mobile no.</label>
+              <Input
+                type="text"
+                name="io_mobile_no"
+                required
+                onChange={handleChange}
+                value={apiPayload.io_mobile_no}
+                disabledSelect={requestData}
+                min={10}
+                maxLength="10"
+                inputMode="numeric"
+                id="mobile"
+                onKeyUp={check}
+              />
+                <span id="message"></span>
+            </div>
+            
+            {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
+                send Otp
+              </button> </div>} */}
+           
+
+
           </div>
 
           {/* Submit Button */}

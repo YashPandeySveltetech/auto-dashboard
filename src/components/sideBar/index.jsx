@@ -92,10 +92,10 @@ function Sidebar() {
           <div className="font-bold text-[.8rem] ">{email}</div>
         </div>
         <hr/>
-        {list.map((item) => (
-          <>
-            <ListItem {...item} />
-          </>
+        {list.map((item,key) => (
+         
+            <ListItem {...item} key={key} />
+         
         ))}
       </div>
       <button

@@ -188,13 +188,15 @@ function RequestList() {
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {item?.request_to_provide}
+                    {String(item?.request_to_provide).replace("_", ' ')}
+                   
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {item?.target_type}
+                    {String(item?.target_type).replace("_", ' ')}
+                   
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"

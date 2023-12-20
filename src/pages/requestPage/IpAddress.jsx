@@ -16,7 +16,7 @@ function IpAddress({
 
     const list = [...IpList];
     list[index][name] = value;
-    list[index]["target_type"] = activeForm?.target_type;
+    list[index]["target_type"] = activeForm?.target_type_id;
     setIpList(list);
   };
 
@@ -29,7 +29,7 @@ function IpAddress({
         date_to: "",
         time_from: "",
         time_to: "",
-        target_type: activeForm?.target_type,
+        target_type: activeForm?.target_type_id,
         request_to_provide: "",
       },
     ]);
@@ -59,9 +59,9 @@ function IpAddress({
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
                 <Input
-                  label={"IMEI "}
-                  name="imei"
-                  value={val.imei}
+                  label={"IP Address"}
+                  name="ip"
+                  value={val.ip}
                   onChange={(e) => ipInputChange(e, i)}
                   disabledSelect={requestData}
                   className="w-[100%]"
@@ -77,7 +77,7 @@ function IpAddress({
                   value={requestprovide?.filter((obj) =>
                     IpList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  className="basic-multi-select w-[100%]"
+                  className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
@@ -156,6 +156,7 @@ function IpAddress({
                 <Select
                   isMulti
                   name="tsp"
+                  placeholder="Select TSP"
                   options={tspdata}
                   value={tspdata.filter((obj) =>
                     IpList[i]?.tsp?.includes(obj?.id)

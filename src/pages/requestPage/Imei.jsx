@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -15,7 +15,7 @@ function Imei({
 
     const list = [...ImeiList];
     list[index][name] = value;
-    list[index]["target_type"] = activeForm?.target_type;
+    list[index]["target_type"] = activeForm?.target_type_id;
     setImeiList(list);
   };
 
@@ -28,12 +28,17 @@ function Imei({
         date_to: "",
         time_from: "",
         time_to: "",
-        target_type: activeForm?.target_type,
+        target_type: activeForm?.target_type_id,
         request_to_provide: "",
       },
     ]);
   };
-
+  // useEffect(()=>{
+  //   if(requestData && Object.keys(requestData?.form_request_for).includes("imei_number")){
+  //     setImeiList(requestData?.form_request_for?.imei_number
+  //       )
+  //   }
+  //    },[requestData])
   const ImeiRemoveClick = (index) => {
     const list = [...ImeiList];
     list.splice(index, 1);
@@ -76,7 +81,7 @@ function Imei({
                   value={requestprovide?.filter((obj) =>
                     ImeiList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  className="basic-multi-select w-[100%]"
+                  className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
@@ -155,6 +160,7 @@ function Imei({
                 <Select
                   isMulti
                   name="tsp"
+                  placeholder="Select TSP"
                   options={tspdata}
                   value={tspdata.filter((obj) =>
                     ImeiList[i]?.tsp?.includes(obj?.id)

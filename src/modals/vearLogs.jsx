@@ -32,26 +32,26 @@ const dispatch=useDispatch()
   return (
     <ModalWrapper handleClick={()=>dispatch(commonCloseModal())} btnName={"close"}>
         <div> 
-        <table class='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-						<thead class='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+        <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+						<thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
 							<tr>
 							
 							
 								<th
 									scope='col'
-									class='px-6 py-3'
+									className='px-6 py-3'
 								>
 									REJECTION TIME
 								</th>
                                 <th
 									scope='col'
-									class='px-6 py-3'
+									className='px-6 py-3'
 								>
 									 REASON FOR REJECTION
 								</th>
                                 <th
 									scope='col'
-									class='px-6 py-3'
+									className='px-6 py-3'
 								>
 									REJECTED BY
 								</th>
@@ -60,15 +60,15 @@ const dispatch=useDispatch()
 						</thead>
 						<tbody>
 							{logs?.map((item) => (
-								<tr class='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+								<tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
 									<th
 										scope='row'
-										class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+										className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
 									>
 										{item?.rejection_time?.split('T')[0]}
 									</th>
-									<td class='px-6 py-4'>{item?.rejection_reason}</td>
-									<td class='px-6 py-4'>{item?.rejected_by}</td>
+									<td className='px-6 py-4'>{item?.rejection_reason}</td>
+									<td className='px-6 py-4'>{item?.rejected_by}</td>
 								
 								
 								</tr>

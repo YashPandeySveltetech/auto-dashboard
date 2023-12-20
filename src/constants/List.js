@@ -7,3 +7,10 @@ export let arry = {
     MOBILE_NUMBER: "multiple_mobile",
     IMEI_NUMBER: "imei_number",
   };
+  export let requestProvide=[ "CDR", "IPDR", "TOWER_DUMP", "CAF"]
+
+ export const firType = [
+    { label: "Fir", value: "Fir" },
+    { label: "complaint", value: "complaint" },
+  ];
+

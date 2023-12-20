@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { tspList, arry } from "../../constants/tspList";
+import { tspList, arry } from "../../constants/List";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 function CAFform({
@@ -95,7 +95,7 @@ function CAFform({
       </div>
       {activeForm?.target_type === "MOBILE_NUMBER" &&
         cafList.map((val, i) => (
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}}>
             <Input
               label={"Mobile no."}
               name="mobile_number"

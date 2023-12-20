@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { tspList, arry } from "../../constants/tspList";
+import { tspList, arry } from "../../constants/List";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 
@@ -84,7 +84,7 @@ function TowerDumpForm({
     <>
       {tdrModelList?.map((val, i) => (
         <>
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}} key={i}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA",marginBottom:"15px"}} key={i}>
             <Input
               label={"CELL ID"}
               type="text"

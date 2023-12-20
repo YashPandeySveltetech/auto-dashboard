@@ -12,3 +12,6 @@ export const REJECT_REQUEST = "/form/reject-forms/";
 export const APPROVE_REQUEST = "/form/approve-decisions/";
 export const VIEW_ATTACHMENTS="/form/request-attachments/"
 export const MAKE_PDF="/form/make-pdf/"
+export const TSP_LIST="/common/tsps/"
+export const REQUEST_TO_PROVIDE="/common/request-to-provides/"
+export const TARGET_TYPE="/common/target-types/"

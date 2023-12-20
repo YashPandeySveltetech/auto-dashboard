@@ -1,6 +1,12 @@
 /** @format */
 
-import React, { Component, useCallback, useEffect, useState } from "react";
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import DropDown from "../../components/dropdown";
 import Radio from "../../components/radio";
 import CDR_FORM from "./cdrform";
@@ -8,35 +14,88 @@ import CAF_FORM from "./cafForm";
 
 import IPDR_FORM from "./ipdrForm";
 import TOWER_DUMP_FORM from "./towerdumpForm";
+import Select from "react-select";
 import Input from "../../components/input";
-import { FORM_REQUEST, MAKE_PDF } from "../../utils/constants";
+import {
+  FORM_REQUEST,
+  MAKE_PDF,
+  REQUEST_TO_PROVIDE,
+  TARGET_TYPE,
+  TSP_LIST,
+} from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
-import { useLocation } from "react-router-dom";
+import Mobile from "./Mobile";
+import Imei from "./Imei";
+import { arry, firType } from "../../constants/List";
+import IpAddress from "./IpAddress";
 
 function RequestForm({ requestData }) {
   const initialobj = {
-    request_to_provide: "",
     police_station: "",
     fir_no: "",
     case_type: "",
     io_name: "",
     io_mobile_no: "",
-    target_type: "",
     form_request_for: {},
     brief_summary: "",
+    fir_or_complaint: "",
   };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
     request_to_provide: "",
+    dump_type: "",
+    target_type_id:""
   });
-  const location=useLocation()
+  // mobile
+  const [MobileList, setMobileList] = useState({multiple_mobile:[
+    {
+      date_from: "",
+      date_to: "",
+      time_from: "",
+      time_to: "",
+      mobile_number: "",
+      tsp: "",
+      target_type: "",
+      request_to_provide: "",
+    },
+  ]});
+  // console.log(MobileList,"MobileList")
+  const [ImeiList, setImeiList] = useState([
+    {
+      date_from: "",
+      date_to: "",
+      time_from: "",
+      time_to: "",
+      imei: "",
+      tsp: "",
+      target_type: "",
+      request_to_provide: "",
+    },
+  ]);
+  const [IpList, setIpList] = useState([
+    {
+      ip: "",
+      date_from: "",
+      date_to: "",
+      time_from: "",
+      time_to: "",
+      tsp: "",
+      target_type: "",
+      request_to_provide: "",
+    },
+  ]);
+
   let station_id = localStorage.getItem("p_station");
-  
+
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
+  const [targetType, setTargetType] = useState([]);
+  const [tspList, setTspList] = useState([]);
   const [apiPayload, setApiPayload] = useState(initialobj);
+  console.log(apiPayload,"payload")
   useEffect(() => {
+
     if (requestData) {
       setCurrentDate(requestData?.sys_date);
       setCurrentTime(requestData?.sys_time);
@@ -48,83 +107,139 @@ function RequestForm({ requestData }) {
       setApiPayload((prev) => {
         return {
           ...prev,
-          ["request_to_provide"]: requestData?.request_to_provide,
-          ["target_type"]: requestData?.target_type,
           ["police_station"]: requestData?.police_station,
+          ["fir_or_complaint"]: requestData?.fir_or_complaint,
           ["fir_no"]: requestData?.fir_no,
           ["case_type"]: requestData?.case_type,
           ["io_name"]: requestData?.io_name,
           ["io_mobile_no"]: requestData?.io_mobile_no,
           ["brief_summary"]: requestData?.brief_summary,
-          ["form_request_for"]:requestData?.form_request_for
+          ["form_request_for"]: requestData?.form_request_for,
         };
       });
 
       return;
     }
     setCurrentDate(new Date().toLocaleDateString("en-CA"));
-    setCurrentTime(new Date().toLocaleTimeString("en-US").split(" ")[0]);
-  }, [requestData]);
+    setCurrentTime(new Date().toLocaleTimeString("en-US")?.split(" ")[0]);
+  }, [requestData,apiPayload]);
+  useEffect(()=>{    getTspList();
+    getTargetType()},[])
 
- 
-  const formHandler = useCallback(() => {
-    if (activeForm.request_to_provide === "CDR") {
-      return (
-        <CDR_FORM
-          requestData={requestData}
-          handleChange={handleChange}
-          setApiPayload={setApiPayload}
-          apiPayload={apiPayload}
-          setActiveForm={setActiveForm}
-          activeForm={activeForm}
-        />
-      );
+  const getTspList = async () => {
+    const res = await ApiHandle(`${TSP_LIST}`, "", "GET");
+    if (res.statusCode === 200) {
+      setTspList(res?.responsePayload);
     }
-    if (activeForm.request_to_provide === "TOWER_DUMP") {
-      return (
-        <TOWER_DUMP_FORM
-          requestData={requestData}
-          handleChange={handleChange}
-          setApiPayload={setApiPayload}
-          apiPayload={apiPayload}
-          setActiveForm={setActiveForm}
-          activeForm={activeForm}
-        />
-      );
+  };
+
+  const getTargetType = async () => {
+    try {
+      const res = await ApiHandle(`${TARGET_TYPE}`, "", "GET");
+      if (res?.statusCode === 200) {
+        // let target = res?.responsePayload?.filter(
+        //   (item) => item?.name !== "CELL_ID"
+        // );
+
+        setTargetType(res?.responsePayload);
+
+        return;
+      }
+    } catch (err) {
+      console.log(err);
     }
-    if (activeForm.request_to_provide === "IPDR") {
-      return (
-        <IPDR_FORM
-          requestData={requestData}
-          handleChange={handleChange}
-          setApiPayload={setApiPayload}
-          apiPayload={apiPayload}
-          setActiveForm={setActiveForm}
-          activeForm={activeForm}
-        />
-      );
-    }
-    if (activeForm.request_to_provide === "CAF") {
-      return (
-        <CAF_FORM
-          requestData={requestData}
-          handleChange={handleChange}
-          setApiPayload={setApiPayload}
-          apiPayload={apiPayload}
-          setActiveForm={setActiveForm}
-          activeForm={activeForm}
-        />
-      );
-    }
+  };
+
+  const requestprovide = useMemo(() => {
+    let ac = targetType?.find((val, i) => val?.name === activeForm.target_type);
+    return ac?.request_to_provide?.map((item) => {
+      return { label: item.name, id: item.id, value: item.name };
+    });
   }, [activeForm]);
+  const tspdata = useMemo(() => {
+    return tspList?.map((val) => ({
+      id: val.id,
+      value: val.name,
+      label: val.name,
+    }));
+  }, [activeForm]);
+
+  const formHandler = useCallback(() => {
+    if (activeForm?.target_type === "MOBILE_NUMBER") {
+      return (
+        <Mobile
+          requestData={requestData}
+          setMobileList={setMobileList}
+          MobileList={MobileList}
+          activeForm={activeForm}
+          tspdata={tspdata}
+          requestprovide={requestprovide}
+        />
+      );
+    }
+    if (activeForm?.target_type === "IMEI_NUMBER") {
+      return (
+        <Imei
+          requestData={requestData}
+          setImeiList={setImeiList}
+          ImeiList={ImeiList}
+          activeForm={activeForm}
+          tspdata={tspdata}
+          requestprovide={requestprovide}
+        />
+      );
+    }
+    if (activeForm?.target_type === "IP_ADDRESS") {
+      return (
+        <IpAddress
+          requestData={requestData}
+          setIpList={setIpList}
+          IpList={IpList}
+          activeForm={activeForm}
+          tspdata={tspdata}
+          requestprovide={requestprovide}
+        />
+      );
+    }
+  }, [activeForm, MobileList, ImeiList,IpList]);
+  useEffect(() => {
+    if (activeForm.target_type === "MOBILE_NUMBER") {
+      activeForm.target_type && 
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: {
+            ...apiPayload?.form_request_for,
+            [arry[activeForm.target_type]]: MobileList,
+          },
+        });
+    }
+    if (activeForm.target_type === "IMEI_NUMBER") {
+      activeForm.target_type &&
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: {
+            ...apiPayload?.form_request_for,
+            [arry[activeForm.target_type]]: ImeiList,
+          },
+        });
+    }
+    if (activeForm.target_type === "IP_ADDRESS") {
+      activeForm.target_type &&
+        setApiPayload({
+          ...apiPayload,
+          form_request_for: {
+            ...apiPayload?.form_request_for,
+            [arry[activeForm?.target_type]]: IpList,
+          },
+        });
+    }
+  }, [ImeiList, MobileList,IpList]);
 
   const handleChange = (e, callfrom, fromval) => {
     const { name, value } = e.target;
     if (callfrom) {
-      setActiveForm({ ...activeForm, [callfrom]: fromval });
-      setApiPayload((prev) => {
-        return { ...prev, [callfrom]: fromval };
-      });
+      console.log(fromval,"from")
+      setActiveForm({ ...activeForm, [callfrom]: fromval.name,target_type_id:fromval.id });
     } else {
       setApiPayload({
         ...apiPayload,
@@ -135,7 +250,16 @@ function RequestForm({ requestData }) {
       });
     }
   };
-
+  const dropdownChange = (e, data) => {
+    if (data?.name == "target_type") {
+      setActiveForm({ ...activeForm, dump_type: e.value });
+    } else {
+      setApiPayload({
+        ...apiPayload,
+        [data?.name]: e?.value,
+      });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,29 +267,29 @@ function RequestForm({ requestData }) {
     const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
 
     if (res.statusCode === 201) {
-      
-      getFormPdf(res?.responsePayload?.id)
+      getFormPdf(res?.responsePayload?.id);
       setActiveForm({
         target_type: "",
         request_to_provide: "",
-      })
-      setApiPayload(initialobj)
-      Toaster("success","SuccessFully Submitted Form")
+        target_type_id:""
+      });
+      setApiPayload(initialobj);
+      Toaster("success", "SuccessFully Submitted Form");
       return;
     }
   };
 
-
-  const getFormPdf=async(id)=>{
-
-const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
-
-  }
+  const getFormPdf = async (id) => {
+    const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
+  };
 
   return (
     <>
       <form action="" onSubmit={handleSubmit}>
-        <div className="mx-auto mt-5 p-3 bg-white shadow-md rounded-lg" style={{width:"96%"}}>
+        <div
+          className="mx-auto mt-5 p-3 bg-white shadow-md rounded-lg"
+          style={{ width: "96%" }}
+        >
           <div style={{ textAlign: "center" }}>
             <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
           </div>
@@ -186,60 +310,31 @@ const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
             </div>
           </div>
 
-          <div className="mt-6 flex items-center gap-6">
-            <label className="font-bold">Request to Provide:</label>
-            <div className="flex gap-4 mt-5">
-              <Radio
-                value={"CDR" === activeForm.request_to_provide}
-                label="CDR"
-                name="request_to_provide"
-                handleChange={(e) =>
-                  handleChange(e, "request_to_provide", "CDR")
-                }
-                disabled={requestData}
-              />
-              <Radio
-                value={"IPDR" === activeForm.request_to_provide}
-                label="IPDR"
-                name="request_to_provide"
-                handleChange={(e) =>
-                  handleChange(e, "request_to_provide", "IPDR")
-                }
-                disabled={requestData}
-              />
-              <Radio
-                value={"TOWER_DUMP" === activeForm.request_to_provide}
-                label="TOWER DUMP"
-                name="request_to_provide"
-                handleChange={(e) =>
-                  handleChange(e, "request_to_provide", "TOWER_DUMP")
-                }
-                disabled={requestData}
-              />
-              <Radio
-                value={"CAF" === activeForm.request_to_provide}
-                label="CAF"
-                name="request_to_provide"
-                handleChange={(e) =>
-                  handleChange(e, "request_to_provide", "CAF")
-                }
-                disabled={requestData}
-              />
-            </div>
-          </div>
-
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* FIR NO. */}
-            <div>
-              <label className="font-bold">FIR NO.:</label>
-              <Input
-                type="text"
-                name="fir_no"
-                required
-                onChange={handleChange}
-                value={apiPayload.fir_no}
-                disabledSelect={requestData}
-              />
+            <div className="">
+              <label className="font-bold">Choose Type:</label>
+              <div className="flex  gap-2">
+                <Select
+                  name="fir_or_complaint"
+                  options={firType}
+                  value={firType?.filter(
+                    (obj) => apiPayload?.fir_or_complaint === obj?.value
+                  )}
+                  className="basic-multi-select w-[30%]"
+                  classNamePrefix="select"
+                  onChange={(e, data) => dropdownChange(e, data)}
+                  isSearchable={false}
+                />
+                <Input
+                  type="text"
+                  name="fir_no"
+                  required
+                  onChange={handleChange}
+                  value={apiPayload.fir_no}
+                  disabledSelect={requestData}
+                />
+              </div>
             </div>
 
             {/* Case Type */}
@@ -281,23 +376,46 @@ const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
               />
             </div>
           </div>
+          <div className="mt-6 flex items-center gap-6">
+            <label className="font-bold">Target Type:</label>
 
+            {/* sdfghjk */}
+            <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+              <ul className="flex flex-wrap -mb-px">
+                {targetType?.map((val, key) => (
+                  <li className="me-2">
+                    <button
+                      onClick={(e) => handleChange(e, "target_type", val)}
+                      key={key}
+                      type="button"
+                      className={
+                        activeForm?.target_type === val?.name
+                          ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
+                          : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                      }
+                      id={key}
+                    >
+                      {val?.name}{" "}
+                      <span className="text-cyan-400">
+                        (
+                        {apiPayload?.form_request_for[arry[val?.name]]?.length >
+                        0
+                          ? apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length
+                          : 0}
+                        )
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <div className="mt-6">
             {/* Additional Form Elements */}
             {formHandler()}
           </div>
 
-          {/* File Upload */}
-          {/* <div className="mt-6">
-            <label className="font-bold">File Upload:</label>&nbsp;
-            <input
-              type="file"
-              name="user_file"
-              className="form-control mt-2"
-              accept=".xlsx,.xls,.doc,.docx,.zip,.rar,.7zip,.xlsm,.xlsb,.xltx,.xltm,.xlt,.xml,.xlam,.xla,.xlw,.xlr,.csv"
-                            />
-                    </div> */}
-          
           {/* Comments */}
           <div className="mt-6">
             <label className="font-bold">Comments:</label>

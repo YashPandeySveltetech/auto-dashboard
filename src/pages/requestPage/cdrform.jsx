@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
-import { tspList, arry } from "../../constants/tspList";
+import { tspList, arry } from "../../constants/List";
 import { CLOSING } from "ws";
 
 function CDRform({
@@ -158,7 +158,7 @@ function CDRform({
       {cdrMobileList.map((val, i) => (
         <>
          
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
             <Input
               label={"Mobile "}
               type="text"
@@ -301,7 +301,7 @@ function CDRform({
     <>
       {cdrImeiList.map((val, i) => (
         <>
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
             <Input
               label={"IMEI "}
               name="imei"

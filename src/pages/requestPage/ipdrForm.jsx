@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { tspList, arry } from "../../constants/tspList";
+import { tspList, arry } from "../../constants/List";
 import Input from "../../components/input";
 import Radio from "../../components/radio";
 
@@ -183,7 +183,7 @@ function IPDRform({
     <>
       {ipdrMobileList.map((val, i) => (
         <>
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}} key={i}>
             <Input
               label={"Mobile "}
               type="text"
@@ -324,7 +324,7 @@ function IPDRform({
     <>
       {ipdrImeiList.map((val, i) => (
         <>
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
             <Input
               label={"IMEI "}
               name="imei"
@@ -461,7 +461,7 @@ function IPDRform({
     <>
       {ipdrReverseIpList.map((val, i) => (
         <>
-          <div class="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
+          <div className="shadow-lg shadow-cyan-500/50 p-5" style={{background:"#FFFAFA"}}>
             <div className="input-group flex items-center justify-start gap-5 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
                 IP Address

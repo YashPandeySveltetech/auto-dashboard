@@ -130,85 +130,85 @@ function RequestList() {
         setFilter={setFilter}
       />
       <div>
-        <div class="relative overflow-x-auto p-3">
+        <div className="relative overflow-x-auto p-3">
           <table
-            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
+            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}
           >
             <thead
-              class="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              className="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
               style={{ backgroundColor: "black", color: "white" }}
             >
               <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   DATE OF REQUEST
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   NAME OF DIST/ORGN.
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   I/O Name
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   Fir No.
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   View Attachment
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   REMARKS(REASON FOR REJECTION){" "}
                 </th>
               </tr>
             </thead>
             <tbody>
               {requestList?.results?.map((item) => (
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th
                     scope="row"
-                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
                     {item?.created_on?.split("T")[0]}
                   </th>
                   <td
-                    class="px-6 py-4 font-semibold"
+                    className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
                     {item?.district}
                   </td>
                   <td
-                    class="px-6 py-4 font-semibold"
+                    className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
                     {item?.request_to_provide}
                   </td>
                   <td
-                    class="px-6 py-4 font-semibold"
+                    className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
                     {item?.target_type}
                   </td>
                   <td
-                    class="px-6 py-4 font-semibold"
+                    className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
                     {item?.io_name}
                   </td>
                   <td
-                    class="px-6 py-4 font-semibold"
+                    className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
                     {item?.fir_no}
                   </td>
-                  <td class="px-6 py-4 text-center">
+                  <td className="px-6 py-4 text-center">
                     {/* <button className='bg-green-300'>Approve</button> */}
                     <button
                       onClick={() =>
@@ -219,7 +219,7 @@ function RequestList() {
                     </button>
                     {/* <button className='bg-red-900'>Reject</button> */}
                   </td>
-                  <td class="px-6 py-4 flex gap-2">
+                  <td className="px-6 py-4 flex gap-2">
                     {["ACP", "DCP"].includes(rank) &&
                       item?.decision == "PENDING" && (
                         <button
@@ -280,7 +280,7 @@ function RequestList() {
                         </button>
                       )}
                   </td>
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     <div>{item?.decision}</div>
                     <div>
                       {item?.decision == "REJECT" && (

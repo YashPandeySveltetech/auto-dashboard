@@ -3,7 +3,7 @@ import React from "react";
 function Radio({ label = "label", value, name, handleChange, disabled }) {
   return (
     <fieldset>
-      <div class="flex items-center mb-4">
+      <div className="flex items-center mb-4">
         <input
           id={name}
           onClick={handleChange}
@@ -11,7 +11,7 @@ function Radio({ label = "label", value, name, handleChange, disabled }) {
           type="radio"
           name={name}
           disabled={disabled}
-          class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
+          className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600"
         />
         <label
           for="country-option-1"

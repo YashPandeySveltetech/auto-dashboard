@@ -20,7 +20,7 @@ import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-function RequestList() {
+function RejectList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
@@ -40,8 +40,8 @@ function RequestList() {
         `?case_type=${filter?.case_type}&fir_no=${
           filter?.case_ref
         }&decision_type=${
-          filter.form_status
-        }&page=${active}&is_otp_verified=${true}`,
+          "REJECT"
+        }&page=${active}&is_otp_verified=${false}`,
       {},
       "GET"
     );
@@ -91,7 +91,7 @@ function RequestList() {
     case_type: "",
   });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
-    console.log(approved_desion_id, ">>>");
+    
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
       { request_form: requestId },
@@ -327,7 +327,23 @@ function RequestList() {
                   {!["ACP", "DCP"].includes(rank) && (
                     <td className="px-6 py-4">
                       <div>{item?.acp_status}</div>
-                      
+                      <div>
+                        {item?.acp_status == "REJECT" && (
+                          <button
+                            onClick={() => {
+                              dispatch(openViewLogModal(item?.id));
+                              dispatch(updateRequestList(false));
+                            }}
+                            className="bg-red-900 p-2 rounded-lg font-bold"
+                            style={{
+                              color: "white",
+                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                            }}
+                          >
+                            View Log
+                          </button>
+                        )}
+                      </div>
                     </td>
                   )}
                 { !["DCP"].includes(rank) &&  <td className="px-6 py-4">
@@ -380,4 +396,4 @@ function RequestList() {
   );
 }
 
-export default RequestList;
+export default RejectList;

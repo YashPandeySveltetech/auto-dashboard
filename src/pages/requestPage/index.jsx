@@ -19,8 +19,11 @@ import Imei from "./Imei";
 import { arry, firType } from "../../constants/List";
 import IpAddress from "./IpAddress";
 import CellId from "./CellId";
+import { useDispatch } from "react-redux";
+import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 
 function RequestForm({ requestData }) {
+  const dispatch=useDispatch()
   const initialobj = {
     police_station: "",
     fir_no: "",
@@ -394,7 +397,6 @@ function RequestForm({ requestData }) {
     e.preventDefault();
 
     const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
-
     if (res.statusCode === 201) {
       getFormPdf(res?.responsePayload?.id);
       setActiveForm({
@@ -403,6 +405,7 @@ function RequestForm({ requestData }) {
         target_type_id: "",
       });
       setApiPayload(initialobj);
+      dispatch(otpValidationModal({id:res?.responsePayload?.id}))
       Toaster("success", "SuccessFully Submitted Form");
       return;
     }
@@ -511,6 +514,8 @@ function RequestForm({ requestData }) {
            
           </div>
           <div className="mt-6 flex items-center gap-6">
+
+           
             <label className="font-bold">Target Type:</label>
             <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px">
@@ -615,6 +620,6 @@ function RequestForm({ requestData }) {
     </>
   );
 }
-// }
+
 
 export default RequestForm;

@@ -13,6 +13,8 @@ import Loader from "../components/loader/Loader";
 import { useSelector } from "react-redux";
 import RequestView from "../pages/requestView";
 import RequestEdit from "../pages/requestEditpage";
+import UnverifiedFormList from "../pages/requestList/unverifiedFormList";
+import RejectList from "../pages/requestList/rejectList";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -80,6 +82,22 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   <RequestList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/unverified-form"
+              element={
+                <Layout>
+                  <UnverifiedFormList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/rejected-form"
+              element={
+                <Layout>
+                  <RejectList />
                 </Layout>
               }
             />

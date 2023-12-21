@@ -5,15 +5,18 @@ import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewLogsModal from "./modals/vearLogs";
+import OtpValidationModal from "./modals/otpValidationModal";
 function App() {
-  const {rejectModal,viewLogModal}=useSelector((state)=>state?.modal)
+  const {rejectModal,viewLogModal,otpValidationModal}=useSelector((state)=>state?.modal)
   return (
     <div>
-      {rejectModal&&<RejectModal/>}
-      {viewLogModal&&<ViewLogsModal/>}
+ 
       <BrowserRouter>
         <AppRoute />
         <ToastContainer />
+        {rejectModal&&<RejectModal/>}
+      {viewLogModal&&<ViewLogsModal/>}
+      {otpValidationModal && <OtpValidationModal/>}
       </BrowserRouter>
     </div>
   );

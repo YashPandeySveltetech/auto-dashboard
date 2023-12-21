@@ -20,7 +20,7 @@ import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-function RequestList() {
+function UnverifiedFormList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
@@ -37,16 +37,12 @@ function RequestList() {
   const getAllRequest = async ({ active = 1 }) => {
     const res = await ApiHandle(
       FORM_REQUEST +
-        `?case_type=${filter?.case_type}&fir_no=${
-          filter?.case_ref
-        }&decision_type=${
-          filter.form_status
-        }&page=${active}&is_otp_verified=${true}`,
+        `?case_type=${filter?.case_type}&is_otp_verified=${false}&fir_no=${filter?.case_ref}&decision_type=PENDING${filter.form_status}&page=${active}`,
       {},
       "GET"
     );
     if (res.statusCode === 200) {
-      setRequestList(res?.responsePayload.results);
+      setRequestList(res?.responsePayload);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -91,7 +87,6 @@ function RequestList() {
     case_type: "",
   });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
-    console.log(approved_desion_id, ">>>");
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
       { request_form: requestId },
@@ -141,8 +136,8 @@ function RequestList() {
             style={{ border: "1px solid black" }}
           >
             <thead
-              className="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-              style={{ backgroundColor: "black", color: "white" }}
+              className="text-center text-xs text-black uppercase bg-red-200 "
+            //   style={{ backgroundColor: "red", color: "white" }}
             >
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -152,43 +147,29 @@ function RequestList() {
                   NAME OF DIST/ORGN.
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Requested Officer Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Fir No.
-                </th>
-                <th scope="col" className="px-6 py-3">
                   REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
                 </th>
                 <th scope="col" className="px-6 py-3">
                   TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
                 </th>
-
+                <th scope="col" className="px-6 py-3">
+                  I/O Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Fir No.
+                </th>
                 <th scope="col" className="px-6 py-3">
                   View Attachment
                 </th>
                 <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
-                {["ACP", "DCP"].includes(rank) && (
-                  <th scope="col" className="px-6 py-3">
-                    REMARKS(REASON FOR REJECTION)
-                  </th>
-                )}
-                {!["ACP", "DCP"].includes(rank) && (
-                  <th scope="col" className="px-6 py-3">
-                    ACP Status
-                  </th>
-                )}
-                {!["DCP"].includes(rank) && (
-                  <th scope="col" className="px-6 py-3">
-                    DCP Status
-                  </th>
-                )}
+               
+              
               </tr>
             </thead>
             <tbody>
-              {requestList?.map((item) => (
+              {requestList?.results?.map((item) => (
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                   <th
                     scope="row"
@@ -206,6 +187,20 @@ function RequestList() {
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
+                    {String(item?.request_to_provide).replace("_", ' ')}
+                   
+                  </td>
+                  <td
+                    className="px-6 py-4 font-semibold"
+                    style={{ color: "black" }}
+                  >
+                    {String(item?.target_type).replace("_", ' ')}
+                   
+                  </td>
+                  <td
+                    className="px-6 py-4 font-semibold"
+                    style={{ color: "black" }}
+                  >
                     {item?.io_name}
                   </td>
                   <td
@@ -214,19 +209,6 @@ function RequestList() {
                   >
                     {item?.fir_no}
                   </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.request_to_provide).replace("_", " ")}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.target_type).replace("_", " ")}
-                  </td>
-
                   <td className="px-6 py-4 text-center">
                     {/* <button className='bg-green-300'>Approve</button> */}
                     <button
@@ -269,24 +251,22 @@ function RequestList() {
                         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                       }}
                     >
-                      View
+                    {item?.is_otp_verified?"View":"Verify"}
                     </button>
-                    {!item?.is_otp_verified && (
-                      <button
-                        onClick={() => {
-                          navigate(
-                            `/request/edit/${item?.request_to_provide}/${item?.id}`
-                          );
-                        }}
-                        className="bg-green-300 p-2 rounded-lg font-bold"
-                        style={{
-                          color: "black",
-                          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                        }}
-                      >
-                        Edit
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        navigate(
+                          `/request/edit/${item?.request_to_provide}/${item?.id}`
+                        );
+                      }}
+                      className="bg-green-300 p-2 rounded-lg font-bold"
+                      style={{
+                        color: "black",
+                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      }}
+                    >
+                      Edit
+                    </button>
                     {["ACP", "DCP"].includes(rank) &&
                       item?.decision == "PENDING" && (
                         <button
@@ -301,55 +281,7 @@ function RequestList() {
                         </button>
                       )}
                   </td>
-
-                  {["ACP", "DCP"].includes(rank) && (
-                    <td className="px-6 py-4">
-                      <div>{item?.decision}</div>
-                      <div>
-                        {item?.decision == "REJECT" && (
-                          <button
-                            onClick={() => {
-                              dispatch(openViewLogModal(item?.id));
-                              dispatch(updateRequestList(false));
-                            }}
-                            className="bg-red-900 p-2 rounded-lg font-bold"
-                            style={{
-                              color: "white",
-                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                            }}
-                          >
-                            View Log
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  )}
-                  {!["ACP", "DCP"].includes(rank) && (
-                    <td className="px-6 py-4">
-                      <div>{item?.acp_status}</div>
-                      
-                    </td>
-                  )}
-                { !["DCP"].includes(rank) &&  <td className="px-6 py-4">
-                    <div>{item?.dcp_status}</div>
-                    <div>
-                      {item?.dcp_status == "REJECT" && (
-                        <button
-                          onClick={() => {
-                            dispatch(openViewLogModal(item?.id));
-                            dispatch(updateRequestList(false));
-                          }}
-                          className="bg-red-900 p-2 rounded-lg font-bold"
-                          style={{
-                            color: "white",
-                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                          }}
-                        >
-                          View Log
-                        </button>
-                      )}
-                    </div>
-                  </td>}
+                 
                 </tr>
               ))}
             </tbody>
@@ -380,4 +312,4 @@ function RequestList() {
   );
 }
 
-export default RequestList;
+export default UnverifiedFormList;

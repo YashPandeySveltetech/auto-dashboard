@@ -10,6 +10,7 @@ function IpAddress({
   activeForm,
   requestprovide,
   tspdata,
+  isEditable
 }) {
   const ipInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -63,7 +64,7 @@ function IpAddress({
                   name="ip"
                   value={val.ip}
                   onChange={(e) => ipInputChange(e, i)}
-                  disabledSelect={requestData}
+                  disabledSelect={!isEditable&&requestData}
                   className="w-[100%]"
                 />
               </div>
@@ -113,7 +114,7 @@ function IpAddress({
                     type="date"
                     value={val.date_to}
                     onChange={(e) => ipInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -133,7 +134,7 @@ function IpAddress({
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => ipInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -146,7 +147,7 @@ function IpAddress({
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => ipInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>

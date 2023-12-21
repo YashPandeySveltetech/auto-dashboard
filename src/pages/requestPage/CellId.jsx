@@ -4,7 +4,7 @@ import Input from "../../components/input";
 import Select from "react-select";
 
 
-function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requestprovide }) {
+function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requestprovide,isEditable }) {
   const mobileInputChange = (e, index) => {
     const { name, value } = e?.target;
     const list = [...cellIdList];
@@ -62,7 +62,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                   value={val.cell_id}
                   name="cell_id"
                   onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={requestData}
+                  disabledSelect={!isEditable&&requestData}
                   className="w-[100%]"
                 />
               </div>
@@ -99,7 +99,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                     type="date"
                     value={val.date_from}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -112,7 +112,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                     type="date"
                     value={val.date_to}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -132,7 +132,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -145,7 +145,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -167,7 +167,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
             
               </div>
 
-              {!requestData && (
+              {!requestData|| isEditable && (
                 <div>
                   <div className="flex gap-5">
                     {cellIdList.length !== 1 && (

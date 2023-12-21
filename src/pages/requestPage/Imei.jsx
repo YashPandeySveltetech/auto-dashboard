@@ -9,6 +9,7 @@ function Imei({
   activeForm,
   requestprovide,
   tspdata,
+  isEditable
 }) {
   const ImeiInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -67,7 +68,7 @@ function Imei({
                   name="imei"
                   value={val.imei}
                   onChange={(e) => ImeiInputChange(e, i)}
-                  disabledSelect={requestData}
+                  disabledSelect={!isEditable&&requestData}
                   className="w-[100%]"
                 />
               </div>
@@ -104,7 +105,7 @@ function Imei({
                     type="date"
                     value={val.date_from}
                     onChange={(e) => ImeiInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -117,7 +118,7 @@ function Imei({
                     type="date"
                     value={val.date_to}
                     onChange={(e) => ImeiInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -137,7 +138,7 @@ function Imei({
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => ImeiInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -150,7 +151,7 @@ function Imei({
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => ImeiInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>

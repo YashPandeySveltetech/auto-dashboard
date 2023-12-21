@@ -407,7 +407,8 @@ function RequestForm({ requestData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await ApiHandle(FORM_REQUEST+ (isEditable&&`${id}/`), apiPayload,isEditable?"PUT":"POST");
+    let url= isEditable?`${FORM_REQUEST}${id}/`:FORM_REQUEST
+    const res = await ApiHandle(url, apiPayload,isEditable?"PUT":"POST");
 
     if (res.statusCode === 201) {
       getFormPdf(res?.responsePayload?.id);
@@ -624,7 +625,7 @@ function RequestForm({ requestData }) {
           </div>
 
           {/* Submit Button */}
-          {!requestData||isEditable && (
+          {(!requestData || isEditable )&& (
             <div className="mt-6">
               <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                 Submit

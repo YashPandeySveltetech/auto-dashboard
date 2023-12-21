@@ -16,7 +16,6 @@ import {
   openViewLogModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
-import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 

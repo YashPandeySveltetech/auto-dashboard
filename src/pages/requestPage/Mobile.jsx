@@ -3,7 +3,7 @@ import Input from "../../components/input";
 import Select from "react-select";
 
 
-function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requestprovide }) {
+function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requestprovide,isEditable }) {
   const mobileInputChange = (e, index) => {
     const { name, value } = e?.target;
     const list = [...MobileList];
@@ -113,7 +113,7 @@ function check()
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                  isDisabled={requestData}
+                  isDisabled={!isEditable&&requestData}
                 />
               </div>
             </div>
@@ -134,7 +134,7 @@ function check()
                     type="date"
                     value={val.date_from}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -147,7 +147,7 @@ function check()
                     type="date"
                     value={val.date_to}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={requestData}
+                    disabledSelect={!isEditable&&requestData}
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ function check()
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -180,7 +180,7 @@ function check()
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={requestData}
+                      disabledSelect={!isEditable&&requestData}
                     />
                   </div>
                 </div>
@@ -198,12 +198,12 @@ function check()
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                  isDisabled={requestData}
+                  isDisabled={!isEditable&&requestData}
                 />
             
               </div>
 
-              {!requestData && (
+              {!requestData||isEditable && (
                 <div>
                   <div className="flex gap-5">
                     {MobileList.length !== 1 && (

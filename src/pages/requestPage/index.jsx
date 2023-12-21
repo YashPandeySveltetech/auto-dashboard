@@ -19,11 +19,19 @@ import Imei from "./Imei";
 import { arry, firType } from "../../constants/List";
 import IpAddress from "./IpAddress";
 import CellId from "./CellId";
+
 import { useDispatch } from "react-redux";
 import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 
+import { useLocation, useParams ,useNavigate} from "react-router";
+
 function RequestForm({ requestData }) {
+  const {pathname}=useLocation()
   const dispatch=useDispatch()
+  const navigate=useNavigate()
+ var isEditable=pathname.includes('edit')
+ let {id}=useParams()
+
   const initialobj = {
     police_station: "",
     fir_no: "",
@@ -134,7 +142,6 @@ function RequestForm({ requestData }) {
   }, [requestData]);
   useEffect(()=>{
     if(!requestData){
-      
       setCurrentDate(new Date().toLocaleDateString("en-CA"));
       setCurrentTime(new Date().toLocaleTimeString("en-US")?.split(" ")[0]);
     }
@@ -210,6 +217,7 @@ function RequestForm({ requestData }) {
           activeForm={activeForm}
           tspdata={tspdata}
           requestprovide={requestprovide}
+          isEditable={isEditable}
         />
       );
     }
@@ -222,6 +230,7 @@ function RequestForm({ requestData }) {
           activeForm={activeForm}
           tspdata={tspdata}
           requestprovide={requestprovide}
+          isEditable={isEditable}
         />
       );
     }
@@ -234,6 +243,7 @@ function RequestForm({ requestData }) {
           activeForm={activeForm}
           tspdata={tspdata}
           requestprovide={requestprovide}
+          isEditable={isEditable}
         />
       );
     }
@@ -246,6 +256,7 @@ function RequestForm({ requestData }) {
           activeForm={activeForm}
           tspdata={tspdata}
           requestprovide={requestprovide}
+          isEditable={isEditable}
         />
       );
     }
@@ -396,7 +407,8 @@ function RequestForm({ requestData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await ApiHandle(FORM_REQUEST, apiPayload, "POST");
+    const res = await ApiHandle(FORM_REQUEST+ (isEditable&&`${id}/`), apiPayload,isEditable?"PUT":"POST");
+
     if (res.statusCode === 201) {
       getFormPdf(res?.responsePayload?.id);
       setActiveForm({
@@ -408,6 +420,10 @@ function RequestForm({ requestData }) {
       dispatch(otpValidationModal({id:res?.responsePayload?.id}))
       Toaster("success", "SuccessFully Submitted Form");
       return;
+    }
+    if (res.statusCode === 200) {
+      dispatch(otpValidationModal({id:res?.responsePayload?.id}))
+      Toaster("success", "SuccessFully Updated Form");
     }
   };
 
@@ -480,7 +496,7 @@ function RequestForm({ requestData }) {
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data)}
                   isSearchable={false}
-                  isDisabled={requestData}
+                  isDisabled={!isEditable&&requestData}
                 />
                 <Input
                   type="text"
@@ -489,7 +505,7 @@ function RequestForm({ requestData }) {
                   
                   onChange={handleChange}
                   value={apiPayload.fir_no}
-                  disabledSelect={requestData}
+                  disabledSelect={!isEditable&&requestData}
                 />
               </div>
             </div>
@@ -506,7 +522,7 @@ function RequestForm({ requestData }) {
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data)}
-                  isDisabled={requestData}
+                  isDisabled={!isEditable&&requestData}
                 />
            
             </div>
@@ -523,8 +539,8 @@ function RequestForm({ requestData }) {
                   <li className="me-2"    key={key}>
                     <button
                       onClick={(e) => handleChange(e, "target_type", val)}
-                   disabled={ requestData &&!requestData?.form_request_for[arry[val?.name]]?.length >
-                    0}
+                   disabled={ !isEditable&&(requestData &&!requestData?.form_request_for[arry[val?.name]]?.length >
+                    0)}
                       type="button"
                       className={
                         activeForm?.target_type === val?.name
@@ -562,7 +578,7 @@ function RequestForm({ requestData }) {
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
-              disabled={requestData}
+              disabled={!isEditable&&requestData}
             ></textarea>
             
           </div>
@@ -576,7 +592,7 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.io_name}
-                disabledSelect={requestData}
+                disabledSelect={!isEditable&&requestData}
               />
             </div>
 
@@ -589,7 +605,7 @@ function RequestForm({ requestData }) {
                 required
                 onChange={handleChange}
                 value={apiPayload.io_mobile_no}
-                disabledSelect={requestData}
+                disabledSelect={!isEditable&&requestData}
                 min={10}
                 maxLength="10"
                 inputMode="numeric"
@@ -608,7 +624,7 @@ function RequestForm({ requestData }) {
           </div>
 
           {/* Submit Button */}
-          {!requestData && (
+          {!requestData||isEditable && (
             <div className="mt-6">
               <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                 Submit

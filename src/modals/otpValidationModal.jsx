@@ -6,9 +6,11 @@ import { ApiHandle } from "../utils/ApiHandle";
 import Toaster from "../utils/toaster/Toaster";
 import { commonCloseModal } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
+import { useNavigate } from "react-router-dom";
 
 function OtpValidationModal() {
   const [otp, setOtp] = useState("");
+  const navigate=useNavigate()
   const { requestId,isFormVerified } = useSelector((state) => state?.modal);
   const dispatch = useDispatch();
   const [showResendButton, setShowResendButton] = useState(false);
@@ -48,6 +50,7 @@ function OtpValidationModal() {
       console.log(res, "otpvairifyed");
       dispatch(commonCloseModal());
       Toaster("success", "Otp verified Successfully!")
+      navigate("/")
       return;
     }
   };

@@ -6,9 +6,11 @@ import Input from "../../components/input";
 import Datepicker from "react-tailwindcss-datepicker"; 
 import {  GET_POLICE_STATION_LIST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
+import { useSelector } from "react-redux";
 
 
 function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange }) {
+	const { rank } = useSelector((state) => state.user?.userData);
 
   const from_status_option = [
     { id: 1, name: "PENDING", value: "PENDING" },
@@ -109,7 +111,7 @@ showShortcuts={true}
 /> 
       </div>
       <div>
-        <CommonDropDown
+     {['DCP'].includes(rank)&&   <CommonDropDown
           name={"police_station"}
           options={policeStation}
           checkId={true}
@@ -117,7 +119,7 @@ showShortcuts={true}
             setFilter({ ...filter, [e.target.name]: e.target.value });
           }}
           label="Form Status"
-        />
+        />}
       </div>
       {/* <div>
         <Input

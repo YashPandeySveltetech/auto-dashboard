@@ -191,19 +191,19 @@ function check()
                   isMulti
                   name="tsp"
                   placeholder="Select TSP"
-                  options={tspdata}
-                  value={tspdata.filter((obj) =>
+                  options={tspdata }
+                  value={tspdata?.filter((obj) =>
                     MobileList[i]?.tsp?.includes(obj?.id)
                   )}
+                  
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isDisabled={!isEditable&&requestData}
                 />
-            
               </div>
 
-              {!requestData||isEditable && (
+              {(!requestData||isEditable) && (
                 <div>
                   <div className="flex gap-5">
                     {MobileList.length !== 1 && (

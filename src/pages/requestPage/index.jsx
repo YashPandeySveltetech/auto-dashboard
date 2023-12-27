@@ -28,7 +28,6 @@ import { useLocation, useParams ,useNavigate} from "react-router";
 function RequestForm({ requestData }) {
   const {pathname}=useLocation()
   const dispatch=useDispatch()
-  const navigate=useNavigate()
  var isEditable=pathname.includes('edit')
  let {id}=useParams()
 
@@ -41,6 +40,7 @@ function RequestForm({ requestData }) {
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
+    urgent:false
   };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
@@ -203,6 +203,7 @@ function RequestForm({ requestData }) {
       id: val.id,
       value: val.name,
       label: val.name,
+      disabled: false
     }));
   }, [activeForm]);
 
@@ -369,7 +370,19 @@ function RequestForm({ requestData }) {
   }, [ImeiList, MobileList, IpList, cellIdList,requestData]);
 
   const handleChange = (e, callfrom, fromval) => {
-    const { name, value } = e.target;
+    const { name, value ,files,checked} = e.target;
+    if(callfrom==="urgent"){
+      setApiPayload({
+        ...apiPayload,
+        [name]: checked,
+      });
+    }
+    if(callfrom==="files"){
+      setApiPayload({
+        ...apiPayload,
+        [name]: files[0],
+      });
+    }
     if (callfrom) {
       setActiveForm({
         ...activeForm,
@@ -386,6 +399,7 @@ function RequestForm({ requestData }) {
       });
     }
   };
+
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
@@ -482,7 +496,7 @@ function RequestForm({ requestData }) {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mt-6 grid grid-cols-3 md:grid-cols-3 gap-6">
             {/* FIR NO. */}
             <div className="">
               <label className="font-bold">Choose Type:</label>
@@ -527,7 +541,18 @@ function RequestForm({ requestData }) {
                 />
            
             </div>
-
+            <div className="mt-6 flex gap-3 items-center">
+            <label htmlFor="" className="font-bold">select if Form is Urgent</label>
+          <Input
+                  type="checkbox"
+                  name="urgent"
+                  required
+                  onChange={(e)=>handleChange(e,"urgent")}
+                  // value={apiPayload.fir_no}
+                  disabledSelect={!isEditable&&requestData}
+                />
+            
+          </div>
            
           </div>
           <div className="mt-6 flex items-center gap-6">
@@ -581,6 +606,18 @@ function RequestForm({ requestData }) {
               onChange={handleChange}
               disabled={!isEditable&&requestData}
             ></textarea>
+            
+          </div>
+          <div className="mt-6 flex gap-3 items-center">
+            <label htmlFor="" className="font-bold">select File if any-:</label>
+          <Input
+                  type="file"
+                  name="file"
+                  required
+                  onChange={(e)=>handleChange(e,"files")}
+                  // value={apiPayload.fir_no}
+                  disabledSelect={!isEditable&&requestData}
+                />
             
           </div>
           <div className="flex justify-start items-center gap-5 mt-6">

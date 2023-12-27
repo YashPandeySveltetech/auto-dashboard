@@ -105,7 +105,7 @@ if(date_range===0){
 		police_station:''
 	});
 	const approveRequest = async ({ requestId, approved_desion_id }) => {
-		console.log(approved_desion_id, '>>>');
+	
 		const res = await ApiHandle(
 			APPROVE_REQUEST + `${approved_desion_id}/`,
 			{ request_form: requestId },

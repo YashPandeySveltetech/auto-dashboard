@@ -37,14 +37,14 @@ const getPoliceStaionList = async () => {
       const data = res?.responsePayload;
     //   setPoliceStationOptions(data);
     // setPoliceStation(data)
-    // console.log(data,'dddddddddddddddddddddd');
+  
    let arr=[]
     if(data.length){
         for(let i=0;i<=data.length;i++){
-// console.log(data[i]);
+
 arr.push({...data[i],['value']:data[i]?.id})
         }
-        console.log(arr,'aaaaaaaaaaa');
+        
         setPoliceStation(arr)
     }
   
@@ -53,10 +53,10 @@ arr.push({...data[i],['value']:data[i]?.id})
   };
 
 const handleValueChange = newValue => {
-    console.log("newValue:", newValue);
+    
     setDateRange(newValue);
 };
-// console.log(value);
+
   return (
     <div className="flex">
         <div className="flex flex-col w-[90%]">
@@ -115,7 +115,7 @@ showShortcuts={true}
           name={"police_station"}
           options={policeStation}
           checkId={true}
-          onChange={(e) => {console.log(e.target.value,'------');
+          onChange={(e) => {
             setFilter({ ...filter, [e.target.name]: e.target.value });
           }}
           label="Form Status"

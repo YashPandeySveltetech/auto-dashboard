@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { Amd, Boxes } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { USER_DETAIL } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { setUserData } from "../../redux/reducers/userReducer";
@@ -20,7 +20,7 @@ function Sidebar() {
     },
     {
       icon: <Boxes />,
-      text: "Request Form",
+      text: "New Request Form",
       url: "/request-form",
       isShow: !["ACP", "DCP"].includes(rank),
     },
@@ -32,7 +32,7 @@ function Sidebar() {
     },
     {
       icon: <Boxes />,
-      text: "REJECTED Form",
+      text: "Rejected Form",
       url: "/rejected-form",
       isShow: !["ACP", "DCP"].includes(rank),
     },
@@ -63,20 +63,25 @@ function Sidebar() {
       dispatch(setUserData(res?.responsePayload));
     }
   };
+
   const ListItem = ({ icon, text, url, isShow }) => {
     return (
       <>
-        {" "}
         {isShow && (
-          <div
-            onClick={() => {
-              navigate(url);
+          <NavLink
+            to={url}
+            end
+            className={(props) => {
+              return `${
+                props.isActive
+                  ? "bg-blue-500 w-[100%] text-[1.1rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3 "
+                  : "hover:bg-blue-600 hover:text-[1.1rem] w-[100%] text-[1.2rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3"
+              }`;
             }}
-            className="hover:bg-blue-800 w-[100%] text-[1.2rem] p-5 text-white h-[2rem] items-center boder rounded flex cursor-pointer gap-3"
           >
             <div className="font-bold">{icon}</div>
-            <div className="font-bold ">{text}</div>
-          </div>
+            <div className="font-bold " style={(String(url)=="/rejected-form")?{color:"red"}:{color:"white"}}>{text}</div>
+          </NavLink>
         )}
       </>
     );

@@ -47,7 +47,7 @@ function OtpValidationModal() {
       "POST"
     );
     if (res.statusCode === 201) {
-      console.log(res, "otpvairifyed");
+     
       dispatch(commonCloseModal());
       Toaster("success", "Otp verified Successfully!")
       navigate("/")
@@ -64,7 +64,7 @@ function OtpValidationModal() {
     if (res.statusCode === 201) {
         setTimeLeft(120);
         setShowResendButton(false);
-      console.log(res, "otpvairifyed");
+   
       Toaster("success", "Otp Sent Successfully")
       return;
     }

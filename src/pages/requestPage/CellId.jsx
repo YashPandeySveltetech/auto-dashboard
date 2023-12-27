@@ -167,7 +167,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
             
               </div>
 
-              {!requestData|| isEditable && (
+              {(!requestData|| isEditable )&& (
                 <div>
                   <div className="flex gap-5">
                     {cellIdList.length !== 1 && (

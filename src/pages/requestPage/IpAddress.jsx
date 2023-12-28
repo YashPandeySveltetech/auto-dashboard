@@ -31,7 +31,8 @@ function IpAddress({
         time_from: "",
         time_to: "",
         target_type: activeForm?.target_type_id,
-        request_to_provide: "",
+        request_to_provide: IpList[0].request_to_provide,
+        tsp:IpList[0].tsp
       },
     ]);
   };
@@ -44,7 +45,7 @@ function IpAddress({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IpList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
     setIpList(list);
   };
 
@@ -72,7 +73,7 @@ function IpAddress({
               <div className="flex justify-start items-center gap-5">
                 <label htmlFor="">Request to provide</label>
                 <Select
-                  isMulti
+                  
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
@@ -155,13 +156,14 @@ function IpAddress({
 
               <div className="col-md-3">
                 <Select
-                  isMulti
+                 
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata}
                   value={tspdata.filter((obj) =>
                     IpList[i]?.tsp?.includes(obj?.id)
                   )}
+                  isOptionDisabled={(option)=>option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
@@ -171,7 +173,7 @@ function IpAddress({
               {!requestData && (
                 <div>
                   <div className="flex gap-5">
-                    {IpList.length !== 1 && (
+                    {IpList?.length !== 1 && (
                       <button
                         type="button"
                         className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -180,7 +182,7 @@ function IpAddress({
                         Remove
                       </button>
                     )}
-                    {IpList.length - 1 === i && (
+                    {IpList?.length - 1 === i && (
                       <button
                         type="button"
                         className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

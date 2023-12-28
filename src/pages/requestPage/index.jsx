@@ -40,11 +40,12 @@ function RequestForm({ requestData }) {
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
-    urgent:false
+    urgent:false,
+    
   };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
-    request_to_provide: "",
+    request_to_provide: [],
     dump_type: "",
     target_type_id: "",
   });
@@ -56,9 +57,9 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       mobile_number: "",
-      tsp: "",
+      tsp:[],
       target_type: "",
-      request_to_provide: "",
+      request_to_provide: [],
     },
   ]);
   const [ImeiList, setImeiList] = useState([
@@ -68,9 +69,9 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       imei: "",
-      tsp: "",
+      tsp:[],
       target_type: "",
-      request_to_provide: "",
+      request_to_provide: [],
     },
   ]);
   const [IpList, setIpList] = useState([
@@ -80,9 +81,9 @@ function RequestForm({ requestData }) {
       date_to: "",
       time_from: "",
       time_to: "",
-      tsp: "",
+      tsp: [],
       target_type: "",
-      request_to_provide: "",
+      request_to_provide: [],
     },
   ]);
   const [cellIdList, setCellIdList] = useState([
@@ -92,9 +93,9 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       cell_id: "",
-      tsp: "",
+      tsp:[],
       target_type: "",
-      request_to_provide: "",
+      request_to_provide: [],
     },
   ]);
 
@@ -164,8 +165,9 @@ function RequestForm({ requestData }) {
       const res = await ApiHandle(`${TARGET_TYPE}`, "", "GET");
       if (res?.statusCode === 200) {
 
-
-        setTargetType(res?.responsePayload);
+let x=res?.responsePayload
+var y = [...x].reverse();
+        setTargetType(y);
 
         return;
       }
@@ -194,7 +196,8 @@ function RequestForm({ requestData }) {
 
   const requestprovide = useMemo(() => {
     let ac = targetType?.find((val, i) => val?.name === activeForm.target_type);
-    return ac?.request_to_provide?.map((item) => {
+    return ac?.request_to_provide?.map((item,i) => {
+    
       return { label: item.name, id: item.id, value: item.name };
     });
   }, [activeForm]);
@@ -203,7 +206,7 @@ function RequestForm({ requestData }) {
       id: val.id,
       value: val.name,
       label: val.name,
-      disabled: false
+      disabled: val?.name==="BSNL"?true:false,
     }));
   }, [activeForm]);
 
@@ -264,111 +267,137 @@ function RequestForm({ requestData }) {
   }, [activeForm, MobileList, ImeiList, IpList, cellIdList,requestData]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
-      let isok = MobileList.map((obj) => {
-        const newObj = { ...obj };
-        delete newObj.target_type;
-        for (let key in newObj) {
-          if (newObj.hasOwnProperty(key)) {
-            if (newObj[key] === "" || newObj[key] === undefined) {
-              return false;
-            }
-          }
-        }
-        return true;
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+          
+          [arry[activeForm.target_type]]: MobileList,
+        },
       });
+      // let isok = MobileList.map((obj) => {
+      //   const newObj = { ...obj };
+      //   delete newObj.target_type;
+      //   for (let key in newObj) {
+      //     if (newObj.hasOwnProperty(key)) {
+      //       if (newObj[key] === "" || newObj[key] === undefined) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      //   return true;
+      // });
 
-      if (isok[0]) {
-        setApiPayload({
-          ...apiPayload,
-          form_request_for: {
-            ...apiPayload?.form_request_for,
-            [arry[activeForm.target_type]]: MobileList,
-          },
-        });
-      } else {
-        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
-      }
+      // if (isok[0]) {
+      //   setApiPayload({
+      //     ...apiPayload,
+      //     form_request_for: {
+      //       ...apiPayload?.form_request_for,
+      //       [arry[activeForm.target_type]]: MobileList,
+      //     },
+      //   });
+      // } else {
+      //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      // }
     }
     if (activeForm.target_type === "IMEI_NUMBER") {
-      let isok = ImeiList.map((obj) => {
-        const newObj = { ...obj };
-        delete newObj.target_type;
-        for (let key in newObj) {
-          if (newObj.hasOwnProperty(key)) {
-            if (newObj[key] === "" || newObj[key] === undefined) {
-              return false;
-            }
-          }
-        }
-        return true;
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+         
+          [arry[activeForm.target_type]]: ImeiList,
+        },
       });
+      // let isok = ImeiList.map((obj) => {
+      //   const newObj = { ...obj };
+      //   delete newObj.target_type;
+      //   for (let key in newObj) {
+      //     if (newObj.hasOwnProperty(key)) {
+      //       if (newObj[key] === "" || newObj[key] === undefined) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      //   return true;
+      // });
 
-      if (isok[0]) {
-        setApiPayload({
-          ...apiPayload,
-          form_request_for: {
-            ...apiPayload?.form_request_for,
-            [arry[activeForm.target_type]]: ImeiList,
-          },
-        });
-      } else {
-        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
-      }
+      // if (isok[0]) {
+      //   setApiPayload({
+      //     ...apiPayload,
+      //     form_request_for: {
+      //       ...apiPayload?.form_request_for,
+      //       [arry[activeForm.target_type]]: ImeiList,
+      //     },
+      //   });
+      // } else {
+      //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      // }
     }
     if (activeForm.target_type === "IP_ADDRESS") {
-      let isok = IpList.map((obj) => {
-        const newObj = { ...obj };
-        delete newObj.target_type;
-        for (let key in newObj) {
-          if (newObj.hasOwnProperty(key)) {
-            if (newObj[key] === "" || newObj[key] === undefined) {
-              return false;
-            }
-          }
-        }
-        return true;
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+         
+          [arry[activeForm?.target_type]]: IpList,
+        },
       });
+      // let isok = IpList.map((obj) => {
+      //   const newObj = { ...obj };
+      //   delete newObj.target_type;
+      //   for (let key in newObj) {
+      //     if (newObj.hasOwnProperty(key)) {
+      //       if (newObj[key] === "" || newObj[key] === undefined) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      //   return true;
+      // });
 
-      if (isok[0]) {
-        setApiPayload({
-          ...apiPayload,
-          form_request_for: {
-            ...apiPayload?.form_request_for,
-            [arry[activeForm?.target_type]]: IpList,
-          },
-        });
-      } else {
-        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
-      }
+      // if (isok[0]) {
+      //   setApiPayload({
+      //     ...apiPayload,
+      //     form_request_for: {
+      //       ...apiPayload?.form_request_for,
+      //       [arry[activeForm?.target_type]]: IpList,
+      //     },
+      //   });
+      // } else {
+      //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      // }
     }
     if (activeForm.target_type === "CELL_ID") {
-      let isok = cellIdList.map((obj) => {
-        const newObj = { ...obj };
-        delete newObj.target_type;
-        for (let key in newObj) {
-          if (newObj.hasOwnProperty(key)) {
-            if (newObj[key] === "" || newObj[key] === undefined) {
-              return false;
-            }
-          }
-        }
-        return true;
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+          [arry[activeForm?.target_type]]: cellIdList,
+        },
       });
+      // let isok = cellIdList.map((obj) => {
+      //   const newObj = { ...obj };
+      //   delete newObj.target_type;
+      //   for (let key in newObj) {
+      //     if (newObj.hasOwnProperty(key)) {
+      //       if (newObj[key] === "" || newObj[key] === undefined) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      //   return true;
+      // });
 
-      if (isok[0]) {
-        setApiPayload({
-          ...apiPayload,
-          form_request_for: {
-            ...apiPayload?.form_request_for,
-            [arry[activeForm?.target_type]]: cellIdList,
-          },
-        });
-      } else {
-        delete apiPayload.form_request_for[arry[activeForm?.target_type]];
-      }
+      // if (isok[0]) {
+      //   setApiPayload({
+      //     ...apiPayload,
+      //     form_request_for: {
+      //       ...apiPayload?.form_request_for,
+      //       [arry[activeForm?.target_type]]: cellIdList,
+      //     },
+      //   });
+      // } else {
+      //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      // }
     }
   }, [ImeiList, MobileList, IpList, cellIdList,requestData]);
-
   const handleChange = (e, callfrom, fromval) => {
     const { name, value ,files,checked} = e.target;
     if(callfrom==="urgent"){
@@ -420,15 +449,35 @@ function RequestForm({ requestData }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let formData = new FormData(); 
+
+    if(apiPayload?.file){
+      for(let key in apiPayload){
+        if(key==="form_request_for"){
+          formData.append(key,JSON.stringify(apiPayload[key]))
+        }
+        else{
+
+          formData.append(key,apiPayload[key])
+        }
+      }
+    }
+    
+    // for (const pair of formData.entries()) {
+    //   console.log(pair["form_request_for"],"abc");
+    // }
+
+    
+
 
     let url= isEditable?`${FORM_REQUEST}${id}/`:FORM_REQUEST
-    const res = await ApiHandle(url, apiPayload,isEditable?"PUT":"POST");
+    const res = await ApiHandle(url, apiPayload.file?formData:apiPayload,isEditable?"PUT":"POST","",apiPayload.file?true:false);
 
     if (res.statusCode === 201) {
-      getFormPdf(res?.responsePayload?.id);
+      // getFormPdf(res?.responsePayload?.id);
       setActiveForm({
         target_type: "",
-        request_to_provide: "",
+        request_to_provide: [],
         target_type_id: "",
       });
       setApiPayload(initialobj);
@@ -499,7 +548,7 @@ function RequestForm({ requestData }) {
           <div className="mt-6 grid grid-cols-3 md:grid-cols-3 gap-6">
             {/* FIR NO. */}
             <div className="">
-              <label className="font-bold">Choose Type:</label>
+              <label className="font-bold required">Choose Type:</label>
               <div className="flex  gap-2">
                 <Select
                   name="fir_or_complaint"
@@ -527,7 +576,7 @@ function RequestForm({ requestData }) {
 
             {/* Case Type */}
             <div>
-              <label className="font-bold">Case Type:</label>
+              <label className="font-bold required">Case Type:</label>
               <Select
                   name="case_type"
                   options={caseType}
@@ -546,9 +595,10 @@ function RequestForm({ requestData }) {
           <Input
                   type="checkbox"
                   name="urgent"
-                  required
+                
                   onChange={(e)=>handleChange(e,"urgent")}
-                  // value={apiPayload.fir_no}
+                  // checked={apiPayload?.urgent?"checked":"unchecked"}
+                  // checked={(apiPayload?.urgent===true)?"checked":""}
                   disabledSelect={!isEditable&&requestData}
                 />
             
@@ -598,7 +648,7 @@ function RequestForm({ requestData }) {
 
           {/* Comments */}
           <div className="mt-6">
-            <label className="font-bold">Case Reference:</label>
+            <label className="font-bold required">Case Reference:</label>
             <textarea
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               name="brief_summary"
@@ -608,22 +658,22 @@ function RequestForm({ requestData }) {
             ></textarea>
             
           </div>
-          <div className="mt-6 flex gap-3 items-center">
+          {/* <div className="mt-6 flex gap-3 items-center">
             <label htmlFor="" className="font-bold">select File if any-:</label>
           <Input
                   type="file"
                   name="file"
-                  required
+                  
                   onChange={(e)=>handleChange(e,"files")}
                   // value={apiPayload.fir_no}
                   disabledSelect={!isEditable&&requestData}
                 />
             
-          </div>
+          </div> */}
           <div className="flex justify-start items-center gap-5 mt-6">
              {/* IO Name */}
              <div className="flex items-center gap-3">
-              <label className="font-bold">Requesting Officer Name:</label>
+              <label className="font-bold required">Requesting Officer Name:</label>
               <Input
                 type="text"
                 name="io_name"
@@ -636,7 +686,7 @@ function RequestForm({ requestData }) {
 
             {/* IO Mobile no. */}
             <div className="flex items-center gap-3">
-              <label className="font-bold">Requesting Officer Mobile no.</label>
+              <label className="font-bold required">Requesting Officer Mobile no.</label>
               <Input
                 type="text"
                 name="io_mobile_no"

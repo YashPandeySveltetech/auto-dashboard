@@ -14,7 +14,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
   };
   const dropdownChange = (e, data, index) => {
     const list = [...MobileList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
     setMobileList(list);
   };
 //  useEffect(()=>{
@@ -33,12 +33,13 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
         time_from: "",
         time_to: "",
         mobile_number: "",
-        tsp: "",
+        tsp: MobileList[0]?.tsp,
         target_type: activeForm?.target_type_id,
-        request_to_provide: "",
+        request_to_provide: MobileList[0].request_to_provide,
       },
     ]);
   };
+  console.log(MobileList,"MobileList")
   const removeMobileClick = (index) => {
     const list = [...MobileList];
     list.splice(index, 1);
@@ -104,7 +105,6 @@ function check()
               <div className="flex justify-start items-center gap-5">
                 <label htmlFor="">Request to provide</label>
                 <Select
-                  isMulti
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
@@ -113,7 +113,7 @@ function check()
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                  isDisabled={!isEditable&&requestData}
+                  isDisabled={(!isEditable&&requestData)||MobileList?.length>1}
                 />
               </div>
             </div>
@@ -188,14 +188,13 @@ function check()
 
               <div className="col">
                 <Select
-                  isMulti
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata }
                   value={tspdata?.filter((obj) =>
                     MobileList[i]?.tsp?.includes(obj?.id)
                   )}
-                  
+                  isOptionDisabled={(option)=>option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}

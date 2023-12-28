@@ -17,10 +17,12 @@ const Input = ({
   required,
   pattern,
   onKeyUp,
-  id
+  id,
+  checked
 }) => {
   return (
     <>
+    
       <div>
         <div className="flex">
           <label className="text-sm font-medium text-gray-900">{label}</label>
@@ -42,6 +44,7 @@ const Input = ({
           required={required}
           pattern={pattern}
           onKeyUp={onKeyUp}
+          checked={checked}
         />
       </div>
     </>

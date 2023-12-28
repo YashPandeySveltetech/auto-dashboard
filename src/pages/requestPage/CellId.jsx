@@ -1,24 +1,29 @@
-
 import React from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
-
-function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requestprovide,isEditable }) {
+function CellId({
+  requestData,
+  cellIdList,
+  setCellIdList,
+  activeForm,
+  tspdata,
+  requestprovide,
+  isEditable,
+}) {
   const mobileInputChange = (e, index) => {
     const { name, value } = e?.target;
     const list = [...cellIdList];
     list[index][name] = value;
-    list[index]["target_type"]=activeForm?.target_type_id
- 
+    list[index]["target_type"] = activeForm?.target_type_id;
+
     setCellIdList(list);
   };
   const dropdownChange = (e, data, index) => {
     const list = [...cellIdList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
     setCellIdList(list);
   };
- 
 
   const addMobileClick = () => {
     setCellIdList([
@@ -29,9 +34,9 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
         time_from: "",
         time_to: "",
         mobile_number: "",
-        tsp: "",
+        tsp: cellIdList[0].tsp,
         target_type: activeForm?.target_type_id,
-        request_to_provide: "",
+        request_to_provide: cellIdList[0].request_to_provide,
       },
     ]);
   };
@@ -40,10 +45,9 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
     list.splice(index, 1);
     setCellIdList(list);
   };
-  const clearHandle=()=>{
-    setCellIdList([])
-  }
-
+  const clearHandle = () => {
+    setCellIdList([]);
+  };
 
   return (
     <>
@@ -56,21 +60,20 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
           >
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
+                <label className="font-bold required">Cell ID</label>
                 <Input
-                  label={"Cell ID"}
                   type="text"
                   value={val.cell_id}
                   name="cell_id"
                   onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={!isEditable&&requestData}
+                  disabledSelect={!isEditable && requestData}
                   className="w-[100%]"
                 />
               </div>
 
               <div className="flex justify-start items-center gap-5">
-                <label htmlFor="">Request to provide</label>
+                <label className="font-bold required">Request to provide</label>
                 <Select
-                  isMulti
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
@@ -86,7 +89,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
             {/* date  */}
 
             <div className="input-group flex items-center justify-start gap-5 m-3">
-              <label className="form-label me-4 col-md-1 font-bold">
+              <label className="form-label me-4 col-md-1 font-bold required">
                 Date :
               </label>
 
@@ -99,7 +102,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                     type="date"
                     value={val.date_from}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={!isEditable&&requestData}
+                    disabledSelect={!isEditable && requestData}
                   />
                 </div>
               </div>
@@ -112,14 +115,14 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                     type="date"
                     value={val.date_to}
                     onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={!isEditable&&requestData}
+                    disabledSelect={!isEditable && requestData}
                   />
                 </div>
               </div>
 
               {/*  Time */}
               <div className="flex items-center justify-start gap-5 m-3 ">
-                <label className="form-label me-4 col-md-1 font-bold">
+                <label className="form-label me-4 col-md-1 font-bold required">
                   Time :
                 </label>
 
@@ -132,7 +135,7 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                       name="time_from"
                       value={val.time_from}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
+                      disabledSelect={!isEditable && requestData}
                     />
                   </div>
                 </div>
@@ -145,29 +148,28 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                       name="time_to"
                       value={val.time_to}
                       onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
+                      disabledSelect={!isEditable && requestData}
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="col">
+              <div className="col flex gap-5 items-center justify-start">
                 <Select
-                  isMulti
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata}
                   value={tspdata.filter((obj) =>
                     cellIdList[i]?.tsp?.includes(obj?.id)
                   )}
+                  isOptionDisabled={(option) => option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
-            
               </div>
 
-              {(!requestData|| isEditable )&& (
+              {(!requestData || isEditable) && (
                 <div>
                   <div className="flex gap-5">
                     {cellIdList.length !== 1 && (
@@ -191,7 +193,6 @@ function CellId({ requestData, cellIdList, setCellIdList,activeForm,tspdata,requ
                   </div>
                 </div>
               )}
-            
             </div>
           </div>
           <hr className="font-bold" />

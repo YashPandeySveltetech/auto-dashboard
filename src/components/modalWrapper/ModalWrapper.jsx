@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../card/index";
 import { useDispatch, useSelector } from "react-redux";
 import { commonCloseModal } from "../../redux/reducers/modalsReducer";
+import Loader from "../loader/Loader";
 
 const ModalWrapper = ({
   children,
@@ -13,6 +14,7 @@ const ModalWrapper = ({
   isDisabled,
   isBackBtn,
   width = "w-[35rem]",
+  loader
 }) => {
   const dispatch = useDispatch();
 
@@ -63,7 +65,7 @@ const ModalWrapper = ({
                 Back
               </button>
             )}
-            <button
+           <button
               className={`${
                 isDisabled
                   ? "bg-gray-300 cursor-not-allowed"
@@ -74,9 +76,9 @@ const ModalWrapper = ({
              }   uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
               type="button"
               onClick={handleClick || handleOnClose}
-              disabled={isDisabled}
+              disabled={isDisabled ||loader}
             >
-              {btnName || "Save Changes"}
+            {loader?"Verifying...": (btnName || "Save Changes")}
             </button>
           </div>
         </Card>

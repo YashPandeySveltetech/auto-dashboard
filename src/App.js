@@ -6,8 +6,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ViewLogsModal from "./modals/vearLogs";
 import OtpValidationModal from "./modals/otpValidationModal";
+import DcpPasswordVerifyModal from "./modals/dcpPasswordVerifyModal";
 function App() {
-  const {rejectModal,viewLogModal,otpValidationModal}=useSelector((state)=>state?.modal)
+  const {rejectModal,viewLogModal,otpValidationModal,dcpPasswordVerify}=useSelector((state)=>state?.modal)
   return (
     <div>
  
@@ -17,6 +18,8 @@ function App() {
         {rejectModal&&<RejectModal/>}
       {viewLogModal&&<ViewLogsModal/>}
       {otpValidationModal && <OtpValidationModal/>}
+      {otpValidationModal && <OtpValidationModal/>}
+      {dcpPasswordVerify && <DcpPasswordVerifyModal/>}
       </BrowserRouter>
     </div>
   );

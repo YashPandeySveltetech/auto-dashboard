@@ -10,35 +10,33 @@ import { useNavigate } from "react-router-dom";
 
 function OtpValidationModal() {
   const [otp, setOtp] = useState("");
-  const navigate=useNavigate()
-  const { requestId,isFormVerified } = useSelector((state) => state?.modal);
+  const navigate = useNavigate();
+  const { requestId, isFormVerified } = useSelector((state) => state?.modal);
   const dispatch = useDispatch();
   const [showResendButton, setShowResendButton] = useState(false);
 
-  const [timeLeft, setTimeLeft] = useState(120); 
+  const [timeLeft, setTimeLeft] = useState(120);
 
   useEffect(() => {
-  
+   
     const timer = setInterval(() => {
-      setTimeLeft(prevTime => prevTime - 1);
+      setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
-    if(!isFormVerified){
-        resendOtp()
-       
-    }
-
+   
     return () => {
       clearInterval(timer);
     };
   }, []);
 
+useEffect(()=>{
+  !isFormVerified && resendOtp()
+},[])
   useEffect(() => {
+    
     if (timeLeft <= 0) {
       setShowResendButton(true);
     }
   }, [timeLeft]);
-
-
 
   const verifyOtp = async () => {
     const res = await ApiHandle(
@@ -47,58 +45,58 @@ function OtpValidationModal() {
       "POST"
     );
     if (res.statusCode === 201) {
-     
       dispatch(commonCloseModal());
-      Toaster("success", "Otp verified Successfully!")
-      navigate("/")
+      Toaster("success", "Otp verified Successfully!");
+      navigate("/");
       return;
     }
   };
 
-  const resendOtp= async () => {
+  const resendOtp = async () => {
+  
     const res = await ApiHandle(
       RESEND_FORM_OTP,
-      {  form_id: requestId },
+      { form_id: requestId },
       "POST"
     );
     if (res.statusCode === 201) {
-        setTimeLeft(120);
-        setShowResendButton(false);
-   
-      Toaster("success", "Otp Sent Successfully")
+      setTimeLeft(120);
+      setShowResendButton(false);
+
+      Toaster("success", "Otp Sent Successfully");
       return;
     }
-
-    
   };
- 
+
   return (
     <ModalWrapper handleClick={verifyOtp} btnName={"Submit Otp"}>
       <div className="flex flex-col gap-5">
         <span className="text-xl text-white">Enter Your Otp</span>
         <Input
           onChange={(e) => setOtp(e?.target?.value)}
-          
           type="text"
           name="otp"
           maxLength="6"
           inputMode="numeric"
         />
 
-
-
-{timeLeft>0 ? (
-    <p className="text-white">
-      <span>Resend Otp after: {timeLeft} seconds</span>
-    </p>
-  ) : (showResendButton && <div>
-    <button onClick={resendOtp} className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
-    Resend OTP
-  </button>
-  </div>
-  )
-}</div>
-     
+        {timeLeft > 0 ? (
+          <p className="text-white">
+            <span>Resend Otp after: {timeLeft} seconds</span>
+          </p>
+        ) : (
+          showResendButton && (
+            <div>
+              <button
+                onClick={resendOtp}
+                className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800"
+              >
+                Resend OTP
+              </button>
+            </div>
+          )
+        )}
+      </div>
     </ModalWrapper>
   );
 }

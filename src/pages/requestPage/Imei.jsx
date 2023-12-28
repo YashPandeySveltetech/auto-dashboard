@@ -30,7 +30,8 @@ function Imei({
         time_from: "",
         time_to: "",
         target_type: activeForm?.target_type_id,
-        request_to_provide: "",
+        request_to_provide: ImeiList[0].request_to_provide,
+        tsp:ImeiList[0].tsp
       },
     ]);
   };
@@ -48,7 +49,7 @@ function Imei({
 
   const dropdownChange = (e, data, index) => {
     const list = [...ImeiList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : e?.id;
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
     setImeiList(list);
   };
 
@@ -76,12 +77,13 @@ function Imei({
               <div className="flex justify-start items-center gap-5">
                 <label htmlFor="">Request to provide</label>
                 <Select
-                  isMulti
+                  
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
                     ImeiList[i]?.request_to_provide?.includes(obj?.id)
                   )}
+                  
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
@@ -159,13 +161,14 @@ function Imei({
 
               <div className="col-md-3">
                 <Select
-                  isMulti
+                  
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata}
                   value={tspdata.filter((obj) =>
                     ImeiList[i]?.tsp?.includes(obj?.id)
                   )}
+                  isOptionDisabled={(option)=>option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}

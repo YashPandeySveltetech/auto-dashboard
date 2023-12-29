@@ -23,13 +23,13 @@ import CellId from "./CellId";
 import { useDispatch } from "react-redux";
 import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 
-import { useLocation, useParams ,useNavigate} from "react-router";
+import { useLocation, useParams, useNavigate } from "react-router";
 
 function RequestForm({ requestData }) {
-  const {pathname}=useLocation()
-  const dispatch=useDispatch()
- var isEditable=pathname.includes('edit')
- let {id}=useParams()
+  const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  var isEditable = pathname.includes("edit");
+  let { id } = useParams();
 
   const initialobj = {
     police_station: "",
@@ -40,8 +40,7 @@ function RequestForm({ requestData }) {
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
-    urgent:false,
-    
+    urgent: false,
   };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
@@ -57,7 +56,7 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       mobile_number: "",
-      tsp:[],
+      tsp: [],
       target_type: "",
       request_to_provide: [],
     },
@@ -69,7 +68,7 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       imei: "",
-      tsp:[],
+      tsp: [],
       target_type: "",
       request_to_provide: [],
     },
@@ -93,7 +92,7 @@ function RequestForm({ requestData }) {
       time_from: "",
       time_to: "",
       cell_id: "",
-      tsp:[],
+      tsp: [],
       target_type: "",
       request_to_provide: [],
     },
@@ -114,9 +113,9 @@ function RequestForm({ requestData }) {
       setCurrentTime(requestData?.sys_time);
       setActiveForm((prev) => ({
         ...prev,
-        ["target_type"]: "" ,
+        ["target_type"]: "",
       }));
-  
+
       setApiPayload((prev) => {
         return {
           ...prev,
@@ -129,28 +128,24 @@ function RequestForm({ requestData }) {
           ["form_request_for"]: requestData?.form_request_for,
         };
       });
-      setMobileList(requestData?.form_request_for?.multiple_mobile
-        )
-        setImeiList(requestData?.form_request_for?.imei_number
-          )
-          setCellIdList(requestData?.form_request_for?.cell_id)
-          setIpList(requestData?.form_request_for?.ip_port)
-  
+      setMobileList(requestData?.form_request_for?.multiple_mobile);
+      setImeiList(requestData?.form_request_for?.imei_number);
+      setCellIdList(requestData?.form_request_for?.cell_id);
+      setIpList(requestData?.form_request_for?.ip_port);
 
       return;
     }
-
   }, [requestData]);
-  useEffect(()=>{
-    if(!requestData){
+  useEffect(() => {
+    if (!requestData) {
       setCurrentDate(new Date().toLocaleDateString("en-CA"));
       setCurrentTime(new Date().toLocaleTimeString("en-US")?.split(" ")[0]);
     }
-  },[apiPayload])
+  }, [apiPayload]);
   useEffect(() => {
     getTspList();
     getTargetType();
-    getCaseType()
+    getCaseType();
   }, []);
 
   const getTspList = async () => {
@@ -164,9 +159,8 @@ function RequestForm({ requestData }) {
     try {
       const res = await ApiHandle(`${TARGET_TYPE}`, "", "GET");
       if (res?.statusCode === 200) {
-
-let x=res?.responsePayload
-var y = [...x].reverse();
+        let x = res?.responsePayload;
+        var y = [...x].reverse();
         setTargetType(y);
 
         return;
@@ -179,11 +173,11 @@ var y = [...x].reverse();
     try {
       const res = await ApiHandle(`${CASE_TYPE}`, "", "GET");
       if (res?.statusCode === 200) {
-       let data= res?.responsePayload?.map((val) => ({
+        let data = res?.responsePayload?.map((val) => ({
           id: val.id,
           value: val.name,
           label: val.name,
-        }))
+        }));
 
         setCaseType(data);
 
@@ -196,20 +190,22 @@ var y = [...x].reverse();
 
   const requestprovide = useMemo(() => {
     let ac = targetType?.find((val, i) => val?.name === activeForm.target_type);
-    return ac?.request_to_provide?.map((item,i) => {
-    
+    return ac?.request_to_provide?.map((item, i) => {
       return { label: item.name, id: item.id, value: item.name };
     });
   }, [activeForm]);
+  let a = [1, 3, 4];
   const tspdata = useMemo(() => {
-    return tspList?.map((val) => ({
+    return tspList?.map((val, index) => ({
       id: val.id,
       value: val.name,
       label: val.name,
-      disabled: val?.name==="BSNL"?true:false,
+      disabled: (apiPayload?.form_request_for[arry[activeForm?.target_type]])&& ((apiPayload.form_request_for[arry[activeForm.target_type]][0]?.tsp?.includes(2) &&val.id !==2)||(!apiPayload.form_request_for[arry[activeForm.target_type]][0]?.tsp?.includes(2) &&val.id ===2))
+         
     }));
-  }, [activeForm]);
-
+  }, [activeForm,apiPayload?.form_request_for]);
+  
+  console.log(apiPayload?.form_request_for,">>>>")
 
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
@@ -264,13 +260,12 @@ var y = [...x].reverse();
         />
       );
     }
-  }, [activeForm, MobileList, ImeiList, IpList, cellIdList,requestData]);
+  }, [activeForm, MobileList, ImeiList, IpList, cellIdList, requestData,apiPayload.form_request_for]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
       setApiPayload({
         ...apiPayload,
         form_request_for: {
-          
           [arry[activeForm.target_type]]: MobileList,
         },
       });
@@ -303,7 +298,6 @@ var y = [...x].reverse();
       setApiPayload({
         ...apiPayload,
         form_request_for: {
-         
           [arry[activeForm.target_type]]: ImeiList,
         },
       });
@@ -336,7 +330,6 @@ var y = [...x].reverse();
       setApiPayload({
         ...apiPayload,
         form_request_for: {
-         
           [arry[activeForm?.target_type]]: IpList,
         },
       });
@@ -397,16 +390,16 @@ var y = [...x].reverse();
       //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
       // }
     }
-  }, [ImeiList, MobileList, IpList, cellIdList,requestData]);
+  }, [ImeiList, MobileList, IpList, cellIdList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
-    const { name, value ,files,checked} = e.target;
-    if(callfrom==="urgent"){
+    const { name, value, files, checked } = e.target;
+    if (callfrom === "urgent") {
       setApiPayload({
         ...apiPayload,
         [name]: checked,
       });
     }
-    if(callfrom==="files"){
+    if (callfrom === "files") {
       setApiPayload({
         ...apiPayload,
         [name]: files[0],
@@ -433,13 +426,12 @@ var y = [...x].reverse();
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
     }
-    if(data.name==="case_type"){
+    if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
       });
-    } 
-    else {
+    } else {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.value,
@@ -449,29 +441,30 @@ var y = [...x].reverse();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let formData = new FormData(); 
+    let formData = new FormData();
 
-    if(apiPayload?.file){
-      for(let key in apiPayload){
-        if(key==="form_request_for"){
-          formData.append(key,JSON.stringify(apiPayload[key]))
-        }
-        else{
-
-          formData.append(key,apiPayload[key])
+    if (apiPayload?.file) {
+      for (let key in apiPayload) {
+        if (key === "form_request_for") {
+          formData.append(key, JSON.stringify(apiPayload[key]));
+        } else {
+          formData.append(key, apiPayload[key]);
         }
       }
     }
-    
+
     // for (const pair of formData.entries()) {
     //   console.log(pair["form_request_for"],"abc");
     // }
 
-    
-
-
-    let url= isEditable?`${FORM_REQUEST}${id}/`:FORM_REQUEST
-    const res = await ApiHandle(url, apiPayload.file?formData:apiPayload,isEditable?"PUT":"POST","",apiPayload.file?true:false);
+    let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
+    const res = await ApiHandle(
+      url,
+      apiPayload.file ? formData : apiPayload,
+      isEditable ? "PUT" : "POST",
+      "",
+      apiPayload.file ? true : false
+    );
 
     if (res.statusCode === 201) {
       // getFormPdf(res?.responsePayload?.id);
@@ -481,12 +474,12 @@ var y = [...x].reverse();
         target_type_id: "",
       });
       setApiPayload(initialobj);
-      dispatch(otpValidationModal({id:res?.responsePayload?.id}))
+      dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
       Toaster("success", "SuccessFully Submitted Form");
       return;
     }
     if (res.statusCode === 200) {
-      dispatch(otpValidationModal({id:res?.responsePayload?.id}))
+      dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
       Toaster("success", "SuccessFully Updated Form");
     }
   };
@@ -494,30 +487,23 @@ var y = [...x].reverse();
   const getFormPdf = async (id) => {
     const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
   };
-  function check()
-  {
-  
-      var mobile = document.getElementById("mobile");
-     
-      
-      var message = document.getElementById('message');
-  
-       var goodColor = "#0C6";
-      var badColor = "#FF9B37";
-    
-      if(mobile.value.length!=10){
-         
-    
-          message.style.color = badColor;
-          message.innerHTML = "required 10 digits mobile number"
-      }else{
-     
-        message.style.color = goodColor;
-        message.innerHTML = ""
-      }
-    
+  function check() {
+    var mobile = document.getElementById("mobile");
+
+    var message = document.getElementById("message");
+
+    var goodColor = "#0C6";
+    var badColor = "#FF9B37";
+
+    if (mobile.value.length != 10) {
+      message.style.color = badColor;
+      message.innerHTML = "required 10 digits mobile number";
+    } else {
+      message.style.color = goodColor;
+      message.innerHTML = "";
     }
-  
+  }
+
   return (
     <>
       <form action="" onSubmit={handleSubmit}>
@@ -560,16 +546,15 @@ var y = [...x].reverse();
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data)}
                   isSearchable={false}
-                  isDisabled={!isEditable&&requestData}
+                  isDisabled={!isEditable && requestData}
                 />
                 <Input
                   type="text"
                   name="fir_no"
                   required
-                  
                   onChange={handleChange}
                   value={apiPayload.fir_no}
-                  disabledSelect={!isEditable&&requestData}
+                  disabledSelect={!isEditable && requestData}
                 />
               </div>
             </div>
@@ -578,45 +563,45 @@ var y = [...x].reverse();
             <div>
               <label className="font-bold required">Case Type:</label>
               <Select
-                  name="case_type"
-                  options={caseType}
-                  value={caseType?.filter(
-                    (obj) => apiPayload?.case_type == obj?.id
-                  )}
-                  className="basic-multi-select w-[50%]"
-                  classNamePrefix="select"
-                  onChange={(e, data) => dropdownChange(e, data)}
-                  isDisabled={!isEditable&&requestData}
-                />
-           
+                name="case_type"
+                options={caseType}
+                value={caseType?.filter(
+                  (obj) => apiPayload?.case_type == obj?.id
+                )}
+                className="basic-multi-select w-[50%]"
+                classNamePrefix="select"
+                onChange={(e, data) => dropdownChange(e, data)}
+                isDisabled={!isEditable && requestData}
+              />
             </div>
             <div className="mt-6 flex gap-3 items-center">
-            <label htmlFor="" className="font-bold">select if Form is Urgent</label>
-          <Input
-                  type="checkbox"
-                  name="urgent"
-                
-                  onChange={(e)=>handleChange(e,"urgent")}
-                  // checked={apiPayload?.urgent?"checked":"unchecked"}
-                  // checked={(apiPayload?.urgent===true)?"checked":""}
-                  disabledSelect={!isEditable&&requestData}
-                />
-            
-          </div>
-           
+              <label htmlFor="" className="font-bold">
+                select if Form is Urgent
+              </label>
+              <Input
+                type="checkbox"
+                name="urgent"
+                onChange={(e) => handleChange(e, "urgent")}
+                // checked={apiPayload?.urgent?"checked":"unchecked"}
+                // checked={(apiPayload?.urgent===true)?"checked":""}
+                disabledSelect={!isEditable && requestData}
+              />
+            </div>
           </div>
           <div className="mt-6 flex items-center gap-6">
-
-           
             <label className="font-bold">Target Type:</label>
             <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px">
                 {targetType?.map((val, key) => (
-                  <li className="me-2"    key={key}>
+                  <li className="me-2" key={key}>
                     <button
                       onClick={(e) => handleChange(e, "target_type", val)}
-                   disabled={ !isEditable&&(requestData &&!requestData?.form_request_for[arry[val?.name]]?.length >
-                    0)}
+                      disabled={
+                        !isEditable &&
+                        requestData &&
+                        !requestData?.form_request_for[arry[val?.name]]
+                          ?.length > 0
+                      }
                       type="button"
                       className={
                         activeForm?.target_type === val?.name
@@ -625,7 +610,7 @@ var y = [...x].reverse();
                       }
                       id={key}
                     >
-                      {String(val?.name).replace("_", ' ')}
+                      {String(val?.name).replace("_", " ")}
                       <span className="text-cyan-400">
                         (
                         {apiPayload?.form_request_for[arry[val?.name]]?.length >
@@ -654,9 +639,8 @@ var y = [...x].reverse();
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
-              disabled={!isEditable&&requestData}
+              disabled={!isEditable && requestData}
             ></textarea>
-            
           </div>
           {/* <div className="mt-6 flex gap-3 items-center">
             <label htmlFor="" className="font-bold">select File if any-:</label>
@@ -671,48 +655,49 @@ var y = [...x].reverse();
             
           </div> */}
           <div className="flex justify-start items-center gap-5 mt-6">
-             {/* IO Name */}
-             <div className="flex items-center gap-3">
-              <label className="font-bold required">Requesting Officer Name:</label>
+            {/* IO Name */}
+            <div className="flex items-center gap-3">
+              <label className="font-bold required">
+                Requesting Officer Name:
+              </label>
               <Input
                 type="text"
                 name="io_name"
                 required
                 onChange={handleChange}
                 value={apiPayload.io_name}
-                disabledSelect={!isEditable&&requestData}
+                disabledSelect={!isEditable && requestData}
               />
             </div>
 
             {/* IO Mobile no. */}
             <div className="flex items-center gap-3">
-              <label className="font-bold required">Requesting Officer Mobile no.</label>
+              <label className="font-bold required">
+                Requesting Officer Mobile no.
+              </label>
               <Input
                 type="text"
                 name="io_mobile_no"
                 required
                 onChange={handleChange}
                 value={apiPayload.io_mobile_no}
-                disabledSelect={!isEditable&&requestData}
+                disabledSelect={!isEditable && requestData}
                 min={10}
                 maxLength="10"
                 inputMode="numeric"
                 id="mobile"
                 onKeyUp={check}
               />
-                <span id="message"></span>
+              <span id="message"></span>
             </div>
-            
+
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                 send Otp
               </button> </div>} */}
-           
-
-
           </div>
 
           {/* Submit Button */}
-          {(!requestData || isEditable )&& (
+          {(!requestData || isEditable) && (
             <div className="mt-6">
               <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                 Submit
@@ -724,6 +709,5 @@ var y = [...x].reverse();
     </>
   );
 }
-
 
 export default RequestForm;

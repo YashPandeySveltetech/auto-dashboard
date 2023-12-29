@@ -41,7 +41,7 @@ function RejectList() {
           filter?.case_ref
         }&decision_type=${
           "REJECT"
-        }&page=${active}&is_otp_verified=${false}`,
+        }&page=${active}`,
       {},
       "GET"
     );

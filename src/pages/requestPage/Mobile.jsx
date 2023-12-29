@@ -199,9 +199,10 @@ function check()
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isDisabled={!isEditable&&requestData}
+                  isClearable={true}
                 />
               </div>
-
+{console.log(tspdata,"tspdata")}
               {(!requestData||isEditable) && (
                 <div>
                   <div className="flex gap-5">

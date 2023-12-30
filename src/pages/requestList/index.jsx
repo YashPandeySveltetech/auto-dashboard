@@ -208,9 +208,9 @@ if(isDcpPassword){
                   TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
                 </th>
 
-                <th scope="col" className="px-6 py-3">
+                {/* <th scope="col" className="px-6 py-3">
                   View Attachment
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
@@ -272,8 +272,8 @@ if(isDcpPassword){
                     {String(item?.target_type).replace("_", " ")}
                   </td>
 
-                  <td className="px-6 py-4 text-center">
-                    {/* <button className='bg-green-300'>Approve</button> */}
+                  {/* <td className="px-6 py-4 text-center">
+                   
                     <button
                       onClick={() =>
                         viewAttachment({ requets_form_id: item?.id })
@@ -281,8 +281,8 @@ if(isDcpPassword){
                     >
                       <VisibilityIcon className="text-green-800" />
                     </button>
-                    {/* <button className='bg-red-900'>Reject</button> */}
-                  </td>
+                   
+                  </td> */}
                   <td className="px-6 py-4 flex gap-2">
                     {(["ACP", "DCP"].includes(rank) &&
                       item?.decision == "PENDING" )&& (

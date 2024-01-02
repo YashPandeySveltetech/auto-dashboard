@@ -193,7 +193,7 @@ if(isDcpPassword){
                   DATE OF REQUEST
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  NAME OF DIST/ORGN.
+                  Police Station
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Requested Officer Name
@@ -245,7 +245,7 @@ if(isDcpPassword){
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {item?.district}
+                    {item?.added_by}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"

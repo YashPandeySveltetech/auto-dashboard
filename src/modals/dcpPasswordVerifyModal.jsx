@@ -44,10 +44,11 @@ function DcpPasswordVerifyModal() {
    
     <ModalWrapper handleClick={verifyPassword} loader={loader} btnName={"Submit"}>
       <div className="flex flex-col gap-5">
-        <span className="text-xl text-white">Enter Your Password</span>
+        <span className="text-xl text-white">Enter Your Kavach OTP</span>
         <Input
           onChange={(e) => setPassword(e?.target?.value)}
-          
+          maxLength="6"
+          inputMode="numeric"
           type="text"
           name="password"
         />

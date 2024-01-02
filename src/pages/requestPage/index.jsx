@@ -37,6 +37,7 @@ function RequestForm({ requestData }) {
     case_type: "",
     io_name: "",
     io_mobile_no: "",
+    io_email:"",
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
@@ -53,8 +54,8 @@ function RequestForm({ requestData }) {
     {
       date_from: "",
       date_to: "",
-      time_from: "",
-      time_to: "",
+      time_from: "00:00",
+      time_to: "00:00",
       mobile_number: "",
       tsp: [],
       target_type: "",
@@ -65,8 +66,8 @@ function RequestForm({ requestData }) {
     {
       date_from: "",
       date_to: "",
-      time_from: "",
-      time_to: "",
+      time_from: "00:00",
+      time_to: "00:00",
       imei: "",
       tsp: [],
       target_type: "",
@@ -78,8 +79,8 @@ function RequestForm({ requestData }) {
       ip: "",
       date_from: "",
       date_to: "",
-      time_from: "",
-      time_to: "",
+      time_from: "00:00",
+      time_to: "00:00",
       tsp: [],
       target_type: "",
       request_to_provide: [],
@@ -89,8 +90,8 @@ function RequestForm({ requestData }) {
     {
       date_from: "",
       date_to: "",
-      time_from: "",
-      time_to: "",
+      time_from: "00:00",
+      time_to: "00:00",
       cell_id: "",
       tsp: [],
       target_type: "",
@@ -124,6 +125,7 @@ function RequestForm({ requestData }) {
           ["case_type"]: requestData?.case_type,
           ["io_name"]: requestData?.io_name,
           ["io_mobile_no"]: requestData?.io_mobile_no,
+          ["io_email"]: requestData?.io_email,
           ["brief_summary"]: requestData?.brief_summary,
           ["form_request_for"]: requestData?.form_request_for,
         };
@@ -205,7 +207,7 @@ function RequestForm({ requestData }) {
     }));
   }, [activeForm,apiPayload?.form_request_for]);
   
-  console.log(apiPayload?.form_request_for,">>>>")
+
 
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
@@ -576,7 +578,7 @@ function RequestForm({ requestData }) {
             </div>
             <div className="mt-6 flex gap-3 items-center">
               <label htmlFor="" className="font-bold">
-                select if Form is Urgent
+                Select if Form is Urgent
               </label>
               <Input
                 type="checkbox"
@@ -689,6 +691,26 @@ function RequestForm({ requestData }) {
                 onKeyUp={check}
               />
               <span id="message"></span>
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="font-bold">
+                Requesting Officer Email.
+              </label>
+              <div className="flex flex-col items-center">
+
+            
+              <Input
+                type="email"
+                name="io_email"
+              
+                onChange={handleChange}
+                value={apiPayload.io_email}
+                disabledSelect={!isEditable && requestData}
+               
+        
+              />
+              <span id="message">(.gov & .nic email's only )</span>
+              </div>
             </div>
 
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">

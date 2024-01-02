@@ -23,7 +23,7 @@ const RegistrationPage = () => {
     rank: "SHO",
     user_profile: {
       reporting_to: "",
-      district: "",
+      // district: "",
       state: "",
       police_station: "",
     }}
@@ -239,12 +239,12 @@ const RegistrationPage = () => {
               label="State"
               options={stateOptions}
               onChange={(e)=>{handleUserProfileChange(e);
-                e?.target?.value &&  getDistrict(e.target.value);      
+                e?.target?.value &&  getPoliceStaionList(e.target.value);      
                 setFormData((prev)=>({
                   ...prev,
                   user_profile: {
                     ...prev.user_profile,
-                    "district": "",
+                    // "district": "",
                     "police_station":""
                   },
                 }));
@@ -259,7 +259,7 @@ const RegistrationPage = () => {
               
             />
 
-            <DropDown
+            {/* <DropDown
               label="District"
               options={districtOptions}
               onChange={(e)=> {handleUserProfileChange(e);
@@ -278,7 +278,7 @@ const RegistrationPage = () => {
               disabledSelect={!formData.user_profile.state}
               star={true}
               required={true}
-            />
+            /> */}
             
 
             <DropDown
@@ -288,7 +288,7 @@ const RegistrationPage = () => {
               value={formData.user_profile.police_station}
               name="user_profile.police_station"
               checkId={true}
-              disabledSelect={!formData.user_profile.district}
+              disabledSelect={!formData.user_profile.state}
               star={true} 
               required={true} 
             />

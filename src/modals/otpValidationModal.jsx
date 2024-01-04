@@ -29,8 +29,11 @@ function OtpValidationModal() {
   }, []);
 
 useEffect(()=>{
-  !isFormVerified && resendOtp()
-},[])
+  if(!isFormVerified ){
+   
+    resendOtp()
+  }
+},[isFormVerified])
   useEffect(() => {
     
     if (timeLeft <= 0) {

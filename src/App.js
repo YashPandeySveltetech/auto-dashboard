@@ -18,7 +18,7 @@ function App() {
         {rejectModal&&<RejectModal/>}
       {viewLogModal&&<ViewLogsModal/>}
       {otpValidationModal && <OtpValidationModal/>}
-      {otpValidationModal && <OtpValidationModal/>}
+      
       {dcpPasswordVerify && <DcpPasswordVerifyModal/>}
       </BrowserRouter>
     </div>

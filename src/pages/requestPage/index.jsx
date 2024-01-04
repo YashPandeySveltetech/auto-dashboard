@@ -203,7 +203,6 @@ function RequestForm({ requestData }) {
       apiPayload?.form_request_for[arry[activeForm?.target_type]][0]?.tsp
         ?.length === 0
     ) {
-      console.log("indise")
       return tspList?.map((val, index) => ({
         id: val.id,
         value: val.name,
@@ -211,7 +210,7 @@ function RequestForm({ requestData }) {
         disabled: false,
       }));
     } else {
-      console.log("motindise")
+     
       return tspList?.map((val, index) => ({
         id: val.id,
         value: val.name,

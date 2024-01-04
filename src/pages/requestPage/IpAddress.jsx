@@ -156,7 +156,6 @@ function IpAddress({
 
               <div className="col-md-3">
                 <Select
-                 
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata}
@@ -168,7 +167,7 @@ function IpAddress({
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isClearable={true}
-                  isDisabled={!isEditable&&requestData}
+                  isDisabled={(!isEditable&&requestData) ||IpList?.length>1}
                 />
               </div>
 

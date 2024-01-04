@@ -40,7 +40,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
       },
     ]);
   };
-  console.log(MobileList,"MobileList")
+
   const removeMobileClick = (index) => {
     const list = [...MobileList];
     list.splice(index, 1);

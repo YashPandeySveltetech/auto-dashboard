@@ -45,7 +45,7 @@ function IpAddress({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IpList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : (e===null)?[]: [e?.id];
     setIpList(list);
   };
 
@@ -167,6 +167,8 @@ function IpAddress({
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
+                  isClearable={true}
+                  isDisabled={!isEditable&&requestData}
                 />
               </div>
 

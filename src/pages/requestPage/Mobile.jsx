@@ -12,9 +12,10 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
  
     setMobileList(list);
   };
+  
   const dropdownChange = (e, data, index) => {
     const list = [...MobileList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: [e?.id];
     setMobileList(list);
   };
 //  useEffect(()=>{
@@ -202,7 +203,7 @@ function check()
                   isClearable={true}
                 />
               </div>
-{console.log(tspdata,"tspdata")}
+{console.log(MobileList,"MobileList")}
               {(!requestData||isEditable) && (
                 <div>
                   <div className="flex gap-5">

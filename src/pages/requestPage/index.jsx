@@ -37,7 +37,7 @@ function RequestForm({ requestData }) {
     case_type: "",
     io_name: "",
     io_mobile_no: "",
-    io_email:"",
+    io_email: "",
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
@@ -196,18 +196,46 @@ function RequestForm({ requestData }) {
       return { label: item.name, id: item.id, value: item.name };
     });
   }, [activeForm]);
-  let a = [1, 3, 4];
-  const tspdata = useMemo(() => {
-    return tspList?.map((val, index) => ({
-      id: val.id,
-      value: val.name,
-      label: val.name,
-      disabled: (apiPayload?.form_request_for[arry[activeForm?.target_type]])&& ((apiPayload.form_request_for[arry[activeForm.target_type]][0]?.tsp?.includes(2) &&val.id !==2)||(!apiPayload.form_request_for[arry[activeForm.target_type]][0]?.tsp?.includes(2) &&val.id ===2))
-         
-    }));
-  }, [activeForm,apiPayload?.form_request_for]);
-  
 
+  const tspdata = useMemo(() => {
+    if (
+      apiPayload?.form_request_for[arry[activeForm?.target_type]] &&
+      apiPayload?.form_request_for[arry[activeForm?.target_type]][0]?.tsp
+        ?.length === 0
+    ) {
+      console.log("indise")
+      return tspList?.map((val, index) => ({
+        id: val.id,
+        value: val.name,
+        label: val.name,
+        disabled: false,
+      }));
+    } else {
+      console.log("motindise")
+      return tspList?.map((val, index) => ({
+        id: val.id,
+        value: val.name,
+        label: val.name,
+        disabled:
+          apiPayload?.form_request_for[arry[activeForm?.target_type]] &&
+          ((apiPayload.form_request_for[
+            arry[activeForm.target_type]
+          ][0]?.tsp?.includes(2) &&
+            val.id !== 2) ||
+            (!apiPayload.form_request_for[
+              arry[activeForm.target_type]
+            ][0]?.tsp?.includes(2) &&
+              val.id === 2)),
+      }));
+    }
+  }, [
+    activeForm,
+    MobileList,
+    apiPayload?.form_request_for,
+    ImeiList,
+    IpList,
+    cellIdList,
+  ]);
 
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
@@ -262,7 +290,16 @@ function RequestForm({ requestData }) {
         />
       );
     }
-  }, [activeForm, MobileList, ImeiList, IpList, cellIdList, requestData,apiPayload.form_request_for]);
+  }, [
+    activeForm,
+    MobileList,
+    ImeiList,
+    IpList,
+    cellIdList,
+    requestData,
+    apiPayload.form_request_for,
+    tspdata
+  ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
       setApiPayload({
@@ -693,23 +730,16 @@ function RequestForm({ requestData }) {
               <span id="message"></span>
             </div>
             <div className="flex items-center gap-3">
-              <label className="font-bold">
-                Requesting Officer Email.
-              </label>
+              <label className="font-bold">Requesting Officer Email.</label>
               <div className="flex flex-col items-center">
-
-            
-              <Input
-                type="email"
-                name="io_email"
-              
-                onChange={handleChange}
-                value={apiPayload.io_email}
-                disabledSelect={!isEditable && requestData}
-               
-        
-              />
-              <span id="message">(.gov & .nic email's only )</span>
+                <Input
+                  type="email"
+                  name="io_email"
+                  onChange={handleChange}
+                  value={apiPayload.io_email}
+                  disabledSelect={!isEditable && requestData}
+                />
+                <span id="message">(.gov & .nic email's only )</span>
               </div>
             </div>
 

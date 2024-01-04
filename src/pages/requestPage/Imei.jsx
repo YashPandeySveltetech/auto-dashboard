@@ -49,7 +49,7 @@ function Imei({
 
   const dropdownChange = (e, data, index) => {
     const list = [...ImeiList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: [e?.id];
     setImeiList(list);
   };
 
@@ -165,13 +165,15 @@ function Imei({
                   name="tsp"
                   placeholder="Select TSP"
                   options={tspdata}
-                  value={tspdata.filter((obj) =>
+                  value={tspdata?.filter((obj) =>
                     ImeiList[i]?.tsp?.includes(obj?.id)
                   )}
                   isOptionDisabled={(option)=>option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
+                  isClearable={true}
+                  isDisabled={!isEditable&&requestData}
                 />
               </div>
 

@@ -26,6 +26,7 @@ const initialState = {
     updateReqList:false,
     requestId:NaN,
     otpValidationModal:false,
+    passwordChangeModal:false,
     isFormVerified:false,
     dcpPasswordVerify:false,
     dcpStatus:{}
@@ -58,6 +59,9 @@ export const userSlice = createSlice({
       DcpPassowrdConfirm: (state,{payload}) => {
         state.isDcpPassword= payload
       },
+      PasswordChangeModal: (state,{payload}) => {
+        state.passwordChangeModal= payload
+      },
       otpValidationModal: (state,{payload}) => {
         state.otpValidationModal= true
         state.requestId=payload?.id
@@ -70,6 +74,7 @@ export const userSlice = createSlice({
         state.requestId=NaN
         state.otpValidationModal=false
         state.dcpPasswordVerify= false
+        state.passwordChangeModal=false
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload
@@ -78,6 +83,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { commonCloseModal, openRejectModal,openViewLogModal,updateRequestList ,otpValidationModal,openDcpPasswordVerifyModal,DcpPassowrdConfirm} = userSlice.actions
+export const { commonCloseModal, openRejectModal,openViewLogModal,updateRequestList ,otpValidationModal,openDcpPasswordVerifyModal,DcpPassowrdConfirm,PasswordChangeModal} = userSlice.actions
 
 export default userSlice.reducer

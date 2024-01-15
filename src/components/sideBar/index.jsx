@@ -7,6 +7,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { USER_DETAIL } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { setUserData } from "../../redux/reducers/userReducer";
+import { PasswordChangeModal } from "../../redux/reducers/modalsReducer";
 
 function Sidebar() {
   const { rank, email } = useSelector((state) => state.user?.userData);
@@ -109,6 +110,21 @@ function Sidebar() {
             <ListItem {...item} key={key} />
           ))}
         </div>
+        <div className="flex flex-col gap-5">
+
+      
+        <button
+          onClick={() => {
+           dispatch(PasswordChangeModal(true))
+          }}
+          className="bg-cyan-900 p-2 rounded-lg font-bold"
+          style={{
+            color: "white",
+            boxShadow: "rgba(150, 130, 0, 0.35) 0px 5px 15px",
+          }}
+        >
+          Change Password
+        </button>
         <button
           onClick={() => {
             localStorage.clear();
@@ -123,6 +139,7 @@ function Sidebar() {
         >
           Logout
         </button>
+        </div>
       </div>
     </div>
   );

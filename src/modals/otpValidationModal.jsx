@@ -30,9 +30,13 @@ function OtpValidationModal() {
   }, []);
 
 useEffect(()=>{
+
   if(!isFormVerified && !isCreate ){
    
     resendOtp()
+  }
+  else{
+    setTimeLeft(120);
   }
 },[isFormVerified,isCreate])
   useEffect(() => {

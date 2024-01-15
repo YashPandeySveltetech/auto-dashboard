@@ -6,15 +6,16 @@ import { ApiHandle } from "../utils/ApiHandle";
 import Toaster from "../utils/toaster/Toaster";
 import { commonCloseModal } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function OtpValidationModal() {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const { requestId, isFormVerified } = useSelector((state) => state?.modal);
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const [showResendButton, setShowResendButton] = useState(false);
-
+  var isCreate = pathname.includes("request-form");
   const [timeLeft, setTimeLeft] = useState(120);
 
   useEffect(() => {
@@ -29,11 +30,11 @@ function OtpValidationModal() {
   }, []);
 
 useEffect(()=>{
-  if(!isFormVerified ){
+  if(!isFormVerified && !isCreate ){
    
     resendOtp()
   }
-},[isFormVerified])
+},[isFormVerified,isCreate])
   useEffect(() => {
     
     if (timeLeft <= 0) {

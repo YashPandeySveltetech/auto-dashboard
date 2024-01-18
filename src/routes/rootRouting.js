@@ -125,14 +125,7 @@ const AppRoute = memo(() => {
                 </Layout>
               }
             />
-            <Route
-              path="/request/approve/:id"
-              element={
-                <Layout>
-                  <RequestList />
-                </Layout>
-              }
-            />
+          
 
             {/* //admin routes */}
 

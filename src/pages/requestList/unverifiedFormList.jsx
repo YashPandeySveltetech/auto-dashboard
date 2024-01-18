@@ -14,11 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
   openViewLogModal,
+  otpValidationModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
 import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import OtpValidationModal from "../../modals/otpValidationModal";
 
 function UnverifiedFormList() {
   const navigate = useNavigate();
@@ -143,9 +145,7 @@ function UnverifiedFormList() {
                 <th scope="col" className="px-6 py-3">
                   DATE OF REQUEST
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  NAME OF DIST/ORGN.
-                </th>
+               
                 <th scope="col" className="px-6 py-3">
                   REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
                 </th>
@@ -177,12 +177,7 @@ function UnverifiedFormList() {
                   >
                     {item?.created_on?.split("T")[0]}
                   </th>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.district}
-                  </td>
+                 
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
@@ -239,9 +234,9 @@ function UnverifiedFormList() {
                       )}
                     <button
                       onClick={() => {
-                        navigate(
-                          `/request/view/${item?.request_to_provide}/${item?.id}`
-                        );
+                       item.is_otp_verified?  navigate(
+                          `/request/view/${item?.request_to_provide[0]}/${item?.id}`
+                        ):dispatch(otpValidationModal({ id: item?.id }));
                       }}
                       className="bg-blue-300 p-2 rounded-lg font-bold"
                       style={{
@@ -253,16 +248,20 @@ function UnverifiedFormList() {
                     </button>
                     <button
                       onClick={() => {
-                        navigate(
-                          `/request/edit/${item?.request_to_provide}/${item?.id}`
-                        );
+                        !item.is_otp_verified? navigate(
+                          `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
+                        )
+                        :dispatch(otpValidationModal({ id: item?.id }));
                       }}
+                       
+                      
                       className="bg-green-300 p-2 rounded-lg font-bold"
                       style={{
                         color: "black",
                         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                       }}
                     >
+            
                       Edit
                     </button>
                     {["ACP", "DCP"].includes(rank) &&

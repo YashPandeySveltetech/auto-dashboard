@@ -33,7 +33,7 @@ function RequestList() {
   //     startDate: new Date(),
   //     endDate: new Date().setMonth(11)
   //     });
-  console.log(isDcpPassword,dcpStatus,"isDcpPassword")
+
   const [dateRange, setDateRange] = useState({
     startDate: "",
     endDate: "",

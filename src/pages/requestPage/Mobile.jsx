@@ -91,7 +91,7 @@ function check()
                   value={val.mobile_number}
                   name="mobile_number"
                   onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={requestData}
+                  disabledSelect={!isEditable && requestData}
                   className="w-[100%]"
                   min={10}
                   maxLength="10"

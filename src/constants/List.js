@@ -11,5 +11,8 @@ export let arry = {
  export const firType = [
     { label: "FIR no.", value: "Fir" },
     { label: "Complaint no.", value: "complaint" },
+    { label: "GD no.", value: "GD_NO" },
+    { label: "E-FIR", value: "E_FIR" },
+    { label: "Court Case / Legal Notice", value: "COURT_CASE_OR_LEGAL_NOTICE" },
   ];
 

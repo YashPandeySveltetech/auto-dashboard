@@ -11,12 +11,14 @@ import { OTP_SEND, OTP_VERIFY } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/reducers/userReducer";
+import Loader from "../../components/loader/Loader";
 
 function LoginPage() {
   const [loginWith, setLoginWith] = useState("email");
   const [formValue, setFormValue] = useState({});
   const [isOtp, setIsOtp] = useState(false);
   const [verifyUser, setVerifyUser] = useState({});
+  const [isLoading,setIsLoading]=useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,6 +39,7 @@ function LoginPage() {
     e.preventDefault();
     const res = await ApiHandle(OTP_VERIFY, verifyUser, "POST");
     if (res.statusCode === 201) {
+      setIsLoading(false)
       localStorage.setItem("token", res.responsePayload.access);
       dispatch(setUserData(res?.responsePayload));
       localStorage.setItem(
@@ -52,6 +55,8 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  try {
+    setIsLoading(true)
     const res = await ApiHandle(OTP_SEND, formValue, "POST");
     if (res.statusCode === 201) {
       setIsOtp(true);
@@ -59,6 +64,16 @@ function LoginPage() {
 
       return;
     }
+    else{
+      console.log(res)
+      setIsLoading(false)
+
+    }
+    
+  } catch (error) {
+    setIsLoading(false)
+    console.log(error)
+  }
   };
 
   const LoginWithMobile = () => (
@@ -193,15 +208,16 @@ function LoginPage() {
                     
                   }}
                 >
-                  <button
+              {isLoading ? "Otp Sending...":    <button
                     type="submit"
                     className="btn  ms-4 "
                     style={{
                       fontSize: "18px",
                     }}
+                    disabled={isLoading}
                   >
                     Login
-                  </button>
+                  </button>}
                 </div>
               </div>
             )}

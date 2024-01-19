@@ -60,6 +60,7 @@ function LoginPage() {
     const res = await ApiHandle(OTP_SEND, formValue, "POST");
     if (res.statusCode === 201) {
       setIsOtp(true);
+      setIsLoading(false)
       Toaster("success", "OTP SENT Successfully!");
 
       return;

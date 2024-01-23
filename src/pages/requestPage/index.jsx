@@ -37,7 +37,7 @@ function RequestForm({ requestData }) {
     case_type: "",
     io_name: "",
     io_mobile_no: "",
-    io_email: "",
+    // io_email: "",
     form_request_for: {},
     brief_summary: "",
     fir_or_complaint: "",
@@ -125,7 +125,7 @@ function RequestForm({ requestData }) {
           ["case_type"]: requestData?.case_type,
           ["io_name"]: requestData?.io_name,
           ["io_mobile_no"]: requestData?.io_mobile_no,
-          ["io_email"]: requestData?.io_email,
+          // ["io_email"]: requestData?.io_email,
           ["brief_summary"]: requestData?.brief_summary,
           ["form_request_for"]: requestData?.form_request_for,
         };
@@ -728,7 +728,7 @@ function RequestForm({ requestData }) {
               />
               <span id="message"></span>
             </div>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <label className="font-bold">Requesting Officer Email.</label>
               <div className="flex flex-col items-center">
                 <Input
@@ -740,7 +740,7 @@ function RequestForm({ requestData }) {
                 />
                 <span id="message">(.gov & .nic email's only )</span>
               </div>
-            </div>
+            </div> */}
 
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                 send Otp

@@ -5,9 +5,9 @@ import Select from "react-select";
 
 function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requestprovide,isEditable }) {
   const mobileInputChange = (e, index) => {
-    const { name, value } = e?.target;
+    const { name, value,checked } = e?.target;
     const list = [...MobileList];
-    list[index][name] = value;
+    list[index][name] = name=="till_date"?checked: value;
     list[index]["target_type"]=activeForm?.target_type_id
  
     setMobileList(list);
@@ -34,6 +34,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
         time_from: "",
         time_to: "",
         mobile_number: "",
+        till_date:false,
         tsp: MobileList[0]?.tsp,
         target_type: activeForm?.target_type_id,
         request_to_provide: MobileList[0].request_to_provide,
@@ -121,12 +122,12 @@ function check()
             {/* CDR DATE TIME */}
             {/* date  */}
 
-            <div className="input-group flex items-center justify-start gap-5 m-3">
+            <div className="input-group flex items-center justify-start gap-3 m-3">
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
 
-              <div className="flex gap-5">
+              <div className="flex gap-4">
                 <div className="w-15  input-group flex items-center gap-3">
                   <span className="input-group-text font-bold">From</span>
                   <Input
@@ -186,7 +187,12 @@ function check()
                   </div>
                 </div>
               </div>
-
+<div className="flex gap-5 ">
+<label className="form-label me-5 col-md-1 font-bold">
+                Till Date :
+              </label>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
+</div>
               <div className="col">
                 <Select
                   name="tsp"

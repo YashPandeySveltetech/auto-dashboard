@@ -12,10 +12,10 @@ function Imei({
   isEditable
 }) {
   const ImeiInputChange = (e, index) => {
-    const { name, value } = e.target;
+    const { name, value,checked } = e.target;
 
     const list = [...ImeiList];
-    list[index][name] = value;
+    list[index][name] = name=="till_date"?checked: value;;
     list[index]["target_type"] = activeForm?.target_type_id;
     setImeiList(list);
   };
@@ -29,6 +29,7 @@ function Imei({
         date_to: "",
         time_from: "",
         time_to: "",
+        till_date:false,
         target_type: activeForm?.target_type_id,
         request_to_provide: ImeiList[0].request_to_provide,
         tsp:ImeiList[0].tsp
@@ -158,7 +159,12 @@ function Imei({
                   </div>
                 </div>
               </div>
-
+              <div className="flex gap-5 ">
+<label className="form-label me-5 col-md-1 font-bold">
+                Till Date :
+              </label>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ImeiInputChange(e, i)}/>
+</div>
               <div className="col-md-3">
                 <Select
                   

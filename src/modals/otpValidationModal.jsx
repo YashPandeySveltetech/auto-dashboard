@@ -71,7 +71,7 @@ useEffect(()=>{
       setTimeLeft(120);
       setShowResendButton(false);
 
-      Toaster("success", "Otp Sent Successfully");
+      Toaster("success", "Otp Sent & Valid Till 5 Minutes");
       return;
     }
   };
@@ -87,7 +87,7 @@ useEffect(()=>{
           maxLength="6"
           inputMode="numeric"
         />
-
+{/* 
         {timeLeft > 0 ? (
           <p className="text-white">
             <span>Resend Otp after: {timeLeft} seconds</span>
@@ -103,7 +103,7 @@ useEffect(()=>{
               </button>
             </div>
           )
-        )}
+        )} */}
       </div>
     </ModalWrapper>
   );

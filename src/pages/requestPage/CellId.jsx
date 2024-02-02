@@ -12,9 +12,9 @@ function CellId({
   isEditable,
 }) {
   const mobileInputChange = (e, index) => {
-    const { name, value } = e?.target;
+    const { name, value,checked } = e?.target;
     const list = [...cellIdList];
-    list[index][name] = value;
+    list[index][name] = name=="till_date"?checked: value;;
     list[index]["target_type"] = activeForm?.target_type_id;
 
     setCellIdList(list);
@@ -33,6 +33,7 @@ function CellId({
         date_to: "",
         time_from: "",
         time_to: "",
+        till_date:false,
         mobile_number: "",
         tsp: cellIdList[0].tsp,
         target_type: activeForm?.target_type_id,
@@ -153,7 +154,12 @@ function CellId({
                   </div>
                 </div>
               </div>
-
+              <div className="flex gap-5 ">
+<label className="form-label me-5 col-md-1 font-bold">
+                Till Date :
+              </label>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
+</div>
               <div className="col flex gap-5 items-center justify-start">
                 <Select
                   name="tsp"

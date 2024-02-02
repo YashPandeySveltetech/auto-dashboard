@@ -24,6 +24,7 @@ import { useDispatch } from "react-redux";
 import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 
 import { useLocation, useParams, useNavigate } from "react-router";
+import Ild from "./Ild";
 
 function RequestForm({ requestData }) {
   const { pathname } = useLocation();
@@ -53,9 +54,10 @@ function RequestForm({ requestData }) {
   const [MobileList, setMobileList] = useState([
     {
       date_from: "",
-      date_to: "",
+      date_to: null,
       time_from: "00:00",
       time_to: "00:00",
+      till_date: false,
       mobile_number: "",
       tsp: [],
       target_type: "",
@@ -65,9 +67,10 @@ function RequestForm({ requestData }) {
   const [ImeiList, setImeiList] = useState([
     {
       date_from: "",
-      date_to: "",
+      date_to: null,
       time_from: "00:00",
       time_to: "00:00",
+      till_date: false,
       imei: "",
       tsp: [],
       target_type: "",
@@ -78,9 +81,10 @@ function RequestForm({ requestData }) {
     {
       ip: "",
       date_from: "",
-      date_to: "",
+      date_to: null,
       time_from: "00:00",
       time_to: "00:00",
+      till_date: false,
       tsp: [],
       target_type: "",
       request_to_provide: [],
@@ -89,18 +93,31 @@ function RequestForm({ requestData }) {
   const [cellIdList, setCellIdList] = useState([
     {
       date_from: "",
-      date_to: "",
+      date_to: null,
       time_from: "00:00",
       time_to: "00:00",
+      till_date: false,
       cell_id: "",
       tsp: [],
       target_type: "",
       request_to_provide: [],
     },
   ]);
-
+  const [IldList, setIldList] = useState([
+    {
+      date_from: "",
+      date_to: null,
+      time_from: "00:00",
+      time_to: "00:00",
+      till_date: false,
+      mobile_number: "",
+      tsp: [],
+      target_type: "",
+      request_to_provide: [],
+    },
+  ]);
   let station_id = localStorage.getItem("p_station");
-
+  const [firOtherOption, setFirOtherOption] = useState("");
   const [currentDate, setCurrentDate] = useState();
   const [currentTime, setCurrentTime] = useState();
   const [targetType, setTargetType] = useState([]);
@@ -134,6 +151,7 @@ function RequestForm({ requestData }) {
       setImeiList(requestData?.form_request_for?.imei_number);
       setCellIdList(requestData?.form_request_for?.cell_id);
       setIpList(requestData?.form_request_for?.ip_port);
+      setIldList(requestData?.form_request_for?.ild);
 
       return;
     }
@@ -210,7 +228,6 @@ function RequestForm({ requestData }) {
         disabled: false,
       }));
     } else {
-     
       return tspList?.map((val, index) => ({
         id: val.id,
         value: val.name,
@@ -234,6 +251,7 @@ function RequestForm({ requestData }) {
     ImeiList,
     IpList,
     cellIdList,
+    IldList
   ]);
 
   const formHandler = useCallback(() => {
@@ -289,6 +307,19 @@ function RequestForm({ requestData }) {
         />
       );
     }
+    if (activeForm?.target_type === "ILD") {
+      return (
+        <Ild
+          requestData={requestData}
+          setIldList={setIldList}
+          IldList={IldList}
+          activeForm={activeForm}
+          tspdata={tspdata}
+          requestprovide={requestprovide}
+          isEditable={isEditable}
+        />
+      );
+    }
   }, [
     activeForm,
     MobileList,
@@ -296,8 +327,9 @@ function RequestForm({ requestData }) {
     IpList,
     cellIdList,
     requestData,
+    IldList,
     apiPayload.form_request_for,
-    tspdata
+    tspdata,
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
@@ -428,7 +460,39 @@ function RequestForm({ requestData }) {
       //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
       // }
     }
-  }, [ImeiList, MobileList, IpList, cellIdList, requestData]);
+    if (activeForm.target_type === "ILD") {
+      setApiPayload({
+        ...apiPayload,
+        form_request_for: {
+          [arry[activeForm?.target_type]]: IldList,
+        },
+      });
+      // let isok = cellIdList.map((obj) => {
+      //   const newObj = { ...obj };
+      //   delete newObj.target_type;
+      //   for (let key in newObj) {
+      //     if (newObj.hasOwnProperty(key)) {
+      //       if (newObj[key] === "" || newObj[key] === undefined) {
+      //         return false;
+      //       }
+      //     }
+      //   }
+      //   return true;
+      // });
+
+      // if (isok[0]) {
+      //   setApiPayload({
+      //     ...apiPayload,
+      //     form_request_for: {
+      //       ...apiPayload?.form_request_for,
+      //       [arry[activeForm?.target_type]]: cellIdList,
+      //     },
+      //   });
+      // } else {
+      //   delete apiPayload.form_request_for[arry[activeForm?.target_type]];
+      // }
+    }
+  }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
     const { name, value, files, checked } = e.target;
     if (callfrom === "urgent") {
@@ -459,17 +523,34 @@ function RequestForm({ requestData }) {
       });
     }
   };
-
+  const [isother, setIsOther] = useState(false);
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
     }
-    if (data.name === "case_type") {
+   else if (data.name === "case_type") {
+      console.log(e,">>>")
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
       });
-    } else {
+    }
+   else if (data.name === "fir_or_complaint") {
+      if (e.value === "other") {
+        setIsOther(true);
+        setApiPayload({
+          ...apiPayload,
+          [data?.name]: "",
+        });
+      } else {
+        setIsOther(false);
+        setApiPayload({
+          ...apiPayload,
+          [data?.name]: e?.value,
+        });
+      }
+    } 
+    else {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.value,
@@ -490,8 +571,6 @@ function RequestForm({ requestData }) {
         }
       }
     }
-
-   
 
     let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
     const res = await ApiHandle(
@@ -539,7 +618,7 @@ function RequestForm({ requestData }) {
       message.innerHTML = "";
     }
   }
-
+  console.log(apiPayload, "api");
 
   return (
     <>
@@ -576,8 +655,10 @@ function RequestForm({ requestData }) {
                 <Select
                   name="fir_or_complaint"
                   options={firType}
-                  value={firType?.filter(
-                    (obj) => apiPayload?.fir_or_complaint === obj?.value
+                  value={firType?.filter((obj) =>
+                    obj.value === "other"
+                      ? obj.value
+                      : apiPayload?.fir_or_complaint === obj?.value
                   )}
                   className="basic-multi-select w-[30%]"
                   classNamePrefix="select"
@@ -585,10 +666,27 @@ function RequestForm({ requestData }) {
                   isSearchable={false}
                   isDisabled={!isEditable && requestData}
                 />
+                {isother && (
+                  <Input
+                    type="text"
+                    name="fir_or_complaint"
+                    required
+                    placeholder={"Enter Type"}
+                    onChange={(e) =>
+                      setApiPayload({
+                        ...apiPayload,
+                        fir_or_complaint: e.target.value,
+                      })
+                    }
+                    value={apiPayload.fir_or_complaint}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                )}
                 <Input
                   type="text"
                   name="fir_no"
                   required
+                  placeholder={"Enter fir No"}
                   onChange={handleChange}
                   value={apiPayload.fir_no}
                   disabledSelect={!isEditable && requestData}
@@ -609,6 +707,7 @@ function RequestForm({ requestData }) {
                 classNamePrefix="select"
                 onChange={(e, data) => dropdownChange(e, data)}
                 isDisabled={!isEditable && requestData}
+                required
               />
             </div>
             <div className="mt-6 flex gap-3 items-center">
@@ -680,17 +779,31 @@ function RequestForm({ requestData }) {
             ></textarea>
           </div>
           <div className="mt-6 flex gap-3 items-center">
-            <label htmlFor="" className="font-bold">select File if any-:</label>
-          <Input
-                  type="file"
-                  name="file"
-                  
-                  onChange={(e)=>handleChange(e,"files")}
-                  // value={apiPayload.fir_no}
-                  disabledSelect={!isEditable&&requestData}
-                />
-                {((!isEditable&&requestData) ||(isEditable&&requestData))&& <a target="_blank" href={requestData.file}><button disabled={!requestData?.file?.length>0} type="button" className= {!requestData?.file?.length>0?"bg-gray-600 text-white  focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-not-allowed focus:outline-none focus:ring-blue-800":"bg-cyan-600 text-white  focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800"} >View File</button></a>}
-            
+            <label htmlFor="" className="font-bold">
+              select File if any-:
+            </label>
+            <Input
+              type="file"
+              name="file"
+              onChange={(e) => handleChange(e, "files")}
+              // value={apiPayload.fir_no}
+              disabledSelect={!isEditable && requestData}
+            />
+            {((!isEditable && requestData) || (isEditable && requestData)) && (
+              <a target="_blank" href={requestData.file}>
+                <button
+                  disabled={!requestData?.file?.length > 0}
+                  type="button"
+                  className={
+                    !requestData?.file?.length > 0
+                      ? "bg-gray-600 text-white  focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-not-allowed focus:outline-none focus:ring-blue-800"
+                      : "bg-cyan-600 text-white  focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800"
+                  }
+                >
+                  View File
+                </button>
+              </a>
+            )}
           </div>
           <div className="flex justify-start items-center gap-5 mt-6">
             {/* IO Name */}

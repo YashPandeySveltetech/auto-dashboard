@@ -16,7 +16,7 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import Mobile from "./Mobile";
 import Imei from "./Imei";
-import { arry, firType } from "../../constants/List";
+import { arry, firType, firTypeList } from "../../constants/List";
 import IpAddress from "./IpAddress";
 import CellId from "./CellId";
 
@@ -602,6 +602,22 @@ function RequestForm({ requestData }) {
   const getFormPdf = async (id) => {
     const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
   };
+  function checkMobile() {
+    var mobile = document.getElementById("iomobile");
+
+    var message = document.getElementById("errormsg");
+
+    var goodColor = "#0C6";
+    var badColor = "#FF9B37";
+
+    if (mobile.value.length != 10) {
+      message.style.color = badColor;
+      message.innerHTML = "required 10 digits mobile number";
+    } else {
+      message.style.color = goodColor;
+      message.innerHTML = "";
+    }
+  }
   function check() {
     var mobile = document.getElementById("mobile");
 
@@ -655,10 +671,8 @@ function RequestForm({ requestData }) {
                 <Select
                   name="fir_or_complaint"
                   options={firType}
-                  value={firType?.filter((obj) =>
-                    obj.value === "other"
-                      ? obj.value
-                      : apiPayload?.fir_or_complaint === obj?.value
+                  value={requestData &&  firTypeList?.filter((obj) =>
+                    (apiPayload?.fir_or_complaint !== obj?.value) ?"other":obj?.value
                   )}
                   className="basic-multi-select w-[30%]"
                   classNamePrefix="select"
@@ -718,6 +732,7 @@ function RequestForm({ requestData }) {
                 type="checkbox"
                 name="urgent"
                 onChange={(e) => handleChange(e, "urgent")}
+                checked  ={apiPayload?.urgent}
                 // checked={apiPayload?.urgent?"checked":"unchecked"}
                 // checked={(apiPayload?.urgent===true)?"checked":""}
                 disabledSelect={!isEditable && requestData}
@@ -836,10 +851,10 @@ function RequestForm({ requestData }) {
                 min={10}
                 maxLength="10"
                 inputMode="numeric"
-                id="mobile"
-                onKeyUp={check}
+                id="iomobile"
+                onKeyUp={checkMobile}
               />
-              <span id="message"></span>
+              <span id="errormsg"></span>
             </div>
             {/* <div className="flex items-center gap-3">
               <label className="font-bold">Requesting Officer Email.</label>

@@ -50,29 +50,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
   const clearHandle=()=>{
     setIldList([])
   }
-function check()
-{
 
-    var mobile = document.getElementById('mobile');
-   
-    
-    var message = document.getElementById('message');
-
-     var goodColor = "#0C6";
-    var badColor = "#FF9B37";
-  
-    if(mobile.value.length!=10){
-       
-  
-        message.style.color = badColor;
-        message.innerHTML = "required 10 digits mobile number"
-    }else{
-   
-      message.style.color = goodColor;
-      message.innerHTML = ""
-    }
-  
-  }
 
 
   return (
@@ -94,14 +72,11 @@ function check()
                   onChange={(e) => ildInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}
                   className="w-[100%]"
-                  min={10}
-                  maxLength="10"
-                  inputMode="numeric"
-                  id="mobile"
+                 
                   
                   
                 />
-                <span id="message"></span>
+              
               </div>
 
               <div className="flex justify-start items-center gap-5">

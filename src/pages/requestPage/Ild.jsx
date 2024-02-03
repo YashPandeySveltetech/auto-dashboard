@@ -31,8 +31,8 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
       {
         date_from: "",
         date_to: "",
-        time_from: "",
-        time_to: "",
+        time_from: "00:00",
+        time_to: "00:00",
         mobile_number: "",
         till_date:false,
         tsp: IldList[0]?.tsp,

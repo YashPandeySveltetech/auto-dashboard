@@ -14,9 +14,13 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
   };
   
   const dropdownChange = (e, data, index) => {
-    const list = [...MobileList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: [e?.id];
+
+  const list = [...MobileList];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: e.value==="ALL"?e.id:[e.id];
     setMobileList(list);
+
+
+  
   };
 //  useEffect(()=>{
 // if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
@@ -31,8 +35,8 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
       {
         date_from: "",
         date_to: "",
-        time_from: "",
-        time_to: "",
+        time_from:"00:00",
+        time_to:"00:00",
         mobile_number: "",
         till_date:false,
         tsp: MobileList[0]?.tsp,

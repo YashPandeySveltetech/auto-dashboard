@@ -171,7 +171,9 @@ function RequestForm({ requestData }) {
   const getTspList = async () => {
     const res = await ApiHandle(`${TSP_LIST}`, "", "GET");
     if (res.statusCode === 200) {
-      setTspList(res?.responsePayload);
+      let data=[...res?.responsePayload,{id:[1,3,4],name:"ALL",email:""}]
+
+      setTspList(data);
     }
   };
 
@@ -216,6 +218,7 @@ function RequestForm({ requestData }) {
   }, [activeForm]);
 
   const tspdata = useMemo(() => {
+    
     if (
       apiPayload?.form_request_for[arry[activeForm?.target_type]] &&
       apiPayload?.form_request_for[arry[activeForm?.target_type]][0]?.tsp
@@ -253,7 +256,7 @@ function RequestForm({ requestData }) {
     cellIdList,
     IldList
   ]);
-
+console.log(tspdata,"tspdata")
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
       return (

@@ -31,8 +31,8 @@ function CellId({
       {
         date_from: "",
         date_to: "",
-        time_from: "",
-        time_to: "",
+        time_from: "00:00",
+        time_to: "00:00",
         till_date:false,
         mobile_number: "",
         tsp: cellIdList[0].tsp,

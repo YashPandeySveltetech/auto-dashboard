@@ -9,7 +9,13 @@ function Imei({
   activeForm,
   requestprovide,
   tspdata,
-  isEditable
+  isEditable,
+  firType,
+  apiPayload,
+  setApiPayload,
+  caseType,
+  handleChange,
+  isother
 }) {
   const ImeiInputChange = (e, index) => {
     const { name, value,checked } = e.target;
@@ -32,7 +38,10 @@ function Imei({
         till_date:false,
         target_type: activeForm?.target_type_id,
         request_to_provide: ImeiList[0].request_to_provide,
-        tsp:ImeiList[0].tsp
+        tsp:ImeiList[0].tsp,
+        fir_or_complaint:"",
+        fir_no: "",
+        case_type: "",
       },
     ]);
   };
@@ -50,7 +59,7 @@ function Imei({
 
   const dropdownChange = (e, data, index) => {
     const list = [...ImeiList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: e.value==="ALL"?e.id:["fir_or_complaint","case_type"].includes(data?.name)?e.value:[e.id];
     setImeiList(list);
   };
 
@@ -91,6 +100,66 @@ function Imei({
                 />
               </div>
             </div>
+            <>  <div className="">
+              <label className="font-bold required">Choose Type:</label>
+              <div className="flex  gap-2">
+                <Select
+                  name="fir_or_complaint"
+                  options={firType}
+                  value={firType?.filter((obj) =>
+                    ImeiList[i]?.fir_or_complaint==obj.value
+                  )}
+                  className="basic-multi-select w-[30%]"
+                  classNamePrefix="select"
+                  onChange={(e, data) => dropdownChange(e, data, i)}
+                  isSearchable={false}
+                  isDisabled={!isEditable && requestData}
+                />
+             
+                {/* {isother && (
+                  <Input
+                    type="text"
+                    name="fir_or_complaint"
+                    required
+                    placeholder={"Enter Type"}
+                    onChange={(e) =>
+                      setApiPayload({
+                        ...apiPayload,
+                        fir_or_complaint: e.target.value,
+                      })
+                    }
+                    value={apiPayload.fir_or_complaint}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                )} */}
+                <Input
+                  type="text"
+                  name="fir_no"
+                  required
+                  placeholder={"Enter fir No"}
+                  onChange={(e) => ImeiInputChange(e, i)}
+                  value={val.fir_no}
+                  disabledSelect={!isEditable && requestData}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="font-bold required">Case Type:</label>
+              <Select
+                name="case_type"
+                options={caseType}
+                value={caseType?.filter(
+                  (obj) => ImeiList[i]?.case_type==obj.value
+                )}
+                className="basic-multi-select w-[50%]"
+                classNamePrefix="select"
+                onChange={(e, data) => dropdownChange(e, data, i)}
+                isDisabled={!isEditable && requestData}
+                required
+              />
+            </div>
+            </>
             {/* CDR DATE TIME */}
             {/* date  */}
 

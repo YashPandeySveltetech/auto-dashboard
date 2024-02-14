@@ -75,6 +75,9 @@ function RequestForm({ requestData }) {
       tsp: [],
       target_type: "",
       request_to_provide: [],
+      fir_or_complaint:"",
+      fir_no: "",
+      case_type: "",
     },
   ]);
   const [IpList, setIpList] = useState([
@@ -256,7 +259,7 @@ function RequestForm({ requestData }) {
     cellIdList,
     IldList
   ]);
-console.log(tspdata,"tspdata")
+
   const formHandler = useCallback(() => {
     if (activeForm?.target_type === "MOBILE_NUMBER") {
       return (
@@ -279,8 +282,15 @@ console.log(tspdata,"tspdata")
           ImeiList={ImeiList}
           activeForm={activeForm}
           tspdata={tspdata}
+          firType={firType}
+          caseType={caseType}
           requestprovide={requestprovide}
           isEditable={isEditable}
+          handleChange={handleChange}
+          apiPayload={apiPayload}
+          setApiPayload={setApiPayload}
+          isother={isother}
+        
         />
       );
     }
@@ -370,6 +380,9 @@ console.log(tspdata,"tspdata")
     if (activeForm.target_type === "IMEI_NUMBER") {
       setApiPayload({
         ...apiPayload,
+        fir_or_complaint:ImeiList[0]?.fir_or_complaint,
+      fir_no: ImeiList[0]?.fir_no,
+      case_type: ImeiList[0]?.case_type,
         form_request_for: {
           [arry[activeForm.target_type]]: ImeiList,
         },
@@ -532,7 +545,6 @@ console.log(tspdata,"tspdata")
       setActiveForm({ ...activeForm, dump_type: e.value });
     }
    else if (data.name === "case_type") {
-      console.log(e,">>>")
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
@@ -637,7 +649,7 @@ console.log(tspdata,"tspdata")
       message.innerHTML = "";
     }
   }
-  console.log(apiPayload, "api");
+  console.log(apiPayload, "apiPayload");
 
   return (
     <>
@@ -667,15 +679,15 @@ console.log(tspdata,"tspdata")
           </div>
 
           <div className="mt-6 grid grid-cols-3 md:grid-cols-3 gap-6">
-            {/* FIR NO. */}
-            <div className="">
+     
+        { (activeForm.target_type !=="IMEI_NUMBER") && <>  <div className="">
               <label className="font-bold required">Choose Type:</label>
               <div className="flex  gap-2">
                 <Select
                   name="fir_or_complaint"
                   options={firType}
-                  value={requestData &&  firTypeList?.filter((obj) =>
-                    (apiPayload?.fir_or_complaint !== obj?.value) ?"other":obj?.value
+                  value={requestData &&  firType?.filter((obj) =>
+                    obj.value===apiPayload.fir_or_complaint ?"":""
                   )}
                   className="basic-multi-select w-[30%]"
                   classNamePrefix="select"
@@ -683,6 +695,7 @@ console.log(tspdata,"tspdata")
                   isSearchable={false}
                   isDisabled={!isEditable && requestData}
                 />
+             
                 {isother && (
                   <Input
                     type="text"
@@ -695,7 +708,7 @@ console.log(tspdata,"tspdata")
                         fir_or_complaint: e.target.value,
                       })
                     }
-                    value={apiPayload.fir_or_complaint}
+                    value={apiPayload?.fir_or_complaint}
                     disabledSelect={!isEditable && requestData}
                   />
                 )}
@@ -705,13 +718,12 @@ console.log(tspdata,"tspdata")
                   required
                   placeholder={"Enter fir No"}
                   onChange={handleChange}
-                  value={apiPayload.fir_no}
+                  value={apiPayload?.fir_no}
                   disabledSelect={!isEditable && requestData}
                 />
               </div>
             </div>
 
-            {/* Case Type */}
             <div>
               <label className="font-bold required">Case Type:</label>
               <Select
@@ -727,6 +739,7 @@ console.log(tspdata,"tspdata")
                 required
               />
             </div>
+            </>}
             <div className="mt-6 flex gap-3 items-center">
               <label htmlFor="" className="font-bold">
                 Select if Form is Urgent

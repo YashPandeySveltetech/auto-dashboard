@@ -21,7 +21,7 @@ function CellId({
   };
   const dropdownChange = (e, data, index) => {
     const list = [...cellIdList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]:e.value==="ALL"?e.id:[e.id];
     setCellIdList(list);
   };
 

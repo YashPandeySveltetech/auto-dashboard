@@ -46,7 +46,7 @@ function IpAddress({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IpList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : (e===null)?[]: [e?.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : (e===null)?[]:e.value==="ALL"?e.id:[e.id];
     setIpList(list);
   };
 

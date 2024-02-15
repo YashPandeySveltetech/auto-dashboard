@@ -59,7 +59,7 @@ function Imei({
 
   const dropdownChange = (e, data, index) => {
     const list = [...ImeiList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: e.value==="ALL"?e.id:["fir_or_complaint","case_type"].includes(data?.name)?e.value:[e.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id):(e===null)?[]: e.value=="ALL"?e.id:["fir_or_complaint","case_type"].includes(data?.name)?e.value:[e.id];
     setImeiList(list);
   };
 

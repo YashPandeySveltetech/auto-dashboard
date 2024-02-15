@@ -59,7 +59,7 @@ function Imei({
 
   const dropdownChange = (e, data, index) => {
     const list = [...ImeiList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id):(e===null)?[]: e.value=="ALL"?e.id:["fir_or_complaint","case_type"].includes(data?.name)?e.value:[e.id];
+    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id):(e===null)?[]: e.value=="ALL"?e.id:["fir_or_complaint"].includes(data?.name)?e.value:["case_type"].includes(data?.name)?e.id:[e.id];
     setImeiList(list);
   };
 
@@ -150,7 +150,7 @@ function Imei({
                 name="case_type"
                 options={caseType}
                 value={caseType?.filter(
-                  (obj) => ImeiList[i]?.case_type==obj.value
+                  (obj) => ImeiList[i]?.case_type==obj.id
                 )}
                 className="basic-multi-select w-[50%]"
                 classNamePrefix="select"

@@ -9,7 +9,7 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import { useSelector } from "react-redux";
 
 
-function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange }) {
+function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange,exportReport }) {
 	const { rank } = useSelector((state) => state.user?.userData);
 
   const from_status_option = [
@@ -56,12 +56,12 @@ const handleValueChange = newValue => {
     
     setDateRange(newValue);
 };
-
+console.log(dateRange,"dateRange")
   return (
     <div className="flex">
         <div className="flex flex-col w-[90%]">
     <div className="flex w-[100%] justify-between p-5">
-      <div>
+      {/* <div>
         <CommonDropDown
           name={"req_to_provider"}
           options={req_to_provider_option}
@@ -70,39 +70,20 @@ const handleValueChange = newValue => {
           }}
           label="Request to provider"
         />
-      </div>
+      </div> */}
       <div>
+        <label htmlFor=""> Form Status</label>
         <CommonDropDown
           name={"form_status"}
           options={from_status_option}
           onChange={(e) => {
             setFilter({ ...filter, [e.target.name]: e.target.value });
           }}
-          label="Form Status"
+          label=""
         />
       </div>
-      <div>
-        <Input
-          name="case_ref"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="FIR NO."
-        />
-      </div>
-      <div>
-        <Input
-          name="case_type"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="Case Type"
-        />
-      </div>
-     
-    </div>
-    <div className="flex w-[100%] justify-between p-5">
       <div className="w-[50%]" >
+      <label htmlFor=""> Select Date</label>
       <Datepicker 
 primaryColor={"blue"} 
 value={dateRange} 
@@ -110,6 +91,43 @@ onChange={handleValueChange}
 showShortcuts={true} 
 /> 
       </div>
+      <button
+     onClick={getAllRequest}
+     style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}
+     className="m-5 mt-10"
+   >
+     <b>Search</b>
+   </button>
+    {['DCP'].includes(rank)&&  <button
+     onClick={exportReport}
+     style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}
+     className="m-5 mt-10"
+     disabled={dateRange?.startDate==""}
+   >
+     <b>Export File</b>
+   </button>}
+      {/* <div>
+        <Input
+          name="case_ref"
+          onChange={(e) => {
+            setFilter({ ...filter, [e.target.name]: e.target.value });
+          }}
+          label="FIR NO."
+        />
+      </div> */}
+      {/* <div>
+        <Input
+          name="case_type"
+          onChange={(e) => {
+            setFilter({ ...filter, [e.target.name]: e.target.value });
+          }}
+          label="Case Type"
+        />
+      </div> */}
+     
+    </div>
+    <div className="flex w-[100%] justify-between p-5">
+    
       <div>
      {['DCP'].includes(rank)&&   <CommonDropDown
           name={"police_station"}
@@ -142,13 +160,7 @@ showShortcuts={true}
      {}
     </div>
 </div>
-     <button
-     onClick={getAllRequest}
-     style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}
-     className="m-5 mt-10"
-   >
-     <b>Search</b>
-   </button>
+    
    </div>
   );
 }

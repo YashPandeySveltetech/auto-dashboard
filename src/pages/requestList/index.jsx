@@ -6,6 +6,7 @@ import {
   FORM_REQUEST,
   APPROVE_REQUEST,
   VIEW_ATTACHMENTS,
+  EXPORT_DCP_FILE,
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
@@ -18,11 +19,14 @@ import {
   openViewLogModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
-import { async } from "q";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function RequestList() {
   const navigate = useNavigate();
+  const baseUrl = process.env.REACT_APP_API_KEY;
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
   const { updateReqList ,isDcpPassword,dcpStatus} = useSelector((state) => state.modal);
@@ -169,6 +173,49 @@ if(isDcpPassword){
      
   };
 
+  const exportReport=async()=>{
+    let date_range =
+    dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+  date_range = dateRange.startDate + date_range;
+  if (date_range === 0) {
+    dateRange = "";
+  }
+   else if(dateRange?.startDate ==="" ){
+      Toaster("","Please Select Date")
+    }
+    else{
+      const res = await ApiHandle(
+        EXPORT_DCP_FILE +
+          `?decision_type=APPROVE&sys_date=${date_range}`,
+        {},
+        "GET"
+      );
+    if ( res?.responsePayload?.details?.length>0 ) {
+        exportExcel(res?.responsePayload?.details)
+      }
+      else{
+        Toaster("","No Data Found")
+      }
+   
+    }
+
+  }
+  const exportExcel = (data) => {
+    const fileType =
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileExtension = ".xlsx";
+  const first_file_data = XLSX.utils.json_to_sheet(data);
+  const new_sheet = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(new_sheet, first_file_data, "file");
+  const excelBuffer = XLSX.write(new_sheet, {
+    bookType: "xlsx",
+    type: "array",
+  });
+  const fileData = new Blob([excelBuffer], { type: fileType });
+  FileSaver.saveAs(fileData, "file"+new Date().toLocaleDateString("en-GB") + fileExtension);
+   
+  };
+
   return (
     <>
       <FilterSection
@@ -177,6 +224,7 @@ if(isDcpPassword){
         setFilter={setFilter}
         dateRange={dateRange}
         setDateRange={setDateRange}
+        exportReport={exportReport}
       />
       <div>
         <div className="relative overflow-x-auto p-3">

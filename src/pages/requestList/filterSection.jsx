@@ -7,11 +7,14 @@ import Datepicker from "react-tailwindcss-datepicker";
 import {  GET_POLICE_STATION_LIST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 
-function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange,exportReport }) {
+function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange,exportReport,clearFilter }) {
 	const { rank } = useSelector((state) => state.user?.userData);
-
+  const location=useLocation()
+ 
+console.log(filter,dateRange,"add")
   const from_status_option = [
     { id: 1, name: "PENDING", value: "PENDING" },
     { id: 2, name: "APPROVE", value: "APPROVE" },
@@ -24,10 +27,6 @@ function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange
     { id: 3, name: "CAF", value: "CAF" },
   ];
   const [policeStation,setPoliceStation]=useState([])
-// useEffect(()=>{
-    
-// },[])
-
 useEffect(() => {
     getPoliceStaionList();
 }, []);
@@ -56,7 +55,6 @@ const handleValueChange = newValue => {
     
     setDateRange(newValue);
 };
-console.log(dateRange,"dateRange")
   return (
     <div className="flex">
         <div className="flex flex-col w-[90%]">
@@ -71,7 +69,7 @@ console.log(dateRange,"dateRange")
           label="Request to provider"
         />
       </div> */}
-      <div>
+      {["/unverified-form","/rejected-form"].includes(location.pathname)?"": <div>
         <label htmlFor=""> Form Status</label>
         <CommonDropDown
           name={"form_status"}
@@ -80,15 +78,18 @@ console.log(dateRange,"dateRange")
             setFilter({ ...filter, [e.target.name]: e.target.value });
           }}
           label=""
+          value={filter["form_status"]}
         />
-      </div>
+      </div>}
+     
       <div className="w-[50%]" >
       <label htmlFor=""> Select Date</label>
       <Datepicker 
 primaryColor={"blue"} 
-value={dateRange} 
+value={dateRange}
 onChange={handleValueChange} 
 showShortcuts={true} 
+
 /> 
       </div>
       <button
@@ -106,6 +107,15 @@ showShortcuts={true}
    >
      <b>Export File</b>
    </button>}
+   <button
+     onClick={clearFilter}
+     type="button"
+     style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}
+     className="m-5 mt-10"
+
+   >
+     <b>Clear Filter</b>
+   </button>
       {/* <div>
         <Input
           name="case_ref"

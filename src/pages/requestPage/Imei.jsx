@@ -32,7 +32,7 @@ function Imei({
       {
         imei: "",
         date_from: "",
-        date_to: "",
+        date_to: null,
         time_from:"00:00",
         time_to:"00:00",
         till_date:false,
@@ -74,8 +74,9 @@ function Imei({
           >
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
+              <label htmlFor="" className=" font-bold required">IMEI</label>
                 <Input
-                  label={"IMEI "}
+                  required={true}
                   name="imei"
                   value={val.imei}
                   onChange={(e) => ImeiInputChange(e, i)}
@@ -85,7 +86,7 @@ function Imei({
               </div>
 
               <div className="flex justify-start items-center gap-5">
-                <label htmlFor="">Request to provide</label>
+              <label className="font-bold required" htmlFor="">Request to provide</label>
                 <Select
                   
                   name="request_to_provide"
@@ -232,7 +233,7 @@ function Imei({
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
-  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ImeiInputChange(e, i)}/>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ImeiInputChange(e, i)} disabled={!isEditable && requestData}/>
 </div>
               <div className="col-md-3">
                 <Select

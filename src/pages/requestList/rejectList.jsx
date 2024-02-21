@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
   openViewLogModal,
+  otpValidationModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
 import { FiEye } from "react-icons/fi";
@@ -35,13 +36,19 @@ function RejectList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
+    let date_range =
+    dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+  date_range = dateRange.startDate + date_range;
+  if (date_range === 0) {
+    dateRange = "";
+  }
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
           filter?.case_ref
         }&decision_type=${
           "REJECT"
-        }&page=${active}`,
+        }&page=${active}&sys_date=${date_range}`,
       {},
       "GET"
     );
@@ -90,6 +97,10 @@ function RejectList() {
     case_ref: "",
     case_type: "",
   });
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+  });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
     
     const res = await ApiHandle(
@@ -126,6 +137,41 @@ function RejectList() {
       return;
     }
   };
+  const clearFilter= async ({ active = 1 }) => {
+    
+    const res = await ApiHandle(
+      FORM_REQUEST +
+        `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
+      {},
+      "GET"
+    );
+    if (res.statusCode === 200) {
+      setRequestList(res?.responsePayload.results);
+      if (res?.responsePayload?.next) {
+        // setCurrentpage(currentpage+1)
+        setIsNext(true);
+      }
+      if (!res?.responsePayload?.next) {
+        // setCurrentpage(currentpage+1)
+        setIsNext(false);
+      }
+
+      if (res?.responsePayload?.previous) {
+        // setCurrentpage(currentpage+1)
+        setIsPrevious(true);
+      }
+      if (!res?.responsePayload?.previous) {
+        // setCurrentpage(currentpage+1)
+        setIsPrevious(false);
+      }
+      // setIsOtp(true);
+      // Toaster('success', 'OTP SENT Successfully!');
+
+      return;
+    }
+   
+  };
+
 
   return (
     <>
@@ -133,6 +179,9 @@ function RejectList() {
         filter={filter}
         getAllRequest={getAllRequest}
         setFilter={setFilter}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        clearFilter={clearFilter}
       />
       <div>
         <div className="relative overflow-x-auto p-3">
@@ -269,6 +318,24 @@ function RejectList() {
                     >
                       View
                     </button>
+                    <button
+                      onClick={() => {
+                        navigate(
+                          `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
+                        )
+                        ;
+                      }}
+                       
+                      
+                      className="bg-green-300 p-2 rounded-lg font-bold"
+                      style={{
+                        color: "black",
+                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      }}
+                    >
+            
+                      Edit
+                    </button>
                     {!item?.is_otp_verified && (
                       <button
                         onClick={() => {
@@ -368,6 +435,7 @@ function RejectList() {
               ))}
             </tbody>
           </table>
+          {requestList?.length>0?"" : <div className="flex justify-center items-center m-[10rem]"> <span className="text-[3rem] text-red-400 text-center"> No Data Found</span></div>      }
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

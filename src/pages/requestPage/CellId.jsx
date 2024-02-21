@@ -30,7 +30,7 @@ function CellId({
       ...cellIdList,
       {
         date_from: "",
-        date_to: "",
+        date_to: null,
         time_from: "00:00",
         time_to: "00:00",
         till_date:false,
@@ -65,6 +65,7 @@ function CellId({
                 <Input
                   type="text"
                   value={val.cell_id}
+                  required={true}
                   name="cell_id"
                   onChange={(e) => mobileInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}
@@ -158,7 +159,7 @@ function CellId({
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
-  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
+  <input type="checkbox" name="till_date" id="" disabled={!isEditable && requestData} checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
 </div>
               <div className="col flex gap-5 items-center justify-start">
                 <Select

@@ -21,6 +21,7 @@ import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import OtpValidationModal from "../../modals/otpValidationModal";
+import { setLoading } from "../../redux/reducers/commonReducer";
 
 function UnverifiedFormList() {
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ function UnverifiedFormList() {
   const [current, setCurrent] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+  const [dateRange, setDateRange] = useState({
+    startDate: "",
+    endDate: "",
+  });
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -37,13 +42,21 @@ function UnverifiedFormList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
+
+    let date_range =
+    dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+  date_range = dateRange.startDate + date_range;
+  if (date_range === 0) {
+    dateRange = "";
+  }
     const res = await ApiHandle(
       FORM_REQUEST +
-        `?case_type=${filter?.case_type}&is_otp_verified=${false}&fir_no=${filter?.case_ref}&decision_type=PENDING${filter.form_status}&page=${active}`,
+        `?case_type=${filter?.case_type}&is_otp_verified=${false}&fir_no=${filter?.case_ref}&decision_type=PENDING${filter.form_status}&page=${active}&sys_date=${date_range}`,
       {},
       "GET"
     );
     if (res.statusCode === 200) {
+      
       setRequestList(res?.responsePayload);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -123,6 +136,40 @@ function UnverifiedFormList() {
       return;
     }
   };
+  const clearFilter= async ({ active = 1 }) => {
+    
+    const res = await ApiHandle(
+      FORM_REQUEST +
+        `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
+      {},
+      "GET"
+    );
+    if (res.statusCode === 200) {
+      setRequestList(res?.responsePayload);
+      if (res?.responsePayload?.next) {
+        // setCurrentpage(currentpage+1)
+        setIsNext(true);
+      }
+      if (!res?.responsePayload?.next) {
+        // setCurrentpage(currentpage+1)
+        setIsNext(false);
+      }
+
+      if (res?.responsePayload?.previous) {
+        // setCurrentpage(currentpage+1)
+        setIsPrevious(true);
+      }
+      if (!res?.responsePayload?.previous) {
+        // setCurrentpage(currentpage+1)
+        setIsPrevious(false);
+      }
+      // setIsOtp(true);
+      // Toaster('success', 'OTP SENT Successfully!');
+
+      return;
+    }
+   
+  };
 
   return (
     <>
@@ -130,6 +177,9 @@ function UnverifiedFormList() {
         filter={filter}
         getAllRequest={getAllRequest}
         setFilter={setFilter}
+        clearFilter={clearFilter}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <div>
         <div className="relative overflow-x-auto p-3">
@@ -283,6 +333,7 @@ function UnverifiedFormList() {
               ))}
             </tbody>
           </table>
+          {requestList?.results?.length>0?"" : <div className="flex justify-center items-center m-[10rem]"> <span className="text-[3rem] text-red-400 text-center"> No Data Found</span></div>      }
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

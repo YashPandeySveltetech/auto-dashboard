@@ -66,14 +66,12 @@ function LoginPage() {
       return;
     }
     else{
-      console.log(res)
       setIsLoading(false)
 
     }
     
   } catch (error) {
     setIsLoading(false)
-    console.log(error)
   }
   };
 

@@ -34,7 +34,7 @@ function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requ
       ...MobileList,
       {
         date_from: "",
-        date_to: "",
+        date_to: null,
         time_from:"00:00",
         time_to:"00:00",
         mobile_number: "",
@@ -65,9 +65,7 @@ function check()
      var goodColor = "#0C6";
     var badColor = "#FF9B37";
   
-    if(mobile.value.length!=10){
-       
-  
+    if(mobile.value.length>10 || mobile.value.length<10){
         message.style.color = badColor;
         message.innerHTML = "required 10 digits mobile number"
     }else{
@@ -90,9 +88,10 @@ function check()
           >
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
+              <label htmlFor="" className=" font-bold required">Mobile</label>
                 <Input
-                  label={"Mobile "}
-                  type="text"
+                  
+                  type="number"
                   value={val.mobile_number}
                   name="mobile_number"
                   onChange={(e) => mobileInputChange(e, i)}
@@ -103,13 +102,14 @@ function check()
                   inputMode="numeric"
                   id="mobile"
                   onKeyUp={check}
+                  required={true}
                   
                 />
                 <span id="message"></span>
               </div>
 
               <div className="flex justify-start items-center gap-5">
-                <label htmlFor="">Request to provide</label>
+              <label className="font-bold required" htmlFor="">Request to provide</label>
                 <Select
                   name="request_to_provide"
                   options={requestprovide}
@@ -195,7 +195,7 @@ function check()
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
-  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)} disabled={!isEditable && requestData}/>
 </div>
               <div className="col">
                 <Select

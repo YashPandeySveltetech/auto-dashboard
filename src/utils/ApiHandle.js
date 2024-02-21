@@ -1,55 +1,53 @@
-// import { getCookie } from "cookies-next";
+import axios from "axios";
 import { Error400_401 } from "./Error400_401";
 import { toast } from "react-toastify";
-let status;
-const ApiHandle = (endPoint, payload, method, handleLoader, isFormData) => {
+const ApiHandle = async (endPoint, payload, method, isFormData) => {
   const token = localStorage.getItem("token");
-  const myHeaders = new Headers();
+  const baseUrl = process.env.REACT_APP_API_KEY;
+  let headers = {};
   if (!isFormData) {
-    myHeaders.append("Content-Type", "application/json");
+    headers["Content-Type"] = "application/json";
   }
+
   if (token) {
-    myHeaders.append("Authorization", `Bearer ${token}`);
+    headers.Authorization = `Bearer ${token}`;
   }
-  let fetchData = {
-    method,
-    headers: myHeaders,
-  };
-  if (method !== "GET") {
-    fetchData = {
-      ...fetchData,
-      body: isFormData ? payload : JSON.stringify(payload),
+
+  try {
+    const response = await axios({
+      method: method,
+      url: `${baseUrl}${endPoint}`,
+      headers: headers,
+      data: payload,
+    });
+
+    return {
+      statusCode: response.status,
+      responsePayload: response.data,
+    };
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      if (err?.response?.data) {
+        const Error = err?.response?.data || "Something went wrong.";
+
+        let msg = Error400_401(err?.response?.status, Error);
+
+        toast.error(msg, { autoClose: 2000 });
+      }
+    } else if (err instanceof Error) {
+      let val = err?.message || "Something went wrong.";
+
+      let msg = Error400_401(500, val);
+      toast.error(msg, { autoClose: 2000 });
+    }
+
+    toast.error(err?.message, { autoClose: 2000 });
+
+    return {
+      statusCode: err?.response?.status || 500,
+      responsePayload: err?.response?.data || "Something went wrong.",
     };
   }
-  return fetch(process.env.REACT_APP_API_KEY + endPoint, fetchData)
-    .then((response) => {
-      status = response.status;
-      if (response.ok) {
-        handleLoader && handleLoader();
-        return response.json();
-      }
-      return Promise.reject(response);
-    })
-    .then((jsonResponse) => {
-      return {
-        statusCode: status,
-        responsePayload: jsonResponse,
-      };
-    })
-    .catch((error) => {
-      handleLoader && handleLoader();
-      error?.json()?.then((json) => {
-         let message=
-              Error400_401(error?.status, json) ||
-              "Something went wrong."
-             return toast.error(message, {autoClose: 2000});
-        // return Toaster("error", message);
-      });
-      return {
-        statusCode: error?.response?.status,
-        responsePayload: error?.response?.data,
-      };
-    });
 };
 
 export { ApiHandle };

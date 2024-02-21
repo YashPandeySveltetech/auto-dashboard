@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { USER_DETAIL } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
-import { setUserData } from "../../redux/reducers/userReducer";
+import { clearUserData, setUserData } from "../../redux/reducers/userReducer";
 import { PasswordChangeModal } from "../../redux/reducers/modalsReducer";
 
 function Sidebar() {
@@ -128,6 +128,7 @@ function Sidebar() {
         <button
           onClick={() => {
             localStorage.clear();
+            dispatch(clearUserData())
             navigate("/login");
             // window.location.reload();
           }}

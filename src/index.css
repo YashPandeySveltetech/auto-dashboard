@@ -40,5 +40,12 @@ code {
   content: ' *';
   color: red;
 }
+input[disabled]{
+  cursor: not-allowed;
+}
+textarea[disabled]{
+  cursor: not-allowed;
+}
+
 
 /* checkbox */

@@ -18,7 +18,8 @@ const Input = ({
   pattern,
   onKeyUp,
   id,
-  checked
+  checked,
+  max,
 }) => {
   return (
     <>
@@ -35,6 +36,7 @@ const Input = ({
           className={`${className} block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
           onChange={onChange}
           name={name}
+          max={max}
           onBlur={onBlur}
           value={value}
           min={min}
@@ -45,6 +47,7 @@ const Input = ({
           pattern={pattern}
           onKeyUp={onKeyUp}
           checked={checked}
+      
         />
       </div>
     </>

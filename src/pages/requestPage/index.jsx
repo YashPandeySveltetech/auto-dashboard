@@ -151,7 +151,10 @@ function RequestForm({ requestData }) {
         };
       });
       setMobileList(requestData?.form_request_for?.multiple_mobile);
-      setImeiList(requestData?.form_request_for?.imei_number);
+    
+
+        setImeiList(requestData?.form_request_for?.imei_number);
+     
       setCellIdList(requestData?.form_request_for?.cell_id);
       setIpList(requestData?.form_request_for?.ip_port);
       setIldList(requestData?.form_request_for?.ild);
@@ -259,8 +262,9 @@ function RequestForm({ requestData }) {
     cellIdList,
     IldList
   ]);
-
+console.log(activeForm.target_type,"target")
   const formHandler = useCallback(() => {
+    
     if (activeForm?.target_type === "MOBILE_NUMBER") {
       return (
         <Mobile
@@ -343,6 +347,7 @@ function RequestForm({ requestData }) {
     IldList,
     apiPayload.form_request_for,
     tspdata,
+    activeForm.target_type
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
@@ -510,6 +515,7 @@ function RequestForm({ requestData }) {
     }
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
+    console.log("insed",callfrom,fromval)
     const { name, value, files, checked } = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
@@ -517,13 +523,14 @@ function RequestForm({ requestData }) {
         [name]: checked,
       });
     }
-    if (callfrom === "files") {
+   else if (callfrom === "files") {
+  
       setApiPayload({
         ...apiPayload,
         [name]: files[0],
       });
     }
-    if (callfrom) {
+   else if (callfrom) {
       setActiveForm({
         ...activeForm,
         [callfrom]: fromval.name,
@@ -586,17 +593,15 @@ function RequestForm({ requestData }) {
         }
       }
     }
-
     let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
+    if(Object.keys(apiPayload?.form_request_for)?.length>0){
     const res = await ApiHandle(
       url,
       apiPayload.file ? formData : apiPayload,
       isEditable ? "PUT" : "POST",
-      "",
       apiPayload.file ? true : false
     );
-
-    if (res.statusCode === 201) {
+    if (res?.statusCode === 201) {
       // getFormPdf(res?.responsePayload?.id);
       setActiveForm({
         target_type: "",
@@ -608,10 +613,14 @@ function RequestForm({ requestData }) {
       Toaster("success", "SuccessFully Submitted Form");
       return;
     }
-    if (res.statusCode === 200) {
+    if (res?.statusCode === 200) {
       dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
       Toaster("success", "SuccessFully Updated Form");
     }
+  }
+  else{
+    Toaster("", "Please Fill all mandatory Data");
+  }
   };
 
   const getFormPdf = async (id) => {
@@ -625,7 +634,7 @@ function RequestForm({ requestData }) {
     var goodColor = "#0C6";
     var badColor = "#FF9B37";
 
-    if (mobile.value.length != 10) {
+    if (mobile.value.length>10 || mobile.value.length<10) {
       message.style.color = badColor;
       message.innerHTML = "required 10 digits mobile number";
     } else {
@@ -687,7 +696,7 @@ function RequestForm({ requestData }) {
                   name="fir_or_complaint"
                   options={firType}
                   value={requestData &&  firType?.filter((obj) =>
-                    obj.value===apiPayload.fir_or_complaint ?"":""
+                    obj.value===apiPayload.fir_or_complaint 
                   )}
                   className="basic-multi-select w-[30%]"
                   classNamePrefix="select"
@@ -756,7 +765,7 @@ function RequestForm({ requestData }) {
             </div>
           </div>
           <div className="mt-6 flex items-center gap-6">
-            <label className="font-bold">Target Type:</label>
+            <label className="font-bold required">Target Type:</label>
             <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px">
                 {targetType?.map((val, key) => (
@@ -764,10 +773,13 @@ function RequestForm({ requestData }) {
                     <button
                       onClick={(e) => handleChange(e, "target_type", val)}
                       disabled={
-                        !isEditable &&
+                       ( !isEditable &&
                         requestData &&
                         !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0
+                          ?.length > 0) ||( isEditable &&
+                            requestData &&
+                            !requestData?.form_request_for[arry[val?.name]]
+                              ?.length > 0)
                       }
                       type="button"
                       className={
@@ -858,7 +870,7 @@ function RequestForm({ requestData }) {
                 Requesting Officer Mobile no.
               </label>
               <Input
-                type="text"
+                type="number"
                 name="io_mobile_no"
                 required
                 onChange={handleChange}
@@ -894,7 +906,7 @@ function RequestForm({ requestData }) {
           {/* Submit Button */}
           {(!requestData || isEditable) && (
             <div className="mt-6">
-              <button className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
+              <button disabled={activeForm?.target_type===""} className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-500">
                 Submit
               </button>
             </div>

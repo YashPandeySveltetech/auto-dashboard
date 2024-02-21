@@ -30,7 +30,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
       ...IldList,
       {
         date_from: "",
-        date_to: "",
+        date_to:null,
         time_from: "00:00",
         time_to: "00:00",
         mobile_number: "",
@@ -64,8 +64,9 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
           >
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
+              <label htmlFor="" className=" font-bold required">Mobile</label>
                 <Input
-                  label={"Mobile "}
+               required={true}
                   type="text"
                   value={val.mobile_number}
                   name="mobile_number"
@@ -166,7 +167,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
-  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ildInputChange(e, i)}/>
+  <input type="checkbox" name="till_date" id="" disabled={!isEditable && requestData} checked={val?.till_date} onChange={(e) => ildInputChange(e, i)}/>
 </div>
               <div className="col">
                 <Select

@@ -27,7 +27,7 @@ function IpAddress({
       {
         ip: "",
         date_from: "",
-        date_to: "",
+        date_to: null,
         time_from:"00:00",
         time_to:"00:00",
         till_date:false,
@@ -49,7 +49,6 @@ function IpAddress({
     list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : (e===null)?[]:e.value==="ALL"?e.id:[e.id];
     setIpList(list);
   };
-
   return (
     <>
       {IpList?.map((val, i) => (
@@ -61,10 +60,12 @@ function IpAddress({
           >
             <div className="grid grid-flow-col gap-4  items-center">
               <div className="col">
+              <label htmlFor="" className=" font-bold required">IP Address</label>
                 <Input
-                  label={"IP Address"}
+                
                   name="ip"
                   value={val.ip}
+                  required={true}
                   onChange={(e) => ipInputChange(e, i)}
                   disabledSelect={!isEditable&&requestData}
                   className="w-[100%]"
@@ -72,7 +73,7 @@ function IpAddress({
               </div>
 
               <div className="flex justify-start items-center gap-5">
-                <label htmlFor="">Request to provide</label>
+              <label className="font-bold required" htmlFor="">Request to provide</label>
                 <Select
                   
                   name="request_to_provide"
@@ -158,7 +159,7 @@ function IpAddress({
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
-  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ipInputChange(e, i)}/>
+  <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ipInputChange(e, i)} disabled={!isEditable && requestData}/>
 </div>
               <div className="col-md-3">
                 <Select

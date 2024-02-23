@@ -140,7 +140,7 @@ function UnverifiedFormList() {
     
     const res = await ApiHandle(
       FORM_REQUEST +
-        `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
+        `?decision_type=PENDING&page=${active}&is_otp_verified=${false}&sys_date=`,
       {},
       "GET"
     );

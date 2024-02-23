@@ -141,7 +141,7 @@ function RejectList() {
     
     const res = await ApiHandle(
       FORM_REQUEST +
-        `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
+        `?decision_type=REJECT&page=${active}&is_otp_verified=&sys_date=`,
       {},
       "GET"
     );

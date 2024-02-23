@@ -75,7 +75,11 @@ useEffect(()=>{
       return;
     }
   };
-
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      verifyOtp()
+    }
+  }
   return (
     <ModalWrapper handleClick={verifyOtp} btnName={"Submit Otp"}>
       <div className="flex flex-col gap-5">
@@ -86,6 +90,7 @@ useEffect(()=>{
           name="otp"
           maxLength="6"
           inputMode="numeric"
+          handleKeyDown={handleKeyDown}
         />
 {/* 
         {timeLeft > 0 ? (

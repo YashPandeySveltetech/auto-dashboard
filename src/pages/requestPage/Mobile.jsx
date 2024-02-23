@@ -4,6 +4,7 @@ import Select from "react-select";
 
 
 function Mobile({ requestData, MobileList, setMobileList,activeForm,tspdata,requestprovide,isEditable }) {
+  
   const mobileInputChange = (e, index) => {
     const { name, value,checked } = e?.target;
     const list = [...MobileList];
@@ -92,7 +93,7 @@ function check()
                 <Input
                   
                   type="number"
-                  value={val.mobile_number}
+                  value={val?.mobile_number}
                   name="mobile_number"
                   onChange={(e) => mobileInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}

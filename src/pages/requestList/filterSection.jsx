@@ -14,7 +14,7 @@ function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange
 	const { rank } = useSelector((state) => state.user?.userData);
   const location=useLocation()
  
-console.log(filter,dateRange,"add")
+
   const from_status_option = [
     { id: 1, name: "PENDING", value: "PENDING" },
     { id: 2, name: "APPROVE", value: "APPROVE" },

@@ -31,6 +31,7 @@ function RequestForm({ requestData }) {
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
+  const [isformcreate,setIsFormCreate]=useState(false)
 
   const initialobj = {
     police_station: "",
@@ -148,6 +149,7 @@ function RequestForm({ requestData }) {
           // ["io_email"]: requestData?.io_email,
           ["brief_summary"]: requestData?.brief_summary,
           ["form_request_for"]: requestData?.form_request_for,
+          ["urgent"]: requestData?.urgent,
         };
       });
       setMobileList(requestData?.form_request_for?.multiple_mobile);
@@ -173,6 +175,79 @@ function RequestForm({ requestData }) {
     getTargetType();
     getCaseType();
   }, []);
+  useEffect(()=>{
+if(isformcreate){
+setMobileList([
+  {
+    date_from: "",
+    date_to: null,
+    time_from: "00:00",
+    time_to: "00:00",
+    till_date: false,
+    mobile_number: "",
+    tsp: [],
+    target_type: "",
+    request_to_provide: [],
+  },
+])
+setImeiList([
+  {
+    date_from: "",
+    date_to: null,
+    time_from: "00:00",
+    time_to: "00:00",
+    till_date: false,
+    imei: "",
+    tsp: [],
+    target_type: "",
+    request_to_provide: [],
+    fir_or_complaint:"",
+    fir_no: "",
+    case_type: "",
+  },
+])
+setIpList([
+  {
+    ip: "",
+    date_from: "",
+    date_to: null,
+    time_from: "00:00",
+    time_to: "00:00",
+    till_date: false,
+    tsp: [],
+    target_type: "",
+    request_to_provide: [],
+  },
+])
+setCellIdList(
+  [{
+    date_from: "",
+    date_to: null,
+    time_from: "00:00",
+    time_to: "00:00",
+    till_date: false,
+    cell_id: "",
+    tsp: [],
+    target_type: "",
+    request_to_provide: [],
+  },
+])
+setIldList([
+  {
+    date_from: "",
+    date_to: null,
+    time_from: "00:00",
+    time_to: "00:00",
+    till_date: false,
+    mobile_number: "",
+    tsp: [],
+    target_type: "",
+    request_to_provide: [],
+  },
+])
+  setIsFormCreate(false)
+}
+  },[isformcreate])
 
   const getTspList = async () => {
     const res = await ApiHandle(`${TSP_LIST}`, "", "GET");
@@ -262,7 +337,6 @@ function RequestForm({ requestData }) {
     cellIdList,
     IldList
   ]);
-console.log(activeForm.target_type,"target")
   const formHandler = useCallback(() => {
     
     if (activeForm?.target_type === "MOBILE_NUMBER") {
@@ -347,10 +421,12 @@ console.log(activeForm.target_type,"target")
     IldList,
     apiPayload.form_request_for,
     tspdata,
-    activeForm.target_type
+    activeForm.target_type,
+    apiPayload
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
+ 
       setApiPayload({
         ...apiPayload,
         form_request_for: {
@@ -515,7 +591,6 @@ console.log(activeForm.target_type,"target")
     }
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
-    console.log("insed",callfrom,fromval)
     const { name, value, files, checked } = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
@@ -582,6 +657,7 @@ console.log(activeForm.target_type,"target")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsFormCreate(false)
     let formData = new FormData();
 
     if (apiPayload?.file) {
@@ -603,12 +679,13 @@ console.log(activeForm.target_type,"target")
     );
     if (res?.statusCode === 201) {
       // getFormPdf(res?.responsePayload?.id);
+      setApiPayload(initialobj);
+     setIsFormCreate(true)
       setActiveForm({
         target_type: "",
         request_to_provide: [],
         target_type_id: "",
       });
-      setApiPayload(initialobj);
       dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
       Toaster("success", "SuccessFully Submitted Form");
       return;
@@ -620,9 +697,9 @@ console.log(activeForm.target_type,"target")
   }
   else{
     Toaster("", "Please Fill all mandatory Data");
+    setIsFormCreate(false)
   }
   };
-
   const getFormPdf = async (id) => {
     const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
   };
@@ -642,23 +719,8 @@ console.log(activeForm.target_type,"target")
       message.innerHTML = "";
     }
   }
-  function check() {
-    var mobile = document.getElementById("mobile");
-
-    var message = document.getElementById("message");
-
-    var goodColor = "#0C6";
-    var badColor = "#FF9B37";
-
-    if (mobile.value.length != 10) {
-      message.style.color = badColor;
-      message.innerHTML = "required 10 digits mobile number";
-    } else {
-      message.style.color = goodColor;
-      message.innerHTML = "";
-    }
-  }
-  console.log(apiPayload, "apiPayload");
+  
+  
 
   return (
     <>
@@ -725,7 +787,7 @@ console.log(activeForm.target_type,"target")
                   type="text"
                   name="fir_no"
                   required
-                  placeholder={"Enter fir No"}
+                  placeholder={"Enter No"}
                   onChange={handleChange}
                   value={apiPayload?.fir_no}
                   disabledSelect={!isEditable && requestData}
@@ -753,14 +815,15 @@ console.log(activeForm.target_type,"target")
               <label htmlFor="" className="font-bold">
                 Select if Form is Urgent
               </label>
-              <Input
+             
+              <input
                 type="checkbox"
                 name="urgent"
                 onChange={(e) => handleChange(e, "urgent")}
                 checked  ={apiPayload?.urgent}
                 // checked={apiPayload?.urgent?"checked":"unchecked"}
                 // checked={(apiPayload?.urgent===true)?"checked":""}
-                disabledSelect={!isEditable && requestData}
+                disabled={!isEditable && requestData}
               />
             </div>
           </div>

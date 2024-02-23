@@ -41,7 +41,7 @@ const ApiHandle = async (endPoint, payload, method, isFormData) => {
       toast.error(msg, { autoClose: 2000 });
     }
 
-    toast.error(err?.message, { autoClose: 2000 });
+    // toast.error(err?.message, { autoClose: 2000 });
 
     return {
       statusCode: err?.response?.status || 500,

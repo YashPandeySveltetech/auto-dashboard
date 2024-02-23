@@ -20,6 +20,7 @@ const Input = ({
   id,
   checked,
   max,
+  handleKeyDown
 }) => {
   return (
     <>
@@ -47,6 +48,7 @@ const Input = ({
           pattern={pattern}
           onKeyUp={onKeyUp}
           checked={checked}
+          onKeyDown={handleKeyDown}
       
         />
       </div>

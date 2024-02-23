@@ -38,7 +38,11 @@ function DcpPasswordVerifyModal() {
         setLoader(false) 
     }
   };
-  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      verifyPassword()
+    }
+  }
 
   return (
    
@@ -51,6 +55,8 @@ function DcpPasswordVerifyModal() {
           inputMode="numeric"
           type="text"
           name="password"
+          handleKeyDown={handleKeyDown}
+        
         />
 </div>
      

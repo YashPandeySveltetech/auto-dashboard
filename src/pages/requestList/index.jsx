@@ -30,7 +30,7 @@ function RequestList() {
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
   const { updateReqList ,isDcpPassword,dcpStatus} = useSelector((state) => state.modal);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   //   const [value, setValue] = useState({
@@ -42,7 +42,7 @@ function RequestList() {
     startDate: "",
     endDate: "",
   });
-  console.log(dateRange)
+
   useEffect(() => {
     getAllRequest({ active: 1 });
   }, []);
@@ -93,11 +93,12 @@ function RequestList() {
     }
   };
   const handleNext = () => {
-    setCurrent(current + 1);
+    setCurrent((prev)=>prev+1 );
     getAllRequest({ active: current + 1 });
   };
+
   const handlePrevious = () => {
-    setCurrent(current - 1);
+    setCurrent((prev)=>prev-1 );
     getAllRequest({ active: current - 1 });
   };
   useEffect(() => {

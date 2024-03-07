@@ -24,8 +24,15 @@ function FilterSection({ filter, setFilter, getAllRequest,dateRange,setDateRange
     { id: 1, name: "CDR", value: "CDR" },
     { id: 2, name: "IPDR", value: "IPDR" },
     { id: 3, name: "TDR", value: "TDR" },
-    { id: 3, name: "CAF", value: "CAF" },
+    { id: 4, name: "CAF", value: "CAF" },
   ];
+  const target_type_option=[
+    { id: 1, name: "MOBILE_NUMBER", value: "MOBILE_NUMBER" },
+    { id: 2, name: "IMEI_NUMBER", value: "IMEI_NUMBER" },
+    { id: 3, name: "CELL_ID", value: "CELL_ID" },
+    { id: 4, name: "IP_ADDRESS", value: "IP_ADDRESS" },
+    { id: 5, name: "ILD", value: "ILD" },
+  ]
   const [policeStation,setPoliceStation]=useState([])
 useEffect(() => {
     getPoliceStaionList();
@@ -82,7 +89,7 @@ const handleValueChange = newValue => {
         />
       </div>}
      
-      <div className="w-[50%]" >
+      <div className="" >
       <label htmlFor=""> Select Date</label>
       <Datepicker 
 primaryColor={"blue"} 
@@ -92,6 +99,31 @@ showShortcuts={true}
 
 /> 
       </div>
+      <div className="" >
+      <label htmlFor=""> Select Type</label>
+      <CommonDropDown
+          name={"target_type"}
+          options={target_type_option}
+          onChange={(e) => {
+            setFilter({ ...filter, [e.target.name]: e.target.value });
+          }}
+          label=""
+          value={filter["target_type"]}
+        />
+      </div>
+      {filter["target_type"]!=="" &&
+      <div className="" >
+      <label htmlFor=""> Select Target Type Value</label>
+      <Input
+                  type="text"
+                  value={filter["target_type_value"]}
+                  required={true}
+                  name="target_type_value"
+                  onChange={(e) => setFilter({ ...filter, [e.target.name]: e.target.value })}
+                
+                  className="w-[100%]"
+                />
+      </div>}
       <button
      onClick={getAllRequest}
      style={{width:"100px", border:"2px solid green",borderRadius:"20px",height:"40px",marginTop:"20px"}}

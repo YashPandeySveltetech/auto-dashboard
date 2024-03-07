@@ -23,7 +23,7 @@ function Sidebar() {
       icon: <Boxes />,
       text: "New Request Form",
       url: "/request-form",
-      isShow: !["ACP", "DCP"].includes(rank),
+      isShow: ![ "DCP"].includes(rank),
     },
     {
       icon: <Boxes />,

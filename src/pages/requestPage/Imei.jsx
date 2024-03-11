@@ -94,7 +94,7 @@ function Imei({
                   value={requestprovide?.filter((obj) =>
                     ImeiList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  
+                  isDisabled={(!isEditable&&requestData)||ImeiList?.length>1}
                   className="basic-multi-select w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}

@@ -23,19 +23,19 @@ function Sidebar() {
       icon: <Boxes />,
       text: "New Request Form",
       url: "/request-form",
-      isShow: ![ "DCP"].includes(rank),
+      isShow: !["DCP"].includes(rank),
     },
     {
       icon: <Boxes />,
       text: "Un-verified Form",
       url: "/unverified-form",
-      isShow: !["ACP", "DCP"].includes(rank),
+      isShow: !["DCP"].includes(rank),
     },
     {
       icon: <Boxes />,
       text: "Rejected Form",
       url: "/rejected-form",
-      isShow: !["ACP", "DCP"].includes(rank),
+      isShow: !["DCP"].includes(rank),
     },
     // {
     //   icon: <Boxes />,

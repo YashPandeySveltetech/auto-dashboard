@@ -9,7 +9,16 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
     const list = [...IldList];
     list[index][name] = name=="till_date"?checked: value;
     list[index]["target_type"]=activeForm?.target_type_id
- 
+    if (name === "mobile_number") {
+      if (value.length <= 10) {
+        setIldList({
+          ...IldList,
+          [name]: value,
+        });
+      } else {
+        return;
+      }
+    }
     setIldList(list);
   };
   

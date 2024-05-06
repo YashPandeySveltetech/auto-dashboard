@@ -765,7 +765,7 @@ function RequestForm({ requestData }) {
                           (obj) => obj.value === apiPayload.fir_or_complaint
                         )
                       }
-                      className="basic-multi-select w-[50%]"
+                      className="basic-multi-select w-[80%]"
                       classNamePrefix="select"
                       onChange={(e, data) => dropdownChange(e, data)}
                       isSearchable={false}
@@ -796,10 +796,11 @@ function RequestForm({ requestData }) {
                       onChange={handleChange}
                       value={apiPayload?.fir_no}
                       disabledSelect={!isEditable && requestData}
+                      className="w-full"
                     />
                   </div>
                 </div>
-                <div>
+                <div className="w-full md:w-48">
                   <label className="font-bold required">Case Type:</label>
                   <Select
                     name="case_type"

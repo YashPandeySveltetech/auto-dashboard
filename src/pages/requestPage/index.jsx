@@ -671,7 +671,7 @@ function RequestForm({ requestData }) {
         }
       }
     }
-    console.log(formData)
+    console.log(formData);
     let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
     if (Object.keys(apiPayload?.form_request_for)?.length > 0) {
       const res = await ApiHandle(
@@ -749,7 +749,7 @@ function RequestForm({ requestData }) {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-3 md:grid-cols-3 gap-6">
+          <div className="mt-6  flex  justify-between grid-cols-3 md:grid-cols-3 sm:grid-col-2 gap-6 sm:gap-2 flex-wrap">
             {activeForm.target_type !== "IMEI_NUMBER" && (
               <>
                 {" "}
@@ -765,7 +765,7 @@ function RequestForm({ requestData }) {
                           (obj) => obj.value === apiPayload.fir_or_complaint
                         )
                       }
-                      className="basic-multi-select w-[30%]"
+                      className="basic-multi-select w-[50%]"
                       classNamePrefix="select"
                       onChange={(e, data) => dropdownChange(e, data)}
                       isSearchable={false}
@@ -807,7 +807,7 @@ function RequestForm({ requestData }) {
                     value={caseType?.filter(
                       (obj) => apiPayload?.case_type == obj?.id
                     )}
-                    className="basic-multi-select w-[50%]"
+                    className="basic-multi-select w-[100%]"
                     classNamePrefix="select"
                     onChange={(e, data) => dropdownChange(e, data)}
                     isDisabled={!isEditable && requestData}
@@ -890,7 +890,7 @@ function RequestForm({ requestData }) {
               disabled={!isEditable && requestData}
             ></textarea>
           </div>
-          <div className="mt-6 flex gap-3 items-center">
+          <div className="mt-6 flex gap-3 items-center flex-wrap">
             <label htmlFor="" className="font-bold">
               select File if any-:
             </label>
@@ -917,9 +917,9 @@ function RequestForm({ requestData }) {
               </a>
             )}
           </div>
-          <div className="flex justify-start items-center gap-5 mt-6">
+          <div className="flex justify-start items-center gap-5 mt-6 flex-wrap">
             {/* IO Name */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <label className="font-bold required">
                 Requesting Officer Name:
               </label>
@@ -934,7 +934,7 @@ function RequestForm({ requestData }) {
             </div>
 
             {/* IO Mobile no. */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <label className="font-bold required">
                 Requesting Officer Mobile no.
               </label>

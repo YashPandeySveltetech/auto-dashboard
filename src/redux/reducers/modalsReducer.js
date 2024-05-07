@@ -29,6 +29,7 @@ const initialState = {
     passwordChangeModal:false,
     isFormVerified:false,
     dcpPasswordVerify:false,
+    isACP:false,
     dcpStatus:{}
 }
 
@@ -79,10 +80,13 @@ export const userSlice = createSlice({
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload
     // },
+    setRank:(state,action)=>{
+      state.isACP = action.payload
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { commonCloseModal, openRejectModal,openViewLogModal,updateRequestList ,otpValidationModal,openDcpPasswordVerifyModal,DcpPassowrdConfirm,PasswordChangeModal} = userSlice.actions
+export const { commonCloseModal, openRejectModal,openViewLogModal,updateRequestList ,otpValidationModal,openDcpPasswordVerifyModal,DcpPassowrdConfirm,PasswordChangeModal,setRank} = userSlice.actions
 
 export default userSlice.reducer

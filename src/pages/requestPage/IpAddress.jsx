@@ -85,7 +85,6 @@ function IpAddress({
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
               </div>
-
             </div>
             {/* CDR DATE TIME */}
             {/* date  */}

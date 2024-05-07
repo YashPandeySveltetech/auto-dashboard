@@ -173,7 +173,7 @@ function LoginPage() {
   );
 
   return (
-    <div className="bgimg h-[100vh]  flex justify-center items-center w-[100%] ">
+    <div className=" h-[100vh]  flex justify-center items-center w-[100%] ">
       <div className="bg-white flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem]">
         <div className="text-2xl font-extrabold	text-center ">Login</div>
         <div className=" flex justify-center gap-5 flex-col">

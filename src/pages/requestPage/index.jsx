@@ -31,8 +31,7 @@ function RequestForm({ requestData }) {
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
-  const [isformcreate, setIsFormCreate] = useState(false);
-  const [openTab, setOpenTab] = useState(1);
+  const [isformcreate,setIsFormCreate]=useState(false)
 
   const initialobj = {
     police_station: "",
@@ -422,10 +421,11 @@ function RequestForm({ requestData }) {
     apiPayload.form_request_for,
     tspdata,
     activeForm.target_type,
-    apiPayload,
+    apiPayload
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
+ 
       setApiPayload({
         ...apiPayload,
         form_request_for: {
@@ -596,7 +596,9 @@ function RequestForm({ requestData }) {
         ...apiPayload,
         [name]: checked,
       });
-    } else if (callfrom === "files") {
+    }
+   else if (callfrom === "files") {
+  
       setApiPayload({
         ...apiPayload,
         [name]: files[0],
@@ -631,12 +633,14 @@ function RequestForm({ requestData }) {
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
-    } else if (data.name === "case_type") {
+    }
+   else if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
       });
-    } else if (data.name === "fir_or_complaint") {
+    }
+   else if (data.name === "fir_or_complaint") {
       if (e.value === "other") {
         setIsOther(true);
         setApiPayload({
@@ -822,7 +826,6 @@ function RequestForm({ requestData }) {
               <label htmlFor="" className="font-bold">
                 Select if Form is Urgent
               </label>
-
               <input
                 type="checkbox"
                 name="urgent"

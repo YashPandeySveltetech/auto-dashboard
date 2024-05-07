@@ -58,8 +58,8 @@ function IpAddress({
             style={{ background: "#FFFAFA" }}
             key={i}
           >
-            <div className="grid grid-flow-col gap-4  items-center">
-              <div className="col">
+            <div className=" flex flex-col md:flex-row w-full  items-center flex-wrap">
+              <div className=" flex justify-around items-center w-[100%] md:w-[50%]  flex-wrap mb-4 md:mb-0">
               <label htmlFor="" className=" font-bold required">IP Address</label>
                 <Input
                 
@@ -71,32 +71,32 @@ function IpAddress({
                   className="w-[100%]"
                 />
               </div>
-
-              <div className="flex justify-start items-center gap-5">
+              <div className=" flex justify-around items-center w-[100%] md:w-[50%]  flex-wrap">
               <label className="font-bold required" htmlFor="">Request to provide</label>
-                <Select
+              <Select
                   
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
                     IpList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  className="basic-multi-select w-[50%]"
+                  className="w-[100%] md:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
               </div>
+
             </div>
             {/* CDR DATE TIME */}
             {/* date  */}
 
-            <div className="input-group flex items-center justify-start gap-5 m-3">
+            <div className="input-group flex items-center justify-start gap-5 m-3 flex-wrap">
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
 
-              <div className="flex gap-5">
-                <div className="w-15  input-group flex items-center gap-3">
+              <div className="flex gap-5 ">
+                <div className="w-15  input-group flex items-center gap-3 flex-wrap">
                   <span className="input-group-text font-bold">From</span>
                   <Input
                     label={" "}
@@ -123,7 +123,7 @@ function IpAddress({
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5 m-3 ">
+              <div className="flex items-center justify-start gap-5 m-3 flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>

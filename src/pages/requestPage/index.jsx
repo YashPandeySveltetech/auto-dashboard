@@ -32,6 +32,7 @@ function RequestForm({ requestData }) {
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
   const [isformcreate, setIsFormCreate] = useState(false);
+  const [openTab, setOpenTab] = useState(1);
 
   const initialobj = {
     police_station: "",
@@ -835,7 +836,122 @@ function RequestForm({ requestData }) {
           </div>
           <div className="mt-6 flex items-center gap-6">
             <label className="font-bold required">Target Type:</label>
-            <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <>
+              <>
+                <div className="mx-auto flex-wrap">
+                  <div className="mb-4 flex space-x-4 p-2 bg-white rounded-lg shadow-md flex-wrap">
+
+                  {targetType?.map((val, key) => (
+                  <>
+                    <button
+                      onClick={(e) => handleChange(e, "target_type", val)}
+                      disabled={
+                        (!isEditable &&
+                          requestData &&
+                          !requestData?.form_request_for[arry[val?.name]]
+                            ?.length > 0) ||
+                        (isEditable &&
+                          requestData &&
+                          !requestData?.form_request_for[arry[val?.name]]
+                            ?.length > 0)
+                      }
+                      type="button"
+                      className={`flex-1 py-2 px-4 bg-gray-100 mb-3 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                        activeForm?.target_type === val?.name? "bg-blue-600 text-white" : "hover:text-gray-600 hover:border-black-300"
+                      }`
+                        // activeForm?.target_type === val?.name
+                        //   ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
+                        //   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                      }
+                      id={key}
+                    >
+                      {String(val?.name).replace("_", " ")}
+                      <span className="text-white-400">
+                        (
+                        {apiPayload?.form_request_for[arry[val?.name]]?.length >
+                        0
+                          ? apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length
+                          : 0}
+                        )
+                      </span>
+                    </button>
+                  </>
+                ))}
+                    {/* <button
+                      onClick={() => setOpenTab(1)}
+                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                        openTab === 1 ? "bg-blue-600 text-white" : ""
+                      }`}
+                    >
+                      Section 1
+                    </button>
+                    <button
+                      onClick={() => setOpenTab(2)}
+                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                        openTab === 2 ? "bg-blue-600 text-white" : ""
+                      }`}
+                    >
+                      Section 2
+                    </button>
+                    <button
+                      onClick={() => setOpenTab(3)}
+                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                        openTab === 3 ? "bg-blue-600 text-white" : ""
+                      }`}
+                    >
+                      Section 3
+                    </button> */}
+                  </div>
+
+                  {/* <div
+                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                      openTab === 1 ? "border-blue-600" : "border-transparent"
+                    }`}
+                  >
+                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                      Section 1 Content
+                    </h2>
+                    <p className="text-gray-700">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Nullam aliquam justo nec justo lacinia, vel ullamcorper
+                      nibh tincidunt.
+                    </p>
+                  </div>
+
+                  <div
+                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                      openTab === 2 ? "border-blue-600" : "border-transparent"
+                    }`}
+                  >
+                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                      Section 2 Content
+                    </h2>
+                    <p className="text-gray-700">
+                      Proin non velit ac purus malesuada venenatis sit amet eget
+                      lacus. Morbi quis purus id ipsum ultrices aliquet Morbi
+                      quis.
+                    </p>
+                  </div>
+
+                  <div
+                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                      openTab === 3 ? "border-blue-600" : "border-transparent"
+                    }`}
+                  >
+                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                      Section 3 Content
+                    </h2>
+                    <p className="text-gray-700">
+                      Fusce hendrerit urna vel tortor luctus, nec tristique odio
+                      tincidunt. Vestibulum ante ipsum primis in faucibus orci
+                      luctus et ultrices posuere cubilia Curae.
+                    </p>
+                  </div> */}
+                </div>
+              </>
+            </>
+            {/* <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
               <ul className="flex flex-wrap -mb-px">
                 {targetType?.map((val, key) => (
                   <li className="me-2" key={key}>
@@ -873,7 +989,7 @@ function RequestForm({ requestData }) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
           <div className="mt-6">
             {/* Additional Form Elements */}

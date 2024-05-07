@@ -749,11 +749,11 @@ function RequestForm({ requestData }) {
             </div>
           </div>
 
-          <div className="mt-6  flex  justify-between grid-cols-3 md:grid-cols-3 sm:grid-col-2 gap-6 sm:gap-2 flex-wrap">
+          <div className="mt-6  flex  justify-around grid-cols-3 md:grid-cols-3 sm:grid-col-2 gap-6 sm:gap-2 flex-wrap">
             {activeForm.target_type !== "IMEI_NUMBER" && (
               <>
                 {" "}
-                <div className="">
+                <div className="w-full md:w-80">
                   <label className="font-bold required">Choose Type:</label>
                   <div className="flex  gap-2">
                     <Select

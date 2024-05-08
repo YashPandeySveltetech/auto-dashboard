@@ -4,19 +4,25 @@ import React, { useEffect, useState } from "react";
 import { Amd, Boxes } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { USER_DETAIL } from "../../utils/constants";
+import { REFRESH, USER_DETAIL } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { clearUserData, setUserData } from "../../redux/reducers/userReducer";
-import { PasswordChangeModal, commonCloseModal } from "../../redux/reducers/modalsReducer";
+import {
+  PasswordChangeModal,
+  commonCloseModal,
+} from "../../redux/reducers/modalsReducer";
 import sidebar from "./sidebar.css";
 import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
 
-function Sidebar({isOpen,setIsOpen }) {
+function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email } = useSelector((state) => state.user?.userData);
-
+  const refresh = localStorage.getItem("refresh")
+    ? localStorage.getItem("refresh")
+    : null;
+  // console.log(typeof token)
   const list = [
     {
       icon: <MdDashboard />,
@@ -50,19 +56,39 @@ function Sidebar({isOpen,setIsOpen }) {
     // },
     {
       icon: <Boxes />,
-      text: "Register",
+      text: "Add New User",
       url: "/register",
       isShow: ["ADMIN"].includes(rank),
     },
   ];
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const refreshApi = async () => {
+    const res = await ApiHandle(
+      REFRESH,
+      {
+        refresh: refresh,
+      },
+      "POST"
+    );
+    if (res.statusCode === 200) {
+      localStorage.setItem("token", res?.responsePayload.access);
+    } else {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
+  useEffect(() => {
+    let fourMinutes = Number(1000 * 60 * 4 + 50000);
+    let interval = setInterval(() => {
+      refreshApi();
+    }, fourMinutes);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     handleUserDetail();
   }, []);
- 
-
 
   const handleUserDetail = async () => {
     const res = await ApiHandle(USER_DETAIL, {}, "GET");
@@ -162,18 +188,17 @@ function Sidebar({isOpen,setIsOpen }) {
         <div className="logo-details">
           {isOpen && (
             <>
-            <div>
-            <i className="bx bxl-codepen icon">
-              <Amd className="w-[3rem] h-[3rem] text-white " />
-            </i>
-            <div className="w-[2rem]">{email}</div>
-            </div>
+              <div>
+                <i className="bx bxl-codepen icon">
+                  <Amd className="w-[3rem] h-[3rem] text-white " />
+                </i>
+                <div className="w-[2rem]">{email}</div>
+              </div>
             </>
-            
           )}
           {/* <div className="logo_name">Auto</div> */}
 
-          <i className="bx bx-menu" id="btn" onClick={()=>setIsOpen(!isOpen)}>
+          <i className="bx bx-menu" id="btn" onClick={() => setIsOpen(!isOpen)}>
             <GiHamburgerMenu />
           </i>
         </div>
@@ -188,16 +213,15 @@ function Sidebar({isOpen,setIsOpen }) {
           </ul>
 
           <div>
-            <li  onClick={() => {
-                  localStorage.clear();
-                  dispatch(clearUserData());
-                  dispatch(commonCloseModal())
-                  navigate("/login");
-                
-                }}>
-              <NavLink
-              
-              >
+            <li
+              onClick={() => {
+                localStorage.clear();
+                dispatch(clearUserData());
+                dispatch(commonCloseModal());
+                navigate("/login");
+              }}
+            >
+              <NavLink>
                 <i className="bx bx-grid-alt">
                   <RiLogoutBoxLine />
                 </i>
@@ -208,10 +232,9 @@ function Sidebar({isOpen,setIsOpen }) {
 
             <li>
               <NavLink
-              onClick={() => {
-                       dispatch(PasswordChangeModal(true))
-                      }}
-              
+                onClick={() => {
+                  dispatch(PasswordChangeModal(true));
+                }}
               >
                 <i className="bx bx-grid-alt">
                   <RiLockPasswordLine />

@@ -1,7 +1,7 @@
 /** @format */
 
-import { memo, Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { memo, Suspense, lazy, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { AuthRoute, PublicRoute } from "./authRoute";
 import LoginPage from "../pages/loginPage";
 import RoleBaseRouting from "./roleBaseRouting";
@@ -15,11 +15,19 @@ import RequestView from "../pages/requestView";
 import RequestEdit from "../pages/requestEditpage";
 import UnverifiedFormList from "../pages/requestList/unverifiedFormList";
 import RejectList from "../pages/requestList/rejectList";
+import Toaster from "../utils/toaster/Toaster";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
+  const navigate = useNavigate()
   const Loading = useSelector((state) => state?.common?.loading);
-
+const token= localStorage.getItem("token")
+useEffect(()=>{
+if(!token){
+  navigate('/login')
+  // Toaster("error", "session expired")
+}
+},[])
   return (
     <main>
       {Loading && <Loader />}

@@ -18,7 +18,7 @@ function LoginPage() {
   const [formValue, setFormValue] = useState({});
   const [isOtp, setIsOtp] = useState(false);
   const [verifyUser, setVerifyUser] = useState({});
-  const [isLoading,setIsLoading]=useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,8 +39,10 @@ function LoginPage() {
     e.preventDefault();
     const res = await ApiHandle(OTP_VERIFY, verifyUser, "POST");
     if (res.statusCode === 201) {
-      setIsLoading(false)
+      setIsLoading(false);
       localStorage.setItem("token", res.responsePayload.access);
+      localStorage.setItem("refresh", res.responsePayload.refresh);
+
       dispatch(setUserData(res?.responsePayload));
       localStorage.setItem(
         "p_station",
@@ -55,24 +57,21 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  try {
-    setIsLoading(true)
-    const res = await ApiHandle(OTP_SEND, formValue, "POST");
-    if (res.statusCode === 201) {
-      setIsOtp(true);
-      setIsLoading(false)
-      Toaster("success", "OTP SENT Successfully!");
+    try {
+      setIsLoading(true);
+      const res = await ApiHandle(OTP_SEND, formValue, "POST");
+      if (res.statusCode === 201) {
+        setIsOtp(true);
+        setIsLoading(false);
+        Toaster("success", "OTP SENT Successfully!");
 
-      return;
+        return;
+      } else {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
     }
-    else{
-      setIsLoading(false)
-
-    }
-    
-  } catch (error) {
-    setIsLoading(false)
-  }
   };
 
   const LoginWithMobile = () => (
@@ -152,7 +151,6 @@ function LoginPage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            
           }}
         >
           <button
@@ -196,29 +194,34 @@ function LoginPage() {
             {isOtp ? (
               <>{Otp()}</>
             ) : (
-              <div style={{ textAlign: "center", marginTop: "10px" }}>
-                <div
-                  className="col flex align-items-center justify-center"
-                  style={{
-                    background: "green",
-                    borderRadius: "5px",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    padding:"5px"
-                    
-                  }}
-                >
-              {isLoading ? "Otp Sending...":    <button
-                    type="submit"
-                    className="btn  ms-4 "
-                    style={{
-                      fontSize: "18px",
-                    }}
-                    disabled={isLoading}
-                  >
-                    Login
-                  </button>}
-                </div>
-              </div>
+              <>
+                {isLoading ? (
+                  "Otp Sending..."
+                ) : (
+                  <div style={{ textAlign: "center", marginTop: "10px" }}>
+                    <div
+                      className="col flex align-items-center justify-center"
+                      style={{
+                        background: "green",
+                        borderRadius: "5px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                        padding: "5px",
+                      }}
+                    >
+                      <button
+                        type="submit"
+                        className="btn  ms-4 "
+                        style={{
+                          fontSize: "18px",
+                        }}
+                        disabled={isLoading}
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </form>
         </div>

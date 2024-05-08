@@ -360,17 +360,17 @@ const RegisterForm = () => {
     },
   };
   const [formData, setFormData] = useState(defaultFormaData);
-  const {isACP} = useSelector((state)=>state.modal);
+  const { isACP } = useSelector((state) => state.modal);
   console.log(isACP);
-  const handleClick = ({isACP}) => {
-
+  const handleClick = ({ isACP }) => {
     dispatch(setRank(isACP));
     setIsModalOpen(true);
+    handleReportingToSelect()
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setFormData(defaultFormaData)
+    setFormData(defaultFormaData);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -424,8 +424,11 @@ const RegisterForm = () => {
     { id: 4, name: "DCP" },
   ];
   const handleReportingToSelect = async (e) => {
-    const { name, value } = e.target;
-    setSelectedReportingTo(value);
+    // const { name} = e.target;
+    const value =isACP ? "DCP" : "ACP";
+    // value = isACP ? "DCP" : "ACP";
+console.log(value)
+    // setSelectedReportingTo(value);
     setSelectedRank("");
     const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");
 
@@ -462,6 +465,7 @@ const RegisterForm = () => {
   };
   useEffect(() => {
     getStates();
+    // handleReportingToSelect()
     // getDistrict();
     // getPoliceStaionList();
   }, []);
@@ -476,13 +480,13 @@ const RegisterForm = () => {
             <Card
               title="SHO"
               imageSrc="./police-officer.png"
-              onclick={() => handleClick({isACP:true})}
+              onclick={() => handleClick({ isACP: true })}
             />
 
             <Card
               title="ACP"
               imageSrc="./dcp.png"
-              onclick={() => handleClick({isACP:false})}
+              onclick={() => handleClick({ isACP: false })}
             />
           </div>
         </div>
@@ -541,56 +545,61 @@ const RegisterForm = () => {
                   star={true}
                   required={true}
                 />
-             { isACP && ( <><DropDown
-                  label="Reporting To"
-                  options={rankOptions}
-                  onChange={handleReportingToSelect}
-                  value={selectedReportingTo}
-                  name="selectedReportingTo"
-                />
-                {selectedReportingTo && (
-                  <DropDown
-                    label="Select User"
-                    options={userOptions}
-                    onChange={handleUserSelect}
-                    value={selectedUser}
-                    checkId={true}
-                    name="user_profile.reporting_to"
-                  />
+                <DropDown
+                        label="Select User"
+                        options={userOptions}
+                        onChange={handleUserSelect}
+                        value={selectedUser}
+                        checkId={true}
+                        name="user_profile.reporting_to"
+                      />
+                {isACP && (
+                  <>
+                    {/* <DropDown
+                      label="Reporting To"
+                      options={rankOptions}
+                      onChange={handleReportingToSelect}
+                      value={selectedReportingTo}
+                      name="selectedReportingTo"
+                    /> */}
+                    {/* {selectedReportingTo && ( */}
+                      
+                    {/* // )} */}
+                    <DropDown
+                      label="State"
+                      options={stateOptions}
+                      onChange={(e) => {
+                        handleUserProfileChange(e);
+                        e?.target?.value && getPoliceStaionList(e.target.value);
+                        setFormData((prev) => ({
+                          ...prev,
+                          user_profile: {
+                            ...prev.user_profile,
+                            // "district": "",
+                            police_station: "",
+                          },
+                        }));
+                        setPoliceStationOptions([]);
+                      }}
+                      value={formData.user_profile.state}
+                      name="user_profile.state"
+                      checkId={true}
+                      star={true}
+                      required={true}
+                    />
+                    <DropDown
+                      label="Police Station"
+                      options={policeStationOptions}
+                      onChange={handleUserProfileChange}
+                      value={formData.user_profile.police_station}
+                      name="user_profile.police_station"
+                      checkId={true}
+                      disabledSelect={!formData.user_profile.state}
+                      star={true}
+                      required={true}
+                    />
+                  </>
                 )}
-                <DropDown
-                  label="State"
-                  options={stateOptions}
-                  onChange={(e) => {
-                    handleUserProfileChange(e);
-                    e?.target?.value && getPoliceStaionList(e.target.value);
-                    setFormData((prev) => ({
-                      ...prev,
-                      user_profile: {
-                        ...prev.user_profile,
-                        // "district": "",
-                        police_station: "",
-                      },
-                    }));
-                    setPoliceStationOptions([]);
-                  }}
-                  value={formData.user_profile.state}
-                  name="user_profile.state"
-                  checkId={true}
-                  star={true}
-                  required={true}
-                />
-                <DropDown
-                  label="Police Station"
-                  options={policeStationOptions}
-                  onChange={handleUserProfileChange}
-                  value={formData.user_profile.police_station}
-                  name="user_profile.police_station"
-                  checkId={true}
-                  disabledSelect={!formData.user_profile.state}
-                  star={true}
-                  required={true}
-                /></>)}
 
                 <div className="flex justify-between">
                   <button
@@ -609,7 +618,7 @@ const RegisterForm = () => {
               </form>
             </div>
           </div>
-          )}
+        )}
       </div>
     </>
   );

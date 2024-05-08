@@ -154,12 +154,12 @@ function IpAddress({
                   </div>
                 </div>
               </div>
-              <div className="flex gap-5 ">
+              {/* <div className="flex gap-5 ">
 <label className="form-label me-5 col-md-1 font-bold">
                 Till Date :
               </label>
   <input type="checkbox" name="till_date" id="" checked={val?.till_date} onChange={(e) => ipInputChange(e, i)} disabled={!isEditable && requestData}/>
-</div>
+</div> */}
               <div className="col-md-3">
                 <Select
                   name="tsp"

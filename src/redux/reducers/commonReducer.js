@@ -1,4 +1,3 @@
-
 // // import { MULTIPLY_FIVE } from './FiveType';
 
 // const initialState = {
@@ -11,31 +10,34 @@
 // 			...state,
 // 			loginData: action.payload
 // 		}
-		
+
 // 		default: return state
 // 	}
 // }
 
 // export default LoginReducer;
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	loading: false
-}
+  loading: false,
+  refresh: "",
+};
 
 export const CommonSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
-    setLoading: (state,{payload}) => {
-      state.loading= payload
+    setLoading: (state, { payload }) => {
+      state.loading = payload;
     },
-   
+    accessToken: (state, { payload }) => {
+      state.refresh = localStorage.setItem("token", payload);
+    },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setLoading } = CommonSlice.actions
+export const { setLoading } = CommonSlice.actions;
 
-export default CommonSlice.reducer
+export default CommonSlice.reducer;

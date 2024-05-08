@@ -7,14 +7,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { USER_DETAIL } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { clearUserData, setUserData } from "../../redux/reducers/userReducer";
-import { PasswordChangeModal } from "../../redux/reducers/modalsReducer";
+import { PasswordChangeModal, commonCloseModal } from "../../redux/reducers/modalsReducer";
 import sidebar from "./sidebar.css";
 import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
 
-function Sidebar() {
+function Sidebar({isOpen,setIsOpen }) {
   const { rank, email } = useSelector((state) => state.user?.userData);
 
   const list = [
@@ -61,12 +61,9 @@ function Sidebar() {
   useEffect(() => {
     handleUserDetail();
   }, []);
-  const [isOpen, setIsOpen] = useState(false);
+ 
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-    // props.setMargin(isOpen)
-  };
+
   const handleUserDetail = async () => {
     const res = await ApiHandle(USER_DETAIL, {}, "GET");
 
@@ -164,13 +161,19 @@ function Sidebar() {
       <div className={`sidebar ${isOpen ? "open" : ""} text-white`}>
         <div className="logo-details">
           {isOpen && (
+            <>
+            <div>
             <i className="bx bxl-codepen icon">
               <Amd className="w-[3rem] h-[3rem] text-white " />
             </i>
+            <div className="w-[2rem]">{email}</div>
+            </div>
+            </>
+            
           )}
           {/* <div className="logo_name">Auto</div> */}
 
-          <i className="bx bx-menu" id="btn" onClick={toggleSidebar}>
+          <i className="bx bx-menu" id="btn" onClick={()=>setIsOpen(!isOpen)}>
             <GiHamburgerMenu />
           </i>
         </div>
@@ -185,14 +188,15 @@ function Sidebar() {
           </ul>
 
           <div>
-            <li>
-              <NavLink
-               onClick={() => {
+            <li  onClick={() => {
                   localStorage.clear();
                   dispatch(clearUserData());
+                  dispatch(commonCloseModal())
                   navigate("/login");
                 
-                }}
+                }}>
+              <NavLink
+              
               >
                 <i className="bx bx-grid-alt">
                   <RiLogoutBoxLine />

@@ -276,15 +276,17 @@ return(
 
   return (
     <>
+    <div className="text-center text-gray-700 text-4xl p-4">
+      Dashboard
+    </div>
      {filtersection()}
       <div>
         <div className="relative overflow-x-auto p-3">
           <table
-            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
-            style={{ border: "1px solid black" }}
+            className="w-full text-sm text-left rtl:text-right text-gray-500 border border-r-4"  
           >
             <thead
-              className="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              className="text-center text-xs text-gray-700 uppercase bg-gray-50"
               style={{ backgroundColor: "black", color: "white" }}
             >
               <tr>
@@ -332,10 +334,10 @@ return(
             </thead>
        <tbody>
               { requestList?.map((item) => (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr className="bg-white border-b ">
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap d"
                   >
                     {/* {item?.created_on?.split("T")[0]} */}
                     {new Date(item?.created_on).toLocaleString("en-GB")}

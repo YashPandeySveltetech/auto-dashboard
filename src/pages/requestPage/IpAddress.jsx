@@ -1,4 +1,3 @@
-
 import React from "react";
 import Input from "../../components/input";
 import Select from "react-select";
@@ -10,13 +9,13 @@ function IpAddress({
   activeForm,
   requestprovide,
   tspdata,
-  isEditable
+  isEditable,
 }) {
   const ipInputChange = (e, index) => {
-    const { name, value,checked } = e.target;
+    const { name, value, checked } = e.target;
 
     const list = [...IpList];
-    list[index][name] = name=="till_date"?checked: value;;
+    list[index][name] = name == "till_date" ? checked : value;
     list[index]["target_type"] = activeForm?.target_type_id;
     setIpList(list);
   };
@@ -28,12 +27,12 @@ function IpAddress({
         ip: "",
         date_from: null,
         date_to: null,
-        time_from:"00:00",
-        time_to:"00:00",
-        till_date:false,
+        time_from: "00:00",
+        time_to: "00:00",
+        till_date: false,
         target_type: activeForm?.target_type_id,
         request_to_provide: IpList[0].request_to_provide,
-        tsp:IpList[0].tsp
+        tsp: IpList[0].tsp,
       },
     ]);
   };
@@ -46,7 +45,14 @@ function IpAddress({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IpList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) : (e===null)?[]:e.value==="ALL"?e.id:[e.id];
+    list[index][data?.name] =
+      e?.length > 0
+        ? e?.map((i) => i.id)
+        : e === null
+        ? []
+        : e.value === "ALL"
+        ? e.id
+        : [e.id];
     setIpList(list);
   };
   return (
@@ -60,21 +66,23 @@ function IpAddress({
           >
             <div className=" grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
               <div className="col">
-              <label htmlFor="" className=" font-bold required">IP Address</label>
+                <label htmlFor="" className=" font-bold required">
+                  IP Address
+                </label>
                 <Input
-                
                   name="ip"
                   value={val.ip}
                   required={true}
                   onChange={(e) => ipInputChange(e, i)}
-                  disabledSelect={!isEditable&&requestData}
+                  disabledSelect={!isEditable && requestData}
                   className="w-[100%]"
                 />
               </div>
               <div className="flex justify-start items-center gap-5 flex-wrap">
-              <label className="font-bold required" htmlFor="">Request to provide</label>
-              <Select
-                  
+                <label className="font-bold required" htmlFor="">
+                  Request to provide
+                </label>
+                <Select
                   name="request_to_provide"
                   options={requestprovide}
                   value={requestprovide?.filter((obj) =>
@@ -93,31 +101,32 @@ function IpAddress({
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
-
-              <div className="flex gap-5 ">
-                <div className="w-15  input-group flex items-center gap-3 flex-wrap">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    name="date_from"
-                    type="date"
-                    value={val.date_from}
-                    onChange={(e) => ipInputChange(e, i)}
-                    disabledSelect={requestData}
-                  />
+              <div className="flex flex-wrap">
+                <div className="flex gap-5 ">
+                  <div className="w-15  input-group flex items-center gap-3 flex-wrap">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      name="date_from"
+                      type="date"
+                      value={val.date_from}
+                      onChange={(e) => ipInputChange(e, i)}
+                      disabledSelect={requestData}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    name="date_to"
-                    type="date"
-                    value={val.date_to}
-                    onChange={(e) => ipInputChange(e, i)}
-                    disabledSelect={!isEditable&&requestData}
-                  />
+                <div className="col-md-3 ms-4">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      name="date_to"
+                      type="date"
+                      value={val.date_to}
+                      onChange={(e) => ipInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -126,31 +135,37 @@ function IpAddress({
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>
-
-                <div className="col-md-3">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">From</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_from"
-                      value={val.time_from}
-                      onChange={(e) => ipInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
-                    />
+                <div className="flex flex-wrap">
+                  {" "}
+                  <div className="col-md-3">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold w-[25%]">
+                        From
+                      </span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_from"
+                        value={val.time_from}
+                        onChange={(e) => ipInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3 ms-4">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">To</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_to"
-                      value={val.time_to}
-                      onChange={(e) => ipInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
-                    />
+                  <div className="col-md-3 ms-4">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold w-[25%]">
+                        To
+                      </span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_to"
+                        value={val.time_to}
+                        onChange={(e) => ipInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -168,12 +183,14 @@ function IpAddress({
                   value={tspdata.filter((obj) =>
                     IpList[i]?.tsp?.includes(obj?.id)
                   )}
-                  isOptionDisabled={(option)=>option.disabled}
+                  isOptionDisabled={(option) => option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isClearable={true}
-                  isDisabled={(!isEditable&&requestData) ||IpList?.length>1}
+                  isDisabled={
+                    (!isEditable && requestData) || IpList?.length > 1
+                  }
                   required
                 />
               </div>

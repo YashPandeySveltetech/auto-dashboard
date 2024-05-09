@@ -18,8 +18,9 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import StarsIcon from '@mui/icons-material/Stars';
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import StarsIcon from "@mui/icons-material/Stars";
+import Toaster from "../../utils/toaster/Toaster";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email } = useSelector((state) => state.user?.userData);
@@ -89,6 +90,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     handleUserDetail();
+    refreshApi();
   }, []);
 
   const handleUserDetail = async () => {
@@ -122,7 +124,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bx-grid-alt">{icon}</i>
                 <span className="links_name">{text}</span>
               </NavLink>
-              <span className="tooltip">{text}</span>
+              <span className="tooltip text-black">{text}</span>
             </li>
           </>
         )}
@@ -205,23 +207,31 @@ function Sidebar({ isOpen, setIsOpen }) {
 
         <div className="user_profile">
           {isOpen ? (
-            <div className="border border-gray-200 rounded-lg p-4">
-              <h2 className="text-lg font-semibold mb-2 text-center">
-                User Profile
-              </h2>
-              <div className="mb-2 ml-0 flex justify-start items-center">
-                <label className="block font-medium text-gray-100">
-                  <DriveFileRenameOutlineIcon  sx={{ fontSize: 20 }}/> : 
-                </label>
-                <p className="text-gray-200  ml-1">John Doe</p>
-              </div>
-              <div className="mb-2 flex justify-start items-center">
-                <label className="block text-gray-200"><AlternateEmailIcon sx={{ fontSize: 20 }}/>: </label>
-                <p className="text-gray-200 font-medium ml-1" >john@example.com</p>
-              </div>
-              <div className="mb-2 flex justify-start items-center">
-                <label className="block text-gray-200"><StarsIcon sx={{ fontSize: 20 }}/> : </label>
-                <p className="text-gray-200 font-medium ml-1">Admin</p>
+            <div className="profile_card_open">
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h2 className="text-lg font-semibold mb-2 text-center">
+                  User Profile
+                </h2>
+                <div className="mb-2 ml-0 flex justify-start items-center">
+                  <label className="block font-medium text-gray-100">
+                    <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :
+                  </label>
+                  <p className="text-gray-200  ml-1">John Doe</p>
+                </div>
+                <div className="mb-2 flex justify-start items-center">
+                  <label className="block text-gray-200">
+                    <AlternateEmailIcon sx={{ fontSize: 20 }} />:{" "}
+                  </label>
+                  <p className="text-gray-200 font-medium ml-1">
+                    john@example.com
+                  </p>
+                </div>
+                <div className="mb-2 flex justify-start items-center">
+                  <label className="block text-gray-200">
+                    <StarsIcon sx={{ fontSize: 20 }} /> :{" "}
+                  </label>
+                  <p className="text-gray-200 font-medium ml-1">Admin</p>
+                </div>
               </div>
             </div>
           ) : (
@@ -234,7 +244,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         {/* <ul className="nav-list"> */}
 
         {/* <li> */}
-        <div className="mt-10 flex flex-col justify-between h-[60vh] overflow-scroll">
+        <div className="mt-10 flex flex-col justify-between h-[70vh] overflow-x-scroll">
           <ul>
             {list.map((item, key) => (
               <ListItem {...item} key={key} />
@@ -256,7 +266,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Logout</span>
               </NavLink>
-              <span className="tooltip">Logout</span>
+              <span className="tooltip text-black">Logout</span>
             </li>
 
             <li>
@@ -270,7 +280,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Change Password</span>
               </NavLink>
-              <span className="tooltip">Change Password</span>
+              <span className="tooltip text-black">Change Password</span>
             </li>
           </div>
         </div>

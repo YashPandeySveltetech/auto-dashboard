@@ -125,7 +125,6 @@ const AppRoute = memo(() => {
                 </Layout>
               }
             />
-          
 
             {/* //admin routes */}
 

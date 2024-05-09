@@ -99,7 +99,7 @@ function Mobile({
           key={i}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
-            <div>
+            <div className="col">
               <label htmlFor="" className="font-bold required">
                 Mobile
               </label>
@@ -141,49 +141,57 @@ function Mobile({
           <div className=" flex flex-col md:flex-row mt-6 flex-wrap ">
             <div className="w-full md:w-1/2 flex items-start md:items-center  flex-wrap mb-4 md:mb-0 flex-col md:flex-row">
               <label className="form-label mr-4 font-bold">Date:</label>
-              <div className="flex items-center justify-between w-full flex-col md:flex-row md:w-96 flex-wrap">
-                <span className="font-bold">From</span>
-                <Input
-                  label={""}
-                  name="date_from"
-                  type="date"
-                  value={val.date_from}
-                  onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={!isEditable && requestData}
-                />
-                <span className="input-group-text font-bold">to</span>
-                <Input
-                  label={""}
-                  name="date_to"
-                  type="date"
-                  value={val.date_to}
-                  onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={!isEditable && requestData}
-                />
+              <div className="flex items-center justify-between w-full flex-col md:flex-row md:w-96 gap-y-4 flex-wrap">
+                <div className="flex items-center w-48 justify-between ">
+                  <span className="font-bold">From</span>
+                  <Input
+                    label={""}
+                    name="date_from"
+                    type="date"
+                    value={val.date_from}
+                    onChange={(e) => mobileInputChange(e, i)}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                </div>
+                <div className="flex items-center pl-5 w-48 justify-between">
+                  <span className="input-group-text font-bold">To</span>
+                  <Input
+                    label={""}
+                    name="date_to"
+                    type="date"
+                    value={val.date_to}
+                    onChange={(e) => mobileInputChange(e, i)}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                </div>
               </div>
             </div>
 
             <div className="w-full md:w-1/2 flex  flex-wrap flex-col md:flex-row items-start md:items-center">
               <label className="form-label mr-4 font-bold">Time:</label>
-              <div className="flex items-center justify-between w-full md:w-96 flex-wrap flex-col md:flex-row">
-                <span className="font-bold">From</span>
-                <Input
-                  label={""}
-                  type="time"
-                  name="time_from"
-                  value={val.time_from}
-                  onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={!isEditable && requestData}
-                />
-                <span className="input-group-text font-bold">to</span>
-                <Input
-                  label={""}
-                  type="time"
-                  name="time_to"
-                  value={val.time_to}
-                  onChange={(e) => mobileInputChange(e, i)}
-                  disabledSelect={!isEditable && requestData}
-                />
+              <div className="flex items-center justify-between w-full md:w-96 flex-wrap gap-y-4 flex-col md:flex-row">
+                <div className="flex items-center w-48 justify-between">
+                  <span className="font-bold">From</span>
+                  <Input
+                    label={""}
+                    type="time"
+                    name="time_from"
+                    value={val.time_from}
+                    onChange={(e) => mobileInputChange(e, i)}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                </div>
+                <div className="flex items-center pl-5 w-48 justify-between">
+                  <span className="input-group-text font-bold">To</span>
+                  <Input
+                    label={""}
+                    type="time"
+                    name="time_to"
+                    value={val.time_to}
+                    onChange={(e) => mobileInputChange(e, i)}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                </div>
               </div>
             </div>
           </div>

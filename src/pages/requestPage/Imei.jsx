@@ -94,7 +94,7 @@ function Imei({
             style={{ background: "#FFFAFA" }}
             key={i}
           >
-            <div className="grid grid-flow-col gap-4  items-center">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2  items-center">
               <div className="col">
                 <label htmlFor="" className=" font-bold required">
                   IMEI
@@ -109,7 +109,7 @@ function Imei({
                 />
               </div>
 
-              <div className="flex justify-start items-center gap-5">
+              <div className="flex justify-start items-center gap-5 flex-wrap">
                 <label className="font-bold required" htmlFor="">
                   Request to provide
                 </label>
@@ -122,7 +122,7 @@ function Imei({
                   isDisabled={
                     (!isEditable && requestData) || ImeiList?.length > 1
                   }
-                  className="basic-multi-select w-[50%]"
+                  className="basic-multi-select w-full sm:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
@@ -130,16 +130,16 @@ function Imei({
             </div>
             <>
               {" "}
-              <div className="">
+              <div>
                 <label className="font-bold required">Choose Type:</label>
-                <div className="flex  gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Select
                     name="fir_or_complaint"
                     options={firType}
                     value={firType?.filter(
                       (obj) => ImeiList[i]?.fir_or_complaint == obj.value
                     )}
-                    className="basic-multi-select w-[30%]"
+                    className="basic-multi-select  w-full sm:w-[30%]"
                     classNamePrefix="select"
                     onChange={(e, data) => dropdownChange(e, data, i)}
                     isSearchable={false}
@@ -170,6 +170,7 @@ function Imei({
                     onChange={(e) => ImeiInputChange(e, i)}
                     value={val.fir_no}
                     disabledSelect={!isEditable && requestData}
+                    className="w-full mb-1 sm:mb-4"
                   />
                 </div>
               </div>
@@ -181,7 +182,7 @@ function Imei({
                   value={caseType?.filter(
                     (obj) => ImeiList[i]?.case_type == obj.id
                   )}
-                  className="basic-multi-select w-[50%]"
+                  className="basic-multi-select w-full sm:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isDisabled={!isEditable && requestData}
@@ -192,7 +193,7 @@ function Imei({
             {/* CDR DATE TIME */}
             {/* date  */}
 
-            <div className="input-group flex items-center justify-start gap-5 m-3">
+            <div className="input-group flex items-center justify-start gap-5 m-3 flex-wrap">
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
@@ -225,7 +226,7 @@ function Imei({
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5 m-3 ">
+              <div className="flex items-center justify-start gap-5  flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>

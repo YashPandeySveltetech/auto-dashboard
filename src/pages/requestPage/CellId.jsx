@@ -59,21 +59,22 @@ function CellId({
             style={{ background: "#FFFAFA" }}
             key={i}
           >
-            <div className="grid grid-flow-col gap-4  items-center">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
               <div className="col">
                 <label className="font-bold required">Cell ID</label>
                 <Input
                   type="text"
                   value={val.cell_id}
                   required={true}
+                  
                   name="cell_id"
                   onChange={(e) => mobileInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}
-                  className="w-[100%]"
+                  className="w-full"
                 />
               </div>
 
-              <div className="flex justify-start items-center gap-5">
+              <div className="flex justify-start items-center gap-5 flex-wrap">
                 <label className="font-bold required">Request to provide</label>
                 <Select
                   name="request_to_provide"
@@ -81,7 +82,7 @@ function CellId({
                   value={requestprovide?.filter((obj) =>
                     cellIdList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  className="basic-multi-select w-[50%]"
+                  className="basic-multi-select w-full sm:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                 />
@@ -90,7 +91,7 @@ function CellId({
             {/* CDR DATE TIME */}
             {/* date  */}
 
-            <div className="input-group flex items-center justify-start gap-5 m-3">
+            <div className="input-group flex items-center justify-start gap-5 m-3 flex-wrap">
               <label className="form-label me-4 col-md-1 font-bold required">
                 Date :
               </label>
@@ -123,7 +124,7 @@ function CellId({
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5 m-3 ">
+              <div className="flex items-center justify-start gap-5 flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold required">
                   Time :
                 </label>

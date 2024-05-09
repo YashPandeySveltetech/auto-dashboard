@@ -99,7 +99,7 @@ function Mobile({
           key={i}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
-            <div>
+            <div className="col">
               <label htmlFor="" className="font-bold required">
                 Mobile
               </label>

@@ -82,7 +82,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     let fourMinutes = Number(1000 * 60 * 4 + 50000);
     let interval = setInterval(() => {
       refreshApi();
-    }, fourMinutes);
+    }, 240000);
     return () => clearInterval(interval);
   }, []);
 

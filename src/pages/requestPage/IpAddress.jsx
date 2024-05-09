@@ -58,8 +58,8 @@ function IpAddress({
             style={{ background: "#FFFAFA" }}
             key={i}
           >
-            <div className=" flex flex-col md:flex-row w-full  items-center flex-wrap">
-              <div className=" flex justify-around items-center w-[100%] md:w-[50%]  flex-wrap mb-4 md:mb-0">
+            <div className=" grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
+              <div className="col">
               <label htmlFor="" className=" font-bold required">IP Address</label>
                 <Input
                 
@@ -71,7 +71,7 @@ function IpAddress({
                   className="w-[100%]"
                 />
               </div>
-              <div className=" flex justify-around items-center w-[100%] md:w-[50%]  flex-wrap">
+              <div className="flex justify-start items-center gap-5 flex-wrap">
               <label className="font-bold required" htmlFor="">Request to provide</label>
               <Select
                   
@@ -122,7 +122,7 @@ function IpAddress({
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5 m-3 flex-wrap">
+              <div className="flex items-center justify-start gap-5  flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>

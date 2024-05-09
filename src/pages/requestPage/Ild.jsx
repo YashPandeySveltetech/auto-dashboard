@@ -71,7 +71,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
             style={{ background: "#FFFAFA" }}
             key={i}
           >
-            <div className="grid grid-flow-col gap-4  items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4  items-center">
               <div className="col">
               <label htmlFor="" className=" font-bold required">Mobile</label>
                 <Input
@@ -89,7 +89,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
               
               </div>
 
-              <div className="flex justify-start items-center gap-5">
+              <div className="flex justify-start items-center gap-5 flex-wrap">
                 <label className="font-bold required" htmlFor="">Request to provide</label>
                 <Select
                   name="request_to_provide"
@@ -97,7 +97,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
                   value={requestprovide?.filter((obj) =>
                     IldList[i]?.request_to_provide?.includes(obj?.id)
                   )}
-                  className="basic-multi-select w-[50%]"
+                  className="basic-multi-select w-full sm:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isDisabled={(!isEditable&&requestData)||IldList?.length>1}
@@ -107,8 +107,8 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
             {/* CDR DATE TIME */}
             {/* date  */}
 
-            <div className="input-group flex items-center justify-start gap-3 m-3">
-              <label className="form-label me-4 col-md-1 font-bold">
+            <div className="input-group flex items-center justify-start gap-3 m-3 flex-wrap">
+              <label className="form-label me-4 col-md-1 font-bold flex-wrap">
                 Date :
               </label>
 
@@ -140,7 +140,7 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5 m-3 ">
+              <div className="input-group flex items-center justify-start gap-3 m-3 flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>

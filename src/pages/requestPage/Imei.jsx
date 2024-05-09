@@ -197,31 +197,33 @@ function Imei({
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
-
-              <div className="flex gap-5">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    name="date_from"
-                    type="date"
-                    value={val.date_from}
-                    onChange={(e) => ImeiInputChange(e, i)}
-                    disabledSelect={!isEditable && requestData}
-                  />
+              <div className="flex flex-wrap gap-y-4 justify-center">
+                {" "}
+                <div className="flex gap-5">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      name="date_from"
+                      type="date"
+                      value={val.date_from}
+                      onChange={(e) => ImeiInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    name="date_to"
-                    type="date"
-                    value={val.date_to}
-                    onChange={(e) => ImeiInputChange(e, i)}
-                    disabledSelect={!isEditable && requestData}
-                  />
+                <div className="col-md-3 ms-4">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      name="date_to"
+                      type="date"
+                      value={val.date_to}
+                      onChange={(e) => ImeiInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -230,31 +232,33 @@ function Imei({
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>
-
-                <div className="col-md-3">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">From</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_from"
-                      value={val.time_from}
-                      onChange={(e) => ImeiInputChange(e, i)}
-                      disabledSelect={!isEditable && requestData}
-                    />
+                <div className="flex flex-wrap gap-y-4 justify-center">
+                  {" "}
+                  <div className="col-md-3">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">From</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_from"
+                        value={val.time_from}
+                        onChange={(e) => ImeiInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3 ms-4">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">To</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_to"
-                      value={val.time_to}
-                      onChange={(e) => ImeiInputChange(e, i)}
-                      disabledSelect={!isEditable && requestData}
-                    />
+                  <div className="col-md-3 ms-4">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">To</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_to"
+                        value={val.time_to}
+                        onChange={(e) => ImeiInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

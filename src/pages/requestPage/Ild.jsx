@@ -2,13 +2,20 @@ import React, { useEffect } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
-
-function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovide,isEditable }) {
+function Ild({
+  requestData,
+  IldList,
+  setIldList,
+  activeForm,
+  tspdata,
+  requestprovide,
+  isEditable,
+}) {
   const ildInputChange = (e, index) => {
-    const { name, value,checked } = e?.target;
+    const { name, value, checked } = e?.target;
     const list = [...IldList];
-    list[index][name] = name=="till_date"?checked: value;
-    list[index]["target_type"]=activeForm?.target_type_id
+    list[index][name] = name == "till_date" ? checked : value;
+    list[index]["target_type"] = activeForm?.target_type_id;
     if (name === "mobile_number") {
       if (value.length <= 10) {
         setIldList({
@@ -21,29 +28,36 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
     }
     setIldList(list);
   };
-  
+
   const dropdownChange = (e, data, index) => {
     const list = [...IldList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]: e.value==="ALL"?e.id:[e.id];
+    list[index][data?.name] =
+      e?.length > 0
+        ? e?.map((i) => i.id)
+        : e === null
+        ? []
+        : e.value === "ALL"
+        ? e.id
+        : [e.id];
     setIldList(list);
   };
-//  useEffect(()=>{
-// if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
-//   setIldList(requestData?.form_request_for?.multiple_mobile
-//     )
-// }
-//  },[requestData])
+  //  useEffect(()=>{
+  // if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
+  //   setIldList(requestData?.form_request_for?.multiple_mobile
+  //     )
+  // }
+  //  },[requestData])
 
   const addIldClick = () => {
     setIldList([
       ...IldList,
       {
         date_from: null,
-        date_to:null,
+        date_to: null,
         time_from: "00:00",
         time_to: "00:00",
         mobile_number: "",
-        till_date:false,
+        till_date: false,
         tsp: IldList[0]?.tsp,
         target_type: activeForm?.target_type_id,
         request_to_provide: IldList[0].request_to_provide,
@@ -56,11 +70,9 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
     list.splice(index, 1);
     setIldList(list);
   };
-  const clearHandle=()=>{
-    setIldList([])
-  }
-
-
+  const clearHandle = () => {
+    setIldList([]);
+  };
 
   return (
     <>
@@ -73,24 +85,24 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4  items-center">
               <div className="col">
-              <label htmlFor="" className=" font-bold required">Mobile</label>
+                <label htmlFor="" className=" font-bold required">
+                  Mobile
+                </label>
                 <Input
-               required={true}
+                  required={true}
                   type="text"
                   value={val.mobile_number}
                   name="mobile_number"
                   onChange={(e) => ildInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}
                   className="w-[100%]"
-                 
-                  
-                  
                 />
-              
               </div>
 
               <div className="flex justify-start items-center gap-5 flex-wrap">
-                <label className="font-bold required" htmlFor="">Request to provide</label>
+                <label className="font-bold required" htmlFor="">
+                  Request to provide
+                </label>
                 <Select
                   name="request_to_provide"
                   options={requestprovide}
@@ -100,7 +112,9 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
                   className="basic-multi-select w-full sm:w-[50%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                  isDisabled={(!isEditable&&requestData)||IldList?.length>1}
+                  isDisabled={
+                    (!isEditable && requestData) || IldList?.length > 1
+                  }
                 />
               </div>
             </div>
@@ -111,92 +125,102 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
               <label className="form-label me-4 col-md-1 font-bold flex-wrap">
                 Date :
               </label>
-
-              <div className="flex gap-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    name="date_from"
-                    type="date"
-                    value={val.date_from}
-                    onChange={(e) => ildInputChange(e, i)}
-                    disabledSelect={!isEditable&&requestData}
-                  />
+              <div className="flex flex-wrap gap-y-4 justify-center">
+                {" "}
+                <div className="flex gap-4">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      name="date_from"
+                      type="date"
+                      value={val.date_from}
+                      onChange={(e) => ildInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    name="date_to"
-                    type="date"
-                    value={val.date_to}
-                    onChange={(e) => ildInputChange(e, i)}
-                    disabledSelect={!isEditable&&requestData}
-                  />
+                <div className="col-md-3 ml-4">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      name="date_to"
+                      type="date"
+                      value={val.date_to}
+                      onChange={(e) => ildInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
               </div>
 
               {/*  Time */}
-              <div className="input-group flex items-center justify-start gap-3 m-3 flex-wrap">
+              <div className="input-group flex items-center justify-start gap-3 flex-wrap">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>
-
-                <div className="col-md-3">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">From</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_from"
-                      value={val.time_from}
-                      onChange={(e) => ildInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
-                    />
+                <div className=" flex flex-wrap gap-y-4  justify-center">
+                  <div className="col-md-3 ">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">From</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_from"
+                        value={val.time_from}
+                        onChange={(e) => ildInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3 ms-4">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">To</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_to"
-                      value={val.time_to}
-                      onChange={(e) => ildInputChange(e, i)}
-                      disabledSelect={!isEditable&&requestData}
-                    />
+                  <div className="col-md-3 ml-4">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">To</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_to"
+                        value={val.time_to}
+                        onChange={(e) => ildInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-<div className="flex gap-5 ">
-<label className="form-label me-5 col-md-1 font-bold">
-                Till Date :
-              </label>
-  <input type="checkbox" name="till_date" id="" disabled={!isEditable && requestData} checked={val?.till_date} onChange={(e) => ildInputChange(e, i)}/>
-</div>
+              <div className="flex gap-5 ">
+                <label className="form-label me-5 col-md-1 font-bold">
+                  Till Date :
+                </label>
+                <input
+                  type="checkbox"
+                  name="till_date"
+                  id=""
+                  disabled={!isEditable && requestData}
+                  checked={val?.till_date}
+                  onChange={(e) => ildInputChange(e, i)}
+                />
+              </div>
               <div className="col">
                 <Select
                   name="tsp"
                   placeholder="Select TSP"
-                  options={tspdata }
+                  options={tspdata}
                   value={tspdata?.filter((obj) =>
                     IldList[i]?.tsp?.includes(obj?.id)
                   )}
-                  isOptionDisabled={(option)=>option.disabled}
+                  isOptionDisabled={(option) => option.disabled}
                   className="basic-multi-select w-[100%]"
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
-                  isDisabled={!isEditable&&requestData}
+                  isDisabled={!isEditable && requestData}
                   isClearable={true}
                   required
                 />
               </div>
 
-              {(!requestData||isEditable) && (
+              {(!requestData || isEditable) && (
                 <div>
                   <div className="flex gap-5">
                     {IldList.length !== 1 && (
@@ -220,7 +244,6 @@ function Ild({ requestData, IldList, setIldList,activeForm,tspdata,requestprovid
                   </div>
                 </div>
               )}
-            
             </div>
           </div>
           <hr className="font-bold" />

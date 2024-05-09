@@ -12,16 +12,23 @@ function CellId({
   isEditable,
 }) {
   const mobileInputChange = (e, index) => {
-    const { name, value,checked } = e?.target;
+    const { name, value, checked } = e?.target;
     const list = [...cellIdList];
-    list[index][name] = name=="till_date"?checked: value;;
+    list[index][name] = name == "till_date" ? checked : value;
     list[index]["target_type"] = activeForm?.target_type_id;
 
     setCellIdList(list);
   };
   const dropdownChange = (e, data, index) => {
     const list = [...cellIdList];
-    list[index][data?.name] = e?.length > 0 ? e?.map((i) => i.id) :(e===null)?[]:e.value==="ALL"?e.id:[e.id];
+    list[index][data?.name] =
+      e?.length > 0
+        ? e?.map((i) => i.id)
+        : e === null
+        ? []
+        : e.value === "ALL"
+        ? e.id
+        : [e.id];
     setCellIdList(list);
   };
 
@@ -33,7 +40,7 @@ function CellId({
         date_to: null,
         time_from: "00:00",
         time_to: "00:00",
-        till_date:false,
+        till_date: false,
         mobile_number: "",
         tsp: cellIdList[0].tsp,
         target_type: activeForm?.target_type_id,
@@ -66,7 +73,6 @@ function CellId({
                   type="text"
                   value={val.cell_id}
                   required={true}
-                  
                   name="cell_id"
                   onChange={(e) => mobileInputChange(e, i)}
                   disabledSelect={!isEditable && requestData}
@@ -95,31 +101,33 @@ function CellId({
               <label className="form-label me-4 col-md-1 font-bold required">
                 Date :
               </label>
-
-              <div className="flex gap-5">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">From</span>
-                  <Input
-                    label={" "}
-                    name="date_from"
-                    type="date"
-                    value={val.date_from}
-                    onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={!isEditable && requestData}
-                  />
+              <div className="flex flex-wrap gap-y-4 justify-center">
+                {" "}
+                <div className="flex gap-5 ">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">From</span>
+                    <Input
+                      label={" "}
+                      name="date_from"
+                      type="date"
+                      value={val.date_from}
+                      onChange={(e) => mobileInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-md-3 ms-4">
-                <div className="w-15  input-group flex items-center gap-3">
-                  <span className="input-group-text font-bold">To</span>
-                  <Input
-                    label={" "}
-                    name="date_to"
-                    type="date"
-                    value={val.date_to}
-                    onChange={(e) => mobileInputChange(e, i)}
-                    disabledSelect={!isEditable && requestData}
-                  />
+                <div className="col-md-3 ms-4">
+                  <div className="w-15  input-group flex items-center gap-3">
+                    <span className="input-group-text font-bold">To</span>
+                    <Input
+                      label={" "}
+                      name="date_to"
+                      type="date"
+                      value={val.date_to}
+                      onChange={(e) => mobileInputChange(e, i)}
+                      disabledSelect={!isEditable && requestData}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -128,40 +136,48 @@ function CellId({
                 <label className="form-label me-4 col-md-1 font-bold required">
                   Time :
                 </label>
-
-                <div className="col-md-3">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">From</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_from"
-                      value={val.time_from}
-                      onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={!isEditable && requestData}
-                    />
+                <div className="flex flex-wrap gap-y-4 justify-center">
+                  <div className="col-md-3">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">From</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_from"
+                        value={val.time_from}
+                        onChange={(e) => mobileInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-3 ms-4">
-                  <div className="flex items-center gap-3 ">
-                    <span className="input-group-text font-bold">To</span>
-                    <Input
-                      label={" "}
-                      type="time"
-                      name="time_to"
-                      value={val.time_to}
-                      onChange={(e) => mobileInputChange(e, i)}
-                      disabledSelect={!isEditable && requestData}
-                    />
+                  <div className="col-md-3 ms-4">
+                    <div className="flex items-center gap-3 ">
+                      <span className="input-group-text font-bold">To</span>
+                      <Input
+                        label={" "}
+                        type="time"
+                        name="time_to"
+                        value={val.time_to}
+                        onChange={(e) => mobileInputChange(e, i)}
+                        disabledSelect={!isEditable && requestData}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="flex gap-5 ">
-<label className="form-label me-5 col-md-1 font-bold">
-                Till Date :
-              </label>
-  <input type="checkbox" name="till_date" id="" disabled={!isEditable && requestData} checked={val?.till_date} onChange={(e) => mobileInputChange(e, i)}/>
-</div>
+                <label className="form-label me-5 col-md-1 font-bold">
+                  Till Date :
+                </label>
+                <input
+                  type="checkbox"
+                  name="till_date"
+                  id=""
+                  disabled={!isEditable && requestData}
+                  checked={val?.till_date}
+                  onChange={(e) => mobileInputChange(e, i)}
+                />
+              </div>
               <div className="col flex gap-5 items-center justify-start">
                 <Select
                   name="tsp"
@@ -175,11 +191,11 @@ function CellId({
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isClearable={true}
-                  isDisabled={!isEditable&&requestData}
+                  isDisabled={!isEditable && requestData}
                   required
                 />
               </div>
-            
+
               {(!requestData || isEditable) && (
                 <div>
                   <div className="flex gap-5">

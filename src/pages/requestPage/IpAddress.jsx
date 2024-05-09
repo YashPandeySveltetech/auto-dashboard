@@ -101,9 +101,9 @@ function IpAddress({
               <label className="form-label me-4 col-md-1 font-bold">
                 Date :
               </label>
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap gap-y-4 justify-center">
                 <div className="flex gap-5 ">
-                  <div className="w-15  input-group flex items-center gap-3 flex-wrap">
+                  <div className="w-15  input-group flex items-center  gap-3 flex-wrap">
                     <span className="input-group-text font-bold">From</span>
                     <Input
                       label={" "}
@@ -115,8 +115,8 @@ function IpAddress({
                     />
                   </div>
                 </div>
-                <div className="col-md-3 ms-4">
-                  <div className="w-15  input-group flex items-center gap-3">
+                <div className="col-md-3 ml-4 ">
+                  <div className="w-15  input-group flex items-center gap-3 ">
                     <span className="input-group-text font-bold">To</span>
                     <Input
                       label={" "}
@@ -131,11 +131,11 @@ function IpAddress({
               </div>
 
               {/*  Time */}
-              <div className="flex items-center justify-start gap-5  flex-wrap">
+              <div className="flex items-center justify-start gap-5  flex-wrap ">
                 <label className="form-label me-4 col-md-1 font-bold">
                   Time :
                 </label>
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap gap-y-4 justify-center">
                   {" "}
                   <div className="col-md-3">
                     <div className="flex items-center gap-3 ">
@@ -152,7 +152,7 @@ function IpAddress({
                       />
                     </div>
                   </div>
-                  <div className="col-md-3 ms-4">
+                  <div className="col-md-3 ml-4">
                     <div className="flex items-center gap-3 ">
                       <span className="input-group-text font-bold w-[25%]">
                         To

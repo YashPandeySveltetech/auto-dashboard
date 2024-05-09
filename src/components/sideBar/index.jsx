@@ -16,6 +16,10 @@ import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import StarsIcon from '@mui/icons-material/Stars';
 
 function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email } = useSelector((state) => state.user?.userData);
@@ -73,9 +77,6 @@ function Sidebar({ isOpen, setIsOpen }) {
     );
     if (res.statusCode === 200) {
       localStorage.setItem("token", res?.responsePayload.access);
-    } else {
-      localStorage.clear();
-      window.location.reload();
     }
   };
   useEffect(() => {
@@ -192,7 +193,6 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bxl-codepen icon">
                   <Amd className="w-[3rem] h-[3rem] text-white " />
                 </i>
-                <div className="w-[2rem]">{email}</div>
               </div>
             </>
           )}
@@ -202,10 +202,39 @@ function Sidebar({ isOpen, setIsOpen }) {
             <GiHamburgerMenu />
           </i>
         </div>
+
+        <div className="user_profile">
+          {isOpen ? (
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h2 className="text-lg font-semibold mb-2 text-center">
+                User Profile
+              </h2>
+              <div className="mb-2 ml-0 flex justify-start items-center">
+                <label className="block font-medium text-gray-100">
+                  <DriveFileRenameOutlineIcon  sx={{ fontSize: 20 }}/> : 
+                </label>
+                <p className="text-gray-200  ml-1">John Doe</p>
+              </div>
+              <div className="mb-2 flex justify-start items-center">
+                <label className="block text-gray-200"><AlternateEmailIcon sx={{ fontSize: 20 }}/>: </label>
+                <p className="text-gray-200 font-medium ml-1" >john@example.com</p>
+              </div>
+              <div className="mb-2 flex justify-start items-center">
+                <label className="block text-gray-200"><StarsIcon sx={{ fontSize: 20 }}/> : </label>
+                <p className="text-gray-200 font-medium ml-1">Admin</p>
+              </div>
+            </div>
+          ) : (
+            <div className="close_side_user">
+              <PermIdentityIcon sx={{ fontSize: 35 }} />
+            </div>
+          )}
+        </div>
+
         {/* <ul className="nav-list"> */}
 
         {/* <li> */}
-        <div className="mt-10 flex flex-col justify-between h-[80vh] overflow-scroll">
+        <div className="mt-10 flex flex-col justify-between h-[60vh] overflow-scroll">
           <ul>
             {list.map((item, key) => (
               <ListItem {...item} key={key} />

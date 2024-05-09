@@ -19,15 +19,7 @@ import Toaster from "../utils/toaster/Toaster";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
-  const navigate = useNavigate()
   const Loading = useSelector((state) => state?.common?.loading);
-const token= localStorage.getItem("token")
-useEffect(()=>{
-if(!token){
-  navigate('/login')
-  // Toaster("error", "session expired")
-}
-},[])
   return (
     <main>
       {Loading && <Loader />}

@@ -76,7 +76,7 @@ function LoginPage() {
 
   const LoginWithMobile = () => (
     <>
-      <div className="input-group mb-3 flex align-items-center ">
+      <div className="input-group mb-3   ">
         <Input
           onChange={handleChange}
           label={"Mobile No."}
@@ -89,23 +89,11 @@ function LoginPage() {
           inputMode="numeric"
         />
       </div>
-
-      <div className="text-primary text-end">
-        <button
-          type="button"
-          onClick={() => {
-            return setLoginWith("email"), setFormValue({}), setIsOtp(false);
-          }}
-          className="btn btn-outline-primary"
-        >
-          login with email?
-        </button>
-      </div>
     </>
   );
   const LoginWithEmail = () => (
     <>
-      <div className="input-group mb-3 flex align-items-center ">
+      <div className="input-group mb-3   ">
         <Input
           onChange={handleChange}
           label={"Email"}
@@ -114,18 +102,6 @@ function LoginPage() {
           value={formValue?.email || ""}
           disabled={isOtp}
         />
-      </div>
-
-      <div className="text-primary text-end">
-        <button
-          type="button"
-          onClick={() => {
-            return setLoginWith("mobile"), setFormValue({}), setIsOtp(false);
-          }}
-          className="btn btn-outline-primary"
-        >
-          login with mobile?
-        </button>
       </div>
     </>
   );
@@ -171,17 +147,17 @@ function LoginPage() {
   );
 
   return (
-    <div className=" h-[100vh]  flex justify-center items-center w-[100%] ">
-      <div className="bg-white flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem]">
+    <div className=" h-[100vh]  flex justify-center items-center w-[100%] bgimg ">
+      <div className=" bg-zinc-200 flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem] ">
         <div className="text-2xl font-extrabold	text-center ">Login</div>
-        <div className=" flex justify-center gap-5 flex-col">
+        <div className=" flex justify-center gap-5 flex-col ">
           <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
             {loginWith === "email"
               ? LoginWithEmail()
               : loginWith === "mobile"
               ? LoginWithMobile()
               : ""}
-            <div className="input-group mb-3 flex align-items-center">
+            <div className="input-group mb-3 ">
               <Input
                 onChange={handleChange}
                 label={"Password"}
@@ -198,19 +174,14 @@ function LoginPage() {
                 {isLoading ? (
                   "Otp Sending..."
                 ) : (
-                  <div style={{ textAlign: "center", marginTop: "10px" }}>
+                  
                     <div
                       className="col flex align-items-center justify-center"
-                      style={{
-                        background: "green",
-                        borderRadius: "5px",
-                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                        padding: "5px",
-                      }}
+                      
                     >
                       <button
                         type="submit"
-                        className="btn  ms-4 "
+                        className="btn  ms-4 text-white bg-green-500 px-5 py-1 rounded"
                         style={{
                           fontSize: "18px",
                         }}
@@ -218,7 +189,40 @@ function LoginPage() {
                       >
                         Login
                       </button>
-                    </div>
+                
+                  </div>
+                )}
+                {loginWith === "email" ? (
+                  <div className="text-primary text-center mt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        return (
+                          setLoginWith("mobile"),
+                          setFormValue({}),
+                          setIsOtp(false)
+                        );
+                      }}
+                      className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                    >
+                      login with mobile?
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-primary text-center mt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        return (
+                          setLoginWith("email"),
+                          setFormValue({}),
+                          setIsOtp(false)
+                        );
+                      }}
+                      className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                    >
+                      login with email?
+                    </button>
                   </div>
                 )}
               </>

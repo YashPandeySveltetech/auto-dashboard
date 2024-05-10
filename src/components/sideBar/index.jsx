@@ -16,6 +16,7 @@ import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
+import Toaster from "../../utils/toaster/Toaster";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email } = useSelector((state) => state.user?.userData);
@@ -73,10 +74,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     );
     if (res.statusCode === 200) {
       localStorage.setItem("token", res?.responsePayload.access);
-    } else {
-      localStorage.clear();
-      window.location.reload();
-    }
+    } 
   };
   useEffect(() => {
     let fourMinutes = Number(1000 * 60 * 4 + 50000);
@@ -88,6 +86,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     handleUserDetail();
+    refreshApi()
   }, []);
 
   const handleUserDetail = async () => {

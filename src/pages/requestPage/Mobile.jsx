@@ -94,7 +94,7 @@ function Mobile({
     <>
       {MobileList?.map((val, i) => (
         <div
-          className="shadow-lg shadow-cyan-500/50 p-5"
+          className="shadow-lg shadow-gray-500/50 p-5"
           style={{ background: "#FFFAFA" }}
           key={i}
         >
@@ -120,7 +120,7 @@ function Mobile({
               <span id="message"></span>
             </div>
 
-            <div className="flex justify-start items-center gap-5 flex-wrap">
+            <div className="flex justify-start flex-col flex-wrap">
               <label className="font-bold required" htmlFor="">
                 Request to provide
               </label>
@@ -130,7 +130,7 @@ function Mobile({
                 value={requestprovide?.filter((obj) =>
                   MobileList[i]?.request_to_provide?.includes(obj?.id)
                 )}
-                className="basic-multi-select w-full sm:w-[50%]"
+                className="basic-multi-select !w-[100%] sm:w-[50%]"
                 classNamePrefix="select"
                 onChange={(e, data) => dropdownChange(e, data, i)}
                 isDisabled={!isEditable && requestData}
@@ -138,9 +138,9 @@ function Mobile({
             </div>
           </div>
 
-          <div className=" flex flex-col md:flex-row mt-6 flex-wrap ">
-            <div className="w-full md:w-1/2 flex items-start md:items-center  flex-wrap mb-4 md:mb-0 flex-col md:flex-row">
-              <label className="form-label mr-4 font-bold">Date:</label>
+          <div className=" flex flex-col md:flex-row mt-6 flex-wrap justify-between">
+            <div className="">
+              <label className="form-label mb-2 font-bold">Select Date:</label>
               <div className="flex items-center justify-between w-full flex-col md:flex-row md:w-96 gap-y-4 flex-wrap">
                 <div className="flex items-center w-48 justify-between ">
                   <span className="font-bold">From</span>

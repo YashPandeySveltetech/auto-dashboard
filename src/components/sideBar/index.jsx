@@ -226,7 +226,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Logout</span>
               </NavLink>
-              <span className="tooltip">Logout</span>
+              {/* <span className="tooltip">Logout</span> */}
             </li>
 
             <li>
@@ -238,7 +238,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bx-grid-alt">
                   <RiLockPasswordLine />
                 </i>
-                {/* <span className="links_name">Change Password</span> */}
+                <span className="links_name">Change Password</span>
               </NavLink>
               {/* <span className="tooltip">Change Password</span> */}
             </li>

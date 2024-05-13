@@ -283,7 +283,7 @@ function RequestList() {
       <div className="text-center text-gray-700 text-4xl p-4">Dashboard</div>
       {filtersection()}
       <div>
-        <div className="relative overflow-x-auto p-3 z-[-1]">
+        <div className=" overflow-x-auto p-3 z-[-1]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 border border-r-4">
             <thead
               className="text-center text-xs text-gray-700 uppercase bg-gray-50"

@@ -128,9 +128,9 @@ function Imei({
                 />
               </div>
             </div>
-            <>
+            <div className="flex flex-wrap w-full  mt-3">
               {" "}
-              <div>
+              <div className="w-full sm:w-[50%]">
                 <label className="font-bold required">Choose Type:</label>
                 <div className="flex flex-wrap gap-2">
                   <Select
@@ -139,7 +139,7 @@ function Imei({
                     value={firType?.filter(
                       (obj) => ImeiList[i]?.fir_or_complaint == obj.value
                     )}
-                    className="basic-multi-select  w-full sm:w-[30%]"
+                    className="basic-multi-select  w-full sm:w-[50%]"
                     classNamePrefix="select"
                     onChange={(e, data) => dropdownChange(e, data, i)}
                     isSearchable={false}
@@ -174,22 +174,22 @@ function Imei({
                   />
                 </div>
               </div>
-              <div>
-                <label className="font-bold required">Case Type:</label>
+              <div className="w-full sm:w-[40%] flex flex-col justify-start  gap-x-5 flex-wrap">
+                <label className="font-bold required mr-7">Case Type:</label>
                 <Select
                   name="case_type"
                   options={caseType}
                   value={caseType?.filter(
                     (obj) => ImeiList[i]?.case_type == obj.id
                   )}
-                  className="basic-multi-select w-full sm:w-[50%]"
+                  className="basic-multi-select w-full "
                   classNamePrefix="select"
                   onChange={(e, data) => dropdownChange(e, data, i)}
                   isDisabled={!isEditable && requestData}
                   required
                 />
               </div>
-            </>
+            </div>
             {/* CDR DATE TIME */}
             {/* date  */}
 
@@ -212,7 +212,7 @@ function Imei({
                     />
                   </div>
                 </div>
-                <div className="col-md-3 ms-4">
+                <div className="col-md-3 ml-4">
                   <div className="w-15  input-group flex items-center gap-3">
                     <span className="input-group-text font-bold">To</span>
                     <Input
@@ -247,7 +247,7 @@ function Imei({
                       />
                     </div>
                   </div>
-                  <div className="col-md-3 ms-4">
+                  <div className="col-md-3 ml-4">
                     <div className="flex items-center gap-3 ">
                       <span className="input-group-text font-bold">To</span>
                       <Input

@@ -45,19 +45,19 @@ function PasswordChangeModal() {
   };
   function check() {
 
-    var message = document.getElementById("message");
+    var passmessage = document.getElementById("passmessage");
 
     var goodColor = "#0C6";
     var badColor = "#FF9B37";
 
     if (confirmpassword !== password) {
    
-      message.style.color = badColor;
-      message.innerHTML = "password not matched";
+      passmessage.style.color = badColor;
+      passmessage.innerHTML = "password not matched";
     } else {
     
-      message.style.color = goodColor;
-      message.innerHTML = "";
+      passmessage.style.color = goodColor;
+      passmessage.innerHTML = "";
     }
   }
 
@@ -82,7 +82,7 @@ function PasswordChangeModal() {
           name="changepassword"
           onKeyUp={check}
         />
-        <span id="message"></span>
+        <span id="passmessage"></span>
         </div>
         
 </div>

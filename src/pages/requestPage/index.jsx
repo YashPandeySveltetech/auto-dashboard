@@ -31,7 +31,7 @@ function RequestForm({ requestData }) {
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
-  const [isformcreate,setIsFormCreate]=useState(false)
+  const [isformcreate, setIsFormCreate] = useState(false);
 
   const initialobj = {
     police_station: "",
@@ -421,11 +421,10 @@ function RequestForm({ requestData }) {
     apiPayload.form_request_for,
     tspdata,
     activeForm.target_type,
-    apiPayload
+    apiPayload,
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
- 
       setApiPayload({
         ...apiPayload,
         form_request_for: {
@@ -596,9 +595,7 @@ function RequestForm({ requestData }) {
         ...apiPayload,
         [name]: checked,
       });
-    }
-   else if (callfrom === "files") {
-  
+    } else if (callfrom === "files") {
       setApiPayload({
         ...apiPayload,
         [name]: files[0],
@@ -633,14 +630,12 @@ function RequestForm({ requestData }) {
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
-    }
-   else if (data.name === "case_type") {
+    } else if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
       });
-    }
-   else if (data.name === "fir_or_complaint") {
+    } else if (data.name === "fir_or_complaint") {
       if (e.value === "other") {
         setIsOther(true);
         setApiPayload({
@@ -731,268 +726,275 @@ function RequestForm({ requestData }) {
     <>
       <form action="" onSubmit={handleSubmit}>
         <div
-          className="mx-auto mt-5 p-3 bg-white shadow-md rounded-lg"
-          style={{ width: "96%" }}
+          className="mx-auto mt-5 p-10 bg-white shadow-md rounded-lg"
+          // style={{ width: "96%" }}
         >
-          <div style={{ textAlign: "center" }}>
-            <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
+          <div className="text-center text-gray-700 text-4xl p-4">
+            New Request Form
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center gap-4">
+          <div className=" flex w-full gap-10">
+            <div className="flex flex-col w-full">
               <label className="font-bold">Date:</label>
-              <div className="rounded-md border border-gray-300 p-2">
+              <div className="rounded-md border border-gray-300 p-2 w-full">
                 {currentDate}
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col w-full">
               <label className="font-bold">Time:</label>
-              <div className="rounded-md border border-gray-300 p-2">
+              <div className="rounded-md border border-gray-300 p-2 w-full">
                 {currentTime ?? "00:00:00"}
               </div>
             </div>
           </div>
 
-          <div className="mt-6  flex  justify-around grid-cols-3 md:grid-cols-3 sm:grid-col-2 gap-6 sm:gap-2 flex-wrap">
+          <div className="mt-6">
             {activeForm.target_type !== "IMEI_NUMBER" && (
               <>
                 {" "}
-                <div className="w-full md:w-80">
-                  <label className="font-bold required">Choose Type:</label>
-                  <div className="flex  gap-2">
-                    <Select
-                      name="fir_or_complaint"
-                      options={firType}
-                      value={
-                        requestData &&
-                        firType?.filter(
-                          (obj) => obj.value === apiPayload.fir_or_complaint
-                        )
-                      }
-                      className="basic-multi-select w-[80%]"
-                      classNamePrefix="select"
-                      onChange={(e, data) => dropdownChange(e, data)}
-                      isSearchable={false}
-                      isDisabled={!isEditable && requestData}
-                    />
+                <div className="flex gap-10">
+                  <div className="w-full ">
+                    <label className="font-bold required">Choose Type:</label>
+                    <div className="flex  gap-2">
+                      <Select
+                        name="fir_or_complaint"
+                        options={firType}
+                        value={
+                          requestData &&
+                          firType?.filter(
+                            (obj) => obj.value === apiPayload.fir_or_complaint
+                          )
+                        }
+                        className="basic-multi-select w-[80%]"
+                        classNamePrefix="select"
+                        onChange={(e, data) => dropdownChange(e, data)}
+                        isSearchable={false}
+                        isDisabled={!isEditable && requestData}
+                      />
 
-                    {isother && (
+                      {isother && (
+                        <Input
+                          type="text"
+                          name="fir_or_complaint"
+                          required
+                          placeholder={"Enter Type"}
+                          onChange={(e) =>
+                            setApiPayload({
+                              ...apiPayload,
+                              fir_or_complaint: e.target.value,
+                            })
+                          }
+                          value={apiPayload?.fir_or_complaint}
+                          disabledSelect={!isEditable && requestData}
+                        />
+                      )}
                       <Input
                         type="text"
-                        name="fir_or_complaint"
+                        name="fir_no"
                         required
-                        placeholder={"Enter Type"}
-                        onChange={(e) =>
-                          setApiPayload({
-                            ...apiPayload,
-                            fir_or_complaint: e.target.value,
-                          })
+                        placeholder={
+                          "Enter " + apiPayload?.fir_or_complaint + " no."
                         }
-                        value={apiPayload?.fir_or_complaint}
+                        onChange={handleChange}
+                        value={apiPayload?.fir_no}
                         disabledSelect={!isEditable && requestData}
+                        className="w-full"
                       />
-                    )}
-                    <Input
-                      type="text"
-                      name="fir_no"
+                    </div>
+                  </div>
+                  <div className="w-full ">
+                    <label className="font-bold required">Case Type:</label>
+
+                    <Select
+                      name="case_type"
+                      options={caseType}
+                      value={caseType?.filter(
+                        (obj) => apiPayload?.case_type == obj?.id
+                      )}
+                      className="basic-multi-select w-[100%]"
+                      classNamePrefix="select"
+                      onChange={(e, data) => dropdownChange(e, data)}
+                      isDisabled={!isEditable && requestData}
                       required
-                      placeholder={"Enter No"}
-                      onChange={handleChange}
-                      value={apiPayload?.fir_no}
-                      disabledSelect={!isEditable && requestData}
-                      className="w-full"
                     />
                   </div>
                 </div>
-                <div className="w-full md:w-48">
-                  <label className="font-bold required">Case Type:</label>
-                  <Select
-                    name="case_type"
-                    options={caseType}
-                    value={caseType?.filter(
-                      (obj) => apiPayload?.case_type == obj?.id
-                    )}
-                    className="basic-multi-select w-[100%]"
-                    classNamePrefix="select"
-                    onChange={(e, data) => dropdownChange(e, data)}
-                    isDisabled={!isEditable && requestData}
-                    required
+                <div className=" flex  items-center mt-5 gap-5">
+                  <label htmlFor="" className="font-bold">
+                    Select if Form is Urgent
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="urgent"
+                    onChange={(e) => handleChange(e, "urgent")}
+                    checked={apiPayload?.urgent}
+                    // checked={apiPayload?.urgent?"checked":"unchecked"}
+                    // checked={(apiPayload?.urgent===true)?"checked":""}
+                    disabled={!isEditable && requestData}
                   />
                 </div>
               </>
             )}
-            <div className="mt-6 flex gap-3 items-center">
-              <label htmlFor="" className="font-bold">
-                Select if Form is Urgent
-              </label>
-              <input
-                type="checkbox"
-                name="urgent"
-                onChange={(e) => handleChange(e, "urgent")}
-                checked={apiPayload?.urgent}
-                // checked={apiPayload?.urgent?"checked":"unchecked"}
-                // checked={(apiPayload?.urgent===true)?"checked":""}
-                disabled={!isEditable && requestData}
-              />
-            </div>
           </div>
-          <div className="mt-6 flex items-center gap-6">
+          <div className="mt-6 flex flex-col">
             <label className="font-bold required">Target Type:</label>
             <>
               <>
-                <div className="mx-auto flex-wrap">
-                  <div className="mb-4 flex space-x-4 p-2 bg-white rounded-lg shadow-md flex-wrap">
-
-                  {targetType?.map((val, key) => (
-                  <>
-                    <button
-                      onClick={(e) => handleChange(e, "target_type", val)}
-                      disabled={
-                        (!isEditable &&
-                          requestData &&
-                          !requestData?.form_request_for[arry[val?.name]]
-                            ?.length > 0) ||
-                        (isEditable &&
-                          requestData &&
-                          !requestData?.form_request_for[arry[val?.name]]
-                            ?.length > 0)
-                      }
-                      type="button"
-                      className={`flex-1 py-2 px-4 bg-gray-100 mb-3 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                        activeForm?.target_type === val?.name? "bg-blue-600 text-white" : "hover:text-gray-600 hover:border-black-300"
-                      }`
-                        // activeForm?.target_type === val?.name
-                        //   ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
-                        //   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                      }
-                      id={key}
-                    >
-                      {String(val?.name).replace("_", " ")}
-                      <span className="text-white-400">
-                        (
-                        {apiPayload?.form_request_for[arry[val?.name]]?.length >
-                        0
-                          ? apiPayload?.form_request_for[arry[val?.name]]
-                              ?.length
-                          : 0}
-                        )
-                      </span>
-                    </button>
-                  </>
-                ))}
+                <div className="flex-wrap">
+                  <div className="mb-4 flex space-x-4 p-2 rounded-lg shadow-md flex-wrap">
+                    {targetType?.map((val, key) => (
+                      <>
+                        <button
+                          onClick={(e) => handleChange(e, "target_type", val)}
+                          disabled={
+                            (!isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0) ||
+                            (isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0)
+                          }
+                          type="button"
+                          className={
+                            `flex-1 py-2 px-4 bg-gray-100 mb-3 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                              activeForm?.target_type === val?.name
+                                ? "bg-blue-400 text-white"
+                                : "hover:text-gray-600 hover:border-black-300"
+                            }`
+                            // activeForm?.target_type === val?.name
+                            //   ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
+                            //   : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                          }
+                          id={key}
+                        >
+                          {String(val?.name).replace("_", " ")}
+                          <span className="text-white-400">
+                            (
+                            {apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length > 0
+                              ? apiPayload?.form_request_for[arry[val?.name]]
+                                  ?.length
+                              : 0}
+                            )
+                          </span>
+                        </button>
+                      </>
+                    ))}
                     {/* <button
-                      onClick={() => setOpenTab(1)}
-                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                        openTab === 1 ? "bg-blue-600 text-white" : ""
-                      }`}
-                    >
-                      Section 1
-                    </button>
-                    <button
-                      onClick={() => setOpenTab(2)}
-                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                        openTab === 2 ? "bg-blue-600 text-white" : ""
-                      }`}
-                    >
-                      Section 2
-                    </button>
-                    <button
-                      onClick={() => setOpenTab(3)}
-                      className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                        openTab === 3 ? "bg-blue-600 text-white" : ""
-                      }`}
-                    >
-                      Section 3
-                    </button> */}
+                        onClick={() => setOpenTab(1)}
+                        className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                          openTab === 1 ? "bg-blue-600 text-white" : ""
+                        }`}
+                      >
+                        Section 1
+                      </button>
+                      <button
+                        onClick={() => setOpenTab(2)}
+                        className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                          openTab === 2 ? "bg-blue-600 text-white" : ""
+                        }`}
+                      >
+                        Section 2
+                      </button>
+                      <button
+                        onClick={() => setOpenTab(3)}
+                        className={`flex-1 py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
+                          openTab === 3 ? "bg-blue-600 text-white" : ""
+                        }`}
+                      >
+                        Section 3
+                      </button> */}
                   </div>
 
                   {/* <div
-                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
-                      openTab === 1 ? "border-blue-600" : "border-transparent"
-                    }`}
-                  >
-                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
-                      Section 1 Content
-                    </h2>
-                    <p className="text-gray-700">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nullam aliquam justo nec justo lacinia, vel ullamcorper
-                      nibh tincidunt.
-                    </p>
-                  </div>
+                      className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                        openTab === 1 ? "border-blue-600" : "border-transparent"
+                      }`}
+                    >
+                      <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                        Section 1 Content
+                      </h2>
+                      <p className="text-gray-700">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nullam aliquam justo nec justo lacinia, vel ullamcorper
+                        nibh tincidunt.
+                      </p>
+                    </div>
 
-                  <div
-                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
-                      openTab === 2 ? "border-blue-600" : "border-transparent"
-                    }`}
-                  >
-                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
-                      Section 2 Content
-                    </h2>
-                    <p className="text-gray-700">
-                      Proin non velit ac purus malesuada venenatis sit amet eget
-                      lacus. Morbi quis purus id ipsum ultrices aliquet Morbi
-                      quis.
-                    </p>
-                  </div>
+                    <div
+                      className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                        openTab === 2 ? "border-blue-600" : "border-transparent"
+                      }`}
+                    >
+                      <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                        Section 2 Content
+                      </h2>
+                      <p className="text-gray-700">
+                        Proin non velit ac purus malesuada venenatis sit amet eget
+                        lacus. Morbi quis purus id ipsum ultrices aliquet Morbi
+                        quis.
+                      </p>
+                    </div>
 
-                  <div
-                    className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
-                      openTab === 3 ? "border-blue-600" : "border-transparent"
-                    }`}
-                  >
-                    <h2 className="text-2xl font-semibold mb-2 text-blue-600">
-                      Section 3 Content
-                    </h2>
-                    <p className="text-gray-700">
-                      Fusce hendrerit urna vel tortor luctus, nec tristique odio
-                      tincidunt. Vestibulum ante ipsum primis in faucibus orci
-                      luctus et ultrices posuere cubilia Curae.
-                    </p>
-                  </div> */}
+                    <div
+                      className={`transition-all duration-300 bg-white p-4 rounded-lg shadow-md border-l-4 ${
+                        openTab === 3 ? "border-blue-600" : "border-transparent"
+                      }`}
+                    >
+                      <h2 className="text-2xl font-semibold mb-2 text-blue-600">
+                        Section 3 Content
+                      </h2>
+                      <p className="text-gray-700">
+                        Fusce hendrerit urna vel tortor luctus, nec tristique odio
+                        tincidunt. Vestibulum ante ipsum primis in faucibus orci
+                        luctus et ultrices posuere cubilia Curae.
+                      </p>
+                    </div> */}
                 </div>
               </>
             </>
             {/* <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-              <ul className="flex flex-wrap -mb-px">
-                {targetType?.map((val, key) => (
-                  <li className="me-2" key={key}>
-                    <button
-                      onClick={(e) => handleChange(e, "target_type", val)}
-                      disabled={
-                        (!isEditable &&
-                          requestData &&
-                          !requestData?.form_request_for[arry[val?.name]]
-                            ?.length > 0) ||
-                        (isEditable &&
-                          requestData &&
-                          !requestData?.form_request_for[arry[val?.name]]
-                            ?.length > 0)
-                      }
-                      type="button"
-                      className={
-                        activeForm?.target_type === val?.name
-                          ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
-                          : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                      }
-                      id={key}
-                    >
-                      {String(val?.name).replace("_", " ")}
-                      <span className="text-cyan-400">
-                        (
-                        {apiPayload?.form_request_for[arry[val?.name]]?.length >
-                        0
-                          ? apiPayload?.form_request_for[arry[val?.name]]
-                              ?.length
-                          : 0}
-                        )
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div> */}
+                <ul className="flex flex-wrap -mb-px">
+                  {targetType?.map((val, key) => (
+                    <li className="me-2" key={key}>
+                      <button
+                        onClick={(e) => handleChange(e, "target_type", val)}
+                        disabled={
+                          (!isEditable &&
+                            requestData &&
+                            !requestData?.form_request_for[arry[val?.name]]
+                              ?.length > 0) ||
+                          (isEditable &&
+                            requestData &&
+                            !requestData?.form_request_for[arry[val?.name]]
+                              ?.length > 0)
+                        }
+                        type="button"
+                        className={
+                          activeForm?.target_type === val?.name
+                            ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
+                            : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
+                        }
+                        id={key}
+                      >
+                        {String(val?.name).replace("_", " ")}
+                        <span className="text-cyan-400">
+                          (
+                          {apiPayload?.form_request_for[arry[val?.name]]?.length >
+                          0
+                            ? apiPayload?.form_request_for[arry[val?.name]]
+                                ?.length
+                            : 0}
+                          )
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div> */}
           </div>
           <div className="mt-6">
             {/* Additional Form Elements */}
@@ -1001,9 +1003,9 @@ function RequestForm({ requestData }) {
 
           {/* Comments */}
           <div className="mt-6">
-            <label className="font-bold required">Case Reference:</label>
+            <label className="font-bold required ">Case Reference:</label>
             <textarea
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent  border-1 border-gray-400 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
@@ -1077,22 +1079,22 @@ function RequestForm({ requestData }) {
               )}
             </div>
             {/* <div className="flex items-center gap-3">
-              <label className="font-bold">Requesting Officer Email.</label>
-              <div className="flex flex-col items-center">
-                <Input
-                  type="email"
-                  name="io_email"
-                  onChange={handleChange}
-                  value={apiPayload.io_email}
-                  disabledSelect={!isEditable && requestData}
-                />
-                <span id="message">(.gov & .nic email's only )</span>
-              </div>
-            </div> */}
+                <label className="font-bold">Requesting Officer Email.</label>
+                <div className="flex flex-col items-center">
+                  <Input
+                    type="email"
+                    name="io_email"
+                    onChange={handleChange}
+                    value={apiPayload.io_email}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                  <span id="message">(.gov & .nic email's only )</span>
+                </div>
+              </div> */}
 
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
-                send Otp
-              </button> </div>} */}
+                  send Otp
+                </button> </div>} */}
           </div>
 
           {/* Submit Button */}
@@ -1100,7 +1102,7 @@ function RequestForm({ requestData }) {
             <div className="mt-6">
               <button
                 disabled={activeForm?.target_type === ""}
-                className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-500"
+                className="bg-blue-400 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-500"
               >
                 Submit
               </button>

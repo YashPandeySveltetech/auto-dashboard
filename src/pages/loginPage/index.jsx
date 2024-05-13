@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from "react";
-import { XLg } from "react-bootstrap-icons";
+import { EyeFill, EyeSlashFill, XLg } from "react-bootstrap-icons";
 import Input from "../../components/input";
 // import { apiHandler } from '../../services/axios';
 // import { sendOTP, verifyOTP } from '../../services/Login';
@@ -21,7 +21,11 @@ function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -161,11 +165,18 @@ function LoginPage() {
               <Input
                 onChange={handleChange}
                 label={"Password"}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formValue?.password || ""}
                 disabled={isOtp}
               />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+              </button>
             </div>
             {isOtp ? (
               <>{Otp()}</>
@@ -174,22 +185,17 @@ function LoginPage() {
                 {isLoading ? (
                   "Otp Sending..."
                 ) : (
-                  
-                    <div
-                      className="col flex align-items-center justify-center"
-                      
+                  <div className="col flex align-items-center justify-center">
+                    <button
+                      type="submit"
+                      className="btn  ms-4 text-white bg-green-500 px-5 py-1 rounded"
+                      style={{
+                        fontSize: "18px",
+                      }}
+                      disabled={isLoading}
                     >
-                      <button
-                        type="submit"
-                        className="btn  ms-4 text-white bg-green-500 px-5 py-1 rounded"
-                        style={{
-                          fontSize: "18px",
-                        }}
-                        disabled={isLoading}
-                      >
-                        Login
-                      </button>
-                
+                      Login
+                    </button>
                   </div>
                 )}
                 {loginWith === "email" ? (

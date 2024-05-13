@@ -15,7 +15,7 @@ function Layout({ children }) {
         {/* <div>
           <Header />
         </div> */}
-        <div  style={{height:"98vh",overflow:'scroll'}} className={isOpen ? "ml-[15rem]": " ml-[5rem]"}>{children}</div>
+        <div  style={{height:"98vh",overflow:'scroll',background:"#e5e5e5"}} className={isOpen ? "ml-[15rem]": " ml-[5rem]"}>{children}</div>
       </div>
     </div>
   );

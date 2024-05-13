@@ -12,8 +12,10 @@ import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
 import FilterSection from "./filterSection";
 import { useDispatch, useSelector } from "react-redux";
+
+import { setLoading } from "../../redux/reducers/commonReducer";
 import {
-	DcpPassowrdConfirm,
+  DcpPassowrdConfirm,
   openDcpPasswordVerifyModal,
   openRejectModal,
   openViewLogModal,
@@ -21,15 +23,19 @@ import {
 } from "../../redux/reducers/modalsReducer";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
+
 
 function RequestList() {
   const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_API_KEY;
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
-  const { updateReqList ,isDcpPassword,dcpStatus} = useSelector((state) => state.modal);
+  const Loading = useSelector((state) => state?.common?.loading);
+  const { updateReqList, isDcpPassword, dcpStatus } = useSelector(
+    (state) => state.modal
+  );
   const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
@@ -49,12 +55,14 @@ function RequestList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
+    dispatch(setLoading(true));
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
       dateRange = "";
     }
+
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
@@ -63,16 +71,16 @@ function RequestList() {
           filter.form_status
         }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station_id=${
           filter?.police_station
-        }&target_type=${
-          filter?.target_type
-        }&target_type_value=${
+        }&target_type=${filter?.target_type}&target_type_value=${
           filter?.target_type_value
         }`,
       {},
       "GET"
     );
+
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
+      dispatch(setLoading(false));
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -90,6 +98,7 @@ function RequestList() {
         // setCurrentpage(currentpage+1)
         setIsPrevious(false);
       }
+
       // setIsOtp(true);
       // Toaster('success', 'OTP SENT Successfully!');
 
@@ -97,12 +106,12 @@ function RequestList() {
     }
   };
   const handleNext = () => {
-    setCurrent((prev)=>prev+1 );
+    setCurrent((prev) => prev + 1);
     getAllRequest({ active: current + 1 });
   };
 
   const handlePrevious = () => {
-    setCurrent((prev)=>prev-1 );
+    setCurrent((prev) => prev - 1);
     getAllRequest({ active: current - 1 });
   };
   useEffect(() => {
@@ -117,19 +126,18 @@ function RequestList() {
     case_ref: "",
     case_type: "",
     police_station: "",
-    target_type:"",
-    target_type_value:""
+    target_type: "",
+    target_type_value: "",
   });
 
-
-  useEffect(()=>{
-if(isDcpPassword){
-	approveRequest({
-		requestId: dcpStatus?.id,
-		approved_desion_id: dcpStatus?.approve_decision_id,
-	  })
-}
-  },[isDcpPassword])
+  useEffect(() => {
+    if (isDcpPassword) {
+      approveRequest({
+        requestId: dcpStatus?.id,
+        approved_desion_id: dcpStatus?.approve_decision_id,
+      });
+    }
+  }, [isDcpPassword]);
   const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
@@ -140,7 +148,7 @@ if(isDcpPassword){
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
       getAllRequest({ active: 1 });
-	  dispatch(DcpPassowrdConfirm(false));
+      dispatch(DcpPassowrdConfirm(false));
       Toaster("success", "Request Approved Successfully!");
 
       return;
@@ -166,65 +174,56 @@ if(isDcpPassword){
       return;
     }
   };
- const handleVerify= (item) => {
-	if(["DCP"].includes(rank) ){
-		
-		dispatch(openDcpPasswordVerifyModal(item))
-	}
-	else{
-		approveRequest({
-			requestId: item?.id,
-			approved_desion_id: item?.approve_decision_id,
-		  });
-	}
-    
-     
+  const handleVerify = (item) => {
+    if (["DCP"].includes(rank)) {
+      dispatch(openDcpPasswordVerifyModal(item));
+    } else {
+      approveRequest({
+        requestId: item?.id,
+        approved_desion_id: item?.approve_decision_id,
+      });
+    }
   };
 
-  const exportReport=async()=>{
+  const exportReport = async () => {
     let date_range =
-    dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
-  date_range = dateRange.startDate + date_range;
-  if (date_range === 0) {
-    dateRange = "";
-  }
-   else if(dateRange?.startDate ==="" ){
-      Toaster("","Please Select Date")
-    }
-    else{
+      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+    date_range = dateRange.startDate + date_range;
+    if (date_range === 0) {
+      dateRange = "";
+    } else if (dateRange?.startDate === "") {
+      Toaster("", "Please Select Date");
+    } else {
       const res = await ApiHandle(
-        EXPORT_DCP_FILE +
-          `?decision_type=APPROVE&sys_date=${date_range}`,
+        EXPORT_DCP_FILE + `?decision_type=APPROVE&sys_date=${date_range}`,
         {},
         "GET"
       );
-    if ( res?.responsePayload?.details?.length>0 ) {
-        exportExcel(res?.responsePayload?.details)
+      if (res?.responsePayload?.details?.length > 0) {
+        exportExcel(res?.responsePayload?.details);
+      } else {
+        Toaster("", "No Data Found");
       }
-      else{
-        Toaster("","No Data Found")
-      }
-   
     }
-
-  }
+  };
   const exportExcel = (data) => {
     const fileType =
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-  const fileExtension = ".xlsx";
-  const first_file_data = XLSX.utils.json_to_sheet(data);
-  const new_sheet = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(new_sheet, first_file_data, "file");
-  const excelBuffer = XLSX.write(new_sheet, {
-    bookType: "xlsx",
-    type: "array",
-  });
-  const fileData = new Blob([excelBuffer], { type: fileType });
-  FileSaver.saveAs(fileData, "file"+new Date().toLocaleDateString("en-GB") + fileExtension);
-   
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
+    const first_file_data = XLSX.utils.json_to_sheet(data);
+    const new_sheet = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(new_sheet, first_file_data, "file");
+    const excelBuffer = XLSX.write(new_sheet, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const fileData = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(
+      fileData,
+      "file" + new Date().toLocaleDateString("en-GB") + fileExtension
+    );
   };
-  const clearFilter= async ({ active = 1 }) => {
-    
+  const clearFilter = async ({ active = 1 }) => {
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
@@ -233,8 +232,14 @@ if(isDcpPassword){
     );
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
-      setFilter({req_to_provider: '', form_status: '', case_ref: '', case_type: '', police_station: ''})
-      setDateRange({startDate: '', endDate: ''})
+      setFilter({
+        req_to_provider: "",
+        form_status: "",
+        case_ref: "",
+        case_type: "",
+        police_station: "",
+      });
+      setDateRange({ startDate: "", endDate: "" });
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -257,34 +262,29 @@ if(isDcpPassword){
 
       return;
     }
-   
   };
 
-  const filtersection=useCallback(()=>{
-return(
-  <FilterSection
-  filter={filter}
-  getAllRequest={getAllRequest}
-  setFilter={setFilter}
-  dateRange={dateRange}
-  setDateRange={setDateRange}
-  exportReport={exportReport}
-  clearFilter={clearFilter}
-/>
-)
-  },[filter,dateRange])
+  const filtersection = useCallback(() => {
+    return (
+      <FilterSection
+        filter={filter}
+        getAllRequest={getAllRequest}
+        setFilter={setFilter}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        exportReport={exportReport}
+        clearFilter={clearFilter}
+      />
+    );
+  }, [filter, dateRange]);
 
   return (
     <>
-    <div className="text-center text-gray-700 text-4xl p-4">
-      Dashboard
-    </div>
-     {filtersection()}
+      <div className="text-center text-gray-700 text-4xl p-4">Dashboard</div>
+      {filtersection()}
       <div>
-        <div className="relative overflow-x-auto p-3">
-          <table
-            className="w-full text-sm text-left rtl:text-right text-gray-500 border border-r-4"  
-          >
+        <div className="relative overflow-x-auto p-3 z-[-1]">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 border border-r-4">
             <thead
               className="text-center text-xs text-gray-700 uppercase bg-gray-50"
               style={{ backgroundColor: "black", color: "white" }}
@@ -310,8 +310,8 @@ return(
                 </th>
 
                 {/* <th scope="col" className="px-6 py-3">
-                  View Attachment
-                </th> */}
+                View Attachment
+              </th> */}
                 <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
@@ -332,8 +332,8 @@ return(
                 )}
               </tr>
             </thead>
-       <tbody>
-              { requestList?.map((item) => (
+            <tbody>
+              {requestList?.map((item) => (
                 <tr className="bg-white border-b ">
                   <th
                     scope="row"
@@ -374,21 +374,21 @@ return(
                   </td>
 
                   {/* <td className="px-6 py-4 text-center">
-                   
-                    <button
-                      onClick={() =>
-                        viewAttachment({ requets_form_id: item?.id })
-                      }
-                    >
-                      <VisibilityIcon className="text-green-800" />
-                    </button>
-                   
-                  </td> */}
+                 
+                  <button
+                    onClick={() =>
+                      viewAttachment({ requets_form_id: item?.id })
+                    }
+                  >
+                    <VisibilityIcon className="text-green-800" />
+                  </button>
+                 
+                </td> */}
                   <td className="px-6 py-4 flex gap-2">
-                    {(["ACP", "DCP"].includes(rank) &&
-                      item?.decision == "PENDING" )&& (
+                    {["ACP", "DCP"].includes(rank) &&
+                      item?.decision == "PENDING" && (
                         <button
-                          onClick={()=>handleVerify(item)}
+                          onClick={() => handleVerify(item)}
                           className="bg-green-300 p-2 rounded-lg font-bold"
                           style={{
                             color: "black",
@@ -495,9 +495,19 @@ return(
                 </tr>
               ))}
             </tbody>
-                   
           </table>
-          {requestList.length>0?"" : <div className="flex justify-center items-center m-[10rem]"> <span className="text-[3rem] text-red-400 text-center"> No Data Found</span></div>      }
+
+          {requestList.length > 0 ? (
+            ""
+          ) : (
+            <div className="flex justify-center items-center m-[10rem]">
+              {" "}
+              <span className="text-[3rem] text-red-400 text-center">
+                {" "}
+                No Data Found
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

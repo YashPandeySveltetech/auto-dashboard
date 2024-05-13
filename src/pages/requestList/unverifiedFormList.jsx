@@ -42,25 +42,30 @@ function UnverifiedFormList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
-
+    dispatch(setLoading(true));
     let date_range =
-    dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
-  date_range = dateRange.startDate + date_range;
-  if (date_range === 0) {
-    dateRange = "";
-  }
+      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+    date_range = dateRange.startDate + date_range;
+    if (date_range === 0) {
+      dateRange = "";
+    }
     const res = await ApiHandle(
       FORM_REQUEST +
-        `?case_type=${filter?.case_type}&is_otp_verified=${false}&fir_no=${filter?.case_ref}&decision_type=PENDING${filter.form_status}&page=${active}&sys_date=${date_range}`,
+        `?case_type=${filter?.case_type}&is_otp_verified=${false}&fir_no=${
+          filter?.case_ref
+        }&decision_type=PENDING${
+          filter.form_status
+        }&page=${active}&sys_date=${date_range}`,
       {},
       "GET"
     );
     if (res.statusCode === 200) {
-      
+      dispatch(setLoading(false));
       setRequestList(res?.responsePayload);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
+        
       }
       if (!res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -136,8 +141,7 @@ function UnverifiedFormList() {
       return;
     }
   };
-  const clearFilter= async ({ active = 1 }) => {
-    
+  const clearFilter = async ({ active = 1 }) => {
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=PENDING&page=${active}&is_otp_verified=${false}&sys_date=`,
@@ -168,7 +172,6 @@ function UnverifiedFormList() {
 
       return;
     }
-   
   };
 
   return (
@@ -182,20 +185,20 @@ function UnverifiedFormList() {
         setDateRange={setDateRange}
       />
       <div>
-        <div className="relative overflow-x-auto p-3">
+        <div className="relative overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}
           >
             <thead
               className="text-center text-xs text-black uppercase bg-red-200 "
-            //   style={{ backgroundColor: "red", color: "white" }}
+              //   style={{ backgroundColor: "red", color: "white" }}
             >
               <tr>
                 <th scope="col" className="px-6 py-3">
                   DATE OF REQUEST
                 </th>
-               
+
                 <th scope="col" className="px-6 py-3">
                   REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
                 </th>
@@ -214,8 +217,6 @@ function UnverifiedFormList() {
                 <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
-               
-              
               </tr>
             </thead>
             <tbody>
@@ -227,20 +228,18 @@ function UnverifiedFormList() {
                   >
                     {item?.created_on?.split("T")[0]}
                   </th>
-                 
+
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {String(item?.request_to_provide).replace("_", ' ')}
-                   
+                    {String(item?.request_to_provide).replace("_", " ")}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {String(item?.target_type).replace("_", ' ')}
-                   
+                    {String(item?.target_type).replace("_", " ")}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
@@ -284,9 +283,11 @@ function UnverifiedFormList() {
                       )}
                     <button
                       onClick={() => {
-                       item.is_otp_verified?  navigate(
-                          `/request/view/${item?.request_to_provide[0]}/${item?.id}`
-                        ):dispatch(otpValidationModal({ id: item?.id }));
+                        item.is_otp_verified
+                          ? navigate(
+                              `/request/view/${item?.request_to_provide[0]}/${item?.id}`
+                            )
+                          : dispatch(otpValidationModal({ id: item?.id }));
                       }}
                       className="bg-blue-300 p-2 rounded-lg font-bold"
                       style={{
@@ -294,24 +295,22 @@ function UnverifiedFormList() {
                         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                       }}
                     >
-                    {item?.is_otp_verified?"View":"Verify"}
+                      {item?.is_otp_verified ? "View" : "Verify"}
                     </button>
                     <button
                       onClick={() => {
-                        !item.is_otp_verified? navigate(
-                          `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
-                        )
-                        :dispatch(otpValidationModal({ id: item?.id }));
+                        !item.is_otp_verified
+                          ? navigate(
+                              `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
+                            )
+                          : dispatch(otpValidationModal({ id: item?.id }));
                       }}
-                       
-                      
                       className="bg-green-300 p-2 rounded-lg font-bold"
                       style={{
                         color: "black",
                         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                       }}
                     >
-            
                       Edit
                     </button>
                     {["ACP", "DCP"].includes(rank) &&
@@ -328,12 +327,21 @@ function UnverifiedFormList() {
                         </button>
                       )}
                   </td>
-                 
                 </tr>
               ))}
             </tbody>
           </table>
-          {requestList?.results?.length>0?"" : <div className="flex justify-center items-center m-[10rem]"> <span className="text-[3rem] text-red-400 text-center"> No Data Found</span></div>      }
+          {requestList?.results?.length > 0 ? (
+            ""
+          ) : (
+            <div className="flex justify-center items-center m-[10rem]">
+              {" "}
+              <span className="text-[3rem] text-red-400 text-center">
+                {" "}
+                No Data Found
+              </span>
+            </div>
+          )}
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

@@ -20,6 +20,7 @@ import {
 import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { setLoading } from "../../redux/reducers/commonReducer";
 
 function RejectList() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ function RejectList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
+    dispatch(setLoading(true));
     let date_range =
     dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
   date_range = dateRange.startDate + date_range;
@@ -53,10 +55,12 @@ function RejectList() {
       "GET"
     );
     if (res.statusCode === 200) {
+      dispatch(setLoading(false));
       setRequestList(res?.responsePayload.results);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
+        
       }
       if (!res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -184,7 +188,7 @@ function RejectList() {
         clearFilter={clearFilter}
       />
       <div>
-        <div className="relative overflow-x-auto p-3">
+        <div className="relative overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}

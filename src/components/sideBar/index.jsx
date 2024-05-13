@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Amd, Boxes } from "react-bootstrap-icons";
+import { Amd, Boxes, XOctagon} from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { REFRESH, USER_DETAIL } from "../../utils/constants";
@@ -21,9 +21,10 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import StarsIcon from "@mui/icons-material/Stars";
 import Toaster from "../../utils/toaster/Toaster";
+import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 
 function Sidebar({ isOpen, setIsOpen }) {
-  const { rank, email } = useSelector((state) => state.user?.userData);
+  const { rank, email,username } = useSelector((state) => state.user?.userData);
   const refresh = localStorage.getItem("refresh")
     ? localStorage.getItem("refresh")
     : null;
@@ -48,7 +49,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       isShow: !["DCP"].includes(rank),
     },
     {
-      icon: <Boxes />,
+      icon: <XOctagon />,
       text: "Rejected Form",
       url: "/rejected-form",
       isShow: !["DCP"].includes(rank),
@@ -216,26 +217,26 @@ function Sidebar({ isOpen, setIsOpen }) {
                   <label className="block font-medium text-gray-100">
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :
                   </label>
-                  <p className="text-gray-200  ml-1">John Doe</p>
+                  <p className="text-gray-200  ml-1">{username}</p>
                 </div>
                 <div className="mb-2 flex justify-start items-center">
                   <label className="block text-gray-200">
                     <AlternateEmailIcon sx={{ fontSize: 20 }} />:{" "}
                   </label>
                   <p className="text-gray-200 font-medium ml-1">
-                    john@example.com
+                    {email}
                   </p>
                 </div>
                 <div className="mb-2 flex justify-start items-center">
                   <label className="block text-gray-200">
                     <StarsIcon sx={{ fontSize: 20 }} /> :{" "}
                   </label>
-                  <p className="text-gray-200 font-medium ml-1">Admin</p>
+                  <p className="text-gray-200 font-medium ml-1">{rank}</p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="close_side_user">
+            <div className="close_side_user" title="User Profile">
               <PermIdentityIcon sx={{ fontSize: 35 }} />
             </div>
           )}
@@ -244,7 +245,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         {/* <ul className="nav-list"> */}
 
         {/* <li> */}
-        <div className="mt-10 flex flex-col justify-between h-[70vh] overflow-x-scroll">
+        <div className="mt-10 flex flex-col justify-between h-[60vh] overflow-x-scroll">
           <ul>
             {list.map((item, key) => (
               <ListItem {...item} key={key} />

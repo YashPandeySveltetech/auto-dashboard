@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Amd, Boxes } from "react-bootstrap-icons";
+import { Amd, Boxes, XOctagon} from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { REFRESH, USER_DETAIL } from "../../utils/constants";
@@ -16,10 +16,15 @@ import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import StarsIcon from "@mui/icons-material/Stars";
 import Toaster from "../../utils/toaster/Toaster";
+import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 
 function Sidebar({ isOpen, setIsOpen }) {
-  const { rank, email } = useSelector((state) => state.user?.userData);
+  const { rank, email,username } = useSelector((state) => state.user?.userData);
   const refresh = localStorage.getItem("refresh")
     ? localStorage.getItem("refresh")
     : null;
@@ -44,7 +49,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       isShow: !["DCP"].includes(rank),
     },
     {
-      icon: <Boxes />,
+      icon: <XOctagon />,
       text: "Rejected Form",
       url: "/rejected-form",
       isShow: !["DCP"].includes(rank),
@@ -74,7 +79,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     );
     if (res.statusCode === 200) {
       localStorage.setItem("token", res?.responsePayload.access);
-    } 
+    }
   };
   useEffect(() => {
     let fourMinutes = Number(1000 * 60 * 4 + 50000);
@@ -86,7 +91,7 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     handleUserDetail();
-    refreshApi()
+    refreshApi();
   }, []);
 
   const handleUserDetail = async () => {
@@ -120,7 +125,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bx-grid-alt">{icon}</i>
                 <span className="links_name">{text}</span>
               </NavLink>
-              {/* <span className="tooltip">{text}</span> */}
+              <span className="tooltip text-black">{text}</span>
             </li>
           </>
         )}
@@ -191,7 +196,6 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bxl-codepen icon">
                   <Amd className="w-[3rem] h-[3rem] text-white " />
                 </i>
-                <div className="w-[2rem]">{email}</div>
               </div>
             </>
           )}
@@ -201,10 +205,47 @@ function Sidebar({ isOpen, setIsOpen }) {
             <GiHamburgerMenu />
           </i>
         </div>
+
+        <div className="user_profile">
+          {isOpen ? (
+            <div className="profile_card_open">
+              <div className="border border-gray-200 rounded-lg p-4">
+                <h2 className="text-lg font-semibold mb-2 text-center">
+                  User Profile
+                </h2>
+                <div className="mb-2 ml-0 flex justify-start items-center">
+                  <label className="block font-medium text-gray-100">
+                    <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :
+                  </label>
+                  <p className="text-gray-200  ml-1">{username}</p>
+                </div>
+                <div className="mb-2 flex justify-start items-center">
+                  <label className="block text-gray-200">
+                    <AlternateEmailIcon sx={{ fontSize: 20 }} />:{" "}
+                  </label>
+                  <p className="text-gray-200 font-medium ml-1">
+                    {email}
+                  </p>
+                </div>
+                <div className="mb-2 flex justify-start items-center">
+                  <label className="block text-gray-200">
+                    <StarsIcon sx={{ fontSize: 20 }} /> :{" "}
+                  </label>
+                  <p className="text-gray-200 font-medium ml-1">{rank}</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="close_side_user" title="User Profile">
+              <PermIdentityIcon sx={{ fontSize: 35 }} />
+            </div>
+          )}
+        </div>
+
         {/* <ul className="nav-list"> */}
 
         {/* <li> */}
-        <div className="mt-10 flex flex-col justify-between h-[80vh] overflow-scroll">
+        <div className="mt-10 flex flex-col justify-between h-[60vh] overflow-x-scroll">
           <ul>
             {list.map((item, key) => (
               <ListItem {...item} key={key} />
@@ -226,7 +267,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Logout</span>
               </NavLink>
-              {/* <span className="tooltip">Logout</span> */}
+              <span className="tooltip text-black">Logout</span>
             </li>
 
             <li>
@@ -240,7 +281,7 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Change Password</span>
               </NavLink>
-              {/* <span className="tooltip">Change Password</span> */}
+              <span className="tooltip text-black">Change Password</span>
             </li>
           </div>
         </div>

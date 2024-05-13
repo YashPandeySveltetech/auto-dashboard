@@ -7,7 +7,7 @@ function Card({
   width = "w-full",
   height = "h-full",
   radius = "rounded-[.5rem]",
-  background = "bg-gradient-to-b from-[#243443] to-[#151E29]",
+  background = "bg-black bg-opacity-50",
 }) {
   return (
     <div

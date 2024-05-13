@@ -21,6 +21,11 @@ function PasswordChangeModal() {
 
   const verifyPassword = async () => {
     setLoader(true)
+    if (!password || !confirmpassword) {
+      Toaster("", "Please fill in both password fields");
+      setLoader(false);
+      return;
+    }
     if(password===confirmpassword){
         const res = await ApiHandle(
            `${CHANGE_PASSWORD}${userData?.id}/`,

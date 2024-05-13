@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Amd, Boxes, XOctagon} from "react-bootstrap-icons";
+import { Amd, Boxes, XOctagon, PersonAdd,EnvelopeAt } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { REFRESH, USER_DETAIL } from "../../utils/constants";
@@ -21,10 +21,12 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import StarsIcon from "@mui/icons-material/Stars";
 import Toaster from "../../utils/toaster/Toaster";
-import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
+import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 
 function Sidebar({ isOpen, setIsOpen }) {
-  const { rank, email,username } = useSelector((state) => state.user?.userData);
+  const { rank, email, username } = useSelector(
+    (state) => state.user?.userData
+  );
   const refresh = localStorage.getItem("refresh")
     ? localStorage.getItem("refresh")
     : null;
@@ -61,7 +63,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     //   isShow: true,
     // },
     {
-      icon: <Boxes />,
+      icon: <PersonAdd />,
       text: "Add New User",
       url: "/register",
       isShow: ["ADMIN"].includes(rank),
@@ -219,11 +221,14 @@ function Sidebar({ isOpen, setIsOpen }) {
                   </label>
                   <p className="text-gray-200  ml-1">{username}</p>
                 </div>
-                <div className="mb-2 flex justify-start items-center">
-                  <label className="block text-gray-200">
-                    <AlternateEmailIcon sx={{ fontSize: 20 }} />:{" "}
+                <div className="mb-2 flex justify-start items-start">
+                  <label className="flex items-start items-center mt-[0px] text-gray-200">
+                    <EnvelopeAt sx={{ fontSize: 20 }} /> &nbsp;:
                   </label>
-                  <p className="text-gray-200 font-medium ml-1">
+                  <p
+                    className="text-gray-200 font-medium ml-1"
+                    style={{ wordBreak: "break-all" }}
+                  >
                     {email}
                   </p>
                 </div>

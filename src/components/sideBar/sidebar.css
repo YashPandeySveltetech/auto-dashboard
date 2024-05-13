@@ -153,7 +153,7 @@
   opacity: 0;
   pointer-events: none;
   transition: 0.4s;
-  margin-top: 10%;
+  /* margin-top: 10%; */
 }
 .sidebar.open li a .links_name {
   opacity: 1;

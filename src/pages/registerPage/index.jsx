@@ -361,7 +361,6 @@ const RegisterForm = () => {
   };
   const [formData, setFormData] = useState(defaultFormaData);
   const { isACP } = useSelector((state) => state.modal);
-  console.log(isACP);
   const handleClick = ({ isACP }) => {
     dispatch(setRank(isACP));
     setIsModalOpen(true);
@@ -427,7 +426,6 @@ const RegisterForm = () => {
     // const { name} = e.target;
     const value =isACP ? "DCP" : "ACP";
     // value = isACP ? "DCP" : "ACP";
-console.log(value)
     // setSelectedReportingTo(value);
     setSelectedRank("");
     const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");

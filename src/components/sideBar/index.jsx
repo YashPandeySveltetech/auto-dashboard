@@ -68,6 +68,12 @@ function Sidebar({ isOpen, setIsOpen }) {
       url: "/register",
       isShow: ["ADMIN"].includes(rank),
     },
+    {
+      icon: <PersonAdd />,
+      text: "Update User",
+      url: "/update",
+      isShow: ["ADMIN"].includes(rank),
+    },
   ];
   const dispatch = useDispatch();
   const navigate = useNavigate();

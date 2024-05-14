@@ -187,7 +187,10 @@ function UnverifiedFormList() {
   return (
     <>
       <Title text={"Unverified Form"} />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 22f972ac92746eaea628443bd56476426375b9e8
       <div className="outer-div-whole mx-auto ">
         <FilterSection
           filter={filter}

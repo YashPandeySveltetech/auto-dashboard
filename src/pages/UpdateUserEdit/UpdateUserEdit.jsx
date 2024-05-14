@@ -6,51 +6,51 @@ import { REGISTRATION } from "../../utils/constants";
 import { useParams } from "react-router-dom";
 
 const UpdateUserEdit = () => {
-  const {id}=useParams()
+  const { id } = useParams();
   const [formField, setFormField] = useState({
     email: "",
     username: "",
     mobile: "",
   });
-  const ranks = [
-    { value: "SHO", label: "SHO" },
-    { value: "DCP", label: "DCP" },
-    { value: "ACP", label: "ACP" },
-  ];
-  const [rank, setRank] = useState("");
-const handleChange=(e)=>{
-const {name, value}=e.target
-console.log(name, value)
-setFormField({
-...formField,
-[name]:value
-})
-}
-const getUser=async()=>{
-  const res = await ApiHandle(`${REGISTRATION}${id}/`, {}, "GET");
-  if (res.statusCode === 200) {
-    console.log(res.responsePayload)
-  }
-}
+  const [modal, setModal] = useState(false);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFormField({
+      ...formField,
+      [name]: value,
+    });
+  };
+  const getUser = async () => {
+    const res = await ApiHandle(`${REGISTRATION}${id}/`, {}, "GET");
+    if (res.statusCode === 200) {
+      setFormField({
+        email: res.responsePayload.email,
+        username: res.responsePayload.username,
+        mobile: res.responsePayload.mobile_no,
+      });
+    }
+  };
+  const updateInfo = async () => {
+    const res = await ApiHandle(
+      `${REGISTRATION}${id}/`,
+      { username: formField.username },
+      "PATCH"
+    );
+    if (res.statusCode === 200) {
+      setFormField({
+        email: res.responsePayload.email,
+        username: res.responsePayload.username,
+        mobile: res.responsePayload.mobile_no,
+      });
+    }
+  };
   useEffect(() => {
-    getUser()
-  },[]);
+    getUser();
+  }, []);
   return (
     <div>
       <h1>Update User Form</h1>
-      <label htmlFor="" className="font-bold required">
-        Rank
-      </label>
-      <Select
-        name="rank"
-        options={ranks}
-        //  value={requestprovide?.filter((obj) =>
-        //    MobileList[i]?.request_to_provide?.includes(obj?.id)
-        //  )}
-        value={rank}
-        onChange={(e) => handleChange(e)}
-        // disabledSelect={!isEditable && requestData}
-      />
       <label htmlFor="" className="font-bold required">
         Username
       </label>
@@ -84,39 +84,14 @@ const getUser=async()=>{
         onChange={(e) => handleChange(e)}
         // disabledSelect={!isEditable && requestData}
       />
-      <label htmlFor="" className="font-bold required">
-        District
-      </label>
-      <Input
-        label={""}
-        name="email"
-        type="email"
-        value={formField.email}
-        onChange={(e) => handleChange(e)}
-        // disabledSelect={!isEditable && requestData}
-      />
-      <label htmlFor="" className="font-bold required">
-        Email
-      </label>
-      <Input
-        label={""}
-        name="email"
-        type="email"
-        value={formField.email}
-        onChange={(e) => handleChange(e)}
-        // disabledSelect={!isEditable && requestData}
-      />
-      <label htmlFor="" className="font-bold required">
-        Email
-      </label>
-      <Input
-        label={""}
-        name="email"
-        type="email"
-        value={formField.email}
-        onChange={(e) => handleChange(e)}
-        // disabledSelect={!isEditable && requestData}
-      />
+      <div className="flex justify-around">
+        <button type="button" onClick={() => setModal(true)}>
+          change password
+        </button>
+        <button type="button" onClick={updateInfo}>
+          Update
+        </button>
+      </div>
     </div>
   );
 };

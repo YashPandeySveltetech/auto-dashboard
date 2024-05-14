@@ -934,7 +934,8 @@ function RequestForm({ requestData }) {
           <div className="mt-6">
             <label className="font-bold required ">Case Reference:</label>
             <textarea
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent  border-1 border-gray-400 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block p-5px w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer"
+
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}

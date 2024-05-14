@@ -250,7 +250,7 @@ function Sidebar({ isOpen, setIsOpen }) {
         {/* <ul className="nav-list"> */}
 
         {/* <li> */}
-        <div className="mt-10 flex flex-col justify-between h-[60vh] overflow-x-scroll">
+        <div className="mt-10 flex flex-col justify-between h-[60vh] ">
           <ul>
             {list.map((item, key) => (
               <ListItem {...item} key={key} />

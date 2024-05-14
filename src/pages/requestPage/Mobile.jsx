@@ -94,8 +94,8 @@ function Mobile({
     <>
       {MobileList?.map((val, i) => (
         <div
-          className="shadow-lg shadow-gray-500/50 p-5"
-          style={{ background: "#FFFAFA" }}
+          className="shadow-lg shadow-gray-500/50 p-5 "
+          style={{ background: "#FFFAFA", border:"" }}
           key={i}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">

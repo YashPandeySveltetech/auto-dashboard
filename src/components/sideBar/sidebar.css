@@ -30,7 +30,17 @@
 .close_side_user {
   margin-left: 10px;
   margin-top: 20px;
+  cursor: pointer;
+  color: white;
+
 }
+
+/* .close_side_user:hover{
+  background-color: white;
+  color:black;
+  border-radius:10px;
+  
+} */
 
 .sidebar .logo-details {
   /* height: 60px; */

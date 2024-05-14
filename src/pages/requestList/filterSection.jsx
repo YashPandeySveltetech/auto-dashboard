@@ -65,7 +65,9 @@ function FilterSection({
     setDateRange(newValue);
   };
   return (
-    <div className="flex border ml-5 border border-stone-300 font-small">
+
+   
+    <div className="inner-div-filter">
       <div className=" flex-flex-row w-[100%]">
         <div className="flex flex-col w-[100%] justify-between p-2 items-center">
           {/* <div>

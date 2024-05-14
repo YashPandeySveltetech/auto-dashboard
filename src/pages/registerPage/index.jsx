@@ -544,7 +544,7 @@ const RegisterForm = () => {
                   required={true}
                 />
                 <DropDown
-                        label="Select User"
+                        label=" Reporting to"
                         options={userOptions}
                         onChange={handleUserSelect}
                         value={selectedUser}

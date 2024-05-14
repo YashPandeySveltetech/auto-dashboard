@@ -21,6 +21,7 @@ import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { setLoading } from "../../redux/reducers/commonReducer";
+import Title from "../../utils/Title";
 
 function RejectList() {
   const navigate = useNavigate();
@@ -185,7 +186,10 @@ function RejectList() {
   };
 
   return (
+
     <>
+    <Title text={"Reject List"} />
+    <div className="outer-div-whole mx-auto ">
       <FilterSection
         filter={filter}
         getAllRequest={getAllRequest}
@@ -194,8 +198,8 @@ function RejectList() {
         setDateRange={setDateRange}
         clearFilter={clearFilter}
       />
-      <div>
-        <div className="overflow-x-auto p-3 z-[-1]">
+      <div className="inner-div-table z-[-1]">
+        <div className="relative overflow-x-auto p-3 ">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}
@@ -456,6 +460,7 @@ function RejectList() {
             </div>
           )}
         </div>
+      </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">
         {isPrevious ? (

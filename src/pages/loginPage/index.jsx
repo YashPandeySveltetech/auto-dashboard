@@ -161,20 +161,30 @@ function LoginPage() {
               : loginWith === "mobile"
               ? LoginWithMobile()
               : ""}
-           <div className="input-group mb-3 w-full relative border rounded border-gray-300 bg-blue-100">
-  <Input
-    onChange={handleChange}
-    label={""}
-    type={showPassword ? "text" : "password"}
-    name="password"
-    value={formValue?.password || ""}
-    disabled={isOtp}
-    className={"!w-full border-0 pr-12"} // Adjust padding to accommodate the eye icon
-  />
-  <div className="absolute right-0 top-0 bottom-0 flex items-center pr-3 cursor-pointer "> {/* Adjust position as needed */}
-    {showPassword ? <EyeSlashFill   onClick={togglePasswordVisibility} className=" hover:text-blue-400"/> : <EyeFill onClick={togglePasswordVisibility} className=" hover:text-blue-400" />}
-  </div>
-</div>
+            <div className="input-group mb-3" style={{ position: "relative" }}>
+              <Input
+                onChange={handleChange}
+                label={"Password"}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formValue?.password || ""}
+                disabled={isOtp}
+                style={{ paddingRight: "40px" }} // Adjust paddingRight to accommodate the button
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "65%",
+                  transform: "translateY(-50%)",
+                }}
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+              </button>
+            </div>
 
             {isOtp ? (
               <>{Otp()}</>

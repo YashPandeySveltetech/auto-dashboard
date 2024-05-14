@@ -839,7 +839,7 @@ function RequestForm({ requestData }) {
          
 
           <div>
-            <div className="flex rounded-lg  flex-wrap">
+            <div className="flex rounded-lg  flex-wrap justify-center gap-2">
               {targetType?.map((val, key) => (
                 <>
                   {/* <button
@@ -886,7 +886,7 @@ function RequestForm({ requestData }) {
 
             <div class="hidden sm:block">
               <div class="border-b border-gray-200">
-                <nav class="-mb-px flex gap-6">
+                <nav class="-mb-px  flex gap-6">
                   <button
                      onClick={(e) => handleChange(e, "target_type", val)}
                      disabled={
@@ -900,7 +900,7 @@ function RequestForm({ requestData }) {
                            ?.length > 0)
                      }
                      type="button"
-                     className={`className="shrink-0 border border-black border-r-0 p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                     className={`className="shrink-0 border border-black border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
                      ${
                       activeForm?.target_type === val?.name
                         ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "

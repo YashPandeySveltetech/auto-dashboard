@@ -24,7 +24,7 @@ import {
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
+import Title from "../../utils/Title";
 
 function RequestList() {
   const navigate = useNavigate();
@@ -280,100 +280,102 @@ function RequestList() {
 
   return (
     <>
-      <div className="text-center text-gray-700 text-4xl p-4">Dashboard</div>
-      {filtersection()}
-      <div>
-        <div className=" overflow-x-auto p-3 z-[-1]">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 border border-r-4">
-            <thead
-              className="text-center text-xs text-gray-700 uppercase bg-gray-50"
-              style={{ backgroundColor: "black", color: "white" }}
-            >
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  DATE OF REQUEST
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Police Station
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Requested Officer Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Fir No.
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
-                </th>
+      <Title text={"Dashboard"} />
+      <div className="outer-div-whole mx-auto ">
+        {filtersection()}
 
-                {/* <th scope="col" className="px-6 py-3">
+        <div className="inner-div-table">
+          <div className=" overflow-x-auto p-3 z-[-1]">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 border">
+              <thead
+                className="text-center text-xs text-gray-700 uppercase bg-gray-50"
+                style={{ backgroundColor: "black", color: "white" }}
+              >
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    DATE OF REQUEST
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Police Station
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Requested Officer Name
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Fir No.
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
+                  </th>
+
+                  {/* <th scope="col" className="px-6 py-3">
                 View Attachment
               </th> */}
-                <th scope="col" className="px-6 py-3">
-                  ACTION{" "}
-                </th>
-                {["ACP", "DCP"].includes(rank) && (
                   <th scope="col" className="px-6 py-3">
-                    REMARKS(REASON FOR REJECTION)
+                    ACTION{" "}
                   </th>
-                )}
-                {!["ACP", "DCP"].includes(rank) && (
-                  <th scope="col" className="px-6 py-3">
-                    ACP Status
-                  </th>
-                )}
-                {!["DCP"].includes(rank) && (
-                  <th scope="col" className="px-6 py-3">
-                    DCP Status
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {requestList?.map((item) => (
-                <tr className="bg-white border-b ">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap d"
-                  >
-                    {/* {item?.created_on?.split("T")[0]} */}
-                    {new Date(item?.created_on).toLocaleString("en-GB")}
-                  </th>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.added_by}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.io_name}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.fir_no}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.request_to_provide).replace("_", " ")}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.target_type).replace("_", " ")}
-                  </td>
+                  {["ACP", "DCP"].includes(rank) && (
+                    <th scope="col" className="px-6 py-3">
+                      REMARKS(REASON FOR REJECTION)
+                    </th>
+                  )}
+                  {!["ACP", "DCP"].includes(rank) && (
+                    <th scope="col" className="px-6 py-3">
+                      ACP Status
+                    </th>
+                  )}
+                  {!["DCP"].includes(rank) && (
+                    <th scope="col" className="px-6 py-3">
+                      DCP Status
+                    </th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {requestList?.map((item) => (
+                  <tr className="bg-white border-b ">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap d"
+                    >
+                      {/* {item?.created_on?.split("T")[0]} */}
+                      {new Date(item?.created_on).toLocaleString("en-GB")}
+                    </th>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {item?.added_by}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {item?.io_name}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {item?.fir_no}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {String(item?.request_to_provide).replace("_", " ")}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {String(item?.target_type).replace("_", " ")}
+                    </td>
 
-                  {/* <td className="px-6 py-4 text-center">
+                    {/* <td className="px-6 py-4 text-center">
                  
                   <button
                     onClick={() =>
@@ -384,130 +386,131 @@ function RequestList() {
                   </button>
                  
                 </td> */}
-                  <td className="px-6 py-4 flex gap-2">
-                    {["ACP", "DCP"].includes(rank) &&
-                      item?.decision == "PENDING" && (
+                    <td className="px-6 py-4 flex gap-2">
+                      {["ACP", "DCP"].includes(rank) &&
+                        item?.decision == "PENDING" && (
+                          <button
+                            onClick={() => handleVerify(item)}
+                            className="bg-green-300 p-2 rounded-lg font-bold"
+                            style={{
+                              color: "black",
+                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                            }}
+                          >
+                            Approve
+                          </button>
+                        )}
+                      <button
+                        onClick={() => {
+                          navigate(
+                            `/request/view/${item?.request_to_provide}/${item?.id}`
+                          );
+                        }}
+                        className="bg-blue-300 p-2 rounded-lg font-bold"
+                        style={{
+                          color: "black",
+                          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                        }}
+                      >
+                        View
+                      </button>
+                      {!item?.is_otp_verified && (
                         <button
-                          onClick={() => handleVerify(item)}
+                          onClick={() => {
+                            navigate(
+                              `/request/edit/${item?.request_to_provide}/${item?.id}`
+                            );
+                          }}
                           className="bg-green-300 p-2 rounded-lg font-bold"
                           style={{
                             color: "black",
                             boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                           }}
                         >
-                          Approve
+                          Edit
                         </button>
                       )}
-                    <button
-                      onClick={() => {
-                        navigate(
-                          `/request/view/${item?.request_to_provide}/${item?.id}`
-                        );
-                      }}
-                      className="bg-blue-300 p-2 rounded-lg font-bold"
-                      style={{
-                        color: "black",
-                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                      }}
-                    >
-                      View
-                    </button>
-                    {!item?.is_otp_verified && (
-                      <button
-                        onClick={() => {
-                          navigate(
-                            `/request/edit/${item?.request_to_provide}/${item?.id}`
-                          );
-                        }}
-                        className="bg-green-300 p-2 rounded-lg font-bold"
-                        style={{
-                          color: "black",
-                          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                        }}
-                      >
-                        Edit
-                      </button>
+                      {["ACP", "DCP"].includes(rank) &&
+                        item?.decision == "PENDING" && (
+                          <button
+                            onClick={() => dispatch(openRejectModal(item?.id))}
+                            className="bg-red-900 p-2 rounded-lg font-bold"
+                            style={{
+                              color: "white",
+                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                            }}
+                          >
+                            Reject
+                          </button>
+                        )}
+                    </td>
+
+                    {["ACP", "DCP"].includes(rank) && (
+                      <td className="px-6 py-4">
+                        <div>{item?.decision}</div>
+                        <div>
+                          {item?.decision == "REJECT" && (
+                            <button
+                              onClick={() => {
+                                dispatch(openViewLogModal(item?.id));
+                                dispatch(updateRequestList(false));
+                              }}
+                              className="bg-red-900 p-2 rounded-lg font-bold"
+                              style={{
+                                color: "white",
+                                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                              }}
+                            >
+                              View Log
+                            </button>
+                          )}
+                        </div>
+                      </td>
                     )}
-                    {["ACP", "DCP"].includes(rank) &&
-                      item?.decision == "PENDING" && (
-                        <button
-                          onClick={() => dispatch(openRejectModal(item?.id))}
-                          className="bg-red-900 p-2 rounded-lg font-bold"
-                          style={{
-                            color: "white",
-                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                          }}
-                        >
-                          Reject
-                        </button>
-                      )}
-                  </td>
+                    {!["ACP", "DCP"].includes(rank) && (
+                      <td className="px-6 py-4">
+                        <div>{item?.acp_status}</div>
+                      </td>
+                    )}
+                    {!["DCP"].includes(rank) && (
+                      <td className="px-6 py-4">
+                        <div>{item?.dcp_status}</div>
+                        <div>
+                          {item?.dcp_status == "REJECT" && (
+                            <button
+                              onClick={() => {
+                                dispatch(openViewLogModal(item?.id));
+                                dispatch(updateRequestList(false));
+                              }}
+                              className="bg-red-900 p-2 rounded-lg font-bold"
+                              style={{
+                                color: "white",
+                                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                              }}
+                            >
+                              View Log
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-                  {["ACP", "DCP"].includes(rank) && (
-                    <td className="px-6 py-4">
-                      <div>{item?.decision}</div>
-                      <div>
-                        {item?.decision == "REJECT" && (
-                          <button
-                            onClick={() => {
-                              dispatch(openViewLogModal(item?.id));
-                              dispatch(updateRequestList(false));
-                            }}
-                            className="bg-red-900 p-2 rounded-lg font-bold"
-                            style={{
-                              color: "white",
-                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                            }}
-                          >
-                            View Log
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  )}
-                  {!["ACP", "DCP"].includes(rank) && (
-                    <td className="px-6 py-4">
-                      <div>{item?.acp_status}</div>
-                    </td>
-                  )}
-                  {!["DCP"].includes(rank) && (
-                    <td className="px-6 py-4">
-                      <div>{item?.dcp_status}</div>
-                      <div>
-                        {item?.dcp_status == "REJECT" && (
-                          <button
-                            onClick={() => {
-                              dispatch(openViewLogModal(item?.id));
-                              dispatch(updateRequestList(false));
-                            }}
-                            className="bg-red-900 p-2 rounded-lg font-bold"
-                            style={{
-                              color: "white",
-                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                            }}
-                          >
-                            View Log
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {requestList.length > 0 ? (
-            ""
-          ) : (
-            <div className="flex justify-center items-center m-[10rem]">
-              {" "}
-              <span className="text-[3rem] text-red-400 text-center">
+            {requestList.length > 0 ? (
+              ""
+            ) : (
+              <div className="flex justify-center items-center m-[10rem]">
                 {" "}
-                No Data Found
-              </span>
-            </div>
-          )}
+                <span className="text-[3rem] text-red-400 text-center">
+                  {" "}
+                  No Data Found
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

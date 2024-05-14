@@ -72,3 +72,33 @@
   .bg_img{
     /* background-image: url("../../../public/bg-image.png"); */
   }
+
+
+  .outer-div-whole{
+
+    border:2px solid black;
+    width:97%;
+    border-radius:30px;
+    padding:5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    background: #F9F6EE;
+    }
+
+  .inner-div-filter{
+    width:100%;
+    margin-bottom: 3px;
+    border-radius: 30px 30px 0 0;
+    padding:5px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  }
+  .inner-div-table{
+    width:100%;
+    margin-bottom: 3px;
+    border-radius: 0 0 30px 30px;
+    padding:5px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  }
+  
+

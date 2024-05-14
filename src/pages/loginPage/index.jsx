@@ -161,7 +161,7 @@ function LoginPage() {
               : loginWith === "mobile"
               ? LoginWithMobile()
               : ""}
-            <div className="input-group mb-3 ">
+            <div className="input-group mb-3" style={{ position: "relative" }}>
               <Input
                 onChange={handleChange}
                 label={"Password"}
@@ -169,15 +169,23 @@ function LoginPage() {
                 name="password"
                 value={formValue?.password || ""}
                 disabled={isOtp}
+                style={{ paddingRight: "40px" }} // Adjust paddingRight to accommodate the button
               />
               <button
                 className="btn btn-outline-secondary"
                 type="button"
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "65%",
+                  transform: "translateY(-50%)",
+                }}
                 onClick={togglePasswordVisibility}
               >
                 {showPassword ? <EyeSlashFill /> : <EyeFill />}
               </button>
             </div>
+
             {isOtp ? (
               <>{Otp()}</>
             ) : (

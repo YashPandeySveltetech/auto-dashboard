@@ -22,6 +22,7 @@ import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import OtpValidationModal from "../../modals/otpValidationModal";
 import { setLoading } from "../../redux/reducers/commonReducer";
+import Title from "../../utils/Title";
 
 function UnverifiedFormList() {
   const navigate = useNavigate();
@@ -65,7 +66,6 @@ function UnverifiedFormList() {
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
-        
       }
       if (!res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -176,84 +176,87 @@ function UnverifiedFormList() {
 
   return (
     <>
-      <FilterSection
-        filter={filter}
-        getAllRequest={getAllRequest}
-        setFilter={setFilter}
-        clearFilter={clearFilter}
-        dateRange={dateRange}
-        setDateRange={setDateRange}
-      />
-      <div>
-        <div className="relative overflow-x-auto p-3 z-[-1]">
-          <table
-            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
-            style={{ border: "1px solid black" }}
-          >
-            <thead
-              className="text-center text-xs text-black uppercase bg-red-200 "
-              //   style={{ backgroundColor: "red", color: "white" }}
-            >
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  DATE OF REQUEST
-                </th>
+      <Title text={"Unverified Form"} />
 
-                <th scope="col" className="px-6 py-3">
-                  REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  I/O Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Fir No.
-                </th>
-                {/* <th scope="col" className="px-6 py-3">
-                  View Attachment
-                </th> */}
-                <th scope="col" className="px-6 py-3">
-                  ACTION{" "}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {requestList?.results?.map((item) => (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    {item?.created_on?.split("T")[0]}
+      <div className="outer-div-whole mx-auto ">
+        <FilterSection
+          filter={filter}
+          getAllRequest={getAllRequest}
+          setFilter={setFilter}
+          clearFilter={clearFilter}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+        />
+        <div className="inner-div-table z-[-1]">
+          <div className="relative overflow-x-auto p-3 ">
+            <table
+              className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
+              style={{ border: "1px solid black" }}
+            >
+              <thead
+                className="text-center text-xs text-black uppercase bg-red-200 "
+                //   style={{ backgroundColor: "red", color: "white" }}
+              >
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    DATE OF REQUEST
                   </th>
 
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.request_to_provide).replace("_", " ")}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.target_type).replace("_", " ")}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.io_name}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {item?.fir_no}
-                  </td>
-                  {/* <td className="px-6 py-4 text-center">
+                  <th scope="col" className="px-6 py-3">
+                    REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    I/O Name
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Fir No.
+                  </th>
+                  {/* <th scope="col" className="px-6 py-3">
+                  View Attachment
+                </th> */}
+                  <th scope="col" className="px-6 py-3">
+                    ACTION{" "}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {requestList?.results?.map((item) => (
+                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {item?.created_on?.split("T")[0]}
+                    </th>
+
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {String(item?.request_to_provide).replace("_", " ")}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {String(item?.target_type).replace("_", " ")}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {item?.io_name}
+                    </td>
+                    <td
+                      className="px-6 py-4 font-semibold"
+                      style={{ color: "black" }}
+                    >
+                      {item?.fir_no}
+                    </td>
+                    {/* <td className="px-6 py-4 text-center">
                     <button
                       onClick={() =>
                         viewAttachment({ requets_form_id: item?.id })
@@ -262,86 +265,87 @@ function UnverifiedFormList() {
                       <VisibilityIcon className="text-green-800" />
                     </button>
                   </td> */}
-                  <td className="px-6 py-4 flex gap-2">
-                    {["ACP", "DCP"].includes(rank) &&
-                      item?.decision == "PENDING" && (
-                        <button
-                          onClick={() => {
-                            approveRequest({
-                              requestId: item?.id,
-                              approved_desion_id: item?.approve_decision_id,
-                            });
-                          }}
-                          className="bg-green-300 p-2 rounded-lg font-bold"
-                          style={{
-                            color: "black",
-                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                          }}
-                        >
-                          Approve
-                        </button>
-                      )}
-                    <button
-                      onClick={() => {
-                        item.is_otp_verified
-                          ? navigate(
-                              `/request/view/${item?.request_to_provide[0]}/${item?.id}`
-                            )
-                          : dispatch(otpValidationModal({ id: item?.id }));
-                      }}
-                      className="bg-blue-300 p-2 rounded-lg font-bold"
-                      style={{
-                        color: "black",
-                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                      }}
-                    >
-                      {item?.is_otp_verified ? "View" : "Verify"}
-                    </button>
-                    <button
-                      onClick={() => {
-                        !item.is_otp_verified
-                          ? navigate(
-                              `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
-                            )
-                          : dispatch(otpValidationModal({ id: item?.id }));
-                      }}
-                      className="bg-green-300 p-2 rounded-lg font-bold"
-                      style={{
-                        color: "black",
-                        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                      }}
-                    >
-                      Edit
-                    </button>
-                    {["ACP", "DCP"].includes(rank) &&
-                      item?.decision == "PENDING" && (
-                        <button
-                          onClick={() => dispatch(openRejectModal(item?.id))}
-                          className="bg-red-900 p-2 rounded-lg font-bold"
-                          style={{
-                            color: "white",
-                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                          }}
-                        >
-                          Reject
-                        </button>
-                      )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {requestList?.results?.length > 0 ? (
-            ""
-          ) : (
-            <div className="flex justify-center items-center m-[10rem]">
-              {" "}
-              <span className="text-[3rem] text-red-400 text-center">
+                    <td className="px-6 py-4 flex gap-2">
+                      {["ACP", "DCP"].includes(rank) &&
+                        item?.decision == "PENDING" && (
+                          <button
+                            onClick={() => {
+                              approveRequest({
+                                requestId: item?.id,
+                                approved_desion_id: item?.approve_decision_id,
+                              });
+                            }}
+                            className="bg-green-300 p-2 rounded-lg font-bold"
+                            style={{
+                              color: "black",
+                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                            }}
+                          >
+                            Approve
+                          </button>
+                        )}
+                      <button
+                        onClick={() => {
+                          item.is_otp_verified
+                            ? navigate(
+                                `/request/view/${item?.request_to_provide[0]}/${item?.id}`
+                              )
+                            : dispatch(otpValidationModal({ id: item?.id }));
+                        }}
+                        className="bg-blue-300 p-2 rounded-lg font-bold"
+                        style={{
+                          color: "black",
+                          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                        }}
+                      >
+                        {item?.is_otp_verified ? "View" : "Verify"}
+                      </button>
+                      <button
+                        onClick={() => {
+                          !item.is_otp_verified
+                            ? navigate(
+                                `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
+                              )
+                            : dispatch(otpValidationModal({ id: item?.id }));
+                        }}
+                        className="bg-green-300 p-2 rounded-lg font-bold"
+                        style={{
+                          color: "black",
+                          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                        }}
+                      >
+                        Edit
+                      </button>
+                      {["ACP", "DCP"].includes(rank) &&
+                        item?.decision == "PENDING" && (
+                          <button
+                            onClick={() => dispatch(openRejectModal(item?.id))}
+                            className="bg-red-900 p-2 rounded-lg font-bold"
+                            style={{
+                              color: "white",
+                              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                            }}
+                          >
+                            Reject
+                          </button>
+                        )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {requestList?.results?.length > 0 ? (
+              ""
+            ) : (
+              <div className="flex justify-center items-center m-[10rem]">
                 {" "}
-                No Data Found
-              </span>
-            </div>
-          )}
+                <span className="text-[3rem] text-red-400 text-center">
+                  {" "}
+                  No Data Found
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className="card-footer flex justify-between p-3 mb-2 mt-2">

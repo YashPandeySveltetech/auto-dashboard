@@ -247,7 +247,7 @@ function Sidebar({ isOpen, setIsOpen }) {
               </div>
             </div>
           ) : (
-            <div className="close_side_user" title="User Profile">
+            <div className="close_side_user " title="User Profile">
               <PermIdentityIcon sx={{ fontSize: 35 }} />
             </div>
           )}

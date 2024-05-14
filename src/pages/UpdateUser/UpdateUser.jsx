@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { REGISTRATION } from "../../utils/constants";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateUser = () => {
-    const [list, setList]=useState([])
-    const navigate = useNavigate();
-  const handleReportingToSelect = async (e) => {
+  const [list, setList] = useState([]);
+  const [rank, setRank] = useState('ACP');
+  const navigate = useNavigate();
+
+  const handleReportingToSelect = async (rank) => {
+    const rankType = rank ? rank : "ACP";
+    setRank(rankType)
     // const { name} = e.target;
     // const value =isACP ? "DCP" : "ACP";
     // value = isACP ? "DCP" : "ACP";
     // setSelectedReportingTo(value);
     // setSelectedRank("");
-    const res = await ApiHandle(`${REGISTRATION}?rank=${"SHO"}`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rankType}`, {}, "GET");
 
     if (res.statusCode === 200) {
       const data = res.responsePayload.results;
-      console.log(data);
-      setList(data)
+      setList(data);
       //   setUserOptions(data);
     }
   };
@@ -26,6 +29,89 @@ const UpdateUser = () => {
   }, []);
   return (
     <div>
+      <h6>User List</h6>
+      <div>
+        <div class="hidden flex justify-center sm:block">
+          <div class="border-b flex justify-around border-gray-200 flex">
+            <nav class="-mb-px   gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("ACP")}
+                //  disabled={
+                //    (!isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0) ||
+                //    (isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0)
+                //  }
+                type="button"
+                 className={`className="shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                 ${
+                    rank === "ACP"
+                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
+                    : "hover:text-gray-700"
+                }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-white-400">ACP</span>
+              </button>
+            </nav>
+            <nav class="-mb-px flex gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("DCP")} //  disabled={
+                //    (!isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0) ||
+                //    (isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0)
+                //  }
+                type="button"
+                 className={`className="shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                 ${
+                    rank === "DCP"
+                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
+                    : "hover:text-gray-700"
+                }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                {/* {String(val?.name).replace("_", " ")} */}
+                <span className="text-white-400">DCP</span>
+              </button>
+            </nav>
+            <nav class="-mb-px flex gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("SHO")}
+                //  disabled={
+                //    (!isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0) ||
+                //    (isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0)
+                //  }
+                type="button"
+                 className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                 ${
+                    rank === "SHO"
+                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
+                    : "hover:text-gray-700"
+                }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                {/* {String(val?.name).replace("_", " ")} */}
+                <span className="text-white-400">SHO</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
       <div>
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
@@ -47,9 +133,9 @@ const UpdateUser = () => {
                   Mobile No.
                 </th>
                 <th scope="col" className="px-6 py-3">
-                 Email
+                  Email
                 </th>
-               
+
                 {/* <th scope="col" className="px-6 py-3">
               View Attachment
             </th> */}
@@ -74,7 +160,7 @@ const UpdateUser = () => {
               </tr>
             </thead>
             <tbody>
-                {}
+              {}
               {list?.map((item) => (
                 <tr className="bg-white border-b ">
                   <th
@@ -101,9 +187,7 @@ const UpdateUser = () => {
                   >
                     {item?.email}
                   </td>
-                 
 
-                 
                   <td className="px-6 py-4 flex gap-2">
                     {/* {["ACP", "DCP"].includes(rank) &&
                       item?.decision == "PENDING" && (
@@ -139,9 +223,7 @@ const UpdateUser = () => {
                     </button> */}
                     <button
                       onClick={() => {
-                        navigate(
-                          `/request/edit_user/${item?.id}`
-                        );
+                        navigate(`/request/edit_user/${item?.id}`);
                       }}
                       className="bg-green-300 p-2 rounded-lg font-bold"
                       style={{

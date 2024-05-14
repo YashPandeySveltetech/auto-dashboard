@@ -890,11 +890,7 @@ function RequestForm({ requestData }) {
                            ?.length > 0)
                      }
                      type="button"
-<<<<<<< HEAD
-                     className={`className="shrink-0 border-b-0 border-black border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
-=======
                      className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
->>>>>>> 22f972ac92746eaea628443bd56476426375b9e8
                      ${
                       activeForm?.target_type === val?.name
                         ? " border-gray-400 border-b-white border-black bg-[#FFFAFA] text-sky-700 "

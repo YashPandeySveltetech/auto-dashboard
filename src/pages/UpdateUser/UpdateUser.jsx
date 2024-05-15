@@ -37,16 +37,6 @@ const UpdateUser = () => {
             <nav class="-mb-px   gap-6">
               <button
                 onClick={(e) => handleReportingToSelect("ACP")}
-                //  disabled={
-                //    (!isEditable &&
-                //      requestData &&
-                //      !requestData?.form_request_for[arry[val?.name]]
-                //        ?.length > 0) ||
-                //    (isEditable &&
-                //      requestData &&
-                //      !requestData?.form_request_for[arry[val?.name]]
-                //        ?.length > 0)
-                //  }
                 type="button"
                 className={`shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800
                  ${
@@ -160,7 +150,6 @@ const UpdateUser = () => {
               </tr>
             </thead>
             <tbody>
-              {}
               {list?.map((item) => (
                 <tr className="bg-white border-b ">
                   <th

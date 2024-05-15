@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { REGISTRATION } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
+import Title from "../../utils/Title";
 
 const UpdateUser = () => {
   const [list, setList] = useState([]);
-  const [rank, setRank] = useState('ACP');
+  const [rank, setRank] = useState("ACP");
   const navigate = useNavigate();
 
   const handleReportingToSelect = async (rank) => {
     const rankType = rank ? rank : "ACP";
-    setRank(rankType)
+    setRank(rankType);
     // const { name} = e.target;
     // const value =isACP ? "DCP" : "ACP";
     // value = isACP ? "DCP" : "ACP";
@@ -28,11 +29,11 @@ const UpdateUser = () => {
     handleReportingToSelect();
   }, []);
   return (
-    <div>
-      <h6>User List</h6>
-      <div>
-        <div class="hidden flex justify-center sm:block">
-          <div class="border-b flex justify-around border-gray-200 flex">
+    <>
+      <Title text={"User List"} />
+      <div className="outer-div-whole mx-auto mb-3 px-8 ">
+        <div class="hidden justify-center sm:block m-3 mb-[-12px]">
+          <div class="border-b flex justify-start border-gray-200 ">
             <nav class="-mb-px   gap-6">
               <button
                 onClick={(e) => handleReportingToSelect("ACP")}
@@ -47,12 +48,12 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                 className={`className="shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                className={`shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800
                  ${
-                    rank === "ACP"
-                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
-                    : "hover:text-gray-700"
-                }`}
+                   rank === "ACP"
+                     ? " border-black-800 border-b-white bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700 "
+                 }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
                 <span className="text-white-400">ACP</span>
@@ -71,12 +72,12 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                 className={`className="shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                className={`className="shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium  text-gray-500"
                  ${
-                    rank === "DCP"
-                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
-                    : "hover:text-gray-700"
-                }`}
+                   rank === "DCP"
+                     ? " border-blue-800 border-b-white  bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700"
+                 }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
                 {/* {String(val?.name).replace("_", " ")} */}
@@ -97,12 +98,12 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                 className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                className={`className="shrink-0 border w-[100px]  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800 mr-1"
                  ${
-                    rank === "SHO"
-                    ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
-                    : "hover:text-gray-700"
-                }`}
+                   rank === "SHO"
+                     ? " border-gray-400 border-b-white  bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700"
+                 }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
                 {/* {String(val?.name).replace("_", " ")} */}
@@ -111,8 +112,7 @@ const UpdateUser = () => {
             </nav>
           </div>
         </div>
-      </div>
-      <div>
+
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
@@ -347,27 +347,7 @@ const UpdateUser = () => {
           )}
         </div>
       </div>
-      {/* <div className="card-footer flex justify-between p-3 mb-2 mt-2">
-        {isPrevious ? (
-          <button
-            onClick={() => handlePrevious()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            PREV
-          </button>
-        ) : (
-          <div></div>
-        )}
-        {isNext && (
-          <button
-            onClick={() => handleNext()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            NEXT
-          </button>
-        )}
-      </div> */}
-    </div>
+    </>
   );
 };
 

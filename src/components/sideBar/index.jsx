@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Amd, Boxes, XOctagon, PersonAdd,EnvelopeAt } from "react-bootstrap-icons";
+import { Amd, Boxes, XOctagon, PersonAdd,EnvelopeAt ,PersonGear} from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { REFRESH, USER_DETAIL } from "../../utils/constants";
@@ -69,7 +69,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       isShow: ["ADMIN"].includes(rank),
     },
     {
-      icon: <PersonAdd />,
+      icon: <PersonGear />,
       text: "Update User",
       url: "/update",
       isShow: ["ADMIN"].includes(rank),
@@ -220,7 +220,7 @@ function Sidebar({ isOpen, setIsOpen }) {
               <div className="border border-gray-200 rounded-lg p-4">
                 <h2 className="text-lg font-semibold mb-2 text-center">
                   User Profile
-                </h2>
+                </h2> 
                 <div className="mb-2 ml-0 flex justify-start items-center">
                   <label className="block font-medium text-gray-100">
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :

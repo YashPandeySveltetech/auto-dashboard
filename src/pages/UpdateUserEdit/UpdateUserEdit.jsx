@@ -4,8 +4,12 @@ import Select from "react-select";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { REGISTRATION } from "../../utils/constants";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { PasswordChangeModal } from "../../redux/reducers/modalsReducer";
 
 const UpdateUserEdit = () => {
+  const dispatch=useDispatch()
+  // const openModal = 
   const { id } = useParams();
   const [formField, setFormField] = useState({
     email: "",
@@ -51,6 +55,7 @@ const UpdateUserEdit = () => {
   return (
     <div>
       <h1>Update User Form</h1>
+     
       <label htmlFor="" className="font-bold required">
         Username
       </label>
@@ -85,7 +90,7 @@ const UpdateUserEdit = () => {
         // disabledSelect={!isEditable && requestData}
       />
       <div className="flex justify-around">
-        <button type="button" onClick={() => setModal(true)}>
+        <button type="button" onClick={() => dispatch(PasswordChangeModal(true))}>
           change password
         </button>
         <button type="button" onClick={updateInfo}>

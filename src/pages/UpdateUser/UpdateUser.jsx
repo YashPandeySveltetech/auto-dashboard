@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const UpdateUser = () => {
   const [list, setList] = useState([]);
   const [rank, setRank] = useState('ACP');
+
   const navigate = useNavigate();
 
   const handleReportingToSelect = async (rank) => {
@@ -150,7 +151,6 @@ const UpdateUser = () => {
               </tr>
             </thead>
             <tbody>
-              {}
               {list?.map((item) => (
                 <tr className="bg-white border-b ">
                   <th

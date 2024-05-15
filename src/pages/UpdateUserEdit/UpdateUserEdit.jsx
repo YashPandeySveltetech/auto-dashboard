@@ -34,7 +34,7 @@ const UpdateUserEdit = () => {
   const updateInfo = async () => {
     const res = await ApiHandle(
       `${REGISTRATION}${id}/`,
-      { username: formField.username },
+      { username: formField.username, mobile_no: formField.mobile, email: formField.email, },
       "PATCH"
     );
     if (res.statusCode === 200) {
@@ -67,7 +67,7 @@ const UpdateUserEdit = () => {
       </label>
       <Input
         label={""}
-        name="mobile_no"
+        name="mobile"
         type="number"
         value={formField.mobile}
         onChange={(e) => handleChange(e)}

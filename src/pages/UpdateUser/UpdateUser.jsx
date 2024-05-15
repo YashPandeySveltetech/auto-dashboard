@@ -1,205 +1,109 @@
-/** @format */
-
 import React, { useEffect, useState } from "react";
 import { ApiHandle } from "../../utils/ApiHandle";
-import {
-  FORM_REQUEST,
-  APPROVE_REQUEST,
-  VIEW_ATTACHMENTS,
-} from "../../utils/constants";
-import Toaster from "../../utils/toaster/Toaster";
-import { useNavigate } from "react-router";
-import FilterSection from "./filterSection";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  openRejectModal,
-  openViewLogModal,
-  otpValidationModal,
-  updateRequestList,
-} from "../../redux/reducers/modalsReducer";
-import { FiEye } from "react-icons/fi";
-import { async } from "q";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { setLoading } from "../../redux/reducers/commonReducer";
+import { REGISTRATION } from "../../utils/constants";
+import { useNavigate, useParams } from "react-router-dom";
 import Title from "../../utils/Title";
 
-function RejectList() {
+const UpdateUser = () => {
+  const [list, setList] = useState([]);
+  const [rank, setRank] = useState("ACP");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { rank } = useSelector((state) => state.user?.userData);
-  const { updateReqList } = useSelector((state) => state.modal);
-  const [current, setCurrent] = useState(0);
-  const [isNext, setIsNext] = useState(false);
-  const [isPrevious, setIsPrevious] = useState(false);
 
+  const handleReportingToSelect = async (rank) => {
+    const rankType = rank ? rank : "ACP";
+    setRank(rankType);
+    // const { name} = e.target;
+    // const value =isACP ? "DCP" : "ACP";
+    // value = isACP ? "DCP" : "ACP";
+    // setSelectedReportingTo(value);
+    // setSelectedRank("");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rankType}`, {}, "GET");
+
+    if (res.statusCode === 200) {
+      const data = res.responsePayload.results;
+      setList(data);
+      //   setUserOptions(data);
+    }
+  };
   useEffect(() => {
-    getAllRequest({ active: 1 });
+    handleReportingToSelect();
   }, []);
-  const [requestList, setRequestList] = useState([]);
-
-  const getAllRequest = async ({ active = 1 }) => {
-    dispatch(setLoading(true));
-    let date_range =
-      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
-    date_range = dateRange.startDate + date_range;
-    if (date_range === 0) {
-      dateRange = "";
-    }
-    const res = await ApiHandle(
-      FORM_REQUEST +
-        `?case_type=${filter?.case_type}&fir_no=${
-          filter?.case_ref
-        }&decision_type=${"REJECT"}&page=${active}&sys_date=${date_range}`,
-      {},
-      "GET"
-    );
-    if (res.statusCode === 200) {
-      dispatch(setLoading(false));
-      setRequestList(res?.responsePayload.results);
-      if (res?.responsePayload?.next) {
-        // setCurrentpage(currentpage+1)
-        setIsNext(true);
-      }
-      if (!res?.responsePayload?.next) {
-        // setCurrentpage(currentpage+1)
-        setIsNext(false);
-      }
-
-      if (res?.responsePayload?.previous) {
-        // setCurrentpage(currentpage+1)
-        setIsPrevious(true);
-      }
-      if (!res?.responsePayload?.previous) {
-        // setCurrentpage(currentpage+1)
-        setIsPrevious(false);
-      }
-      // setIsOtp(true);
-      // Toaster('success', 'OTP SENT Successfully!');
-
-      return;
-    }
-  };
-  const handleNext = () => {
-    setCurrent(current + 1);
-    getAllRequest({ active: current + 1 });
-  };
-  const handlePrevious = () => {
-    setCurrent(current - 1);
-    getAllRequest({ active: current - 1 });
-  };
-  useEffect(() => {
-    if (updateReqList) {
-      getAllRequest({ active: 1 });
-    }
-  }, [updateReqList]);
-
-  const [filter, setFilter] = useState({
-    req_to_provider: "",
-    form_status: "",
-    case_ref: "",
-    case_type: "",
-  });
-  const [dateRange, setDateRange] = useState({
-    startDate:"",
-    endDate: "",
-  });
-  const approveRequest = async ({ requestId, approved_desion_id }) => {
-    const res = await ApiHandle(
-      APPROVE_REQUEST + `${approved_desion_id}/`,
-      { request_form: requestId },
-      "PATCH"
-    );
-    if (res.statusCode === 200) {
-      // setRequestList(res?.responsePayload);
-      // setIsOtp(true);
-      getAllRequest({ active: 1 });
-      Toaster("success", "Request Approved Successfully!");
-
-      return;
-    }
-  };
-
-  const viewAttachment = async ({ requets_form_id }) => {
-    const res = await ApiHandle(
-      VIEW_ATTACHMENTS + `?request_form=${requets_form_id}`,
-      {},
-      "GET"
-    );
-    if (res.statusCode === 200) {
-      if (res?.responsePayload?.results[0].file) {
-        window.open(
-          process.env.REACT_APP_MEDIA_URI +
-            res?.responsePayload?.results[0].file
-        );
-      }
-      // getAllRequest()
-      // Toaster("success", "Request Approved Successfully!");
-
-      return;
-    }
-  };
-  const clearFilter = async ({ active = 1 }) => {
-    setDateRange({
-      startDate: null,
-    endDate: null,
-    });
-    setFilter({
-      req_to_provider: "",
-      form_status: "",
-      case_ref: "",
-      target_type_value: "",
-      target_type: "",
-    });
-    if (filter) {
-      const res = await ApiHandle(
-        FORM_REQUEST +
-          `?decision_type=REJECT&page=${active}&is_otp_verified=&sys_date=`,
-        {},
-        "GET"
-      );
-      if (res.statusCode === 200) {
-        setRequestList(res?.responsePayload.results);
-
-        if (res?.responsePayload?.next) {
-          // setCurrentpage(currentpage+1)
-          setIsNext(true);
-        }
-        if (!res?.responsePayload?.next) {
-          // setCurrentpage(currentpage+1)
-          setIsNext(false);
-        }
-
-        if (res?.responsePayload?.previous) {
-          // setCurrentpage(currentpage+1)
-          setIsPrevious(true);
-        }
-        if (!res?.responsePayload?.previous) {
-          // setCurrentpage(currentpage+1)
-          setIsPrevious(false);
-        }
-        // setIsOtp(true);
-        // Toaster('success', 'OTP SENT Successfully!');
-
-        return;
-      }
-    }
-  };
-
   return (
-
     <>
-    <Title text={"Reject List"} />
-    <div className="outer-div-whole mx-auto ">
-      <FilterSection
-        filter={filter}
-        getAllRequest={getAllRequest}
-        setFilter={setFilter}
-        dateRange={dateRange}
-        setDateRange={setDateRange}
-        clearFilter={clearFilter}
-      />
-      <div className="inner-div-table z-[-1]">
-        <div className="relative overflow-x-auto p-3 ">
+      <Title text={"User List"} />
+      <div className="outer-div-whole mx-auto mb-3 px-8 ">
+        <div class="hidden justify-center sm:block m-3 mb-[-12px]">
+          <div class="border-b flex justify-start border-gray-200 ">
+            <nav class="-mb-px   gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("ACP")}
+                type="button"
+                className={`shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800
+                 ${
+                   rank === "ACP"
+                     ? " border-black-800 border-b-white bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700 "
+                 }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-white-400">ACP</span>
+              </button>
+            </nav>
+            <nav class="-mb-px flex gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("DCP")} //  disabled={
+                //    (!isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0) ||
+                //    (isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0)
+                //  }
+                type="button"
+                className={`className="shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium  text-gray-500"
+                 ${
+                   rank === "DCP"
+                     ? " border-blue-800 border-b-white  bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700"
+                 }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                {/* {String(val?.name).replace("_", " ")} */}
+                <span className="text-white-400">DCP</span>
+              </button>
+            </nav>
+            <nav class="-mb-px flex gap-6">
+              <button
+                onClick={(e) => handleReportingToSelect("SHO")}
+                //  disabled={
+                //    (!isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0) ||
+                //    (isEditable &&
+                //      requestData &&
+                //      !requestData?.form_request_for[arry[val?.name]]
+                //        ?.length > 0)
+                //  }
+                type="button"
+                className={`className="shrink-0 border w-[100px]  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800 mr-1"
+                 ${
+                   rank === "SHO"
+                     ? " border-gray-400 border-b-white  bg-[skyblue] text-sky-700 "
+                     : "hover:text-gray-700"
+                 }`}
+                // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+              >
+                {/* {String(val?.name).replace("_", " ")} */}
+                <span className="text-white-400">SHO</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}
@@ -210,31 +114,25 @@ function RejectList() {
             >
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  DATE OF REQUEST
+                  Rank
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  NAME OF DIST/ORGN.
+                  Username
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Requested Officer Name
+                  Mobile No.
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Fir No.
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  REQUESTED TYPE(CDR, IMEI,TDR,IPDR,CAF)
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
+                  Email
                 </th>
 
                 {/* <th scope="col" className="px-6 py-3">
-                  View Attachment
-                </th> */}
+              View Attachment
+            </th> */}
                 <th scope="col" className="px-6 py-3">
                   ACTION{" "}
                 </th>
-                {["ACP", "DCP"].includes(rank) && (
+                {/* {["ACP", "DCP"].includes(rank) && (
                   <th scope="col" className="px-6 py-3">
                     REMARKS(REASON FOR REJECTION)
                   </th>
@@ -248,60 +146,39 @@ function RejectList() {
                   <th scope="col" className="px-6 py-3">
                     DCP Status
                   </th>
-                )}
+                )} */}
               </tr>
             </thead>
             <tbody>
-              {requestList?.map((item) => (
+              {list?.map((item) => (
                 <tr className="bg-white border-b ">
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
                   >
-                    {item?.created_on?.split("T")[0]}
+                    {item?.rank}
                   </th>
                   <td
                     className="px-6 py-4 font-semibold text-gray-900"
                     style={{ color: "black" }}
                   >
-                    {item?.district}
+                    {item?.username}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {item?.io_name}
+                    {item?.mobile_no}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
                     style={{ color: "black" }}
                   >
-                    {item?.fir_no}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.request_to_provide).replace("_", " ")}
-                  </td>
-                  <td
-                    className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
-                  >
-                    {String(item?.target_type).replace("_", " ")}
+                    {item?.email}
                   </td>
 
-                  {/* <td className="px-6 py-4 text-center">
-                    <button
-                      onClick={() =>
-                        viewAttachment({ requets_form_id: item?.id })
-                      }
-                    >
-                      <VisibilityIcon className="text-green-800" />
-                    </button>
-                  </td> */}
                   <td className="px-6 py-4 flex gap-2">
-                    {["ACP", "DCP"].includes(rank) &&
+                    {/* {["ACP", "DCP"].includes(rank) &&
                       item?.decision == "PENDING" && (
                         <button
                           onClick={() => {
@@ -318,8 +195,8 @@ function RejectList() {
                         >
                           Approve
                         </button>
-                      )}
-                    <button
+                      )} */}
+                    {/* <button
                       onClick={() => {
                         navigate(
                           `/request/view/${item?.request_to_provide}/${item?.id}`
@@ -332,12 +209,10 @@ function RejectList() {
                       }}
                     >
                       View
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => {
-                        navigate(
-                          `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
-                        );
+                        navigate(`/request/edit_user/${item?.id}`);
                       }}
                       className="bg-green-300 p-2 rounded-lg font-bold"
                       style={{
@@ -347,7 +222,7 @@ function RejectList() {
                     >
                       Edit
                     </button>
-                    {!item?.is_otp_verified && (
+                    {/* {!item?.is_otp_verified && (
                       <button
                         onClick={() => {
                           navigate(
@@ -375,10 +250,10 @@ function RejectList() {
                         >
                           Reject
                         </button>
-                      )}
+                      )} */}
                   </td>
 
-                  {["ACP", "DCP"].includes(rank) && (
+                  {/* {["ACP", "DCP"].includes(rank) && (
                     <td className="px-6 py-4">
                       <div>{item?.decision}</div>
                       <div>
@@ -443,12 +318,12 @@ function RejectList() {
                         )}
                       </div>
                     </td>
-                  )}
+                  )} */}
                 </tr>
               ))}
             </tbody>
           </table>
-          {requestList?.length > 0 ? (
+          {list?.length > 0 ? (
             ""
           ) : (
             <div className="flex justify-center items-center m-[10rem]">
@@ -461,29 +336,8 @@ function RejectList() {
           )}
         </div>
       </div>
-      </div>
-      <div className="card-footer flex justify-between p-3 mb-2 mt-2">
-        {isPrevious ? (
-          <button
-            onClick={() => handlePrevious()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            PREV
-          </button>
-        ) : (
-          <div></div>
-        )}
-        {isNext && (
-          <button
-            onClick={() => handleNext()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            NEXT
-          </button>
-        )}
-      </div>
     </>
   );
-}
+};
 
-export default RejectList;
+export default UpdateUser;

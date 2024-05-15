@@ -142,6 +142,16 @@ function UnverifiedFormList() {
     }
   };
   const clearFilter = async ({ active = 1 }) => {
+    setFilter({
+      req_to_provider: "",
+      form_status: "",
+      case_ref: "",
+      case_type: "",
+      police_station: "",
+      target_type: "",
+      target_type_value: "",
+    });
+    setDateRange({ startDate: null, endDate: null });
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=PENDING&page=${active}&is_otp_verified=${false}&sys_date=`,
@@ -177,7 +187,6 @@ function UnverifiedFormList() {
   return (
     <>
       <Title text={"Unverified Form"} />
-
       <div className="outer-div-whole mx-auto ">
         <FilterSection
           filter={filter}

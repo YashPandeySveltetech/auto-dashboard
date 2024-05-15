@@ -238,8 +238,10 @@ function RequestList() {
         case_ref: "",
         case_type: "",
         police_station: "",
+        target_type: "",
+        target_type_value: "",
       });
-      setDateRange({ startDate: "", endDate: "" });
+      setDateRange({ startDate: null, endDate: null });
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);

@@ -872,17 +872,7 @@ function RequestForm({ requestData }) {
                     </span>
                   </button> */}
                   <div>
-            <div class="sm:hidden">
-              {/* <label for="Tab" class="sr-only">
-                Tab
-              </label>
-
-              <select id="Tab" class="w-full rounded-md border-gray-200">
-                
-                <option>Settings</option>
-              
-              </select> */}
-            </div>
+            
 
             <div class="hidden sm:block">
               <div class="border-b border-gray-200">
@@ -900,10 +890,10 @@ function RequestForm({ requestData }) {
                            ?.length > 0)
                      }
                      type="button"
-                     className={`className="shrink-0 border border-black border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                     className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
                      ${
                       activeForm?.target_type === val?.name
-                        ? " border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700 "
+                        ? " border-gray-400 border-b-white border-black bg-[#FFFAFA] text-sky-700 "
                         : "hover:text-gray-700"
                     }`}
                     // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"

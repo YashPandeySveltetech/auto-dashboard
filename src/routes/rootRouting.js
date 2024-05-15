@@ -16,6 +16,8 @@ import RequestEdit from "../pages/requestEditpage";
 import UnverifiedFormList from "../pages/requestList/unverifiedFormList";
 import RejectList from "../pages/requestList/rejectList";
 import Toaster from "../utils/toaster/Toaster";
+import UpdateUser from "../pages/UpdateUser/UpdateUser";
+import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -39,6 +41,14 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   <RegistrationPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/update"
+              element={
+                <Layout>
+                  <UpdateUser />
                 </Layout>
               }
             />
@@ -114,6 +124,14 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   <RequestEdit />
+                </Layout>
+              }
+            />
+            <Route
+              path="/request/edit_user/:id"
+              element={
+                <Layout>
+                  <UpdateUserEdit />
                 </Layout>
               }
             />

@@ -6,10 +6,13 @@ import { ApiHandle } from "../utils/ApiHandle";
 import Toaster from "../utils/toaster/Toaster";
 import { commonCloseModal } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
+import { useLocation, useParams } from "react-router-dom";
 
 function PasswordChangeModal() {
   const [password, setPassword] = useState("");
-  
+  const location = useLocation()
+  const id = location.pathname.includes("edit_user")?location.pathname.split("/").pop():userData?.id
+ 
   const [confirmpassword, setConfirmPassword] = useState("");
   const { userData } = useSelector((state) => state?.user);
   const dispatch = useDispatch();
@@ -22,8 +25,9 @@ function PasswordChangeModal() {
       return;
     }
     if (password === confirmpassword) {
+      
       const res = await ApiHandle(
-        `${CHANGE_PASSWORD}${userData?.id}/`,
+        `${CHANGE_PASSWORD}${id}/`,
         { password: password },
         "PATCH"
       );

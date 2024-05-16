@@ -334,6 +334,7 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import "./style.css";
 import { setRank } from "../../redux/reducers/modalsReducer";
+import Title from "../../utils/Title";
 
 const RegisterForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -364,7 +365,7 @@ const RegisterForm = () => {
   const handleClick = ({ isACP }) => {
     dispatch(setRank(isACP));
     setIsModalOpen(true);
-    handleReportingToSelect()
+    handleReportingToSelect();
   };
 
   const closeModal = () => {
@@ -424,7 +425,7 @@ const RegisterForm = () => {
   ];
   const handleReportingToSelect = async (e) => {
     // const { name} = e.target;
-    const value =isACP ? "DCP" : "ACP";
+    const value = isACP ? "DCP" : "ACP";
     // value = isACP ? "DCP" : "ACP";
     // setSelectedReportingTo(value);
     setSelectedRank("");
@@ -469,34 +470,41 @@ const RegisterForm = () => {
   }, []);
   return (
     <>
-      <div className="flex flex-col h-screen justify-center items-center gap-12 bg_img">
-        <h1 className="text-4xl font-bold  text-black text-center">
-          Registration{" "}
-        </h1>
-        <div className="flex justify-center items-center ">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 ">
-            <Card
-              title="SHO"
-              imageSrc="./police-officer.png"
-              onclick={() => handleClick({ isACP: true })}
-            />
-
-            <Card
-              title="ACP"
-              imageSrc="./dcp.png"
-              onclick={() => handleClick({ isACP: false })}
-            />
+      <Title text={"Registration"} />
+      <div
+        className="outer-div-whole flex flex-col min-h-screen justify-center bg-img"
+        style={{ margin: "10px", }}
+      >
+        <div className="flex justify-center items-center">
+          <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-2 gap-8" 
+            style={{display:"flex",justifyContent:"center",gap:"43px", flexWrap:"wrap"}}  
+   
+>
+            <div className="w-[90%] md:w-[30%]">
+              <Card
+                title="SHO"
+                imageSrc="./police-officer.png"
+                onclick={() => handleClick({ isACP: true })}
+              />
+            </div>
+            <div className="w-[90%] md:w-[30%] ">
+              <Card
+                title="ACP"
+                imageSrc="./dcp.png"
+                onclick={() => handleClick({ isACP: false })}
+              />
+            </div>
           </div>
         </div>
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
-            <div className="bg-white rounded-lg p-4 shadow-md  w-1/2  ">
-              <h2 className=" text-2xl font-semibold mb-2 text-center">
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+            <div className="bg-white rounded-lg p-4 shadow-md w-full md:w-1/2 lg:w-1/2">
+              <h2 className="text-2xl font-semibold mb-2 text-center">
                 Registration Form
               </h2>
               <form
                 onSubmit={handleSubmit}
-                className="w-full   p-2 overflow-scroll"
+                className="w-full p-2 overflow-scroll"
               >
                 <Input
                   label="Username"
@@ -544,13 +552,13 @@ const RegisterForm = () => {
                   required={true}
                 />
                 <DropDown
-                        label="Select User"
-                        options={userOptions}
-                        onChange={handleUserSelect}
-                        value={selectedUser}
-                        checkId={true}
-                        name="user_profile.reporting_to"
-                      />
+                  label="Select User"
+                  options={userOptions}
+                  onChange={handleUserSelect}
+                  value={selectedUser}
+                  checkId={true}
+                  name="user_profile.reporting_to"
+                />
                 {isACP && (
                   <>
                     {/* <DropDown
@@ -561,7 +569,7 @@ const RegisterForm = () => {
                       name="selectedReportingTo"
                     /> */}
                     {/* {selectedReportingTo && ( */}
-                      
+
                     {/* // )} */}
                     <DropDown
                       label="State"
@@ -601,14 +609,14 @@ const RegisterForm = () => {
 
                 <div className="flex justify-between">
                   <button
-                    className=" p-2.5 mb-4 border border-gray-300  text-white rounded-lg bg-blue-400  cursor-pointer mt-4 "
+                    className="w-full sm:w-auto p-2.5 mb-4 border border-gray-300 text-white rounded-lg bg-blue-400 cursor-pointer mt-4 sm:mr-4"
                     onClick={closeModal}
                   >
                     Close
                   </button>
                   <button
                     type="submit"
-                    className=" p-2.5 mb-4 border border-gray-300 text-white rounded-lg  bg-green-400  cursor-pointer mt-4"
+                    className="w-full sm:w-auto p-2.5 mb-4 border border-gray-300 text-white rounded-lg bg-green-400 cursor-pointer mt-4"
                   >
                     Register
                   </button>

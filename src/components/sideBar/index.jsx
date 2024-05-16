@@ -1,7 +1,14 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Amd, Boxes, XOctagon, PersonAdd,EnvelopeAt ,PersonGear} from "react-bootstrap-icons";
+import {
+  Amd,
+  Boxes,
+  XOctagon,
+  PersonAdd,
+  EnvelopeAt,
+  PersonGear,
+} from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { REFRESH, USER_DETAIL } from "../../utils/constants";
@@ -130,10 +137,12 @@ function Sidebar({ isOpen, setIsOpen }) {
           <>
             <li>
               <NavLink to={url}>
-                <i className="bx bx-grid-alt">{icon}</i>
+                <i className="bx bx-grid-alt " title={text}>
+                  {icon}
+                </i>
                 <span className="links_name">{text}</span>
               </NavLink>
-              <span className="tooltip text-black">{text}</span>
+              {/* <span className="tooltip text-black">{text}</span> */}
             </li>
           </>
         )}
@@ -220,7 +229,7 @@ function Sidebar({ isOpen, setIsOpen }) {
               <div className="border border-gray-200 rounded-lg p-4">
                 <h2 className="text-lg font-semibold mb-2 text-center">
                   User Profile
-                </h2> 
+                </h2>
                 <div className="mb-2 ml-0 flex justify-start items-center">
                   <label className="block font-medium text-gray-100">
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :
@@ -263,7 +272,21 @@ function Sidebar({ isOpen, setIsOpen }) {
             ))}
           </ul>
 
-          <div>
+          <div className="mt-2">
+            <li>
+              <NavLink
+                onClick={() => {
+                  dispatch(PasswordChangeModal(true));
+                }}
+              >
+                <i className="bx bx-grid-alt" title="change Password">
+                  <RiLockPasswordLine />
+                </i>
+                <span className="links_name">Change Password</span>
+              </NavLink>
+             
+            </li>
+
             <li
               onClick={() => {
                 localStorage.clear();
@@ -273,26 +296,12 @@ function Sidebar({ isOpen, setIsOpen }) {
               }}
             >
               <NavLink>
-                <i className="bx bx-grid-alt">
+                <i className="bx bx-grid-alt" title="Logout">
                   <RiLogoutBoxLine />
                 </i>
-                <span className="links_name">Logout</span>
+                <span className="links_name" >Logout</span>
               </NavLink>
-              <span className="tooltip text-black">Logout</span>
-            </li>
-
-            <li>
-              <NavLink
-                onClick={() => {
-                  dispatch(PasswordChangeModal(true));
-                }}
-              >
-                <i className="bx bx-grid-alt">
-                  <RiLockPasswordLine />
-                </i>
-                <span className="links_name">Change Password</span>
-              </NavLink>
-              <span className="tooltip text-black">Change Password</span>
+              
             </li>
           </div>
         </div>

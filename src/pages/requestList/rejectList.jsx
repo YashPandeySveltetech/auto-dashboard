@@ -98,6 +98,8 @@ function RejectList() {
     form_status: "",
     case_ref: "",
     case_type: "",
+    target_type: "",
+target_type_value: "",
   });
   const [dateRange, setDateRange] = useState({
     startDate:"",

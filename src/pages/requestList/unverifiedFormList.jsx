@@ -105,6 +105,8 @@ function UnverifiedFormList() {
     form_status: "",
     case_ref: "",
     case_type: "",
+    target_type: "",
+target_type_value: "",
   });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(

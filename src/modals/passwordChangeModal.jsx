@@ -11,10 +11,10 @@ import { useLocation, useParams } from "react-router-dom";
 function PasswordChangeModal() {
   const [password, setPassword] = useState("");
   const location = useLocation()
+  const { userData } = useSelector((state) => state?.user);
   const id = location.pathname.includes("edit_user")?location.pathname.split("/").pop():userData?.id
  
   const [confirmpassword, setConfirmPassword] = useState("");
-  const { userData } = useSelector((state) => state?.user);
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
   const verifyPassword = async () => {

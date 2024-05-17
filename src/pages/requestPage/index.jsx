@@ -924,7 +924,7 @@ function RequestForm({ requestData }) {
           <div className="mt-6">
             <label className="font-bold required ">Case Reference:</label>
             <textarea
-              className="block p-5px w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer"
+              className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer"
 
               name="brief_summary"
               value={apiPayload?.brief_summary}

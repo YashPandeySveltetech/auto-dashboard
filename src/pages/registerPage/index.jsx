@@ -498,7 +498,7 @@ const RegisterForm = () => {
         </div>
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div className="bg-white rounded-lg p-4 shadow-md w-full md:w-1/2 lg:w-1/2">
+            <div className="bg-white rounded-lg p-4 shadow-md w-full md:w-1/2 lg:w-1/2 max- sm:ml-[80px]">
               <h2 className="text-2xl font-semibold mb-2 text-center">
                 Registration Form
               </h2>

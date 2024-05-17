@@ -272,7 +272,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             ))}
           </ul>
 
-          <div className="mt-2">
+          <div className={`${isOpen ? 'mt-9' : 'mt-40'}`}>
             <li>
               <NavLink
                 onClick={() => {
@@ -287,7 +287,7 @@ function Sidebar({ isOpen, setIsOpen }) {
              
             </li>
 
-            <li
+            <li className="mt-[160px]"
               onClick={() => {
                 localStorage.clear();
                 dispatch(clearUserData());

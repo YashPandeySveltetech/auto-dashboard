@@ -25,6 +25,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Title from "../../utils/Title";
+import { EyeFill } from "react-bootstrap-icons";
 
 function RequestList() {
   const navigate = useNavigate();
@@ -446,6 +447,7 @@ function RequestList() {
                           </button>
                         )}
                     </td>
+                    
 
                     {["ACP", "DCP"].includes(rank) && (
                       <td className="px-6 py-4">
@@ -469,14 +471,37 @@ function RequestList() {
                         </div>
                       </td>
                     )}
-                    {!["ACP", "DCP"].includes(rank) && (
-                      <td className="px-6 py-4">
-                        <div>{item?.acp_status}</div>
-                      </td>
-                    )}
+
+
+                    <td>
+                      {!["ACP", "DCP"].includes(rank) && (
+                        <div className= "">
+                          <span
+                            className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
+    ${
+      item?.acp_status === "REJECT"? "bg-red-100 text-red-700"
+        : item?.acp_status === "PENDING"? "bg-yellow-100 text-yellow-700"
+        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+    }`}
+                          >
+                            {item?.acp_status}
+                          </span>
+                        </div>
+                      )}
+                    </td>
                     {!["DCP"].includes(rank) && (
-                      <td className="px-6 py-4">
-                        <div>{item?.dcp_status}</div>
+                      <td className="px-6 py-4 flex gap-2 justify-center items-center">
+                        {/* <div>{item?.dcp_status}</div> */}
+                        <span
+                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
+    ${
+      item?.dcp_status === "REJECT"  ? "bg-red-100 text-red-700"
+        : item?.dcp_status === "PENDING" ? "bg-yellow-100 text-yellow-700"
+        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+    }`}
+                        >
+                          {item?.dcp_status}
+                        </span>
                         <div>
                           {item?.dcp_status == "REJECT" && (
                             <button
@@ -484,13 +509,13 @@ function RequestList() {
                                 dispatch(openViewLogModal(item?.id));
                                 dispatch(updateRequestList(false));
                               }}
-                              className="bg-red-900 p-2 rounded-lg font-bold"
-                              style={{
-                                color: "white",
-                                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                              }}
+                              //   className="bg-red-900 p-2 rounded-lg font-bold"
+                              //   style={{
+                              //     color: "white",
+                              //     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                              //   }}
                             >
-                              View Log
+                              <EyeFill color="blue" title="view log" />
                             </button>
                           )}
                         </div>

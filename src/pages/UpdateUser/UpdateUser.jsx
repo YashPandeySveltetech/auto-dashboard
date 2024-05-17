@@ -3,13 +3,18 @@ import { ApiHandle } from "../../utils/ApiHandle";
 import { REGISTRATION } from "../../utils/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import Title from "../../utils/Title";
+import { setLoading } from "../../redux/reducers/commonReducer";
+import { useDispatch } from "react-redux";
 
 const UpdateUser = () => {
+
   const [list, setList] = useState([]);
   const [rank, setRank] = useState("ACP");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleReportingToSelect = async (rank) => {
+    dispatch(setLoading(true));
     const rankType = rank ? rank : "ACP";
     setRank(rankType);
     // const { name} = e.target;
@@ -20,6 +25,7 @@ const UpdateUser = () => {
     const res = await ApiHandle(`${REGISTRATION}?rank=${rankType}`, {}, "GET");
 
     if (res.statusCode === 200) {
+      dispatch(setLoading(false));
       const data = res.responsePayload.results;
       setList(data);
       //   setUserOptions(data);
@@ -32,7 +38,7 @@ const UpdateUser = () => {
     <>
       <Title text={"User List"} />
       <div className="outer-div-whole mx-auto mb-3 px-8 ">
-        <div class="hidden justify-center sm:block m-3 mb-[-12px]">
+        <div class=" justify-center  m-3 mb-[-12px]">
           <div class="border-b flex justify-start border-gray-200 ">
             <nav class="-mb-px   gap-6">
               <button
@@ -41,7 +47,7 @@ const UpdateUser = () => {
                 className={`shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800
                  ${
                    rank === "ACP"
-                     ? " border-black-800 border-b-white bg-[skyblue] text-sky-700 "
+                     ? " border-black border-b-white  text-sky-700"
                      : "hover:text-gray-700 "
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -65,7 +71,7 @@ const UpdateUser = () => {
                 className={`className="shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium  text-gray-500"
                  ${
                    rank === "DCP"
-                     ? " border-blue-800 border-b-white  bg-[skyblue] text-sky-700 "
+                     ? " border-black border-b-white  text-sky-700"
                      : "hover:text-gray-700"
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -91,7 +97,7 @@ const UpdateUser = () => {
                 className={`className="shrink-0 border w-[100px]  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800 mr-1"
                  ${
                    rank === "SHO"
-                     ? " border-gray-400 border-b-white  bg-[skyblue] text-sky-700 "
+                     ? " border-black border-b-white  text-sky-700"
                      : "hover:text-gray-700"
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -105,11 +111,11 @@ const UpdateUser = () => {
 
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
-            className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
+            className="w-full text-sm text-left rtl:text-center text-gray-500 dark:text-gray-400 "
             style={{ border: "1px solid black" }}
           >
             <thead
-              className="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
               style={{ backgroundColor: "black", color: "white" }}
             >
               <tr>

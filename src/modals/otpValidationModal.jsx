@@ -10,37 +10,33 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function OtpValidationModal() {
   const [otp, setOtp] = useState("");
+  // const otp = "otp"
   const navigate = useNavigate();
   const { requestId, isFormVerified } = useSelector((state) => state?.modal);
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const [showResendButton, setShowResendButton] = useState(false);
-  var isCreate = pathname.includes("request-form");
+  const isCreate = pathname.includes("request-form");
   const [timeLeft, setTimeLeft] = useState(120);
 
   useEffect(() => {
-   
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
-   
     return () => {
       clearInterval(timer);
     };
   }, []);
 
-useEffect(()=>{
-
-  if(!isFormVerified && !isCreate ){
-   
-    resendOtp()
-  }
-  else{
-    setTimeLeft(120);
-  }
-},[isFormVerified,isCreate])
   useEffect(() => {
-    
+    if (!isFormVerified && !isCreate) {
+      resendOtp();
+    } else {
+      setTimeLeft(120);
+    }
+  }, [isFormVerified, isCreate]);
+
+  useEffect(() => {
     if (timeLeft <= 0) {
       setShowResendButton(true);
     }
@@ -61,7 +57,6 @@ useEffect(()=>{
   };
 
   const resendOtp = async () => {
-  
     const res = await ApiHandle(
       RESEND_FORM_OTP,
       { form_id: requestId },
@@ -70,29 +65,34 @@ useEffect(()=>{
     if (res.statusCode === 201) {
       setTimeLeft(120);
       setShowResendButton(false);
-
       Toaster("success", "Otp Sent & Valid Till 5 Minutes");
       return;
     }
   };
+
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      verifyOtp()
+    if (event.key === "Enter") {
+      verifyOtp();
     }
-  }
+  };
+
+  const handleChange = (e) => {
+      const Value = e.target.value.slice(0,6);
+      setOtp(Value);
+  };
+
   return (
     <ModalWrapper handleClick={verifyOtp} btnName={"Submit Otp"}>
       <div className="flex flex-col gap-5">
         <span className="text-xl text-white">Enter Your Otp</span>
         <Input
-          onChange={(e) => setOtp(e?.target?.value)}
-          type="text"
+          onChange={(e)=>handleChange(e)}
+          type="number"
           name="otp"
-          maxLength="6"
-          inputMode="numeric"
+          value={otp}
+          // maxLength={6}
           handleKeyDown={handleKeyDown}
         />
-{/* 
         {timeLeft > 0 ? (
           <p className="text-white">
             <span>Resend Otp after: {timeLeft} seconds</span>
@@ -108,7 +108,7 @@ useEffect(()=>{
               </button>
             </div>
           )
-        )} */}
+        )}
       </div>
     </ModalWrapper>
   );

@@ -39,16 +39,16 @@ const UpdateUser = () => {
       <Title text={"User List"} />
       <div className="outer-div-whole mx-auto mb-3 px-8 ">
         <div class=" justify-center  m-3 mb-[-12px]">
-          <div class="border-b flex justify-start border-gray-200 ">
+          <div class="border-b flex justify-around border-gray-200 ">
             <nav class="-mb-px   gap-6">
               <button
                 onClick={(e) => handleReportingToSelect("ACP")}
                 type="button"
-                className={`shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800
+                className={` border-black shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium 
                  ${
                    rank === "ACP"
-                     ? " border-black border-b-white  text-sky-700"
-                     : "hover:text-gray-700 "
+                     ? " bg-zinc-500 border-b-white  text-white"
+                     : "   hover:text-gray-700 "
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
@@ -68,12 +68,12 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                className={`className="shrink-0 border w-[100px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium  text-gray-500"
-                 ${
-                   rank === "DCP"
-                     ? " border-black border-b-white  text-sky-700"
-                     : "hover:text-gray-700"
-                 }`}
+                className={`border-black shrink-0 border p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
+                ${
+                  rank === "DCP"
+                    ? " bg-zinc-500  border-b-white  text-white"
+                    : "hover:text-gray-700"
+                }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
                 {/* {String(val?.name).replace("_", " ")} */}
@@ -94,10 +94,10 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                className={`className="shrink-0 border w-[100px]  p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-800 mr-1"
+                className={`border-black shrink-0 border p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
                  ${
                    rank === "SHO"
-                     ? " border-black border-b-white  text-sky-700"
+                     ? " bg-zinc-500  border-b-white  text-white"
                      : "hover:text-gray-700"
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"

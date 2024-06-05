@@ -20,7 +20,7 @@ import {
 import { FiEye } from "react-icons/fi";
 import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import OtpValidationModal from "../../modals/otpValidationModal";
+// import OtpValidationModal from "../../modals/otpValidationModal";
 import { setLoading } from "../../redux/reducers/commonReducer";
 import Title from "../../utils/Title";
 
@@ -199,14 +199,14 @@ target_type_value: "",
           setDateRange={setDateRange}
         />
         <div className="inner-div-table z-[-1]">
-          <div className="relative overflow-x-auto p-3 ">
+          <div className=" overflow-x-auto p-3 ">
             <table
               className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
               style={{ border: "1px solid black" }}
             >
               <thead
                 className="text-center text-xs text-black uppercase bg-red-200 "
-                //   style={{ backgroundColor: "red", color: "white" }}
+              //   style={{ backgroundColor: "red", color: "white" }}
               >
                 <tr>
                   <th scope="col" className="px-6 py-3">

@@ -202,7 +202,7 @@ target_type_value: "",
           clearFilter={clearFilter}
         />
         <div className="inner-div-table z-[-1]">
-          <div className="relative overflow-x-auto p-3 ">
+          <div className=" overflow-x-auto p-3 ">
             <table
               className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
               style={{ border: "1px solid black" }}

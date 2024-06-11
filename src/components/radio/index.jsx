@@ -15,7 +15,7 @@ function Radio({ label = "label", value, name, handleChange, disabled }) {
         />
         <label
           for="country-option-1"
-          className="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          className="block ml-2 text-sm font-medium text-gray-900"
           id={name}
         >
           {label}

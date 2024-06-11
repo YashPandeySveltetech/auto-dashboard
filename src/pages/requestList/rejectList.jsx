@@ -204,11 +204,11 @@ target_type_value: "",
         <div className="inner-div-table z-[-1]">
           <div className=" overflow-x-auto p-3 ">
             <table
-              className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 "
+              className="w-full text-sm text-left rtl:text-right text-gray-500 "
               style={{ border: "1px solid black" }}
             >
               <thead
-                className="text-center text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                className="text-center text-xs text-gray-700 uppercase bg-gray-50 "
                 style={{ backgroundColor: "black", color: "white" }}
               >
                 <tr>

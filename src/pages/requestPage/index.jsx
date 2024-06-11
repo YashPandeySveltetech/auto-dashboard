@@ -26,6 +26,8 @@ import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 import { useLocation, useParams, useNavigate } from "react-router";
 import Ild from "./Ild";
 import Title from "../../utils/Title";
+import { ArrowLeft } from "react-bootstrap-icons";
+import BackButton from "../../components/backButton/BackButton";
 
 function RequestForm({ requestData }) {
   const { pathname } = useLocation();
@@ -725,6 +727,7 @@ function RequestForm({ requestData }) {
 
   return (
     <>
+    <BackButton/>
       <Title text={"New Request Form"} />
       <div className="outer-div-whole mx-auto mb-5" style={{ padding: "30px" }}>
         <form action="" onSubmit={handleSubmit}>

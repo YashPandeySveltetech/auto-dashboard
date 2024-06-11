@@ -111,11 +111,11 @@ const UpdateUser = () => {
 
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
-            className="w-full text-sm text-left rtl:text-center text-gray-500 dark:text-gray-400 "
+            className="w-full text-sm text-left rtl:text-center text-gray-500  "
             style={{ border: "1px solid black" }}
           >
             <thead
-              className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              className="text-xs text-gray-700 uppercase bg-gray-50  "
               style={{ backgroundColor: "black", color: "white" }}
             >
               <tr>

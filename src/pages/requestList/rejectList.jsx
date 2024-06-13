@@ -23,6 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { setLoading } from "../../redux/reducers/commonReducer";
 import Title from "../../utils/Title";
 import { EyeFill } from "react-bootstrap-icons";
+import CustomPagination from "../../components/pagination/CustomPagination";
 
 
 function RejectList() {
@@ -33,6 +34,7 @@ function RejectList() {
   const [current, setCurrent] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+  const [rejectPageCount,setRejectPageCount] = useState(0)
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -58,6 +60,7 @@ function RejectList() {
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload.results);
+      setRejectPageCount(res.responsePayload.count);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -81,14 +84,15 @@ function RejectList() {
       return;
     }
   };
-  const handleNext = () => {
-    setCurrent(current + 1);
-    getAllRequest({ active: current + 1 });
-  };
-  const handlePrevious = () => {
-    setCurrent(current - 1);
-    getAllRequest({ active: current - 1 });
-  };
+  // const handleNext = () => {
+  //   setCurrent(current + 1);
+  //   getAllRequest({ active: current + 1 });
+  // };
+  // const handlePrevious = () => {
+  //   setCurrent(current - 1);
+  //   getAllRequest({ active: current - 1 });
+  // };
+  
   useEffect(() => {
     if (updateReqList) {
       getAllRequest({ active: 1 });
@@ -486,25 +490,10 @@ target_type_value: "",
           </div>
         </div>
       </div>
-      <div className="card-footer flex justify-between p-3 mb-2 mt-2">
-        {isPrevious ? (
-          <button
-            onClick={() => handlePrevious()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            PREV
-          </button>
-        ) : (
-          <div></div>
-        )}
-        {isNext && (
-          <button
-            onClick={() => handleNext()}
-            className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
-          >
-            NEXT
-          </button>
-        )}
+      <div className="flex justify-center mb-2 mt-2">
+
+
+<CustomPagination  totalItems={rejectPageCount} />
       </div>
     </>
   );

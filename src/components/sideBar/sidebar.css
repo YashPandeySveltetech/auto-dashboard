@@ -34,7 +34,7 @@
 .close_side_user {
   margin-left: 10px;
   margin-top: 20px;
-  cursor: pointer;
+  /* cursor: pointer; */
   color: white;
 
 }

@@ -31,11 +31,16 @@ code {
 /* .custom-background {
   background-color: rgb(45, 60, 83);
 } */
-.bgimg{
-  background: url("/public/homebg.png");
-  background-position: center;
-  background-repeat: no-repeat;
+.bgimg {
+  background: url("/public/loginBg.jpg") center center no-repeat black;
+  background-size: cover;
+  height: 100vh; /* Ensures the element takes the full viewport height */
+  width: 100vw;  /* Ensures the element takes the full viewport width */
+  overflow: hidden; /* Prevents scrollbars if the content overflows */
+  margin: 0; /* Removes default margins */
+  padding: 0; /* Removes default padding */
 }
+
 .required::after {
   content: ' *';
   color: red;
@@ -51,5 +56,34 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+
+.my-3d-watercolor-div {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px); /* Adds a blur effect to make it look more like water */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+              0 1px 3px rgba(0, 0, 0, 0.08); /* Subtle shadow for 3D effect */
+  border-radius: 10px; /* Rounded corners */
+  padding: 1.25rem; /* Padding */
+  width: 20rem; /* Fixed width */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  /* color: white; */
+}
+
+.bodyLogin {
+  background-color: #f1f1f1; /* Light background to enhance 3D effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
 
 /* checkbox */

@@ -23,6 +23,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 // import OtpValidationModal from "../../modals/otpValidationModal";
 import { setLoading } from "../../redux/reducers/commonReducer";
 import Title from "../../utils/Title";
+import CustomPagination from "../../components/pagination/CustomPagination";
 
 function UnverifiedFormList() {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ function UnverifiedFormList() {
     startDate: "",
     endDate: "",
   });
+  const [unverifiedTotalCount, setUnverifiedTotalCount] = useState(0);
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -63,6 +65,8 @@ function UnverifiedFormList() {
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload);
+      setUnverifiedTotalCount(res?.responsePayload.count)
+      // console.log( res.responsePayload.count);
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -162,6 +166,7 @@ target_type_value: "",
     );
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload);
+     
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -359,7 +364,7 @@ target_type_value: "",
           </div>
         </div>
       </div>
-      <div className="card-footer flex justify-between p-3 mb-2 mt-2">
+      {/* <div className="card-footer flex justify-between p-3 mb-2 mt-2">
         {isPrevious ? (
           <button
             onClick={() => handlePrevious()}
@@ -378,6 +383,12 @@ target_type_value: "",
             NEXT
           </button>
         )}
+      </div> */}
+       <div className="flex justify-center mb-2 mt-2">
+
+
+<CustomPagination  totalItems={unverifiedTotalCount}getAllRequest={getAllRequest}setCurrent={setCurrent} />
+
       </div>
     </>
   );

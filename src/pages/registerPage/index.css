@@ -76,7 +76,7 @@
 
   .outer-div-whole{
 
-    border:2px solid black;
+    /* border:2px solid black; */
     width:97%;
     border-radius:30px;
     padding:5px;

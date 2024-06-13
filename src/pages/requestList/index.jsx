@@ -26,6 +26,8 @@ import * as XLSX from "xlsx";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Title from "../../utils/Title";
 import { EyeFill } from "react-bootstrap-icons";
+import { Pagination } from "@mui/material";
+import CustomPagination from "../../components/pagination/CustomPagination";
 
 function RequestList() {
   const navigate = useNavigate();
@@ -49,6 +51,7 @@ function RequestList() {
     startDate: "",
     endDate: "",
   });
+  const [totalPageCount ,setTotalPageCount] = useState(0)
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -81,6 +84,7 @@ function RequestList() {
 
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
+      setTotalPageCount(res?.responsePayload?.count)
       dispatch(setLoading(false));
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -106,15 +110,16 @@ function RequestList() {
       return;
     }
   };
-  const handleNext = () => {
-    setCurrent((prev) => prev + 1);
-    getAllRequest({ active: current + 1 });
-  };
+  // const handleNext = () => {
+  //   setCurrent((prev) => prev + 1);
+  //   getAllRequest({ active: current + 1 });
+  // };
 
-  const handlePrevious = () => {
-    setCurrent((prev) => prev - 1);
-    getAllRequest({ active: current - 1 });
-  };
+  // const handlePrevious = () => {
+  //   setCurrent((prev) => prev - 1);
+  //   getAllRequest({ active: current - 1 });
+  // };
+  console.log(totalPageCount);
   useEffect(() => {
     if (updateReqList) {
       getAllRequest({ active: 1 });
@@ -266,6 +271,12 @@ function RequestList() {
       return;
     }
   };
+  const handlePageChange = ({ selected }) => {
+    const selectedPageIndex = selected;
+    setCurrent(selectedPageIndex + 1); // Since selectedPageIndex is zero-based index
+    getAllRequest({ active: selectedPageIndex + 1 }); // Ensure selectedPageIndex is a number
+  };
+  
 
   const filtersection = useCallback(() => {
     return (
@@ -539,9 +550,10 @@ function RequestList() {
             )}
           </div>
         </div>
+        
       </div>
-      <div className="card-footer flex justify-between p-3 mb-2 mt-2">
-        {isPrevious ? (
+      <div className=" flex justify-center mb-2 mt-2">
+        {/* {isPrevious ? (
           <button
             onClick={() => handlePrevious()}
             className="bg-green-400 px-4 py-2 rounded-lg font-bold text-black shadow-md"
@@ -558,7 +570,9 @@ function RequestList() {
           >
             NEXT
           </button>
-        )}
+        )} */}
+        
+        <CustomPagination  totalItems={totalPageCount}  getAllRequest={getAllRequest}setCurrent={setCurrent} />
       </div>
     </>
   );

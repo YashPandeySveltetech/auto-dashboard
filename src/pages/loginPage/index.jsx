@@ -105,6 +105,7 @@ function LoginPage() {
           name="email"
           value={formValue?.email || ""}
           disabled={isOtp}
+          textColor={"text-white"}
         />
       </div>
     </>
@@ -119,6 +120,8 @@ function LoginPage() {
           type="number"
           name="otp"
           value={verifyUser?.otp}
+          textColor={"text-white"}
+
         />
 
         <div
@@ -152,8 +155,8 @@ function LoginPage() {
 
   return (
     <div className=" h-[100vh]  flex justify-center items-center w-[100%] bgimg ">
-      <div className=" bg-zinc-200 flex relative justify-center gap-5 flex-col text-black  p-5 border rounded  w-[20rem] ">
-        <div className="text-2xl font-extrabold	text-center ">Login</div>
+      <div className="my-3d-watercolor-div">
+        <div className="text-2xl font-extrabold	text-center text-white   ">Login</div>
         <div className=" flex justify-center gap-5 flex-col ">
           <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
             {loginWith === "email"
@@ -163,13 +166,16 @@ function LoginPage() {
               : ""}
             <div className="input-group mb-3" style={{ position: "relative" }}>
               <Input
+              
                 onChange={handleChange}
+                className="custom-input"
                 label={"Password"}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formValue?.password || ""}
                 disabled={isOtp}
                 style={{ paddingRight: "40px" }} // Adjust paddingRight to accommodate the button
+                textColor={"text-white"}
               />
               <button
                 className="btn btn-outline-secondary"
@@ -191,7 +197,7 @@ function LoginPage() {
             ) : (
               <>
                 {isLoading ? (
-                  "Otp Sending..."
+                 <span className="text-white"> "Otp Sending..."</span>
                 ) : (
                   <div className="col flex align-items-center justify-center">
                     <button
@@ -217,7 +223,7 @@ function LoginPage() {
                           setIsOtp(false)
                         );
                       }}
-                      className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                      className="font-semibold leading-6 text-white hover:text-indigo-500"
                     >
                       login with mobile?
                     </button>
@@ -233,7 +239,7 @@ function LoginPage() {
                           setIsOtp(false)
                         );
                       }}
-                      className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                      className="font-semibold leading-6 text-white hover:text-indigo-500"
                     >
                       login with email?
                     </button>

@@ -20,14 +20,15 @@ const Input = ({
   id,
   checked,
   max,
-  handleKeyDown
+  handleKeyDown,
+  textColor
 }) => {
   return (
     <>
     
       <div>
         <div className="flex">
-          <label className="text-sm font-medium text-black">{label}</label>
+          <label className={`text-sm font-medium ${textColor?textColor:"text-black"}`}>{label}</label>
           <span className={star ? "text-red-600" : ""}>{star ? "*" : ""}</span>
         </div>
         <input

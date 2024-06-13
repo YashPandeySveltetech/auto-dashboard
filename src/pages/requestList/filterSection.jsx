@@ -119,7 +119,7 @@ function FilterSection({
             <label htmlFor=""> Select Date</label>
            <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
            <Datepicker
-              primaryColor={"lightgray"}
+              primaryColor={"teal"}
               value={dateRange}
               onChange={handleValueChange}
               showShortcuts={true}

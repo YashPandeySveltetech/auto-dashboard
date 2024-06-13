@@ -23,7 +23,7 @@ const UpdateUserEdit = () => {
   const [modal, setModal] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
+    
     setFormField({
       ...formField,
       [name]: value,
@@ -35,7 +35,7 @@ const UpdateUserEdit = () => {
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
 
-      console.log(res.responsePayload);
+    
       setFormField({
         email: res.responsePayload.email,
         username: res.responsePayload.username,

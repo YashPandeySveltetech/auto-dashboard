@@ -158,7 +158,7 @@ const RegistrationPage = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-    console.log("Selected option:", event.target.value);
+   
   };
   return (
     <div className="min-h-screen flex items-center justify-center custom-background from-inherit" >

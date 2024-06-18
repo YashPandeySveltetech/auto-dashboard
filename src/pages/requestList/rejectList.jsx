@@ -43,6 +43,7 @@ function RejectList() {
 
   const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
+  
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
@@ -159,6 +160,7 @@ target_type_value: "",
       target_type: "",
     });
     if (filter) {
+      
       const res = await ApiHandle(
         FORM_REQUEST +
           `?decision_type=REJECT&page=${active}&is_otp_verified=&sys_date=`,

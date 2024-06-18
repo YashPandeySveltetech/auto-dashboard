@@ -59,12 +59,12 @@ function RequestList() {
   const [requestList, setRequestList] = useState([]);
 
   const getAllRequest = async ({ active = 1 }) => {
+ 
     dispatch(setLoading(true));
-    let date_range =
-      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+    let date_range = dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
-      dateRange = "";
+      date_range = "";
     }
 
     const res = await ApiHandle(

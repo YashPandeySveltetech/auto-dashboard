@@ -877,7 +877,7 @@ function RequestForm({ requestData }) {
                   <div>
             
 
-            <div class="hidden sm:block">
+            <div class=" sm:block">
               <div class="border-b border-gray-200">
                 <nav class="-mb-px  flex gap-6">
                   <button
@@ -937,7 +937,7 @@ function RequestForm({ requestData }) {
           </div>
           <div className="mt-6 flex gap-3 items-center flex-wrap">
             <label htmlFor="" className="font-bold">
-              select File if any-:
+              Select File if any:
             </label>
             <Input
               type="file"

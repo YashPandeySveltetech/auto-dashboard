@@ -91,6 +91,7 @@ function LoginPage() {
           min={6}
           maxLength="10"
           inputMode="numeric"
+          textColor={"text-white"}
         />
       </div>
     </>

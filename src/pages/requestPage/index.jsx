@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState,useRef } from "react";
 
 import Select from "react-select";
 import Input from "../../components/input";
@@ -25,13 +25,16 @@ import { otpValidationModal } from "../../redux/reducers/modalsReducer";
 
 import { useLocation, useParams, useNavigate } from "react-router";
 import Ild from "./Ild";
+import Title from "../../utils/Title";
+import { ArrowLeft } from "react-bootstrap-icons";
+import BackButton from "../../components/backButton/BackButton";
 
 function RequestForm({ requestData }) {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
-  const [isformcreate,setIsFormCreate]=useState(false)
+  const [isformcreate, setIsFormCreate] = useState(false);
 
   const initialobj = {
     police_station: "",
@@ -54,7 +57,7 @@ function RequestForm({ requestData }) {
   // mobile
   const [MobileList, setMobileList] = useState([
     {
-      date_from: "",
+      date_from: null,
       date_to: null,
       time_from: "00:00",
       time_to: "00:00",
@@ -67,7 +70,7 @@ function RequestForm({ requestData }) {
   ]);
   const [ImeiList, setImeiList] = useState([
     {
-      date_from: "",
+      date_from: null,
       date_to: null,
       time_from: "00:00",
       time_to: "00:00",
@@ -76,7 +79,7 @@ function RequestForm({ requestData }) {
       tsp: [],
       target_type: "",
       request_to_provide: [],
-      fir_or_complaint:"",
+      fir_or_complaint: "",
       fir_no: "",
       case_type: "",
     },
@@ -84,7 +87,7 @@ function RequestForm({ requestData }) {
   const [IpList, setIpList] = useState([
     {
       ip: "",
-      date_from: "",
+      date_from: null,
       date_to: null,
       time_from: "00:00",
       time_to: "00:00",
@@ -96,7 +99,7 @@ function RequestForm({ requestData }) {
   ]);
   const [cellIdList, setCellIdList] = useState([
     {
-      date_from: "",
+      date_from: null,
       date_to: null,
       time_from: "00:00",
       time_to: "00:00",
@@ -109,7 +112,7 @@ function RequestForm({ requestData }) {
   ]);
   const [IldList, setIldList] = useState([
     {
-      date_from: "",
+      date_from: null,
       date_to: null,
       time_from: "00:00",
       time_to: "00:00",
@@ -128,7 +131,7 @@ function RequestForm({ requestData }) {
   const [caseType, setCaseType] = useState([]);
   const [tspList, setTspList] = useState([]);
   const [apiPayload, setApiPayload] = useState(initialobj);
-
+  const [isValid, setIsValid] = useState(false);
   useEffect(() => {
     if (requestData) {
       setCurrentDate(requestData?.sys_date);
@@ -153,10 +156,9 @@ function RequestForm({ requestData }) {
         };
       });
       setMobileList(requestData?.form_request_for?.multiple_mobile);
-    
 
-        setImeiList(requestData?.form_request_for?.imei_number);
-     
+      setImeiList(requestData?.form_request_for?.imei_number);
+
       setCellIdList(requestData?.form_request_for?.cell_id);
       setIpList(requestData?.form_request_for?.ip_port);
       setIldList(requestData?.form_request_for?.ild);
@@ -175,84 +177,87 @@ function RequestForm({ requestData }) {
     getTargetType();
     getCaseType();
   }, []);
-  useEffect(()=>{
-if(isformcreate){
-setMobileList([
-  {
-    date_from: "",
-    date_to: null,
-    time_from: "00:00",
-    time_to: "00:00",
-    till_date: false,
-    mobile_number: "",
-    tsp: [],
-    target_type: "",
-    request_to_provide: [],
-  },
-])
-setImeiList([
-  {
-    date_from: "",
-    date_to: null,
-    time_from: "00:00",
-    time_to: "00:00",
-    till_date: false,
-    imei: "",
-    tsp: [],
-    target_type: "",
-    request_to_provide: [],
-    fir_or_complaint:"",
-    fir_no: "",
-    case_type: "",
-  },
-])
-setIpList([
-  {
-    ip: "",
-    date_from: "",
-    date_to: null,
-    time_from: "00:00",
-    time_to: "00:00",
-    till_date: false,
-    tsp: [],
-    target_type: "",
-    request_to_provide: [],
-  },
-])
-setCellIdList(
-  [{
-    date_from: "",
-    date_to: null,
-    time_from: "00:00",
-    time_to: "00:00",
-    till_date: false,
-    cell_id: "",
-    tsp: [],
-    target_type: "",
-    request_to_provide: [],
-  },
-])
-setIldList([
-  {
-    date_from: "",
-    date_to: null,
-    time_from: "00:00",
-    time_to: "00:00",
-    till_date: false,
-    mobile_number: "",
-    tsp: [],
-    target_type: "",
-    request_to_provide: [],
-  },
-])
-  setIsFormCreate(false)
-}
-  },[isformcreate])
+  useEffect(() => {
+    if (isformcreate) {
+      setMobileList([
+        {
+          date_from: null,
+          date_to: null,
+          time_from: "00:00",
+          time_to: "00:00",
+          till_date: false,
+          mobile_number: "",
+          tsp: [],
+          target_type: "",
+          request_to_provide: [],
+        },
+      ]);
+      setImeiList([
+        {
+          date_from: null,
+          date_to: null,
+          time_from: "00:00",
+          time_to: "00:00",
+          till_date: false,
+          imei: "",
+          tsp: [],
+          target_type: "",
+          request_to_provide: [],
+          fir_or_complaint: "",
+          fir_no: "",
+          case_type: "",
+        },
+      ]);
+      setIpList([
+        {
+          ip: "",
+          date_from: null,
+          date_to: null,
+          time_from: "00:00",
+          time_to: "00:00",
+          till_date: false,
+          tsp: [],
+          target_type: "",
+          request_to_provide: [],
+        },
+      ]);
+      setCellIdList([
+        {
+          date_from: null,
+          date_to: null,
+          time_from: "00:00",
+          time_to: "00:00",
+          till_date: false,
+          cell_id: "",
+          tsp: [],
+          target_type: "",
+          request_to_provide: [],
+        },
+      ]);
+      setIldList([
+        {
+          date_from: null,
+          date_to: null,
+          time_from: "00:00",
+          time_to: "00:00",
+          till_date: false,
+          mobile_number: "",
+          tsp: [],
+          target_type: "",
+          request_to_provide: [],
+        },
+      ]);
+      setIsFormCreate(false);
+    }
+  }, [isformcreate]);
 
   const getTspList = async () => {
     const res = await ApiHandle(`${TSP_LIST}`, "", "GET");
     if (res.statusCode === 200) {
-      let data=[...res?.responsePayload,{id:[1,3,4],name:"ALL",email:""}]
+      let data = [
+        ...res?.responsePayload,
+        { id: [1, 3, 4], name: "ALL", email: "" },
+      ];
 
       setTspList(data);
     }
@@ -299,7 +304,6 @@ setIldList([
   }, [activeForm]);
 
   const tspdata = useMemo(() => {
-    
     if (
       apiPayload?.form_request_for[arry[activeForm?.target_type]] &&
       apiPayload?.form_request_for[arry[activeForm?.target_type]][0]?.tsp
@@ -335,10 +339,9 @@ setIldList([
     ImeiList,
     IpList,
     cellIdList,
-    IldList
+    IldList,
   ]);
   const formHandler = useCallback(() => {
-    
     if (activeForm?.target_type === "MOBILE_NUMBER") {
       return (
         <Mobile
@@ -368,7 +371,6 @@ setIldList([
           apiPayload={apiPayload}
           setApiPayload={setApiPayload}
           isother={isother}
-        
         />
       );
     }
@@ -422,11 +424,10 @@ setIldList([
     apiPayload.form_request_for,
     tspdata,
     activeForm.target_type,
-    apiPayload
+    apiPayload,
   ]);
   useEffect(() => {
     if (activeForm.target_type === "MOBILE_NUMBER") {
- 
       setApiPayload({
         ...apiPayload,
         form_request_for: {
@@ -461,9 +462,9 @@ setIldList([
     if (activeForm.target_type === "IMEI_NUMBER") {
       setApiPayload({
         ...apiPayload,
-        fir_or_complaint:ImeiList[0]?.fir_or_complaint,
-      fir_no: ImeiList[0]?.fir_no,
-      case_type: ImeiList[0]?.case_type,
+        fir_or_complaint: ImeiList[0]?.fir_or_complaint,
+        fir_no: ImeiList[0]?.fir_no,
+        case_type: ImeiList[0]?.case_type,
         form_request_for: {
           [arry[activeForm.target_type]]: ImeiList,
         },
@@ -597,20 +598,27 @@ setIldList([
         ...apiPayload,
         [name]: checked,
       });
-    }
-   else if (callfrom === "files") {
-  
+    } else if (callfrom === "files") {
       setApiPayload({
         ...apiPayload,
         [name]: files[0],
       });
-    }
-   else if (callfrom) {
+    } else if (callfrom) {
       setActiveForm({
         ...activeForm,
         [callfrom]: fromval.name,
         target_type_id: fromval.id,
       });
+    } else if (name === "io_mobile_no") {
+      if (value.length <= 10) {
+        setIsValid(true);
+        setApiPayload({
+          ...apiPayload,
+          [name]: value,
+        });
+      } else {
+        setIsValid(false);
+      }
     } else {
       setApiPayload({
         ...apiPayload,
@@ -625,14 +633,12 @@ setIldList([
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
       setActiveForm({ ...activeForm, dump_type: e.value });
-    }
-   else if (data.name === "case_type") {
+    } else if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.id,
       });
-    }
-   else if (data.name === "fir_or_complaint") {
+    } else if (data.name === "fir_or_complaint") {
       if (e.value === "other") {
         setIsOther(true);
         setApiPayload({
@@ -646,8 +652,7 @@ setIldList([
           [data?.name]: e?.value,
         });
       }
-    } 
-    else {
+    } else {
       setApiPayload({
         ...apiPayload,
         [data?.name]: e?.value,
@@ -657,7 +662,7 @@ setIldList([
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsFormCreate(false)
+    setIsFormCreate(false);
     let formData = new FormData();
 
     if (apiPayload?.file) {
@@ -669,36 +674,36 @@ setIldList([
         }
       }
     }
+   
     let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
-    if(Object.keys(apiPayload?.form_request_for)?.length>0){
-    const res = await ApiHandle(
-      url,
-      apiPayload.file ? formData : apiPayload,
-      isEditable ? "PUT" : "POST",
-      apiPayload.file ? true : false
-    );
-    if (res?.statusCode === 201) {
-      // getFormPdf(res?.responsePayload?.id);
-      setApiPayload(initialobj);
-     setIsFormCreate(true)
-      setActiveForm({
-        target_type: "",
-        request_to_provide: [],
-        target_type_id: "",
-      });
-      dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
-      Toaster("success", "SuccessFully Submitted Form");
-      return;
+    if (Object.keys(apiPayload?.form_request_for)?.length > 0) {
+      const res = await ApiHandle(
+        url,
+        apiPayload.file ? formData : apiPayload,
+        isEditable ? "PUT" : "POST",
+        apiPayload.file ? true : false
+      );
+      if (res?.statusCode === 201) {
+        // getFormPdf(res?.responsePayload?.id);
+        setApiPayload(initialobj);
+        setIsFormCreate(true);
+        setActiveForm({
+          target_type: "",
+          request_to_provide: [],
+          target_type_id: "",
+        });
+        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        Toaster("success", "SuccessFully Submitted Form");
+        return;
+      }
+      if (res?.statusCode === 200) {
+        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        Toaster("success", "SuccessFully Updated Form");
+      }
+    } else {
+      Toaster("", "Please Fill all mandatory Data");
+      setIsFormCreate(false);
     }
-    if (res?.statusCode === 200) {
-      dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
-      Toaster("success", "SuccessFully Updated Form");
-    }
-  }
-  else{
-    Toaster("", "Please Fill all mandatory Data");
-    setIsFormCreate(false)
-  }
   };
   const getFormPdf = async (id) => {
     const res = await ApiHandle(`${MAKE_PDF}?form_id=${id}`, "", "GET");
@@ -711,7 +716,7 @@ setIldList([
     var goodColor = "#0C6";
     var badColor = "#FF9B37";
 
-    if (mobile.value.length>10 || mobile.value.length<10) {
+    if (mobile.value.length > 10 || mobile.value.length < 10) {
       message.style.color = badColor;
       message.innerHTML = "required 10 digits mobile number";
     } else {
@@ -719,174 +724,211 @@ setIldList([
       message.innerHTML = "";
     }
   }
-  
-  
+  const containerRef = useRef(null);
+
+  const scrollLeft = () => {
+    containerRef.current.scrollBy({left: -200, behavior: "smooth"});
+  };
+
+  const scrollRight = () => {
+    containerRef.current.scrollBy({left: 200, behavior: "smooth"});
+  };
 
   return (
     <>
-      <form action="" onSubmit={handleSubmit}>
-        <div
-          className="mx-auto mt-5 p-3 bg-white shadow-md rounded-lg"
-          style={{ width: "96%" }}
-        >
-          <div style={{ textAlign: "center" }}>
-            <h1 className="text-2xl font-bold mb-20">New Request Form</h1>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center gap-4">
+    {/* <BackButton/> */}
+      <Title text={"New Request Form"} />
+      <div className="outer-div-whole mx-auto mb-5" style={{ padding: "30px" }}>
+        <form action="" onSubmit={handleSubmit}>
+          <div className=" flex w-full gap-10">
+            <div className="flex flex-col w-full">
               <label className="font-bold">Date:</label>
-              <div className="rounded-md border border-gray-300 p-2">
+              <div className="rounded-md border border-gray-300 p-2 w-full">
                 {currentDate}
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col w-full">
               <label className="font-bold">Time:</label>
-              <div className="rounded-md border border-gray-300 p-2">
+              <div className="rounded-md border border-gray-300 p-2 w-full">
                 {currentTime ?? "00:00:00"}
               </div>
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-3 md:grid-cols-3 gap-6">
-     
-        { (activeForm.target_type !=="IMEI_NUMBER") && <>  <div className="">
-              <label className="font-bold required">Choose Type:</label>
-              <div className="flex  gap-2">
-                <Select
-                  name="fir_or_complaint"
-                  options={firType}
-                  value={requestData &&  firType?.filter((obj) =>
-                    obj.value===apiPayload.fir_or_complaint 
-                  )}
-                  className="basic-multi-select w-[30%]"
-                  classNamePrefix="select"
-                  onChange={(e, data) => dropdownChange(e, data)}
-                  isSearchable={false}
-                  isDisabled={!isEditable && requestData}
-                />
-             
-                {isother && (
-                  <Input
-                    type="text"
-                    name="fir_or_complaint"
-                    required
-                    placeholder={"Enter Type"}
-                    onChange={(e) =>
-                      setApiPayload({
-                        ...apiPayload,
-                        fir_or_complaint: e.target.value,
-                      })
-                    }
-                    value={apiPayload?.fir_or_complaint}
-                    disabledSelect={!isEditable && requestData}
+          <div className="mt-6">
+            {activeForm.target_type !== "IMEI_NUMBER" && (
+              <>
+                {" "}
+                <div className="flex gap-10">
+                  <div className="w-full ">
+                    <label className="font-bold required">Choose Type:</label>
+                    <div className="flex  gap-2">
+                      <Select
+                        name="fir_or_complaint"
+                        options={firType}
+                        value={
+                          requestData &&
+                          firType?.filter(
+                            (obj) => obj.value === apiPayload.fir_or_complaint
+                          )
+                        }
+                        className="basic-multi-select w-[80%]"
+                        classNamePrefix="select"
+                        onChange={(e, data) => dropdownChange(e, data)}
+                        isSearchable={false}
+                        isDisabled={!isEditable && requestData}
+                      />
+
+                      {isother && (
+                        <Input
+                          type="text"
+                          name="fir_or_complaint"
+                          required
+                          placeholder={"Enter Type"}
+                          onChange={(e) =>
+                            setApiPayload({
+                              ...apiPayload,
+                              fir_or_complaint: e.target.value,
+                            })
+                          }
+                          value={apiPayload?.fir_or_complaint}
+                          disabledSelect={!isEditable && requestData}
+                        />
+                      )}
+                      <Input
+                        type="text"
+                        name="fir_no"
+                        required
+                        placeholder={
+                          "Enter " + apiPayload?.fir_or_complaint + " no."
+                        }
+                        onChange={handleChange}
+                        value={apiPayload?.fir_no}
+                        disabledSelect={!isEditable && requestData}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full ">
+                    <label className="font-bold required">Case Type:</label>
+
+                    <Select
+                      name="case_type"
+                      options={caseType}
+                      value={caseType?.filter(
+                        (obj) => apiPayload?.case_type == obj?.id
+                      )}
+                      className="basic-multi-select w-[100%]"
+                      classNamePrefix="select"
+                      onChange={(e, data) => dropdownChange(e, data)}
+                      isDisabled={!isEditable && requestData}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className=" flex  items-center mt-5 gap-5">
+                  <label htmlFor="" className="font-bold">
+                    Select if Form is Urgent
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="urgent"
+                    onChange={(e) => handleChange(e, "urgent")}
+                    checked={apiPayload?.urgent}
+                    // checked={apiPayload?.urgent?"checked":"unchecked"}
+                    // checked={(apiPayload?.urgent===true)?"checked":""}
+                    disabled={!isEditable && requestData}
                   />
-                )}
-                <Input
-                  type="text"
-                  name="fir_no"
-                  required
-                  placeholder={"Enter No"}
-                  onChange={handleChange}
-                  value={apiPayload?.fir_no}
-                  disabledSelect={!isEditable && requestData}
-                />
+                </div>
+              </>
+            )}
+          </div>
+          <div className="mt-6 flex flex-col">
+            <label className="font-bold required">Target Type:</label>
+          </div>
+
+         
+
+          <div className="mt-2">
+          <div className="relative flex items-center">
+              <button
+                onClick={scrollLeft}
+                className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block"
+              >
+                &lt;
+              </button>
+
+              <div
+                className="flex rounded-lg gap-2 ml-[40px]  mr-[40px] overflow-x-auto scrollbar-thumb-gray-900 scrollbar-track-gray-100 scrollbar-thin"
+                ref={containerRef}
+              >
+                {targetType?.map((val, key) => (
+                  <div key={key} className="flex-shrink-0">
+                    <div className="border-b border-gray-200">
+                      <nav className="-mb-px flex gap-2">
+                        <button
+                          onClick={(e) => handleChange(e, "target_type", val)}
+                          disabled={
+                            (!isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0) ||
+                            (isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0)
+                          }
+                          type="button"
+                          className={`border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500
+                    ${
+                      activeForm?.target_type === val?.name
+                        ? "border-black-400 border-b-white bg-[#FFFAFA] text-sky-700"
+                        : "hover:text-gray-700"
+                    }`}
+                        >
+                          {String(val?.name).replace("_", " ")}
+                          <span className="text-gray-400">
+                            (
+                            {apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length > 0
+                              ? apiPayload?.form_request_for[arry[val?.name]]
+                                  ?.length
+                              : 0}
+                            )
+                          </span>
+                        </button>
+                      </nav>
+                    </div>
+                  </div>
+                ))}
               </div>
+              <button
+                onClick={scrollRight}
+                className="absolute right-0 z-10 p-2 bg-gray-300 rounded-full shadow-md md:hidden block"
+              >
+                &gt;
+              </button>
             </div>
 
-            <div>
-              <label className="font-bold required">Case Type:</label>
-              <Select
-                name="case_type"
-                options={caseType}
-                value={caseType?.filter(
-                  (obj) => apiPayload?.case_type == obj?.id
-                )}
-                className="basic-multi-select w-[50%]"
-                classNamePrefix="select"
-                onChange={(e, data) => dropdownChange(e, data)}
-                isDisabled={!isEditable && requestData}
-                required
-              />
-            </div>
-            </>}
-            <div className="mt-6 flex gap-3 items-center">
-              <label htmlFor="" className="font-bold">
-                Select if Form is Urgent
-              </label>
-             
-              <input
-                type="checkbox"
-                name="urgent"
-                onChange={(e) => handleChange(e, "urgent")}
-                checked  ={apiPayload?.urgent}
-                // checked={apiPayload?.urgent?"checked":"unchecked"}
-                // checked={(apiPayload?.urgent===true)?"checked":""}
-                disabled={!isEditable && requestData}
-              />
-            </div>
-          </div>
-          <div className="mt-6 flex items-center gap-6">
-            <label className="font-bold required">Target Type:</label>
-            <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-              <ul className="flex flex-wrap -mb-px">
-                {targetType?.map((val, key) => (
-                  <li className="me-2" key={key}>
-                    <button
-                      onClick={(e) => handleChange(e, "target_type", val)}
-                      disabled={
-                       ( !isEditable &&
-                        requestData &&
-                        !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0) ||( isEditable &&
-                            requestData &&
-                            !requestData?.form_request_for[arry[val?.name]]
-                              ?.length > 0)
-                      }
-                      type="button"
-                      className={
-                        activeForm?.target_type === val?.name
-                          ? "inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg "
-                          : "inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300"
-                      }
-                      id={key}
-                    >
-                      {String(val?.name).replace("_", " ")}
-                      <span className="text-cyan-400">
-                        (
-                        {apiPayload?.form_request_for[arry[val?.name]]?.length >
-                        0
-                          ? apiPayload?.form_request_for[arry[val?.name]]
-                              ?.length
-                          : 0}
-                        )
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="mt-6">
-            {/* Additional Form Elements */}
-            {formHandler()}
+            <div>{formHandler()}</div>
           </div>
 
           {/* Comments */}
           <div className="mt-6">
-            <label className="font-bold required">Case Reference:</label>
+            <label className="font-bold required ">Case Reference:</label>
             <textarea
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer !bg-blue-100"
+
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
               disabled={!isEditable && requestData}
             ></textarea>
           </div>
-          <div className="mt-6 flex gap-3 items-center">
+          <div className="mt-6 flex gap-3 items-center flex-wrap">
             <label htmlFor="" className="font-bold">
-              select File if any-:
+              Select File if any:
             </label>
             <Input
               type="file"
@@ -911,9 +953,9 @@ setIldList([
               </a>
             )}
           </div>
-          <div className="flex justify-start items-center gap-5 mt-6">
+          <div className="flex justify-start items-center gap-5 mt-6 flex-wrap">
             {/* IO Name */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <label className="font-bold required">
                 Requesting Officer Name:
               </label>
@@ -928,7 +970,7 @@ setIldList([
             </div>
 
             {/* IO Mobile no. */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <label className="font-bold required">
                 Requesting Officer Mobile no.
               </label>
@@ -938,44 +980,50 @@ setIldList([
                 required
                 onChange={handleChange}
                 value={apiPayload.io_mobile_no}
-                disabledSelect={!isEditable && requestData}
-                min={10}
+                max={9999999999} // Define the maximum value here (10 digits)
                 maxLength="10"
                 inputMode="numeric"
                 id="iomobile"
-                onKeyUp={checkMobile}
+                // onKeyUp={checkMobile}
               />
-              <span id="errormsg"></span>
+              {isValid && (
+                <p style={{ color: "red" }}>
+                  Mobile number must be 10 digits long.
+                </p>
+              )}
             </div>
             {/* <div className="flex items-center gap-3">
-              <label className="font-bold">Requesting Officer Email.</label>
-              <div className="flex flex-col items-center">
-                <Input
-                  type="email"
-                  name="io_email"
-                  onChange={handleChange}
-                  value={apiPayload.io_email}
-                  disabledSelect={!isEditable && requestData}
-                />
-                <span id="message">(.gov & .nic email's only )</span>
-              </div>
-            </div> */}
+                <label className="font-bold">Requesting Officer Email.</label>
+                <div className="flex flex-col items-center">
+                  <Input
+                    type="email"
+                    name="io_email"
+                    onChange={handleChange}
+                    value={apiPayload.io_email}
+                    disabledSelect={!isEditable && requestData}
+                  />
+                  <span id="message">(.gov & .nic email's only )</span>
+                </div>
+              </div> */}
 
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
-                send Otp
-              </button> </div>} */}
+                  send Otp
+                </button> </div>} */}
           </div>
 
           {/* Submit Button */}
           {(!requestData || isEditable) && (
             <div className="mt-6">
-              <button disabled={activeForm?.target_type===""} className="bg-blue-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-500">
+              <button
+                disabled={activeForm?.target_type === ""}
+                className="bg-blue-400 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-500"
+              >
                 Submit
               </button>
             </div>
           )}
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   );
 }

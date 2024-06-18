@@ -1,0 +1,103 @@
+/* CustomPagination.css */
+
+.pagination-container {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    margin-top: 20px;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  .custom-pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .custom-pagination-item {
+    margin: 0 5px;
+  }
+  
+  .custom-pagination-link, 
+  .custom-pagination-previous, 
+  .custom-pagination-next,
+  .custom-pagination-break {
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid rgb(228, 223, 223);
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    background-color: #ffffff;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .custom-pagination-link:hover, 
+  .custom-pagination-previous:hover, 
+  .custom-pagination-next:hover,
+  .custom-pagination-break:hover,
+  .custom-pagination-item.active .custom-pagination-link {
+    background-color: #11101d;
+    color: #fff;
+  }
+  
+  /* Styles for disabled arrow buttons */
+  .custom-pagination-previous.disabled,
+  .custom-pagination-next.disabled {
+    pointer-events: none; /* Disable click */
+    cursor: default;
+    color: #aaa; /* Lighter color to indicate disabled state */
+    background-color: #f7f7f7; /* Light background */
+    border-color: #ddd; /* Light border */
+  }
+  
+  .jump-to-container {
+    display: flex;
+    align-items: center;
+
+  }
+  
+  .jump-to-input {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 5px;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .jump-to-button {
+    padding: 4px 12px;
+    border: 1px solid #11101d;
+    border-radius: 4px;
+    background-color: #11101d;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .jump-to-button:hover {
+    background-color: #4d4c59;
+    border-color: #4d4c59;
+  }
+  @media only screen and (max-width: 600px) {
+    .pagination-container {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        margin-top: 20px;
+        justify-content: space-around;
+        width: 100%;
+      }
+      .custom-pagination-link, 
+      .custom-pagination-previous, 
+      .custom-pagination-next,
+      .custom-pagination-break {
+   
+        padding: 3px 8px;
+      }
+  }

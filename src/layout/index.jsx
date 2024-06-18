@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/sideBar";
 import Header from "../components/header";
 
 function Layout({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+
   return (
     <div className="flex w-[100%]">
-      <div className="w-[16%]">
-        <Sidebar />
+      <div>
+        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen}  />
       </div>
-      <div className="w-[84%]">
+      <div  className=" h-full w-full">
         {/* <div>
           <Header />
         </div> */}
-        <div  style={{height:"100vh" ,overflow:'scroll'}} >{children}</div>
+        <div  style={{height:"100vh",overflow:'scroll'}} className={isOpen ? "ml-[15rem]": " ml-[5rem]"}>{children}</div>
       </div>
     </div>
   );

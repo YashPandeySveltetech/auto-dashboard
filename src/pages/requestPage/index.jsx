@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState,useRef } from "react";
 
 import Select from "react-select";
 import Input from "../../components/input";
@@ -724,6 +724,15 @@ function RequestForm({ requestData }) {
       message.innerHTML = "";
     }
   }
+  const containerRef = useRef(null);
+
+  const scrollLeft = () => {
+    containerRef.current.scrollBy({left: -200, behavior: "smooth"});
+  };
+
+  const scrollRight = () => {
+    containerRef.current.scrollBy({left: 200, behavior: "smooth"});
+  };
 
   return (
     <>
@@ -841,83 +850,65 @@ function RequestForm({ requestData }) {
 
          
 
-          <div>
-            <div className="flex rounded-lg  flex-wrap justify-center gap-2">
-              {targetType?.map((val, key) => (
-                <>
-                  {/* <button
-                    onClick={(e) => handleChange(e, "target_type", val)}
-                    disabled={
-                      (!isEditable &&
-                        requestData &&
-                        !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0) ||
-                      (isEditable &&
-                        requestData &&
-                        !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0)
-                    }
-                    type="button"
-                    className={`flex-1 py-2 px-4 bg-zinc-400	  rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                      activeForm?.target_type === val?.name
-                        ? "bg-blue-400 text-white"
-                        : "hover:text-gray-600 hover:border-black-300"
-                    }`}
-                    id={key}
-                  >
-                    {String(val?.name).replace("_", " ")}
-                    <span className="text-white-400">
-                      (
-                      {apiPayload?.form_request_for[arry[val?.name]]?.length > 0
-                        ? apiPayload?.form_request_for[arry[val?.name]]?.length
-                        : 0}
-                      )
-                    </span>
-                  </button> */}
-                  <div>
-            
+          <div className="mt-2">
+          <div className="relative flex items-center">
+              <button
+                onClick={scrollLeft}
+                className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block"
+              >
+                &lt;
+              </button>
 
-            <div class=" sm:block">
-              <div class="border-b border-gray-200">
-                <nav class="-mb-px  flex gap-6">
-                  <button
-                     onClick={(e) => handleChange(e, "target_type", val)}
-                     disabled={
-                       (!isEditable &&
-                         requestData &&
-                         !requestData?.form_request_for[arry[val?.name]]
-                           ?.length > 0) ||
-                       (isEditable &&
-                         requestData &&
-                         !requestData?.form_request_for[arry[val?.name]]
-                           ?.length > 0)
-                     }
-                     type="button"
-                     className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-black-500 mr-1"
-                     ${
+              <div
+                className="flex rounded-lg gap-2 ml-[40px]  mr-[40px] overflow-x-auto scrollbar-thumb-gray-900 scrollbar-track-gray-100 scrollbar-thin"
+                ref={containerRef}
+              >
+                {targetType?.map((val, key) => (
+                  <div key={key} className="flex-shrink-0">
+                    <div className="border-b border-gray-200">
+                      <nav className="-mb-px flex gap-2">
+                        <button
+                          onClick={(e) => handleChange(e, "target_type", val)}
+                          disabled={
+                            (!isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0) ||
+                            (isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0)
+                          }
+                          type="button"
+                          className={`border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500
+                    ${
                       activeForm?.target_type === val?.name
-                        ? " border-gray-400 border-b-white border-black bg-[#FFFAFA] text-sky-700 "
+                        ? "border-black-400 border-b-white bg-[#FFFAFA] text-sky-700"
                         : "hover:text-gray-700"
                     }`}
-                    // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
-                  >
-                     {String(val?.name).replace("_", " ")}
-                     <span className="text-white-400">
-                      (
-                      {apiPayload?.form_request_for[arry[val?.name]]?.length > 0
-                        ? apiPayload?.form_request_for[arry[val?.name]]?.length
-                        : 0}
-                      )
-                    </span>
-                  </button>
-
-                 
-                </nav>
+                        >
+                          {String(val?.name).replace("_", " ")}
+                          <span className="text-gray-400">
+                            (
+                            {apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length > 0
+                              ? apiPayload?.form_request_for[arry[val?.name]]
+                                  ?.length
+                              : 0}
+                            )
+                          </span>
+                        </button>
+                      </nav>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-                </>
-              ))}
+              <button
+                onClick={scrollRight}
+                className="absolute right-0 z-10 p-2 bg-gray-300 rounded-full shadow-md md:hidden block"
+              >
+                &gt;
+              </button>
             </div>
 
             <div>{formHandler()}</div>

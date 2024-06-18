@@ -362,10 +362,9 @@ const RegisterForm = () => {
   };
   const [formData, setFormData] = useState(defaultFormaData);
   const { isACP } = useSelector((state) => state.modal);
-  const handleClick = ({ isACP }) => {
-    dispatch(setRank(isACP));
+  const handleClick = ({ is_ACP }) => {
+    dispatch(setRank(is_ACP));
     setIsModalOpen(true);
-    handleReportingToSelect();
   };
 
   const closeModal = () => {
@@ -423,13 +422,13 @@ const RegisterForm = () => {
     { id: 3, name: "ACP" },
     { id: 4, name: "DCP" },
   ];
-  const handleReportingToSelect = async (e) => {
+  const handleReportingToSelect = async (rank) => {
     // const { name} = e.target;
-    const value = isACP ? "DCP" : "ACP";
+    // const value = isACP ? "DCP" : "ACP";
     // value = isACP ? "DCP" : "ACP";
     // setSelectedReportingTo(value);
     setSelectedRank("");
-    const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "GET");
 
     if (res.statusCode === 200) {
       const data = res.responsePayload.results;
@@ -484,14 +483,19 @@ const RegisterForm = () => {
               <Card
                 title="SHO"
                 imageSrc="./police-officer.png"
-                onclick={() => handleClick({ isACP: true })}
+   
+                onclick={() =>{ handleClick({ is_ACP: true })
+                 handleReportingToSelect("ACP") }}
+                
               />
             </div>
             <div className="w-[90%] md:w-[30%] ">
               <Card
                 title="ACP"
                 imageSrc="./dcp.png"
-                onclick={() => handleClick({ isACP: false })}
+                onclick={() => {handleClick({ is_ACP: false })
+                handleReportingToSelect("DCP") 
+              }}
               />
             </div>
           </div>
@@ -552,7 +556,7 @@ const RegisterForm = () => {
                   required={true}
                 />
                 <DropDown
-                  label="Select User"
+                  label="Reporting To"
                   options={userOptions}
                   onChange={handleUserSelect}
                   value={selectedUser}

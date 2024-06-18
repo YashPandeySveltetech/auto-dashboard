@@ -893,7 +893,7 @@ function RequestForm({ requestData }) {
                            ?.length > 0)
                      }
                      type="button"
-                     className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
+                     className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-black-500 mr-1"
                      ${
                       activeForm?.target_type === val?.name
                         ? " border-gray-400 border-b-white border-black bg-[#FFFAFA] text-sky-700 "
@@ -927,7 +927,7 @@ function RequestForm({ requestData }) {
           <div className="mt-6">
             <label className="font-bold required ">Case Reference:</label>
             <textarea
-              className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer"
+              className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer !bg-blue-100"
 
               name="brief_summary"
               value={apiPayload?.brief_summary}

@@ -203,7 +203,7 @@ function LoginPage() {
                   <div className="col flex align-items-center justify-center">
                     <button
                       type="submit"
-                      className="btn  ms-4 text-white bg-green-500 px-5 py-1 rounded"
+                      className="btn ms-4 text-white bg-green-500 px-5 py-1 rounded hover:bg-green-600 hover:shadow-lg transition duration-300"
                       style={{
                         fontSize: "18px",
                       }}

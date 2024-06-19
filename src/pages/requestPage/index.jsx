@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {useCallback, useEffect, useMemo, useState, useRef} from "react";
 
 import Select from "react-select";
 import Input from "../../components/input";
@@ -12,26 +12,26 @@ import {
   TARGET_TYPE,
   TSP_LIST,
 } from "../../utils/constants";
-import { ApiHandle } from "../../utils/ApiHandle";
+import {ApiHandle} from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import Mobile from "./Mobile";
 import Imei from "./Imei";
-import { arry, firType, firTypeList } from "../../constants/List";
+import {arry, firType, firTypeList} from "../../constants/List";
 import IpAddress from "./IpAddress";
 import CellId from "./CellId";
 
-import { useDispatch } from "react-redux";
-import { otpValidationModal } from "../../redux/reducers/modalsReducer";
+import {useDispatch} from "react-redux";
+import {otpValidationModal} from "../../redux/reducers/modalsReducer";
 
-import { useLocation, useParams, useNavigate } from "react-router";
+import {useLocation, useParams, useNavigate} from "react-router";
 import Ild from "./Ild";
 import Title from "../../utils/Title";
 
-function RequestForm({ requestData }) {
-  const { pathname } = useLocation();
+function RequestForm({requestData}) {
+  const {pathname} = useLocation();
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
-  let { id } = useParams();
+  let {id} = useParams();
   const [isformcreate, setIsFormCreate] = useState(false);
 
   const initialobj = {
@@ -254,7 +254,7 @@ function RequestForm({ requestData }) {
     if (res.statusCode === 200) {
       let data = [
         ...res?.responsePayload,
-        { id: [1, 3, 4], name: "ALL", email: "" },
+        {id: [1, 3, 4], name: "ALL", email: ""},
       ];
 
       setTspList(data);
@@ -297,7 +297,7 @@ function RequestForm({ requestData }) {
   const requestprovide = useMemo(() => {
     let ac = targetType?.find((val, i) => val?.name === activeForm.target_type);
     return ac?.request_to_provide?.map((item, i) => {
-      return { label: item.name, id: item.id, value: item.name };
+      return {label: item.name, id: item.id, value: item.name};
     });
   }, [activeForm]);
 
@@ -590,7 +590,7 @@ function RequestForm({ requestData }) {
     }
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
-    const { name, value, files, checked } = e.target;
+    const {name, value, files, checked} = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
         ...apiPayload,
@@ -630,7 +630,7 @@ function RequestForm({ requestData }) {
   const [isother, setIsOther] = useState(false);
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
-      setActiveForm({ ...activeForm, dump_type: e.value });
+      setActiveForm({...activeForm, dump_type: e.value});
     } else if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
@@ -690,12 +690,12 @@ function RequestForm({ requestData }) {
           request_to_provide: [],
           target_type_id: "",
         });
-        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        dispatch(otpValidationModal({id: res?.responsePayload?.id}));
         Toaster("success", "SuccessFully Submitted Form");
         return;
       }
       if (res?.statusCode === 200) {
-        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        dispatch(otpValidationModal({id: res?.responsePayload?.id}));
         Toaster("success", "SuccessFully Updated Form");
       }
     } else {
@@ -723,10 +723,19 @@ function RequestForm({ requestData }) {
     }
   }
 
+  const scrollLeft = () => {
+    containerRef.current.scrollBy({left: -200, behavior: "smooth"});
+  };
+
+  const scrollRight = () => {
+    containerRef.current.scrollBy({left: 200, behavior: "smooth"});
+  };
+
+  const containerRef = useRef(null);
   return (
     <>
       <Title text={"New Request Form"} />
-      <div className="outer-div-whole mx-auto mb-5" style={{ padding: "30px" }}>
+      <div className="outer-div-whole mx-auto mb-5" style={{padding: "30px"}}>
         <form action="" onSubmit={handleSubmit}>
           <div className=" flex w-full gap-10">
             <div className="flex flex-col w-full">
@@ -836,85 +845,65 @@ function RequestForm({ requestData }) {
             <label className="font-bold required">Target Type:</label>
           </div>
 
-         
-
           <div>
-            <div className="flex rounded-lg  flex-wrap justify-center gap-2">
-              {targetType?.map((val, key) => (
-                <>
-                  {/* <button
-                    onClick={(e) => handleChange(e, "target_type", val)}
-                    disabled={
-                      (!isEditable &&
-                        requestData &&
-                        !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0) ||
-                      (isEditable &&
-                        requestData &&
-                        !requestData?.form_request_for[arry[val?.name]]
-                          ?.length > 0)
-                    }
-                    type="button"
-                    className={`flex-1 py-2 px-4 bg-zinc-400	  rounded-md focus:outline-none focus:shadow-outline-blue transition-all duration-300 ${
-                      activeForm?.target_type === val?.name
-                        ? "bg-blue-400 text-white"
-                        : "hover:text-gray-600 hover:border-black-300"
-                    }`}
-                    id={key}
-                  >
-                    {String(val?.name).replace("_", " ")}
-                    <span className="text-white-400">
-                      (
-                      {apiPayload?.form_request_for[arry[val?.name]]?.length > 0
-                        ? apiPayload?.form_request_for[arry[val?.name]]?.length
-                        : 0}
-                      )
-                    </span>
-                  </button> */}
-                  <div>
-            
+            <div className="relative flex items-center">
+              <button
+                onClick={scrollLeft}
+                className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block"
+              >
+                &lt;
+              </button>
 
-            <div class="hidden sm:block">
-              <div class="border-b border-gray-200">
-                <nav class="-mb-px  flex gap-6">
-                  <button
-                     onClick={(e) => handleChange(e, "target_type", val)}
-                     disabled={
-                       (!isEditable &&
-                         requestData &&
-                         !requestData?.form_request_for[arry[val?.name]]
-                           ?.length > 0) ||
-                       (isEditable &&
-                         requestData &&
-                         !requestData?.form_request_for[arry[val?.name]]
-                           ?.length > 0)
-                     }
-                     type="button"
-                     className={`className="shrink-0 border   p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500 mr-1"
-                     ${
+              <div
+                className="flex rounded-lg gap-2 ml-[40px]  mr-[40px] overflow-x-auto scrollbar-thumb-gray-900 scrollbar-track-gray-100 scrollbar-thin"
+                ref={containerRef}
+              >
+                {targetType?.map((val, key) => (
+                  <div key={key} className="flex-shrink-0">
+                    <div className="border-b border-gray-200">
+                      <nav className="-mb-px flex gap-2">
+                        <button
+                          onClick={(e) => handleChange(e, "target_type", val)}
+                          disabled={
+                            (!isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0) ||
+                            (isEditable &&
+                              requestData &&
+                              !requestData?.form_request_for[arry[val?.name]]
+                                ?.length > 0)
+                          }
+                          type="button"
+                          className={`border p-3 rounded-tl-md rounded-tr-md text-sm font-medium text-gray-500
+                    ${
                       activeForm?.target_type === val?.name
-                        ? " border-gray-400 border-b-white border-black bg-[#FFFAFA] text-sky-700 "
+                        ? "border-gray-400 border-b-white bg-[#FFFAFA] text-sky-700"
                         : "hover:text-gray-700"
                     }`}
-                    // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
-                  >
-                     {String(val?.name).replace("_", " ")}
-                     <span className="text-white-400">
-                      (
-                      {apiPayload?.form_request_for[arry[val?.name]]?.length > 0
-                        ? apiPayload?.form_request_for[arry[val?.name]]?.length
-                        : 0}
-                      )
-                    </span>
-                  </button>
-
-                 
-                </nav>
+                        >
+                          {String(val?.name).replace("_", " ")}
+                          <span className="text-gray-400">
+                            (
+                            {apiPayload?.form_request_for[arry[val?.name]]
+                              ?.length > 0
+                              ? apiPayload?.form_request_for[arry[val?.name]]
+                                  ?.length
+                              : 0}
+                            )
+                          </span>
+                        </button>
+                      </nav>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-                </>
-              ))}
+              <button
+                onClick={scrollRight}
+                className="absolute right-0 z-10 p-2 bg-gray-300 rounded-full shadow-md md:hidden block"
+              >
+                &gt;
+              </button>
             </div>
 
             <div>{formHandler()}</div>
@@ -925,7 +914,6 @@ function RequestForm({ requestData }) {
             <label className="font-bold required ">Case Reference:</label>
             <textarea
               className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer"
-
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
@@ -993,7 +981,7 @@ function RequestForm({ requestData }) {
                 // onKeyUp={checkMobile}
               />
               {isValid && (
-                <p style={{ color: "red" }}>
+                <p style={{color: "red"}}>
                   Mobile number must be 10 digits long.
                 </p>
               )}

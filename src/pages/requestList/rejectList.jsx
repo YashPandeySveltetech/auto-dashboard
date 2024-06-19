@@ -59,7 +59,7 @@ function RejectList() {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload.results);
       if (res?.responsePayload?.next) {
-        // setCurrentpage(currentpage+1)
+        // setCurrentpage(currentpage+1) 
         setIsNext(true);
       }
       if (!res?.responsePayload?.next) {

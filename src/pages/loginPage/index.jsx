@@ -1,16 +1,16 @@
 /** @format */
 
-import React, { useState } from "react";
-import { EyeFill, EyeSlashFill, XLg } from "react-bootstrap-icons";
+import React, {useState} from "react";
+import {EyeFill, EyeSlashFill, XLg} from "react-bootstrap-icons";
 import Input from "../../components/input";
 // import { apiHandler } from '../../services/axios';
 // import { sendOTP, verifyOTP } from '../../services/Login';
-import { useNavigate } from "react-router-dom";
-import { ApiHandle } from "../../utils/ApiHandle";
-import { OTP_SEND, OTP_VERIFY } from "../../utils/constants";
+import {useNavigate} from "react-router-dom";
+import {ApiHandle} from "../../utils/ApiHandle";
+import {OTP_SEND, OTP_VERIFY} from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
-import { useDispatch } from "react-redux";
-import { setUserData } from "../../redux/reducers/userReducer";
+import {useDispatch} from "react-redux";
+import {setUserData} from "../../redux/reducers/userReducer";
 import Loader from "../../components/loader/Loader";
 
 function LoginPage() {
@@ -27,7 +27,7 @@ function LoginPage() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {name, value} = e.target;
 
     setFormValue({
       ...formValue,
@@ -36,8 +36,8 @@ function LoginPage() {
   };
 
   const handleOTP = (e) => {
-    const { name, value } = e.target;
-    setVerifyUser({ ...formValue, [name]: value });
+    const {name, value} = e.target;
+    setVerifyUser({...formValue, [name]: value});
   };
   const SubmitOTP = async (e) => {
     e.preventDefault();
@@ -117,7 +117,7 @@ function LoginPage() {
           onChange={handleOTP}
           label={"Enter OTP"}
           type="number"
-          name="otp"
+          name="otp" 
           value={verifyUser?.otp}
         />
 
@@ -156,12 +156,8 @@ function LoginPage() {
         <div className="text-2xl font-extrabold	text-center ">Login</div>
         <div className=" flex justify-center gap-5 flex-col ">
           <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
-            {loginWith === "email"
-              ? LoginWithEmail()
-              : loginWith === "mobile"
-              ? LoginWithMobile()
-              : ""}
-            <div className="input-group mb-3" style={{ position: "relative" }}>
+            {loginWith === "email" ? LoginWithEmail() : loginWith === "mobile" ? LoginWithMobile(): ""}
+            <div className="input-group mb-3" style={{position: "relative"}}>
               <Input
                 onChange={handleChange}
                 label={"Password"}
@@ -169,7 +165,7 @@ function LoginPage() {
                 name="password"
                 value={formValue?.password || ""}
                 disabled={isOtp}
-                style={{ paddingRight: "40px" }} // Adjust paddingRight to accommodate the button
+                style={{paddingRight: "40px"}} // Adjust paddingRight to accommodate the button
               />
               <button
                 className="btn btn-outline-secondary"

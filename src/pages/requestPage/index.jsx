@@ -628,6 +628,7 @@ function RequestForm({ requestData }) {
         [name]: value,
       });
     }
+   
   };
   const [isother, setIsOther] = useState(false);
   const dropdownChange = (e, data) => {
@@ -811,7 +812,7 @@ function RequestForm({ requestData }) {
                     </div>
                   </div>
                   <div className="w-full ">
-                    <label className="font-bold required">Case Type:</label>
+                    <label className="font-bold required">Crime Head:</label>
 
                     <Select
                       name="case_type"
@@ -926,7 +927,10 @@ function RequestForm({ requestData }) {
               disabled={!isEditable && requestData}
             ></textarea>
           </div>
-          <div className="mt-6 flex gap-3 items-center flex-wrap">
+
+
+          {/* not in use */}
+          {/* <div className="mt-6 flex gap-3 items-center flex-wrap">
             <label htmlFor="" className="font-bold">
               Select File if any:
             </label>
@@ -952,7 +956,7 @@ function RequestForm({ requestData }) {
                 </button>
               </a>
             )}
-          </div>
+          </div> */}
           <div className="flex justify-start items-center gap-5 mt-6 flex-wrap">
             {/* IO Name */}
             <div className="flex items-center gap-3 flex-wrap">

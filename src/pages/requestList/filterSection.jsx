@@ -98,9 +98,10 @@ function FilterSection({
                   value={filter["form_status"]}
                 />
               </div>
+              
             )}
             <div className="w-full">
-              <label htmlFor=""> Select Type</label>
+              <label htmlFor=""> Search Type</label>
               <CommonDropDown
                 name={"target_type"}
                 options={target_type_option}
@@ -110,6 +111,7 @@ function FilterSection({
                 label=""
                 value={filter["target_type"]}
               />
+          
             </div>
           </div>
 

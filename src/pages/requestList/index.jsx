@@ -66,7 +66,6 @@ function RequestList() {
     if (date_range === 0) {
       date_range = "";
     }
-
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
@@ -119,7 +118,7 @@ function RequestList() {
   //   setCurrent((prev) => prev - 1);
   //   getAllRequest({ active: current - 1 });
   // };
-  console.log(totalPageCount);
+
   useEffect(() => {
     if (updateReqList) {
       getAllRequest({ active: 1 });
@@ -484,8 +483,9 @@ function RequestList() {
                     )}
 
 
-                    <td>
+                 
                       {!["ACP", "DCP"].includes(rank) && (
+                           <td>
                         <div className= "">
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
@@ -497,9 +497,9 @@ function RequestList() {
                           >
                             {item?.acp_status}
                           </span>
-                        </div>
+                        </div> </td>
                       )}
-                    </td>
+                   
                     {!["DCP"].includes(rank) && (
                       <td className="px-6 py-4 flex gap-2 justify-center items-center">
                         {/* <div>{item?.dcp_status}</div> */}

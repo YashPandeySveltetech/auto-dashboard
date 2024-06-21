@@ -175,7 +175,7 @@ function Imei({
                 </div>
               </div>
               <div className="w-full sm:w-[40%] flex flex-col justify-start  gap-x-5 flex-wrap">
-                <label className="font-bold required mr-7">Case Type:</label>
+                <label className="font-bold required mr-7">Crime Head:</label>
                 <Select
                   name="case_type"
                   options={caseType}

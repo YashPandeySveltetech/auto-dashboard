@@ -25,7 +25,6 @@ import Title from "../../utils/Title";
 import { EyeFill } from "react-bootstrap-icons";
 import CustomPagination from "../../components/pagination/CustomPagination";
 
-
 function RejectList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ function RejectList() {
   const [current, setCurrent] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
-  const [rejectPageCount,setRejectPageCount] = useState(0)
+  const [rejectPageCount, setRejectPageCount] = useState(0);
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -43,18 +42,19 @@ function RejectList() {
 
   const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
-  
+
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
-      dateRange = "";
+      date_range = "";
     }
+    console.log(filter,"filter");
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
           filter?.case_ref
-        }&decision_type=${"REJECT"}&page=${active}&sys_date=${date_range}`,
+        }&decision_type=${"REJECT"}&page=${active}&sys_date=${date_range}&target_type=${filter.target_type}&target_type_value=${filter.target_type_value}`,
       {},
       "GET"
     );
@@ -93,7 +93,7 @@ function RejectList() {
   //   setCurrent(current - 1);
   //   getAllRequest({ active: current - 1 });
   // };
-  
+
   useEffect(() => {
     if (updateReqList) {
       getAllRequest({ active: 1 });
@@ -106,7 +106,7 @@ function RejectList() {
     case_ref: "",
     case_type: "",
     target_type: "",
-target_type_value: "",
+    target_type_value: "",
   });
   const [dateRange, setDateRange] = useState({
     startDate: "",
@@ -156,11 +156,11 @@ target_type_value: "",
       req_to_provider: "",
       form_status: "",
       case_ref: "",
+      case_type:"",
       target_type_value: "",
       target_type: "",
     });
     if (filter) {
-      
       const res = await ApiHandle(
         FORM_REQUEST +
           `?decision_type=REJECT&page=${active}&is_otp_verified=&sys_date=`,
@@ -369,7 +369,7 @@ target_type_value: "",
                             boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                           }}
                         >
-                          Edit
+                          Otp Verified
                         </button>
                       )}
                       {["ACP", "DCP"].includes(rank) &&
@@ -409,42 +409,47 @@ target_type_value: "",
                         </div>
                       </td>
                     )}
-                    <td>  {!["ACP", "DCP"].includes(rank) && (
-                      <div className="flex gap-2 justify-center items-center">
-                        {/* <div>{item?.acp_status}</div> */}
+                    <td>
+                      {" "}
+                      {!["ACP", "DCP"].includes(rank) && (
+                        <div className="flex gap-2 justify-center items-center">
+                          {/* <div>{item?.acp_status}</div> */}
 
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
+                          <span
+                            className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
     ${
       item?.acp_status === "REJECT"
         ? "bg-red-100 text-red-700"
         : item?.acp_status === "PENDING"
         ? "bg-yellow-100 text-yellow-700"
-        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+        : item?.acp_status === "APPROVE"
+        ? "bg-green-100 text-yellow-700"
+        : ""
     }`}
-                        >
-                        {item?.acp_status}
-                        </span>
-                        <div>
-                          {item?.acp_status === "REJECT" && (
-                            <button
-                              onClick={() => {
-                                dispatch(openViewLogModal(item?.id));
-                                dispatch(updateRequestList(false));
-                              }}
-                              // className="bg-red-900 p-2 rounded-lg font-bold"
-                              // style={{
-                              //   color: "white",
-                              //   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                              // }}
-                            >
-                              <EyeFill color="blue" title="view log" />
-                            </button>
-                          )}
+                          >
+                            {item?.acp_status}
+                          </span>
+                          <div>
+                            {item?.acp_status === "REJECT" && (
+                              <button
+                                onClick={() => {
+                                  dispatch(openViewLogModal(item?.id));
+                                  dispatch(updateRequestList(false));
+                                }}
+                                // className="bg-red-900 p-2 rounded-lg font-bold"
+                                // style={{
+                                //   color: "white",
+                                //   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                                // }}
+                              >
+                                <EyeFill color="blue" title="view log" />
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    )}</td>
-                  
+                      )}
+                    </td>
+
                     {!["DCP"].includes(rank) && (
                       <td className="px-6 py-4 flex gap-2 justify-center items-center">
                         <span
@@ -454,7 +459,9 @@ target_type_value: "",
         ? "bg-red-100 text-red-700"
         : item?.dcp_status === "PENDING"
         ? "bg-yellow-100 text-yellow-700"
-        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+        : item?.acp_status === "APPROVE"
+        ? "bg-green-100 text-yellow-700"
+        : ""
     }`}
                         >
                           {item?.dcp_status}
@@ -493,9 +500,7 @@ target_type_value: "",
         </div>
       </div>
       <div className="flex justify-center mb-2 mt-2">
-
-
-<CustomPagination  totalItems={rejectPageCount} />
+        <CustomPagination totalItems={rejectPageCount} />
       </div>
     </>
   );

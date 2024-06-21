@@ -5,6 +5,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { GET_POLICE_STATION_LIST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { useSelector } from "react-redux";
+
 import { useLocation } from "react-router-dom";
 
 function FilterSection({
@@ -64,9 +65,14 @@ function FilterSection({
   const handleValueChange = (newValue) => {
     setDateRange(newValue);
   };
-  return (
 
-   
+  const autoApprovedOptions = [
+    { id: true, name: "Yes" },
+    { id: false, name: "No" },
+    { id: "", name: "All" },
+  ];
+
+  return (
     <div className="inner-div-filter">
       <div className=" flex-flex-row w-[100%]">
         <div className="flex flex-col w-[100%] justify-between p-2 items-center">
@@ -98,7 +104,6 @@ function FilterSection({
                   value={filter["form_status"]}
                 />
               </div>
-              
             )}
             <div className="w-full">
               <label htmlFor=""> Search Type</label>
@@ -111,61 +116,83 @@ function FilterSection({
                 label=""
                 value={filter["target_type"]}
               />
-          
             </div>
           </div>
 
-          
           <div className="flex w-full justify-between gap-4">
-          <div className="w-full">
-            <label htmlFor=""> Select Date</label>
-           <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
-           <Datepicker
-              primaryColor={"teal"}
-              value={dateRange}
-              onChange={handleValueChange}
-              showShortcuts={true}
-              classNames="border border-solid"
-            />
-           </div>
-          </div>
-         
+            <div className="w-full">
+              <label htmlFor=""> Select Date</label>
+              <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
+                <Datepicker
+                  primaryColor={"teal"}
+                  value={dateRange}
+                  onChange={handleValueChange}
+                  showShortcuts={true}
+                  classNames="border border-solid"
+                />
+              </div>
+            </div>
+
             <div className="w-full  ">
-            {filter["target_type"] !== "" && (<>
-            
-              <label htmlFor=""> Select Target Type Value</label>
-              <Input
-                type="text"
-                value={filter["target_type_value"]}
-                required={true}
-                name="target_type_value"
-                onChange={(e) =>
-                  setFilter({ ...filter, [e.target.name]: e.target.value })
-                }
-                className="w-[100%]"
-              />
-              </>
-          )}
+              {filter["target_type"] !== "" && (
+                <>
+                  <label htmlFor=""> Select Target Type Value</label>
+                  <Input
+                    type="text"
+                    value={filter["target_type_value"]}
+                    required={true}
+                    name="target_type_value"
+                    onChange={(e) =>
+                      setFilter({ ...filter, [e.target.name]: e.target.value })
+                    }
+                    className="w-[100%]"
+                  />
+                </>
+              )}
             </div>
           </div>
-          
-     <div>
-     <button
-            onClick={getAllRequest}
-            style={{
-              width: "100px",
-              border: "2px solid green",
-              borderRadius: "20px",
-              height: "40px",
-              marginTop: "20px",
-            }}
-            className="m-5 mt-10"
-          >
-            <b>Search</b>
-          </button>
-          {["DCP"].includes(rank) && (
+
+          <div className="flex justify-between w-full gap-4">
+         <div className="w-full">
+         {["/unverified-form", "/rejected-form"].includes(
+            location.pathname
+          ) ? (
+            ""
+          ) : (
+            <CommonDropDown
+              name={"auto_approved"}
+              options={autoApprovedOptions}
+              checkId={true}
+              onChange={(e) => {
+                setFilter({ ...filter, [e.target.name]: e.target.value });
+              }}
+              label="Auto Approved"
+            />
+            
+          )}
+         </div>
+              {/* <div className="flex w-[100%] justify-between "> */}
+          <div className="w-full" >
+            {["DCP"].includes(rank) && (
+              <CommonDropDown
+                name={"police_station"}
+                options={policeStation}
+                checkId={true}
+                onChange={(e) => {
+                  setFilter({ ...filter, [e.target.name]: e.target.value });
+                }}
+                label="Police Station"
+              />
+            )}
+          </div>
+        {/* </div> */}
+          </div>
+
+       
+
+          <div>
             <button
-              onClick={exportReport}
+              onClick={getAllRequest}
               style={{
                 width: "100px",
                 border: "2px solid green",
@@ -174,28 +201,42 @@ function FilterSection({
                 marginTop: "20px",
               }}
               className="m-5 mt-10"
-              disabled={dateRange?.startDate === ""}
             >
-              <b>Export File</b>
+              <b>Search</b>
             </button>
-          )}
+            {["DCP"].includes(rank) && (
+              <button
+                onClick={exportReport}
+                style={{
+                  width: "100px",
+                  border: "2px solid green",
+                  borderRadius: "20px",
+                  height: "40px",
+                  marginTop: "20px",
+                  cursor:"pointer"
+                }}
+                className="m-5 mt-10"
+                disabled={dateRange?.startDate === ""}
+              >
+                <b>Export File</b>
+              </button>
+            )}
             <button
-            onClick={clearFilter}
-            type="button"
-            style={{
-              width: "100px",
-              border: "2px solid green",
-              borderRadius: "20px",
-              height: "40px",
-              marginTop: "20px",
-            }}
-            className="m-5 mt-10"
-          >
-            <b>Clear Filter</b>
-          </button>
-     </div>
-          
-        
+              onClick={clearFilter}
+              type="button"
+              style={{
+                width: "100px",
+                border: "2px solid green",
+                borderRadius: "20px",
+                height: "40px",
+                marginTop: "20px",
+              }}
+              className="m-5 mt-10"
+            >
+              <b>Clear Filter</b>
+            </button>
+          </div>
+
           {/* <div>
         <Input
           name="case_ref"
@@ -215,22 +256,7 @@ function FilterSection({
         />
       </div> */}
         </div>
-        <div className="flex w-[100%] justify-between p-5">
-          <div>
-            {["DCP"].includes(rank) && (
-              <CommonDropDown
-                name={"police_station"}
-                options={policeStation}
-                checkId={true}
-                onChange={(e) => {
-                  setFilter({ ...filter, [e.target.name]: e.target.value });
-                }}
-                label="Police Station"
-              />
-            )}
-          </div>
-       
-        </div>
+    
       </div>
     </div>
   );

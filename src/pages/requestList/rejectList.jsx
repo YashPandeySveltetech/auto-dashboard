@@ -34,6 +34,7 @@ function RejectList() {
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [rejectPageCount, setRejectPageCount] = useState(0);
+  
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -107,6 +108,8 @@ function RejectList() {
     case_type: "",
     target_type: "",
     target_type_value: "",
+   
+
   });
   const [dateRange, setDateRange] = useState({
     startDate: "",
@@ -159,6 +162,7 @@ function RejectList() {
       case_type:"",
       target_type_value: "",
       target_type: "",
+     
     });
     if (filter) {
       const res = await ApiHandle(
@@ -206,6 +210,7 @@ function RejectList() {
           dateRange={dateRange}
           setDateRange={setDateRange}
           clearFilter={clearFilter}
+        
         />
         <div className="inner-div-table z-[-1]">
           <div className=" overflow-x-auto p-3 ">

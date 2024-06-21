@@ -42,6 +42,8 @@ function RequestList() {
   const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+
+
   //   const [value, setValue] = useState({
   //     startDate: new Date(),
   //     endDate: new Date().setMonth(11)
@@ -57,6 +59,8 @@ function RequestList() {
     getAllRequest({ active: 1 });
   }, []);
   const [requestList, setRequestList] = useState([]);
+ 
+
 
   const getAllRequest = async ({ active = 1 }) => {
  
@@ -76,7 +80,7 @@ function RequestList() {
           filter?.police_station
         }&target_type=${filter?.target_type}&target_type_value=${
           filter?.target_type_value
-        }`,
+        }&automatic_approved=${filter?.auto_approved}`,
       {},
       "GET"
     );
@@ -191,9 +195,11 @@ function RequestList() {
   };
 
   const exportReport = async () => {
+    setLoader(true)
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
+
     if (date_range === 0) {
       dateRange = "";
     } else if (dateRange?.startDate === "") {
@@ -206,6 +212,7 @@ function RequestList() {
       );
       if (res?.responsePayload?.details?.length > 0) {
         exportExcel(res?.responsePayload?.details);
+        setLoader(false)
       } else {
         Toaster("", "No Data Found");
       }
@@ -245,7 +252,9 @@ function RequestList() {
         police_station: "",
         target_type: "",
         target_type_value: "",
+        auto_approved:""
       });
+    
       setDateRange({ startDate: null, endDate: null });
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -287,10 +296,12 @@ function RequestList() {
         setDateRange={setDateRange}
         exportReport={exportReport}
         clearFilter={clearFilter}
+       
       />
     );
   }, [filter, dateRange]);
 
+ 
   return (
     <>
       <Title text={"Dashboard"} />

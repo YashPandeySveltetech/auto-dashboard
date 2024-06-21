@@ -38,6 +38,7 @@ function UnverifiedFormList() {
     endDate: "",
   });
   const [unverifiedTotalCount, setUnverifiedTotalCount] = useState(0);
+ 
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -111,6 +112,7 @@ function UnverifiedFormList() {
     case_type: "",
     target_type: "",
 target_type_value: "",
+
   });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
@@ -156,6 +158,7 @@ target_type_value: "",
       police_station: "",
       target_type: "",
       target_type_value: "",
+     
     });
     setDateRange({ startDate: null, endDate: null });
     const res = await ApiHandle(
@@ -202,6 +205,7 @@ target_type_value: "",
           clearFilter={clearFilter}
           dateRange={dateRange}
           setDateRange={setDateRange}
+       
         />
         <div className="inner-div-table z-[-1]">
           <div className=" overflow-x-auto p-3 ">

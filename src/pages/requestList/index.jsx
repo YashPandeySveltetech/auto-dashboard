@@ -1,7 +1,7 @@
 /** @format */
 
-import React, { useCallback, useEffect, useState } from "react";
-import { ApiHandle } from "../../utils/ApiHandle";
+import React, {useCallback, useEffect, useState} from "react";
+import {ApiHandle} from "../../utils/ApiHandle";
 import {
   FORM_REQUEST,
   APPROVE_REQUEST,
@@ -9,11 +9,11 @@ import {
   EXPORT_DCP_FILE,
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 import FilterSection from "./filterSection";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-import { setLoading } from "../../redux/reducers/commonReducer";
+import {setLoading} from "../../redux/reducers/commonReducer";
 import {
   DcpPassowrdConfirm,
   openDcpPasswordVerifyModal,
@@ -25,18 +25,21 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Title from "../../utils/Title";
-import { EyeFill } from "react-bootstrap-icons";
-import { Pagination } from "@mui/material";
+import {EyeFill} from "react-bootstrap-icons";
+import {Pagination} from "@mui/material";
 import CustomPagination from "../../components/pagination/CustomPagination";
+import {jsPDF} from "jspdf";
+import autoTable from "jspdf-autotable";
+import Modal from "react-modal";
 
 function RequestList() {
   const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_API_KEY;
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
-  const { rank } = useSelector((state) => state.user?.userData);
+  const {rank} = useSelector((state) => state.user?.userData);
   const Loading = useSelector((state) => state?.common?.loading);
-  const { updateReqList, isDcpPassword, dcpStatus } = useSelector(
+  const {updateReqList, isDcpPassword, dcpStatus} = useSelector(
     (state) => state.modal
   );
   const [current, setCurrent] = useState(1);
@@ -51,17 +54,18 @@ function RequestList() {
     startDate: "",
     endDate: "",
   });
-  const [totalPageCount ,setTotalPageCount] = useState(0)
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    getAllRequest({ active: 1 });
+    getAllRequest({active: 1});
   }, []);
   const [requestList, setRequestList] = useState([]);
 
-  const getAllRequest = async ({ active = 1 }) => {
- 
+  const getAllRequest = async ({active = 1}) => {
     dispatch(setLoading(true));
-    let date_range = dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+    let date_range =
+      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
       date_range = "";
@@ -84,7 +88,7 @@ function RequestList() {
 
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
-      setTotalPageCount(res?.responsePayload?.count)
+      setTotalPageCount(res?.responsePayload?.count);
       dispatch(setLoading(false));
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
@@ -122,7 +126,7 @@ function RequestList() {
   console.log(totalPageCount);
   useEffect(() => {
     if (updateReqList) {
-      getAllRequest({ active: 1 });
+      getAllRequest({active: 1});
     }
   }, [updateReqList]);
 
@@ -144,16 +148,16 @@ function RequestList() {
       });
     }
   }, [isDcpPassword]);
-  const approveRequest = async ({ requestId, approved_desion_id }) => {
+  const approveRequest = async ({requestId, approved_desion_id}) => {
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
-      { request_form: requestId },
+      {request_form: requestId},
       "PATCH"
     );
     if (res.statusCode === 200) {
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
-      getAllRequest({ active: 1 });
+      getAllRequest({active: 1});
       dispatch(DcpPassowrdConfirm(false));
       Toaster("success", "Request Approved Successfully!");
 
@@ -161,7 +165,7 @@ function RequestList() {
     }
   };
 
-  const viewAttachment = async ({ requets_form_id }) => {
+  const viewAttachment = async ({requets_form_id}) => {
     const res = await ApiHandle(
       VIEW_ATTACHMENTS + `?request_form=${requets_form_id}`,
       {},
@@ -188,6 +192,175 @@ function RequestList() {
         requestId: item?.id,
         approved_desion_id: item?.approve_decision_id,
       });
+    }
+  };
+
+  const [tableData, setTableData] = useState([]);
+  const [date, setDate] = useState([]);
+  const [selectedHeaders, setSelectedHeaders] = useState({
+    "Date of Request": true,
+    "Police Station": true,
+    "Requesting Officer": true,
+    "FIR-Complaint": true,
+    "FIR No": true,
+    "Target Type": true,
+    "Requested For": true,
+    "Requested Number": true,
+    "AUTOMATIC APPROVE": true,
+  });
+
+  const allHeaders = [
+    "Date of Request",
+    "Police Station",
+    "Requesting Officer",
+    "FIR-Complaint",
+    "FIR No",
+    "Target Type",
+    "Requested For",
+    "Requested Number",
+    "AUTOMATIC APPROVE",
+  ];
+
+  const handleCheckboxChange = (header) => {
+    setSelectedHeaders((prevState) => ({
+      ...prevState,
+      [header]: !prevState[header],
+    }));
+  };
+
+  useEffect(() => {
+    if (tableData.length > 0) {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Draw the border
+      const margin = 3;
+      doc.rect(
+        margin,
+        margin,
+        pageWidth - 2 * margin,
+        pageHeight - 2 * margin,
+        "S"
+      );
+
+      // Add form data to PDF
+      let yOffset = 13;
+      doc.setFontSize(10);
+
+      if (filter.form_status) {
+        // Set font to bold for the label
+        doc.setFont("helvetica", "bold");
+        doc.text(`Form Status:`, 10, yOffset);
+
+        // Set font back to normal for the value
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.form_status}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
+      if (filter.target_type) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`Target Type:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.target_type}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+      doc.setFont("helvetica", "bold");
+      doc.text(`Date Range :`, 10, yOffset);
+
+      doc.setFont("helvetica", "normal");
+      doc.text(` ${date}`, 50, yOffset);
+      yOffset += 10;
+
+      if (filter.target_type_value) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`Target Type Value:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.target_type_value}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
+      const filteredHeaders = allHeaders.filter(
+        (header) => selectedHeaders[header]
+      );
+
+      console.log(filteredHeaders);
+      const tableDataFormatted = tableData.map((item) =>
+        filteredHeaders.map((header) => {
+          switch (header) {
+            case "Date of Request":
+              return item.DATE_OF_REQUEST;
+            case "Police Station":
+              return item.POLICE_STATION;
+            case "Requesting Officer":
+              return item.REQUESTING_OFFICER;
+            case "FIR-Complaint":
+              return item.FIR_COMPLAINT;
+            case "FIR No":
+              return item.FIR_NO;
+            case "Target Type":
+              return item.TARGET_TYPE;
+            case "Requested For":
+              return item.REQUESTED_FOR;
+            case "Requested Number":
+              return item.REQUESTED_NUMBER_VALUE;
+            case "AUTOMATIC APPROVE":
+              return item.AUTOMATIC_APPROVE === false ? "False" : "True";
+            default:
+              return "";
+          }
+        })
+      );
+
+      doc.autoTable({
+        startY: yOffset,
+        head: [filteredHeaders],
+        body: tableDataFormatted,
+        margin: {left: 4, right: 5},
+        headStyles: {
+          fillColor: "#000000",
+          textColor: "#FFFFFF",
+          fontStyle: "bold",
+          fontSize: 8,
+        },
+      });
+
+      doc.save("form_and_table.pdf");
+    }
+  }, [tableData]);
+
+  const pdfHeaderModal = () => {
+    setModalIsOpen(true);
+    console.log("modal clik");
+  };
+
+  const PdfExport = async () => {
+    let date_range =
+      dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
+    date_range = dateRange.startDate + date_range;
+    setDate(date_range);
+    if (date_range === 0) {
+      dateRange = "";
+    } else if (dateRange?.startDate === "") {
+      Toaster("", "Please Select Date");
+    } else {
+      const res = await ApiHandle(
+        EXPORT_DCP_FILE +
+          `?decision_type=${filter.form_status}&sys_date=${date_range}`,
+        {},
+        "GET"
+      );
+      if (Object.keys(res?.responsePayload?.details).length > 0) {
+        setTableData(res?.responsePayload?.details);
+      } else {
+        Toaster("", "No Data Found");
+      }
     }
   };
 
@@ -223,13 +396,13 @@ function RequestList() {
       bookType: "xlsx",
       type: "array",
     });
-    const fileData = new Blob([excelBuffer], { type: fileType });
+    const fileData = new Blob([excelBuffer], {type: fileType});
     FileSaver.saveAs(
       fileData,
       "file" + new Date().toLocaleDateString("en-GB") + fileExtension
     );
   };
-  const clearFilter = async ({ active = 1 }) => {
+  const clearFilter = async ({active = 1}) => {
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
@@ -247,7 +420,7 @@ function RequestList() {
         target_type: "",
         target_type_value: "",
       });
-      setDateRange({ startDate: null, endDate: null });
+      setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -271,12 +444,11 @@ function RequestList() {
       return;
     }
   };
-  const handlePageChange = ({ selected }) => {
+  const handlePageChange = ({selected}) => {
     const selectedPageIndex = selected;
     setCurrent(selectedPageIndex + 1); // Since selectedPageIndex is zero-based index
-    getAllRequest({ active: selectedPageIndex + 1 }); // Ensure selectedPageIndex is a number
+    getAllRequest({active: selectedPageIndex + 1}); // Ensure selectedPageIndex is a number
   };
-  
 
   const filtersection = useCallback(() => {
     return (
@@ -288,12 +460,140 @@ function RequestList() {
         setDateRange={setDateRange}
         exportReport={exportReport}
         clearFilter={clearFilter}
+        PdfExport={PdfExport}
+        pdfHeaderModal={pdfHeaderModal}
       />
     );
   }, [filter, dateRange]);
 
   return (
     <>
+      {/* <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Select Headers"
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        <h2>Select Headers to Export</h2>
+        <div>
+          {Object.keys(selectedHeaders).map((header) => (
+            <div key={header}>
+              <input
+                type="checkbox"
+                checked={selectedHeaders[header]}
+                onChange={() => handleCheckboxChange(header)}
+              />
+              <label>{header}</label>
+            </div>
+          ))}
+        </div>
+        <button onClick={PdfExport}>Export PDF</button>
+        <button onClick={() => setModalIsOpen(false)}>Cancel</button>
+      </Modal> */}
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Select Headers"
+        style={{
+          content: {
+            width: "40%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            padding: "20px",
+            backgroundColor: "#f7f7f7",
+            borderRadius: "10px",
+            boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+            opacity: "1",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(5px)",
+          },
+        }}
+      >
+        <h1 style={{textAlign: "center", marginBottom: "20px"}}>
+          <b>
+            <u>Select Headers to Export</u>
+          </b>
+        </h1>
+        <div style={{marginBottom: "20px", marginLeft: "30px"}}>
+          {Object.keys(selectedHeaders).map((header) => (
+            <div key={header} style={{marginBottom: "10px"}}>
+              <input
+                type="checkbox"
+                checked={selectedHeaders[header]}
+                onChange={() => handleCheckboxChange(header)}
+                style={{marginRight: "10px"}}
+              />
+              <label>{header}</label>
+            </div>
+          ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+            marginTop: "10%",
+          }}
+        >
+          <button
+            onClick={PdfExport}
+            style={{
+              padding: "10px 20px",
+              border: "none",
+              backgroundColor: "#007BFF",
+              color: "#FFF",
+              borderRadius: "5px",
+              cursor: "pointer",
+              transition: "background-color 0.3s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#0056b3")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#007BFF")
+            }
+          >
+            Export PDF
+          </button>
+          <button
+            onClick={() => setModalIsOpen(false)}
+            style={{
+              padding: "10px 20px",
+              border: "1px solid #ccc",
+              backgroundColor: "#FFF",
+              color: "#333",
+              borderRadius: "5px",
+              cursor: "pointer",
+              transition: "background-color 0.3s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#f1f1f1")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#FFF")
+            }
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
+
       <Title text={"Dashboard"} />
       <div className="outer-div-whole mx-auto ">
         {filtersection()}
@@ -303,7 +603,7 @@ function RequestList() {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 border">
               <thead
                 className="text-center text-xs text-gray-700 uppercase bg-gray-50"
-                style={{ backgroundColor: "black", color: "white" }}
+                style={{backgroundColor: "black", color: "white"}}
               >
                 <tr>
                   <th scope="col" className="px-6 py-3">
@@ -360,31 +660,31 @@ function RequestList() {
                     </th>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{ color: "black" }}
+                      style={{color: "black"}}
                     >
                       {item?.added_by}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{ color: "black" }}
+                      style={{color: "black"}}
                     >
                       {item?.io_name}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{ color: "black" }}
+                      style={{color: "black"}}
                     >
                       {item?.fir_no}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{ color: "black" }}
+                      style={{color: "black"}}
                     >
                       {String(item?.request_to_provide).replace("_", " ")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{ color: "black" }}
+                      style={{color: "black"}}
                     >
                       {String(item?.target_type).replace("_", " ")}
                     </td>
@@ -458,7 +758,6 @@ function RequestList() {
                           </button>
                         )}
                     </td>
-                    
 
                     {["ACP", "DCP"].includes(rank) && (
                       <td className="px-6 py-4">
@@ -483,16 +782,19 @@ function RequestList() {
                       </td>
                     )}
 
-
                     <td>
                       {!["ACP", "DCP"].includes(rank) && (
-                        <div className= "">
+                        <div className="">
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
     ${
-      item?.acp_status === "REJECT"? "bg-red-100 text-red-700"
-        : item?.acp_status === "PENDING"? "bg-yellow-100 text-yellow-700"
-        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+      item?.acp_status === "REJECT"
+        ? "bg-red-100 text-red-700"
+        : item?.acp_status === "PENDING"
+        ? "bg-yellow-100 text-yellow-700"
+        : item?.acp_status === "APPROVE"
+        ? "bg-green-100 text-yellow-700"
+        : ""
     }`}
                           >
                             {item?.acp_status}
@@ -506,9 +808,13 @@ function RequestList() {
                         <span
                           className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
     ${
-      item?.dcp_status === "REJECT"  ? "bg-red-100 text-red-700"
-        : item?.dcp_status === "PENDING" ? "bg-yellow-100 text-yellow-700"
-        : item?.acp_status === "APPROVE" ? "bg-green-100 text-yellow-700":""
+      item?.dcp_status === "REJECT"
+        ? "bg-red-100 text-red-700"
+        : item?.dcp_status === "PENDING"
+        ? "bg-yellow-100 text-yellow-700"
+        : item?.acp_status === "APPROVE"
+        ? "bg-green-100 text-yellow-700"
+        : ""
     }`}
                         >
                           {item?.dcp_status}
@@ -550,7 +856,6 @@ function RequestList() {
             )}
           </div>
         </div>
-        
       </div>
       <div className=" flex justify-center mb-2 mt-2">
         {/* {isPrevious ? (
@@ -571,8 +876,12 @@ function RequestList() {
             NEXT
           </button>
         )} */}
-        
-        <CustomPagination  totalItems={totalPageCount}  getAllRequest={getAllRequest}setCurrent={setCurrent} />
+
+        <CustomPagination
+          totalItems={totalPageCount}
+          getAllRequest={getAllRequest}
+          setCurrent={setCurrent}
+        />
       </div>
     </>
   );

@@ -207,10 +207,12 @@ function RequestList() {
     "Requested For": true,
     "Requested Number": true,
     "AUTOMATIC APPROVE": true,
+    "Date Of Approval": true,
   });
 
   const allHeaders = [
     "Date of Request",
+    "Date Of Approval",
     "Police Station",
     "Requesting Officer",
     "FIR-Complaint",
@@ -290,12 +292,14 @@ function RequestList() {
         (header) => selectedHeaders[header]
       );
 
-      console.log(filteredHeaders);
+      console.log(tableData, "tabledata");
       const tableDataFormatted = tableData.map((item) =>
         filteredHeaders.map((header) => {
           switch (header) {
             case "Date of Request":
               return item.DATE_OF_REQUEST;
+            case "Date Of Approval":
+              return new Date(item.Date_OF_APPROVAL).toLocaleDateString();
             case "Police Station":
               return item.POLICE_STATION;
             case "Requesting Officer":
@@ -337,7 +341,7 @@ function RequestList() {
 
   const pdfHeaderModal = () => {
     setModalIsOpen(true);
-    console.log("modal clik");
+    // console.log("modal clik");
   };
 
   const PdfExport = async () => {
@@ -468,38 +472,6 @@ function RequestList() {
 
   return (
     <>
-      {/* <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Select Headers"
-        style={{
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
-      >
-        <h2>Select Headers to Export</h2>
-        <div>
-          {Object.keys(selectedHeaders).map((header) => (
-            <div key={header}>
-              <input
-                type="checkbox"
-                checked={selectedHeaders[header]}
-                onChange={() => handleCheckboxChange(header)}
-              />
-              <label>{header}</label>
-            </div>
-          ))}
-        </div>
-        <button onClick={PdfExport}>Export PDF</button>
-        <button onClick={() => setModalIsOpen(false)}>Cancel</button>
-      </Modal> */}
-
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -624,10 +596,6 @@ function RequestList() {
                   <th scope="col" className="px-6 py-3">
                     TARGET TYPE(MOBILE NO./IP ADDRESS/IMEI/CELL ID)
                   </th>
-
-                  {/* <th scope="col" className="px-6 py-3">
-                View Attachment
-              </th> */}
                   <th scope="col" className="px-6 py-3">
                     ACTION{" "}
                   </th>
@@ -651,13 +619,13 @@ function RequestList() {
               <tbody>
                 {requestList?.map((item) => (
                   <tr className="bg-white border-b ">
-                    <th
+                    <td
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap d"
+                      style={{color: "black"}}
                     >
-                      {/* {item?.created_on?.split("T")[0]} */}
                       {new Date(item?.created_on).toLocaleString("en-GB")}
-                    </th>
+                    </td>
                     <td
                       className="px-6 py-4 font-semibold"
                       style={{color: "black"}}
@@ -689,17 +657,6 @@ function RequestList() {
                       {String(item?.target_type).replace("_", " ")}
                     </td>
 
-                    {/* <td className="px-6 py-4 text-center">
-                 
-                  <button
-                    onClick={() =>
-                      viewAttachment({ requets_form_id: item?.id })
-                    }
-                  >
-                    <VisibilityIcon className="text-green-800" />
-                  </button>
-                 
-                </td> */}
                     <td className="px-6 py-4 flex gap-2">
                       {["ACP", "DCP"].includes(rank) &&
                         item?.decision == "PENDING" && (
@@ -760,30 +717,42 @@ function RequestList() {
                     </td>
 
                     {["ACP", "DCP"].includes(rank) && (
-                      <td className="px-6 py-4">
-                        <div>{item?.decision}</div>
-                        <div>
-                          {item?.decision == "REJECT" && (
-                            <button
-                              onClick={() => {
-                                dispatch(openViewLogModal(item?.id));
-                                dispatch(updateRequestList(false));
-                              }}
-                              className="bg-red-900 p-2 rounded-lg font-bold"
-                              style={{
-                                color: "white",
-                                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                              }}
-                            >
-                              View Log
-                            </button>
-                          )}
+                      <td className="px-6 py-4  ">
+                        {/* <div>{item?.decision}</div> */}
+                        <div className="flex gap-2 justify-center items-center">
+                          <span
+                            className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
+    ${
+      item?.decision === "REJECT"
+        ? "bg-red-100 text-red-700"
+        : item?.decision === "PENDING"
+        ? "bg-yellow-100 text-yellow-700"
+        : item?.decision === "APPROVE"
+        ? "bg-green-100 text-yellow-700"
+        : ""
+    }`}
+                          >
+                            {item?.decision}
+                          </span>
+
+                          <div>
+                            {item?.decision == "REJECT" && (
+                              <button
+                                onClick={() => {
+                                  dispatch(openViewLogModal(item?.id));
+                                  dispatch(updateRequestList(false));
+                                }}
+                              >
+                                <EyeFill color="blue" title="view log" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </td>
                     )}
 
-                    <td>
-                      {!["ACP", "DCP"].includes(rank) && (
+                    {!["ACP", "DCP"].includes(rank) && (
+                      <td>
                         <div className="">
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
@@ -800,8 +769,9 @@ function RequestList() {
                             {item?.acp_status}
                           </span>
                         </div>
-                      )}
-                    </td>
+                      </td>
+                    )}
+
                     {!["DCP"].includes(rank) && (
                       <td className="px-6 py-4 flex gap-2 justify-center items-center">
                         {/* <div>{item?.dcp_status}</div> */}
@@ -812,7 +782,7 @@ function RequestList() {
         ? "bg-red-100 text-red-700"
         : item?.dcp_status === "PENDING"
         ? "bg-yellow-100 text-yellow-700"
-        : item?.acp_status === "APPROVE"
+        : item?.dcp_status === "APPROVE"
         ? "bg-green-100 text-yellow-700"
         : ""
     }`}

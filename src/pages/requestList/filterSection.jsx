@@ -28,9 +28,10 @@ function FilterSection({
   ];
 
   const from_status_option = [
-    {id: 1, name: "PENDING", value: "PENDING"},
-    {id: 2, name: "APPROVE", value: "APPROVE"},
-    {id: 3, name: "REJECT", value: "REJECT"},
+    {id: 1, name: "All", value: "All"},
+    {id: 2, name: "PENDING", value: "PENDING"},
+    {id: 3, name: "APPROVE", value: "APPROVE"},
+    {id: 4, name: "REJECT", value: "REJECT"},
   ];
   const req_to_provider_option = [
     {id: 1, name: "CDR", value: "CDR"},
@@ -116,9 +117,13 @@ function FilterSection({
                   name={"form_status"}
                   options={from_status_option}
                   onChange={(e) => {
-                    setFilter({...filter, [e.target.name]: e.target.value});
+                    setFilter({
+                      ...filter,
+                      [e.target.name]:
+                        e.target.value == "All" ? "" : e.target.value,
+                    });
                   }}
-                  label=""
+                  label={""}
                   value={filter["form_status"]}
                 />
               </div>

@@ -1,6 +1,12 @@
 /** @format */
 
-import React, { useCallback, useEffect, useMemo, useState,useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from "react";
 
 import Select from "react-select";
 import Input from "../../components/input";
@@ -35,6 +41,7 @@ function RequestForm({ requestData }) {
   var isEditable = pathname.includes("edit");
   let { id } = useParams();
   const [isformcreate, setIsFormCreate] = useState(false);
+ 
 
   const initialobj = {
     police_station: "",
@@ -47,6 +54,7 @@ function RequestForm({ requestData }) {
     brief_summary: "",
     fir_or_complaint: "",
     urgent: false,
+    pis_no: "",
   };
   const [activeForm, setActiveForm] = useState({
     target_type: "",
@@ -132,6 +140,7 @@ function RequestForm({ requestData }) {
   const [tspList, setTspList] = useState([]);
   const [apiPayload, setApiPayload] = useState(initialobj);
   const [isValid, setIsValid] = useState(false);
+  const [isPisValid, setPisValid] = useState(false);
   useEffect(() => {
     if (requestData) {
       setCurrentDate(requestData?.sys_date);
@@ -153,6 +162,7 @@ function RequestForm({ requestData }) {
           ["brief_summary"]: requestData?.brief_summary,
           ["form_request_for"]: requestData?.form_request_for,
           ["urgent"]: requestData?.urgent,
+          ["pis_no"]: requestData?.pis_no,
         };
       });
       setMobileList(requestData?.form_request_for?.multiple_mobile);
@@ -592,6 +602,7 @@ function RequestForm({ requestData }) {
     }
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
+    console.log(isPisValid);
     const { name, value, files, checked } = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
@@ -619,6 +630,17 @@ function RequestForm({ requestData }) {
       } else {
         setIsValid(false);
       }
+    } else if (name === "pis_no") {
+      console.log("hello");
+      if (value.length <= 8) {
+        setPisValid(true);
+        setApiPayload({
+          ...apiPayload,
+          [name]: value,
+        });
+      } else {
+        setPisValid(false);
+      }
     } else {
       setApiPayload({
         ...apiPayload,
@@ -628,7 +650,6 @@ function RequestForm({ requestData }) {
         [name]: value,
       });
     }
-   
   };
   const [isother, setIsOther] = useState(false);
   const dropdownChange = (e, data) => {
@@ -675,7 +696,7 @@ function RequestForm({ requestData }) {
         }
       }
     }
-   
+
     let url = isEditable ? `${FORM_REQUEST}${id}/` : FORM_REQUEST;
     if (Object.keys(apiPayload?.form_request_for)?.length > 0) {
       const res = await ApiHandle(
@@ -728,16 +749,16 @@ function RequestForm({ requestData }) {
   const containerRef = useRef(null);
 
   const scrollLeft = () => {
-    containerRef.current.scrollBy({left: -200, behavior: "smooth"});
+    containerRef.current.scrollBy({ left: -200, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    containerRef.current.scrollBy({left: 200, behavior: "smooth"});
+    containerRef.current.scrollBy({ left: 200, behavior: "smooth" });
   };
 
   return (
     <>
-    {/* <BackButton/> */}
+      {/* <BackButton/> */}
       <Title text={"New Request Form"} />
       <div className="outer-div-whole mx-auto mb-5" style={{ padding: "30px" }}>
         <form action="" onSubmit={handleSubmit}>
@@ -849,10 +870,8 @@ function RequestForm({ requestData }) {
             <label className="font-bold required">Target Type:</label>
           </div>
 
-         
-
           <div className="mt-2">
-          <div className="relative flex items-center">
+            <div className="relative flex items-center">
               <button
                 onClick={scrollLeft}
                 className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block"
@@ -920,14 +939,12 @@ function RequestForm({ requestData }) {
             <label className="font-bold required ">Case Reference:</label>
             <textarea
               className="block p-2 w-full border border-black-900 text-sm text-gray-900 bg-transparent focus:outline-none  focus:border-blue-600 peer !bg-blue-100"
-
               name="brief_summary"
               value={apiPayload?.brief_summary}
               onChange={handleChange}
               disabled={!isEditable && requestData}
             ></textarea>
           </div>
-
 
           {/* not in use */}
           {/* <div className="mt-6 flex gap-3 items-center flex-wrap">
@@ -968,11 +985,33 @@ function RequestForm({ requestData }) {
                 name="io_name"
                 required
                 onChange={handleChange}
-                value={apiPayload.io_name}
+                value={apiPayload.io_name.toLocaleUpperCase()}
                 disabledSelect={!isEditable && requestData}
               />
             </div>
-
+            <div className="flex items-center gap-3 flex-wrap">
+              <label className="font-bold required">
+                Requesting Officer PIS no.
+              </label>
+              <Input
+                type="number"
+                name="pis_no"
+                required
+                onChange={handleChange}
+                value={apiPayload.pis_no}
+                max={99999999}
+                maxLength="8"
+                inputMode="numeric"
+                id="pis"
+              />
+              {isPisValid && (
+                <div className=" has-tootip">
+                <span className=" text-red-500 tooltip">
+                  PIS number must be 8 digits long.
+                </span>
+                </div>
+              )}
+            </div>
             {/* IO Mobile no. */}
             <div className="flex items-center gap-3 flex-wrap">
               <label className="font-bold required">

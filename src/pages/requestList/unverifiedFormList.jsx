@@ -51,7 +51,7 @@ function UnverifiedFormList() {
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
-      dateRange = "";
+      date_range = "";
     }
     const res = await ApiHandle(
       FORM_REQUEST +
@@ -59,10 +59,11 @@ function UnverifiedFormList() {
           filter?.case_ref
         }&decision_type=PENDING${
           filter.form_status
-        }&page=${active}&sys_date=${date_range}`,
+        }&page=${active}&sys_date=${date_range}&target_type=${filter?.target_type}&target_type_value=${filter?.target_type_value}`,
       {},
       "GET"
     );
+    console.log(filter,"filter");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload);

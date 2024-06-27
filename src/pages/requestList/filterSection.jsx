@@ -5,6 +5,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { GET_POLICE_STATION_LIST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { useSelector } from "react-redux";
+import Select from 'react-select';
 
 import { useLocation } from "react-router-dom";
 
@@ -45,21 +46,33 @@ function FilterSection({
   const getPoliceStaionList = async () => {
     const res = await ApiHandle(`${GET_POLICE_STATION_LIST}`, {}, "GET");
     if (res.statusCode === 200) {
-      const data = res?.responsePayload;
+      // const data = res?.responsePayload;
       //   setPoliceStationOptions(data);
       // setPoliceStation(data)
 
-      let arr = [];
-      if (data.length) {
-        for (let i = 0; i <= data.length; i++) {
-          arr.push({ ...data[i], ["value"]: data[i]?.id });
-        }
+      // let arr = [];
+      // if (data.length) {
+      //   for (let i = 0; i <= data.length; i++) {
+      //     arr.push({ ...data[i], ["value"]: data[i]?.id });
+      //   }
 
-        setPoliceStation(arr);
-      }
+      //   setPoliceStation(arr);
+      //   console.log(arr);
+      // }
+      const data = res?.responsePayload || [];
+      const arr = data.map(station => ({
+        ...station,
+        value: station.id,
+        label: station.name // Assuming 'name' is the label for the dropdown options
+      }));
+      setPoliceStation(arr);
+      console.log(arr);
+    } else {
+      console.error('Failed to fetch police stations:', res.error); // Handle error cases if necessary
+    }
 
       return;
-    }
+    
   };
 
   const handleValueChange = (newValue) => {
@@ -71,6 +84,21 @@ function FilterSection({
     { id: false, name: "No" },
     { id: "", name: "All" },
   ];
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleSelectChange = (selected) => {
+    setSelectedOptions(selected);
+    console.log(selected,"selected");
+    let selectedPoliceStation="" ;
+    selected.map((e)=>{
+      selectedPoliceStation=e.name+','+selectedPoliceStation
+    })
+    setFilter({ ...filter, "police_station":selectedPoliceStation });
+    console.log(selectedPoliceStation,"naaam")
+    // setFilter()
+ 
+  };
 
   return (
     <div className="inner-div-filter">
@@ -105,6 +133,48 @@ function FilterSection({
                 />
               </div>
             )}
+         {/* //////////////////// */}
+           <div className="w-full">
+              <label htmlFor=""> Select Date</label>
+              <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
+                <Datepicker
+                  primaryColor={"teal"}
+                  value={dateRange}
+                  onChange={handleValueChange}
+                  showShortcuts={true}
+                  classNames="border border-solid"
+                />
+              </div>
+            </div>
+
+          </div>
+
+          <div className="w-full flex justify-between gap-4">
+           <div className="w-full">
+           <label htmlFor=""> FIR NO.</label>
+            <Input
+              name="case_ref"
+              onChange={(e) => {
+                setFilter({ ...filter, [e.target.name]: e.target.value });
+              }}
+              label=""
+            />
+          </div>
+          <div className="w-full">
+           <label htmlFor=""> Case Type</label>
+
+            <Input
+              name="case_type"
+              onChange={(e) => {
+                setFilter({ ...filter, [e.target.name]: e.target.value });
+              }}
+              label=""
+            />
+          </div>
+         </div>
+
+          <div className="flex w-full justify-between gap-4  items-center">
+          
             <div className="w-full">
               <label htmlFor=""> Search Type</label>
               <CommonDropDown
@@ -116,21 +186,6 @@ function FilterSection({
                 label=""
                 value={filter["target_type"]}
               />
-            </div>
-          </div>
-
-          <div className="flex w-full justify-between gap-4">
-            <div className="w-full">
-              <label htmlFor=""> Select Date</label>
-              <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
-                <Datepicker
-                  primaryColor={"teal"}
-                  value={dateRange}
-                  onChange={handleValueChange}
-                  showShortcuts={true}
-                  classNames="border border-solid"
-                />
-              </div>
             </div>
 
             <div className="w-full  ">
@@ -153,42 +208,63 @@ function FilterSection({
           </div>
 
           <div className="flex justify-between w-full gap-4">
-         <div className="w-full">
-         {["/unverified-form", "/rejected-form"].includes(
-            location.pathname
-          ) ? (
-            ""
-          ) : (
-            <CommonDropDown
-              name={"auto_approved"}
-              options={autoApprovedOptions}
-              checkId={true}
-              onChange={(e) => {
-                setFilter({ ...filter, [e.target.name]: e.target.value });
-              }}
-              label="Auto Approved"
-            />
-            
-          )}
-         </div>
-              {/* <div className="flex w-[100%] justify-between "> */}
-          <div className="w-full" >
-            {["DCP"].includes(rank) && (
-              <CommonDropDown
-                name={"police_station"}
-                options={policeStation}
+            <div className="w-full">
+              {["DCP"].includes(rank) ? (
+                <CommonDropDown
+                name={"auto_approved"}
+                options={autoApprovedOptions}
                 checkId={true}
                 onChange={(e) => {
                   setFilter({ ...filter, [e.target.name]: e.target.value });
                 }}
-                label="Police Station"
+                label="Auto Approved"
               />
+              ) : (
+               ""
+              )}
+            </div>
+            {/* <div className="flex w-[100%] justify-between "> */}
+            {/* <div className="w-full">
+              {["DCP"].includes(rank) && (
+                <CommonDropDown
+                  name={"police_station"}
+                  options={policeStation}
+                  checkId={true}
+                  onChange={(e) => {
+                    setFilter({ ...filter, [e.target.name]: e.target.value });
+                  }}
+                  label="Police Station"
+                />
+              )}
+            </div> */}
+            <div className="w-full">
+              {["DCP"].includes(rank) && (
+                // <CommonDropDown
+                //   name={"police_station"}
+                //   options={policeStation}
+                //   checkId={true}
+                //   onChange={(e) => {
+                  //     setFilter({ ...filter, [e.target.name]: e.target.value });
+                  //   }}
+                  //   label="Police Station"
+                  // />
+         <>
+                  <label htmlFor=""> Police Station</label>
+                
+                <Select
+                options={policeStation}
+                isMulti
+                onChange={handleSelectChange}
+                value={selectedOptions}
+                label={selectedOptions}
+                className="bg-blue-300"
+              />
+         </>
             )}
+            {console.log(filter)}
+            </div>
+            {/* </div> */}
           </div>
-        {/* </div> */}
-          </div>
-
-       
 
           <div>
             <button
@@ -213,7 +289,7 @@ function FilterSection({
                   borderRadius: "20px",
                   height: "40px",
                   marginTop: "20px",
-                  cursor:"pointer"
+                  cursor: "pointer",
                 }}
                 className="m-5 mt-10"
                 disabled={dateRange?.startDate === ""}
@@ -237,26 +313,8 @@ function FilterSection({
             </button>
           </div>
 
-          {/* <div>
-        <Input
-          name="case_ref"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="FIR NO."
-        />
-      </div> */}
-          {/* <div>
-        <Input
-          name="case_type"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="Case Type"
-        />
-      </div> */}
+         
         </div>
-    
       </div>
     </div>
   );

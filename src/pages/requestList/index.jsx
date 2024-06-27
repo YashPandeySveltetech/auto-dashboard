@@ -76,7 +76,7 @@ function RequestList() {
           filter?.case_ref
         }&decision_type=${
           filter.form_status
-        }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station_id=${
+        }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station=${
           filter?.police_station
         }&target_type=${filter?.target_type}&target_type_value=${
           filter?.target_type_value

@@ -5,6 +5,8 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { GET_POLICE_STATION_LIST } from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { useSelector } from "react-redux";
+import Select from 'react-select';
+
 import { useLocation } from "react-router-dom";
 
 function FilterSection({
@@ -44,29 +46,61 @@ function FilterSection({
   const getPoliceStaionList = async () => {
     const res = await ApiHandle(`${GET_POLICE_STATION_LIST}`, {}, "GET");
     if (res.statusCode === 200) {
-      const data = res?.responsePayload;
+      // const data = res?.responsePayload;
       //   setPoliceStationOptions(data);
       // setPoliceStation(data)
 
-      let arr = [];
-      if (data.length) {
-        for (let i = 0; i <= data.length; i++) {
-          arr.push({ ...data[i], ["value"]: data[i]?.id });
-        }
+      // let arr = [];
+      // if (data.length) {
+      //   for (let i = 0; i <= data.length; i++) {
+      //     arr.push({ ...data[i], ["value"]: data[i]?.id });
+      //   }
 
-        setPoliceStation(arr);
-      }
+      //   setPoliceStation(arr);
+      //   console.log(arr);
+      // }
+      const data = res?.responsePayload || [];
+      const arr = data.map(station => ({
+        ...station,
+        value: station.id,
+        label: station.name // Assuming 'name' is the label for the dropdown options
+      }));
+      setPoliceStation(arr);
+      console.log(arr);
+    } else {
+      console.error('Failed to fetch police stations:', res.error); // Handle error cases if necessary
+    }
 
       return;
-    }
+    
   };
 
   const handleValueChange = (newValue) => {
     setDateRange(newValue);
   };
-  return (
 
-   
+  const autoApprovedOptions = [
+    { id: true, name: "Yes" },
+    { id: false, name: "No" },
+    { id: "", name: "All" },
+  ];
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleSelectChange = (selected) => {
+    setSelectedOptions(selected);
+    console.log(selected,"selected");
+    let selectedPoliceStation="" ;
+    selected.map((e)=>{
+      selectedPoliceStation=e.name+','+selectedPoliceStation
+    })
+    setFilter({ ...filter, "police_station":selectedPoliceStation });
+    console.log(selectedPoliceStation,"naaam")
+    // setFilter()
+ 
+  };
+
+  return (
     <div className="inner-div-filter">
       <div className=" flex-flex-row w-[100%]">
         <div className="flex flex-col w-[100%] justify-between p-2 items-center">
@@ -99,8 +133,50 @@ function FilterSection({
                 />
               </div>
             )}
+         {/* //////////////////// */}
+           <div className="w-full">
+              <label htmlFor=""> Select Date</label>
+              <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
+                <Datepicker
+                  primaryColor={"teal"}
+                  value={dateRange}
+                  onChange={handleValueChange}
+                  showShortcuts={true}
+                  classNames="border border-solid"
+                />
+              </div>
+            </div>
+
+          </div>
+
+          <div className="w-full flex justify-between gap-4">
+           <div className="w-full">
+           <label htmlFor=""> FIR NO.</label>
+            <Input
+              name="case_ref"
+              onChange={(e) => {
+                setFilter({ ...filter, [e.target.name]: e.target.value });
+              }}
+              label=""
+            />
+          </div>
+          <div className="w-full">
+           <label htmlFor=""> Case Type</label>
+
+            <Input
+              name="case_type"
+              onChange={(e) => {
+                setFilter({ ...filter, [e.target.name]: e.target.value });
+              }}
+              label=""
+            />
+          </div>
+         </div>
+
+          <div className="flex w-full justify-between gap-4  items-center">
+          
             <div className="w-full">
-              <label htmlFor=""> Select Type</label>
+              <label htmlFor=""> Search Type</label>
               <CommonDropDown
                 name={"target_type"}
                 options={target_type_option}
@@ -111,59 +187,88 @@ function FilterSection({
                 value={filter["target_type"]}
               />
             </div>
-          </div>
 
-          
-          <div className="flex w-full justify-between gap-4">
-          <div className="w-full">
-            <label htmlFor=""> Select Date</label>
-           <div className="text-black-900 border border-gray-300 rounded-lg bg-blue-100 focus:ring-blue-500 focus:border-blue-500">
-           <Datepicker
-              primaryColor={"teal"}
-              value={dateRange}
-              onChange={handleValueChange}
-              showShortcuts={true}
-              classNames="border border-solid"
-            />
-           </div>
-          </div>
-         
             <div className="w-full  ">
-            {filter["target_type"] !== "" && (<>
-            
-              <label htmlFor=""> Select Target Type Value</label>
-              <Input
-                type="text"
-                value={filter["target_type_value"]}
-                required={true}
-                name="target_type_value"
-                onChange={(e) =>
-                  setFilter({ ...filter, [e.target.name]: e.target.value })
-                }
-                className="w-[100%]"
-              />
-              </>
-          )}
+              {filter["target_type"] !== "" && (
+                <>
+                  <label htmlFor=""> Select Target Type Value</label>
+                  <Input
+                    type="text"
+                    value={filter["target_type_value"]}
+                    required={true}
+                    name="target_type_value"
+                    onChange={(e) =>
+                      setFilter({ ...filter, [e.target.name]: e.target.value })
+                    }
+                    className="w-[100%]"
+                  />
+                </>
+              )}
             </div>
           </div>
-          
-     <div>
-     <button
-            onClick={getAllRequest}
-            style={{
-              width: "100px",
-              border: "2px solid green",
-              borderRadius: "20px",
-              height: "40px",
-              marginTop: "20px",
-            }}
-            className="m-5 mt-10"
-          >
-            <b>Search</b>
-          </button>
-          {["DCP"].includes(rank) && (
+
+          <div className="flex justify-between w-full gap-4">
+            <div className="w-full">
+              {["DCP"].includes(rank) ? (
+                <CommonDropDown
+                name={"auto_approved"}
+                options={autoApprovedOptions}
+                checkId={true}
+                onChange={(e) => {
+                  setFilter({ ...filter, [e.target.name]: e.target.value });
+                }}
+                label="Auto Approved"
+              />
+              ) : (
+               ""
+              )}
+            </div>
+            {/* <div className="flex w-[100%] justify-between "> */}
+            {/* <div className="w-full">
+              {["DCP"].includes(rank) && (
+                <CommonDropDown
+                  name={"police_station"}
+                  options={policeStation}
+                  checkId={true}
+                  onChange={(e) => {
+                    setFilter({ ...filter, [e.target.name]: e.target.value });
+                  }}
+                  label="Police Station"
+                />
+              )}
+            </div> */}
+            <div className="w-full">
+              {["DCP"].includes(rank) && (
+                // <CommonDropDown
+                //   name={"police_station"}
+                //   options={policeStation}
+                //   checkId={true}
+                //   onChange={(e) => {
+                  //     setFilter({ ...filter, [e.target.name]: e.target.value });
+                  //   }}
+                  //   label="Police Station"
+                  // />
+         <>
+                  <label htmlFor=""> Police Station</label>
+                
+                <Select
+                options={policeStation}
+                isMulti
+                onChange={handleSelectChange}
+                value={selectedOptions}
+                label={selectedOptions}
+                className="bg-blue-300"
+              />
+         </>
+            )}
+            {console.log(filter)}
+            </div>
+            {/* </div> */}
+          </div>
+
+          <div>
             <button
-              onClick={exportReport}
+              onClick={getAllRequest}
               style={{
                 width: "100px",
                 border: "2px solid green",
@@ -172,62 +277,43 @@ function FilterSection({
                 marginTop: "20px",
               }}
               className="m-5 mt-10"
-              disabled={dateRange?.startDate === ""}
             >
-              <b>Export File</b>
+              <b>Search</b>
             </button>
-          )}
-            <button
-            onClick={clearFilter}
-            type="button"
-            style={{
-              width: "100px",
-              border: "2px solid green",
-              borderRadius: "20px",
-              height: "40px",
-              marginTop: "20px",
-            }}
-            className="m-5 mt-10"
-          >
-            <b>Clear Filter</b>
-          </button>
-     </div>
-          
-        
-          {/* <div>
-        <Input
-          name="case_ref"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="FIR NO."
-        />
-      </div> */}
-          {/* <div>
-        <Input
-          name="case_type"
-          onChange={(e) => {
-            setFilter({ ...filter, [e.target.name]: e.target.value });
-          }}
-          label="Case Type"
-        />
-      </div> */}
-        </div>
-        <div className="flex w-[100%] justify-between p-5">
-          <div>
             {["DCP"].includes(rank) && (
-              <CommonDropDown
-                name={"police_station"}
-                options={policeStation}
-                checkId={true}
-                onChange={(e) => {
-                  setFilter({ ...filter, [e.target.name]: e.target.value });
+              <button
+                onClick={exportReport}
+                style={{
+                  width: "100px",
+                  border: "2px solid green",
+                  borderRadius: "20px",
+                  height: "40px",
+                  marginTop: "20px",
+                  cursor: "pointer",
                 }}
-                label="Police Station"
-              />
+                className="m-5 mt-10"
+                disabled={dateRange?.startDate === ""}
+              >
+                <b>Export File</b>
+              </button>
             )}
+            <button
+              onClick={clearFilter}
+              type="button"
+              style={{
+                width: "100px",
+                border: "2px solid green",
+                borderRadius: "20px",
+                height: "40px",
+                marginTop: "20px",
+              }}
+              className="m-5 mt-10"
+            >
+              <b>Clear Filter</b>
+            </button>
           </div>
-       
+
+         
         </div>
       </div>
     </div>

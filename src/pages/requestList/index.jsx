@@ -45,6 +45,7 @@ function RequestList() {
   const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+
   //   const [value, setValue] = useState({
   //     startDate: new Date(),
   //     endDate: new Date().setMonth(11)
@@ -70,18 +71,17 @@ function RequestList() {
     if (date_range === 0) {
       date_range = "";
     }
-
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
           filter?.case_ref
         }&decision_type=${
           filter.form_status
-        }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station_id=${
+        }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station=${
           filter?.police_station
         }&target_type=${filter?.target_type}&target_type_value=${
           filter?.target_type_value
-        }`,
+        }&automatic_approved=${filter?.auto_approved}`,
       {},
       "GET"
     );
@@ -123,7 +123,7 @@ function RequestList() {
   //   setCurrent((prev) => prev - 1);
   //   getAllRequest({ active: current - 1 });
   // };
-  console.log(totalPageCount);
+
   useEffect(() => {
     if (updateReqList) {
       getAllRequest({active: 1});
@@ -369,21 +369,26 @@ function RequestList() {
   };
 
   const exportReport = async () => {
+    setLoader(true);
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
+
     if (date_range === 0) {
       dateRange = "";
     } else if (dateRange?.startDate === "") {
       Toaster("", "Please Select Date");
     } else {
       const res = await ApiHandle(
-        EXPORT_DCP_FILE + `?decision_type=APPROVE&sys_date=${date_range}`,
+        EXPORT_DCP_FILE +
+          `?decision_type=${filter.form_status}&sys_date=${date_range}`,
         {},
         "GET"
       );
+      console.log(res, "resss");
       if (res?.responsePayload?.details?.length > 0) {
         exportExcel(res?.responsePayload?.details);
+        setLoader(false);
       } else {
         Toaster("", "No Data Found");
       }
@@ -423,7 +428,9 @@ function RequestList() {
         police_station: "",
         target_type: "",
         target_type_value: "",
+        auto_approved: "",
       });
+
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)

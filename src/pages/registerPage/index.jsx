@@ -353,7 +353,7 @@ const RegisterForm = () => {
     mobile_no: "",
     password: "",
     email: "",
-    rank: "SHO",
+    rank: "",
     user_profile: {
       reporting_to: "",
       state: "",
@@ -365,8 +365,10 @@ const RegisterForm = () => {
   const handleClick = ({ is_ACP }) => {
     dispatch(setRank(is_ACP));
     setIsModalOpen(true);
+    console.log(isACP,"acp");
+    setFormData((prev)=>({...prev,rank:isACP?"ACP":"SHO"}))
   };
-
+  
   const closeModal = () => {
     setIsModalOpen(false);
     setFormData(defaultFormaData);
@@ -484,7 +486,7 @@ const RegisterForm = () => {
                 title="SHO"
                 imageSrc="./police-officer.png"
    
-                onclick={() =>{ handleClick({ is_ACP: true })
+                onclick={(e) =>{ handleClick({ is_ACP: true })
                  handleReportingToSelect("ACP") }}
                 
               />

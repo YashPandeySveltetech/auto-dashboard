@@ -38,6 +38,7 @@ function UnverifiedFormList() {
     endDate: "",
   });
   const [unverifiedTotalCount, setUnverifiedTotalCount] = useState(0);
+ 
 
   useEffect(() => {
     getAllRequest({ active: 1 });
@@ -50,7 +51,7 @@ function UnverifiedFormList() {
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
     if (date_range === 0) {
-      dateRange = "";
+      date_range = "";
     }
     const res = await ApiHandle(
       FORM_REQUEST +
@@ -58,10 +59,11 @@ function UnverifiedFormList() {
           filter?.case_ref
         }&decision_type=PENDING${
           filter.form_status
-        }&page=${active}&sys_date=${date_range}`,
+        }&page=${active}&sys_date=${date_range}&target_type=${filter?.target_type}&target_type_value=${filter?.target_type_value}`,
       {},
       "GET"
     );
+    console.log(filter,"filter");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload);
@@ -111,6 +113,7 @@ function UnverifiedFormList() {
     case_type: "",
     target_type: "",
 target_type_value: "",
+
   });
   const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
@@ -156,6 +159,7 @@ target_type_value: "",
       police_station: "",
       target_type: "",
       target_type_value: "",
+     
     });
     setDateRange({ startDate: null, endDate: null });
     const res = await ApiHandle(
@@ -202,6 +206,7 @@ target_type_value: "",
           clearFilter={clearFilter}
           dateRange={dateRange}
           setDateRange={setDateRange}
+       
         />
         <div className="inner-div-table z-[-1]">
           <div className=" overflow-x-auto p-3 ">

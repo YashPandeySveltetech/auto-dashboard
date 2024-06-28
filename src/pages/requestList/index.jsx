@@ -291,7 +291,7 @@ function RequestList() {
 
       if (filter.case_type) {
         doc.setFont("helvetica", "bold");
-        doc.text(`Case Type:`, 10, yOffset);
+        doc.text(`Crime Head:`, 10, yOffset);
 
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.case_type}`, 50, yOffset);

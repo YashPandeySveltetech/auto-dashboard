@@ -285,7 +285,7 @@ function UnverifiedFormList() {
                     </button>
                   </td> */}
                     <td className="px-6 py-4 flex gap-2">
-                      {["ACP", "DCP"].includes(rank) &&
+                      {/* {["ACP", "DCP"].includes(rank) &&
                         item?.decision == "PENDING" && (
                           <button
                             onClick={() => {
@@ -302,7 +302,7 @@ function UnverifiedFormList() {
                           >
                             Approve
                           </button>
-                        )}
+                        )} */}
                       <button
                         onClick={() => {
                           item.is_otp_verified
@@ -335,7 +335,7 @@ function UnverifiedFormList() {
                       >
                         Edit
                       </button>
-                      {["ACP", "DCP"].includes(rank) &&
+                      {/* {["ACP", "DCP"].includes(rank) &&
                         item?.decision == "PENDING" && (
                           <button
                             onClick={() => dispatch(openRejectModal(item?.id))}
@@ -347,7 +347,7 @@ function UnverifiedFormList() {
                           >
                             Reject
                           </button>
-                        )}
+                        )} */}
                     </td>
                   </tr>
                 ))}

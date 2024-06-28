@@ -1,12 +1,6 @@
 /** @format */
 
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-} from "react";
+import React, {useCallback, useEffect, useMemo, useState, useRef} from "react";
 
 import Select from "react-select";
 import Input from "../../components/input";
@@ -18,30 +12,29 @@ import {
   TARGET_TYPE,
   TSP_LIST,
 } from "../../utils/constants";
-import { ApiHandle } from "../../utils/ApiHandle";
+import {ApiHandle} from "../../utils/ApiHandle";
 import Toaster from "../../utils/toaster/Toaster";
 import Mobile from "./Mobile";
 import Imei from "./Imei";
-import { arry, firType, firTypeList } from "../../constants/List";
+import {arry, firType, firTypeList} from "../../constants/List";
 import IpAddress from "./IpAddress";
 import CellId from "./CellId";
 
-import { useDispatch } from "react-redux";
-import { otpValidationModal } from "../../redux/reducers/modalsReducer";
+import {useDispatch} from "react-redux";
+import {otpValidationModal} from "../../redux/reducers/modalsReducer";
 
-import { useLocation, useParams, useNavigate } from "react-router";
+import {useLocation, useParams, useNavigate} from "react-router";
 import Ild from "./Ild";
 import Title from "../../utils/Title";
-import { ArrowLeft } from "react-bootstrap-icons";
+import {ArrowLeft} from "react-bootstrap-icons";
 import BackButton from "../../components/backButton/BackButton";
 
-function RequestForm({ requestData }) {
-  const { pathname } = useLocation();
+function RequestForm({requestData}) {
+  const {pathname} = useLocation();
   const dispatch = useDispatch();
   var isEditable = pathname.includes("edit");
-  let { id } = useParams();
+  let {id} = useParams();
   const [isformcreate, setIsFormCreate] = useState(false);
- 
 
   const initialobj = {
     police_station: "",
@@ -156,7 +149,7 @@ function RequestForm({ requestData }) {
           ["fir_or_complaint"]: requestData?.fir_or_complaint,
           ["fir_no"]: requestData?.fir_no,
           ["case_type"]: requestData?.case_type,
-          ["io_name"]: requestData?.io_name,
+          ["io_name"]: requestData?.io_name.toUpperCase(),
           ["io_mobile_no"]: requestData?.io_mobile_no,
           // ["io_email"]: requestData?.io_email,
           ["brief_summary"]: requestData?.brief_summary,
@@ -266,7 +259,7 @@ function RequestForm({ requestData }) {
     if (res.statusCode === 200) {
       let data = [
         ...res?.responsePayload,
-        { id: [1, 3, 4], name: "ALL", email: "" },
+        {id: [1, 3, 4], name: "ALL", email: ""},
       ];
 
       setTspList(data);
@@ -309,7 +302,7 @@ function RequestForm({ requestData }) {
   const requestprovide = useMemo(() => {
     let ac = targetType?.find((val, i) => val?.name === activeForm.target_type);
     return ac?.request_to_provide?.map((item, i) => {
-      return { label: item.name, id: item.id, value: item.name };
+      return {label: item.name, id: item.id, value: item.name};
     });
   }, [activeForm]);
 
@@ -603,7 +596,7 @@ function RequestForm({ requestData }) {
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
     console.log(isPisValid);
-    const { name, value, files, checked } = e.target;
+    const {name, value, files, checked} = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
         ...apiPayload,
@@ -654,7 +647,7 @@ function RequestForm({ requestData }) {
   const [isother, setIsOther] = useState(false);
   const dropdownChange = (e, data) => {
     if (data?.name == "target_type") {
-      setActiveForm({ ...activeForm, dump_type: e.value });
+      setActiveForm({...activeForm, dump_type: e.value});
     } else if (data.name === "case_type") {
       setApiPayload({
         ...apiPayload,
@@ -714,12 +707,12 @@ function RequestForm({ requestData }) {
           request_to_provide: [],
           target_type_id: "",
         });
-        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        dispatch(otpValidationModal({id: res?.responsePayload?.id}));
         Toaster("success", "SuccessFully Submitted Form");
         return;
       }
       if (res?.statusCode === 200) {
-        dispatch(otpValidationModal({ id: res?.responsePayload?.id }));
+        dispatch(otpValidationModal({id: res?.responsePayload?.id}));
         Toaster("success", "SuccessFully Updated Form");
       }
     } else {
@@ -749,18 +742,18 @@ function RequestForm({ requestData }) {
   const containerRef = useRef(null);
 
   const scrollLeft = () => {
-    containerRef.current.scrollBy({ left: -200, behavior: "smooth" });
+    containerRef.current.scrollBy({left: -200, behavior: "smooth"});
   };
 
   const scrollRight = () => {
-    containerRef.current.scrollBy({ left: 200, behavior: "smooth" });
+    containerRef.current.scrollBy({left: 200, behavior: "smooth"});
   };
 
   return (
     <>
       {/* <BackButton/> */}
       <Title text={"New Request Form"} />
-      <div className="outer-div-whole mx-auto mb-5" style={{ padding: "30px" }}>
+      <div className="outer-div-whole mx-auto mb-5" style={{padding: "30px"}}>
         <form action="" onSubmit={handleSubmit}>
           <div className=" flex w-full gap-10">
             <div className="flex flex-col w-full">
@@ -985,7 +978,7 @@ function RequestForm({ requestData }) {
                 name="io_name"
                 required
                 onChange={handleChange}
-                value={apiPayload.io_name.toLocaleUpperCase()}
+                value={apiPayload.io_name.toUpperCase()}
                 disabledSelect={!isEditable && requestData}
               />
             </div>
@@ -1006,9 +999,9 @@ function RequestForm({ requestData }) {
               />
               {isPisValid && (
                 <div className=" has-tootip">
-                <span className=" text-red-500 tooltip">
-                  PIS number must be 8 digits long.
-                </span>
+                  <span className=" text-red-500 tooltip">
+                    PIS number must be 8 digits long.
+                  </span>
                 </div>
               )}
             </div>
@@ -1030,7 +1023,7 @@ function RequestForm({ requestData }) {
                 // onKeyUp={checkMobile}
               />
               {isValid && (
-                <p style={{ color: "red" }}>
+                <p style={{color: "red"}}>
                   Mobile number must be 10 digits long.
                 </p>
               )}

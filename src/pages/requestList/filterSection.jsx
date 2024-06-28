@@ -190,6 +190,7 @@ function FilterSection({
                   setFilter({ ...filter, [e.target.name]: e.target.value });
                 }}
                 label=""
+                value={filter.case_ref}
               />
             </div>
             {/* <div className="w-full">
@@ -247,6 +248,7 @@ function FilterSection({
                     setFilter({ ...filter, [e.target.name]: e.target.value });
                   }}
                   label="Auto Approved"
+                  value={filter.auto_approved}
                 />
               ) : (
                 ""

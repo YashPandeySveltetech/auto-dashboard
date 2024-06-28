@@ -230,6 +230,7 @@ function RequestList() {
     }));
   };
 
+  console.log(filter, "ghdgsjdgjsgh");
   useEffect(() => {
     if (tableData.length > 0) {
       const doc = new jsPDF();
@@ -278,6 +279,46 @@ function RequestList() {
       doc.text(` ${date}`, 50, yOffset);
       yOffset += 10;
 
+      if (filter.case_ref) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`FIR NO:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.case_ref}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
+      if (filter.case_type) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`Crime Head:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.case_type}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
+      if (filter.auto_approved) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`Auto Approved:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.auto_approved}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
+      if (filter.police_station) {
+        doc.setFont("helvetica", "bold");
+        doc.text(`Police Station:`, 10, yOffset);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(` ${filter.police_station}`, 50, yOffset);
+
+        yOffset += 10;
+      }
+
       if (filter.target_type_value) {
         doc.setFont("helvetica", "bold");
         doc.text(`Target Type Value:`, 10, yOffset);
@@ -299,7 +340,7 @@ function RequestList() {
             case "Date of Request":
               return item.DATE_OF_REQUEST;
             case "Date Of Approval":
-              return new Date(item.Date_OF_APPROVAL).toLocaleDateString();
+              return new Date(item.Date_OF_APPROVAL).toLocaleString("en-US");
             case "Police Station":
               return item.POLICE_STATION;
             case "Requesting Officer":
@@ -309,7 +350,7 @@ function RequestList() {
             case "FIR No":
               return item.FIR_NO;
             case "Target Type":
-              return item.TARGET_TYPE;
+              return item.TARGET_TYPE === "MOBILE_NUMBER" ? "Mobile" : "IMEI";
             case "Requested For":
               return item.REQUESTED_FOR;
             case "Requested Number":
@@ -332,6 +373,24 @@ function RequestList() {
           textColor: "#FFFFFF",
           fontStyle: "bold",
           fontSize: 8,
+        },
+        styles: {
+          overflow: "linebreak",
+          cellWidth: "wrap",
+          minCellHeight: 10,
+          fontSize: 8,
+        },
+        columnStyles: {
+          0: {cellWidth: 20},
+          1: {cellWidth: 20},
+          2: {cellWidth: 20},
+          3: {cellWidth: 20},
+          4: {cellWidth: 20},
+          5: {cellWidth: 20},
+          6: {cellWidth: 20},
+          7: {cellWidth: 20},
+          8: {cellWidth: 20},
+          9: {cellWidth: 20},
         },
       });
 
@@ -356,7 +415,15 @@ function RequestList() {
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +
-          `?decision_type=${filter.form_status}&sys_date=${date_range}`,
+          `?case_type=${filter?.case_type}&is_otp_verified=${true}&fir_no=${
+            filter?.case_ref
+          }&decision_type=${
+            filter.form_status
+          }&sys_date=${date_range}&police_station=${
+            filter?.police_station
+          }&target_type=${filter?.target_type}&target_type_value=${
+            filter?.target_type_value
+          }&automatic_approved=${filter?.auto_approved}`,
         {},
         "GET"
       );
@@ -381,11 +448,19 @@ function RequestList() {
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +
-          `?decision_type=${filter.form_status}&sys_date=${date_range}`,
+          `?case_type=${filter?.case_type}&is_otp_verified=${true}&fir_no=${
+            filter?.case_ref
+          }&decision_type=${
+            filter.form_status
+          }&sys_date=${date_range}&police_station=${
+            filter?.police_station
+          }&target_type=${filter?.target_type}&target_type_value=${
+            filter?.target_type_value
+          }&automatic_approved=${filter?.auto_approved}`,
         {},
         "GET"
       );
-      console.log(res, "resss");
+
       if (res?.responsePayload?.details?.length > 0) {
         exportExcel(res?.responsePayload?.details);
         setLoader(false);
@@ -429,7 +504,9 @@ function RequestList() {
         target_type: "",
         target_type_value: "",
         auto_approved: "",
+        fir_no:"",
       });
+      console.log(filter,"filter");
 
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {

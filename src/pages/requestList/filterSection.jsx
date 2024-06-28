@@ -7,7 +7,7 @@ import {ApiHandle} from "../../utils/ApiHandle";
 import {useSelector} from "react-redux";
 import {FaDownload} from "react-icons/fa";
 import Select from "react-select";
-
+import {CASE_TYPE} from "../../utils/constants";
 import {useLocation} from "react-router-dom";
 
 function FilterSection({
@@ -22,6 +22,7 @@ function FilterSection({
   pdfHeaderModal,
 }) {
   const {rank} = useSelector((state) => state.user?.userData);
+  const [caseType, setCaseType] = useState([]);
   const location = useLocation();
 
   const Export_Option = [
@@ -30,11 +31,12 @@ function FilterSection({
   ];
 
   const from_status_option = [
-    {id: 1, name: "All", value: "All"},
-    {id: 2, name: "PENDING", value: "PENDING"},
-    {id: 3, name: "APPROVE", value: "APPROVE"},
-    {id: 4, name: "REJECT", value: "REJECT"},
+    // { id: 1, name: "All", value: "All" },
+    {id: 1, name: "PENDING", value: "PENDING"},
+    {id: 2, name: "APPROVE", value: "APPROVE"},
+    {id: 3, name: "REJECT", value: "REJECT"},
   ];
+
   const req_to_provider_option = [
     {id: 1, name: "CDR", value: "CDR"},
     {id: 2, name: "IPDR", value: "IPDR"},
@@ -51,23 +53,11 @@ function FilterSection({
   const [policeStation, setPoliceStation] = useState([]);
   useEffect(() => {
     getPoliceStaionList();
+    getCaseType();
   }, []);
   const getPoliceStaionList = async () => {
     const res = await ApiHandle(`${GET_POLICE_STATION_LIST}`, {}, "GET");
     if (res.statusCode === 200) {
-      // const data = res?.responsePayload;
-      //   setPoliceStationOptions(data);
-      // setPoliceStation(data)
-
-      // let arr = [];
-      // if (data.length) {
-      //   for (let i = 0; i <= data.length; i++) {
-      //     arr.push({ ...data[i], ["value"]: data[i]?.id });
-      //   }
-
-      //   setPoliceStation(arr);
-      //   console.log(arr);
-      // }
       const data = res?.responsePayload || [];
       const arr = data.map((station) => ({
         ...station,
@@ -75,7 +65,6 @@ function FilterSection({
         label: station.name, // Assuming 'name' is the label for the dropdown options
       }));
       setPoliceStation(arr);
-      console.log(arr);
     } else {
       console.error("Failed to fetch police stations:", res.error); // Handle error cases if necessary
     }
@@ -113,14 +102,29 @@ function FilterSection({
 
   const handleSelectChange = (selected) => {
     setSelectedOptions(selected);
-    console.log(selected, "selected");
+
     let selectedPoliceStation = "";
     selected.map((e) => {
       selectedPoliceStation = e.name + "," + selectedPoliceStation;
     });
     setFilter({...filter, police_station: selectedPoliceStation});
-    console.log(selectedPoliceStation, "naaam");
+
     // setFilter()
+  };
+  const getCaseType = async () => {
+    try {
+      const res = await ApiHandle(`${CASE_TYPE}`, "", "GET");
+      if (res?.statusCode === 200) {
+        let data = res?.responsePayload?.map((val) => ({
+          id: val.id,
+          value: val.name,
+          name: val.name,
+        }));
+        setCaseType(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -184,9 +188,10 @@ function FilterSection({
                   setFilter({...filter, [e.target.name]: e.target.value});
                 }}
                 label=""
+                value={filter.case_ref}
               />
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <label htmlFor=""> Case Type</label>
 
               <Input
@@ -196,39 +201,34 @@ function FilterSection({
                 }}
                 label=""
               />
-            </div>
-          </div>
+            </div> */}
+            <div className="w-full ">
+              <label className="font ">Crime Head:</label>
 
-          <div className="flex w-full justify-between gap-4  items-center">
-            <div className="w-full">
-              <label htmlFor=""> Search Type</label>
               <CommonDropDown
-                name={"target_type"}
-                options={target_type_option}
+                name="case_type"
+                options={caseType}
+                value={filter["case_type"]}
                 onChange={(e) => {
                   setFilter({...filter, [e.target.name]: e.target.value});
                 }}
                 label=""
-                value={filter["target_type"]}
+                // isDisabled={!isEditable && requestData}
               />
-            </div>
 
-            <div className="w-full  ">
-              {filter["target_type"] !== "" && (
-                <>
-                  <label htmlFor=""> Select Target Type Value</label>
-                  <Input
-                    type="text"
-                    value={filter["target_type_value"]}
-                    required={true}
-                    name="target_type_value"
-                    onChange={(e) =>
-                      setFilter({...filter, [e.target.name]: e.target.value})
-                    }
-                    className="w-[100%]"
-                  />
-                </>
-              )}
+              {/* <CommonDropDown
+                  name={"form_status"}
+                  options={from_status_option}
+                  onChange={(e) => {
+                    setFilter({
+                      ...filter,
+                      [e.target.name]:
+                        e.target.value == "All" ? "" : e.target.value,
+                    });
+                  }}
+                  label={""}
+                  value={filter["form_status"]}
+                /> */}
             </div>
           </div>
 
@@ -243,6 +243,7 @@ function FilterSection({
                     setFilter({...filter, [e.target.name]: e.target.value});
                   }}
                   label="Auto Approved"
+                  value={filter.auto_approved}
                 />
               ) : (
                 ""
@@ -286,12 +287,43 @@ function FilterSection({
                   />
                 </>
               )}
-              {console.log(filter)}
             </div>
             {/* </div> */}
           </div>
+          <div className="flex w-full justify-between gap-4  items-center">
+            <div className="w-full">
+              <label htmlFor=""> Search Type</label>
+              <CommonDropDown
+                name={"target_type"}
+                options={target_type_option}
+                onChange={(e) => {
+                  setFilter({...filter, [e.target.name]: e.target.value});
+                }}
+                label=""
+                value={filter["target_type"]}
+              />
+            </div>
 
-          <div>
+            <div className="w-full  ">
+              {filter["target_type"] !== "" && (
+                <>
+                  <label htmlFor=""> Select Target Type Value</label>
+                  <Input
+                    type="text"
+                    value={filter["target_type_value"]}
+                    required={true}
+                    name="target_type_value"
+                    onChange={(e) =>
+                      setFilter({...filter, [e.target.name]: e.target.value})
+                    }
+                    className="w-[100%]"
+                  />
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className=" flex mt-4 w-[100%] justify-around">
             <button
               onClick={getAllRequest}
               style={{

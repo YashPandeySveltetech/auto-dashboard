@@ -3,8 +3,8 @@ import React from "react";
 function CommonDropDown({
   label = "Select",
   options = [
-    { id: 1, name: "option 1" },
-    { id: 2, name: "option 2" },
+    {id: 1, name: "option 1"},
+    {id: 2, name: "option 2"},
   ],
   onChange,
   value,
@@ -13,22 +13,19 @@ function CommonDropDown({
   checkId,
   disabledSelect,
   star,
-  hidden=false,
-  disabled=false
+  hidden = false,
+  disabled = false,
 }) {
- 
   return (
     <div>
       <div className="flex">
-      <label
-        htmlFor="dropdown"
-        className="block mb-2 text-sm font-medium text-gray-900 "
-      >
-        {label}
-      </label>
-      <span className={star ? "text-red-600" : ""}>
-              {star ? "*" : ""}
-            </span>
+        <label
+          htmlFor="dropdown"
+          className="block mb-2 text-sm font-medium text-gray-900 "
+        >
+          {label}
+        </label>
+        <span className={star ? "text-red-600" : ""}>{star ? "*" : ""}</span>
       </div>
 
       <select
@@ -40,7 +37,7 @@ function CommonDropDown({
         className="bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
       >
         <option value="" disabled={disabled} hidden={hidden}>
-          {`Please Select ${label}`}
+          {label}
         </option>
         {options.map((option) => (
           <option

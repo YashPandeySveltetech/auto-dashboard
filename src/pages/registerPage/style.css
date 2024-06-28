@@ -20,3 +20,13 @@
   border-top: none;
   border-radius: 0 0 5px 5px;
 }
+.download-icon {
+  cursor: pointer;
+  margin-top: 36px;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
+
+.download-icon:hover {
+  color: #007BFF; /* Change this to your desired hover color */
+}

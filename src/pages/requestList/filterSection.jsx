@@ -291,7 +291,7 @@ function FilterSection({
             {/* </div> */}
           </div>
 
-          <div>
+          <div className=" flex mt-4 w-[100%] justify-around">
             <button
               onClick={getAllRequest}
               style={{

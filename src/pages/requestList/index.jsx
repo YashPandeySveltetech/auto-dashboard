@@ -504,7 +504,9 @@ function RequestList() {
         target_type: "",
         target_type_value: "",
         auto_approved: "",
+        fir_no:"",
       });
+      console.log(filter,"filter");
 
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {

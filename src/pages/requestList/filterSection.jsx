@@ -204,7 +204,7 @@ function FilterSection({
               />
             </div> */}
             <div className="w-full ">
-              {/* <label className="font ">Crime Head:</label> */}
+              <label className="font ">Crime Head:</label>
 
               <CommonDropDown
                 name="case_type"
@@ -213,7 +213,7 @@ function FilterSection({
                 onChange={(e) => {
                   setFilter({ ...filter, [e.target.name]: e.target.value });
                 }}
-                label="Crime Head:"
+                label=""
                 // isDisabled={!isEditable && requestData}
                 
                 />
@@ -234,38 +234,7 @@ function FilterSection({
             </div>
           </div>
 
-          <div className="flex w-full justify-between gap-4  items-center">
-            <div className="w-full">
-              <label htmlFor=""> Search Type</label>
-              <CommonDropDown
-                name={"target_type"}
-                options={target_type_option}
-                onChange={(e) => {
-                  setFilter({ ...filter, [e.target.name]: e.target.value });
-                }}
-                label=""
-                value={filter["target_type"]}
-              />
-            </div>
-
-            <div className="w-full  ">
-              {filter["target_type"] !== "" && (
-                <>
-                  <label htmlFor=""> Select Target Type Value</label>
-                  <Input
-                    type="text"
-                    value={filter["target_type_value"]}
-                    required={true}
-                    name="target_type_value"
-                    onChange={(e) =>
-                      setFilter({ ...filter, [e.target.name]: e.target.value })
-                    }
-                    className="w-[100%]"
-                  />
-                </>
-              )}
-            </div>
-          </div>
+          
 
           <div className="flex justify-between w-full gap-4">
             <div className="w-full">
@@ -324,6 +293,38 @@ function FilterSection({
             
             </div>
             {/* </div> */}
+          </div>
+          <div className="flex w-full justify-between gap-4  items-center">
+            <div className="w-full">
+              <label htmlFor=""> Search Type</label>
+              <CommonDropDown
+                name={"target_type"}
+                options={target_type_option}
+                onChange={(e) => {
+                  setFilter({ ...filter, [e.target.name]: e.target.value });
+                }}
+                label=""
+                value={filter["target_type"]}
+              />
+            </div>
+
+            <div className="w-full  ">
+              {filter["target_type"] !== "" && (
+                <>
+                  <label htmlFor=""> Select Target Type Value</label>
+                  <Input
+                    type="text"
+                    value={filter["target_type_value"]}
+                    required={true}
+                    name="target_type_value"
+                    onChange={(e) =>
+                      setFilter({ ...filter, [e.target.name]: e.target.value })
+                    }
+                    className="w-[100%]"
+                  />
+                </>
+              )}
+            </div>
           </div>
 
           <div>

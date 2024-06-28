@@ -415,7 +415,15 @@ function RequestList() {
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +
-          `?case_type=${filter?.case_type}&fir_no=${filter?.case_ref}&decision_type=${filter.form_status}&sys_date=${date_range}&police_station=${filter?.police_station}&target_type=${filter?.target_type}&target_type_value=${filter?.target_type_value}&automatic_approved=${filter?.auto_approved}`,
+          `?case_type=${filter?.case_type}&is_otp_verified=${true}&fir_no=${
+            filter?.case_ref
+          }&decision_type=${
+            filter.form_status
+          }&sys_date=${date_range}&police_station=${
+            filter?.police_station
+          }&target_type=${filter?.target_type}&target_type_value=${
+            filter?.target_type_value
+          }&automatic_approved=${filter?.auto_approved}`,
         {},
         "GET"
       );
@@ -440,7 +448,15 @@ function RequestList() {
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +
-          `?case_type=${filter?.case_type}&fir_no=${filter?.case_ref}&decision_type=${filter.form_status}&sys_date=${date_range}&police_station=${filter?.police_station}&target_type=${filter?.target_type}&target_type_value=${filter?.target_type_value}&automatic_approved=${filter?.auto_approved}`,
+          `?case_type=${filter?.case_type}&is_otp_verified=${true}&fir_no=${
+            filter?.case_ref
+          }&decision_type=${
+            filter.form_status
+          }&sys_date=${date_range}&police_station=${
+            filter?.police_station
+          }&target_type=${filter?.target_type}&target_type_value=${
+            filter?.target_type_value
+          }&automatic_approved=${filter?.auto_approved}`,
         {},
         "GET"
       );

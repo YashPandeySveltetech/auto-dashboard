@@ -386,6 +386,8 @@ function RequestList() {
   };
 
   const PdfExport = async () => {
+    setModalIsOpen(true);
+    setLoader(true);
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
@@ -411,6 +413,7 @@ function RequestList() {
       );
       if (Object.keys(res?.responsePayload?.details).length > 0) {
         setTableData(res?.responsePayload?.details);
+        setLoader(false);
       } else {
         Toaster("", "No Data Found");
       }

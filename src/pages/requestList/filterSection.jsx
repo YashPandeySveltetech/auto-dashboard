@@ -26,7 +26,6 @@ function FilterSection({
   const location = useLocation();
 
   const Export_Option = [
-    { name: "Select",},
     {id: "pdf", label: "PDF", name: "Export PDF"},
     {id: "excel", label: "Excel", name: "Export Excel"},
   ];

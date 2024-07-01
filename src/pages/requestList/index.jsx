@@ -386,8 +386,8 @@ function RequestList() {
   };
 
   const PdfExport = async () => {
-    setModalIsOpen(true);
-    setLoader(true);
+    setModalIsOpen(false);
+    dispatch(setLoading(true));
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
@@ -413,7 +413,7 @@ function RequestList() {
       );
       if (Object.keys(res?.responsePayload?.details).length > 0) {
         setTableData(res?.responsePayload?.details);
-        setLoader(false);
+        dispatch(setLoading(false));
       } else {
         Toaster("", "No Data Found");
       }
@@ -421,7 +421,7 @@ function RequestList() {
   };
 
   const exportReport = async () => {
-    setLoader(true);
+    dispatch(setLoading(true));
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
     date_range = dateRange.startDate + date_range;
@@ -448,7 +448,7 @@ function RequestList() {
 
       if (res?.responsePayload?.details?.length > 0) {
         exportExcel(res?.responsePayload?.details);
-        setLoader(false);
+        dispatch(setLoading(false));
       } else {
         Toaster("", "No Data Found");
       }

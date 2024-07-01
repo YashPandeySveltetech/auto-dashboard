@@ -842,22 +842,22 @@ function RequestForm({requestData}) {
                     />
                   </div>
                 </div>
-                <div className=" flex  items-center mt-5 gap-5">
-                  <label htmlFor="" className="font-bold">
-                    Select if Form is Urgent
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="urgent"
-                    onChange={(e) => handleChange(e, "urgent")}
-                    checked={apiPayload?.urgent}
-                    // checked={apiPayload?.urgent?"checked":"unchecked"}
-                    // checked={(apiPayload?.urgent===true)?"checked":""}
-                    disabled={!isEditable && requestData}
-                  />
-                </div>
               </>
             )}
+          </div>
+          <div className=" flex  items-center mt-5 gap-5">
+            <label htmlFor="" className="font-bold">
+              Select if Form is Urgent
+            </label>
+            <input
+              type="checkbox"
+              name="urgent"
+              onChange={(e) => handleChange(e, "urgent")}
+              checked={apiPayload?.urgent}
+              // checked={apiPayload?.urgent?"checked":"unchecked"}
+              // checked={(apiPayload?.urgent===true)?"checked":""}
+              disabled={!isEditable && requestData}
+            />
           </div>
           <div className="mt-6 flex flex-col">
             <label className="font-bold required">Target Type:</label>

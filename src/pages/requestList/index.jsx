@@ -76,7 +76,7 @@ function RequestList() {
         `?case_type=${filter?.case_type}&fir_no=${
           filter?.case_ref
         }&decision_type=${
-          filter.form_status
+          filter.form_status == "All" ? "" : filter.form_status
         }&page=${active}&is_otp_verified=${true}&sys_date=${date_range}&police_station=${
           filter?.police_station
         }&target_type=${filter?.target_type}&target_type_value=${
@@ -252,29 +252,23 @@ function RequestList() {
       doc.setFontSize(10);
 
       if (filter.form_status) {
-        // Set font to bold for the label
         doc.setFont("helvetica", "bold");
         doc.text(`Form Status:`, 10, yOffset);
-
-        // Set font back to normal for the value
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.form_status}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       if (filter.target_type) {
         doc.setFont("helvetica", "bold");
         doc.text(`Target Type:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.target_type}`, 50, yOffset);
-
         yOffset += 10;
       }
-      doc.setFont("helvetica", "bold");
-      doc.text(`Date Range :`, 10, yOffset);
 
+      doc.setFont("helvetica", "bold");
+      doc.text(`Date Range:`, 10, yOffset);
       doc.setFont("helvetica", "normal");
       doc.text(` ${date}`, 50, yOffset);
       yOffset += 10;
@@ -282,58 +276,46 @@ function RequestList() {
       if (filter.case_ref) {
         doc.setFont("helvetica", "bold");
         doc.text(`FIR NO:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.case_ref}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       if (filter.case_type) {
         doc.setFont("helvetica", "bold");
         doc.text(`Crime Head:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.case_type}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       if (filter.auto_approved) {
         doc.setFont("helvetica", "bold");
         doc.text(`Auto Approved:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.auto_approved}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       if (filter.police_station) {
         doc.setFont("helvetica", "bold");
         doc.text(`Police Station:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.police_station}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       if (filter.target_type_value) {
         doc.setFont("helvetica", "bold");
         doc.text(`Target Type Value:`, 10, yOffset);
-
         doc.setFont("helvetica", "normal");
         doc.text(` ${filter.target_type_value}`, 50, yOffset);
-
         yOffset += 10;
       }
 
       const filteredHeaders = allHeaders.filter(
         (header) => selectedHeaders[header]
       );
-
-      console.log(tableData, "tabledata");
       const tableDataFormatted = tableData.map((item) =>
         filteredHeaders.map((header) => {
           switch (header) {
@@ -363,6 +345,11 @@ function RequestList() {
         })
       );
 
+      const margins = 4 + 5;
+      const availableWidth = pageWidth - margins;
+      const numColumns = filteredHeaders.length;
+      const cellWidth = availableWidth / numColumns;
+
       doc.autoTable({
         startY: yOffset,
         head: [filteredHeaders],
@@ -380,18 +367,13 @@ function RequestList() {
           minCellHeight: 10,
           fontSize: 8,
         },
-        columnStyles: {
-          0: {cellWidth: 20},
-          1: {cellWidth: 20},
-          2: {cellWidth: 20},
-          3: {cellWidth: 20},
-          4: {cellWidth: 20},
-          5: {cellWidth: 20},
-          6: {cellWidth: 20},
-          7: {cellWidth: 20},
-          8: {cellWidth: 20},
-          9: {cellWidth: 20},
-        },
+        columnStyles: (() => {
+          let styles = {};
+          for (let i = 0; i < numColumns; i++) {
+            styles[i] = {cellWidth: cellWidth};
+          }
+          return styles;
+        })(),
       });
 
       doc.save("form_and_table.pdf");
@@ -504,9 +486,9 @@ function RequestList() {
         target_type: "",
         target_type_value: "",
         auto_approved: "",
-        fir_no:"",
+        fir_no: "",
       });
-      console.log(filter,"filter");
+      console.log(filter, "filter");
 
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {
@@ -852,6 +834,23 @@ function RequestList() {
                           >
                             {item?.acp_status}
                           </span>
+                        </div>
+                        <div>
+                          {item?.acp_status == "REJECT" && (
+                            <button
+                              onClick={() => {
+                                dispatch(openViewLogModal(item?.id));
+                                dispatch(updateRequestList(false));
+                              }}
+                              //   className="bg-red-900 p-2 rounded-lg font-bold"
+                              //   style={{
+                              //     color: "white",
+                              //     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                              //   }}
+                            >
+                              <EyeFill color="blue" title="view log" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     )}

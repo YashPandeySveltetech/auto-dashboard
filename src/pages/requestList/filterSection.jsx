@@ -26,12 +26,13 @@ function FilterSection({
   const location = useLocation();
 
   const Export_Option = [
+    {name: "Select"},
     {id: "pdf", label: "PDF", name: "Export PDF"},
     {id: "excel", label: "Excel", name: "Export Excel"},
   ];
 
   const from_status_option = [
-    // { id: 1, name: "All", value: "All" },
+    {id: 4, name: "All", value: "All"},
     {id: 1, name: "PENDING", value: "PENDING"},
     {id: 2, name: "APPROVE", value: "APPROVE"},
     {id: 3, name: "REJECT", value: "REJECT"},
@@ -155,8 +156,7 @@ function FilterSection({
                   onChange={(e) => {
                     setFilter({
                       ...filter,
-                      [e.target.name]:
-                        e.target.value == "All" ? "" : e.target.value,
+                      [e.target.name]: e.target.value,
                     });
                   }}
                   label={""}

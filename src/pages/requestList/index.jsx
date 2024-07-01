@@ -819,7 +819,7 @@ function RequestList() {
 
                     {!["ACP", "DCP"].includes(rank) && (
                       <td>
-                        <div className="">
+                        <div className="flex gap-2 justify-center items-center">
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-pink-700/10
     ${
@@ -834,23 +834,24 @@ function RequestList() {
                           >
                             {item?.acp_status}
                           </span>
-                        </div>
-                        <div>
-                          {item?.acp_status == "REJECT" && (
-                            <button
-                              onClick={() => {
-                                dispatch(openViewLogModal(item?.id));
-                                dispatch(updateRequestList(false));
-                              }}
-                              //   className="bg-red-900 p-2 rounded-lg font-bold"
-                              //   style={{
-                              //     color: "white",
-                              //     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-                              //   }}
-                            >
-                              <EyeFill color="blue" title="view log" />
-                            </button>
-                          )}
+
+                          <div>
+                            {item?.acp_status == "REJECT" && (
+                              <button
+                                onClick={() => {
+                                  dispatch(openViewLogModal(item?.id));
+                                  dispatch(updateRequestList(false));
+                                }}
+                                //   className="bg-red-900 p-2 rounded-lg font-bold"
+                                //   style={{
+                                //     color: "white",
+                                //     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                                //   }}
+                              >
+                                <EyeFill color="blue" title="view log" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </td>
                     )}

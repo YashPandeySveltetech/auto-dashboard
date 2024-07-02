@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import './CustomPagination.css'; // Import the CSS file
 
-const CustomPagination = ({ totalItems, getAllRequest, setCurrent }) => {
+const CustomPagination = ({ totalItems, getAllRequest, setCurrent,clearFilter }) => {
   const pageCount = Math.ceil(totalItems / 10); // Assuming 10 items per page
   const [jumpPage, setJumpPage] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
@@ -15,9 +15,10 @@ const CustomPagination = ({ totalItems, getAllRequest, setCurrent }) => {
   };
 
   const handlePageChange = ({ selected }) => {
+    clearFilter({active:selected + 1})
     setCurrentPage(selected);
     setCurrent(selected + 1); // Since selected is zero-based index
-    getAllRequest({ active: selected + 1 }); // Ensure selected is a number
+    // getAllRequest({ active: selected + 1 }); // Ensure selected is a number
   };
 
   return (

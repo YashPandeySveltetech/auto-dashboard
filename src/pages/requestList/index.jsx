@@ -491,7 +491,7 @@ function RequestList() {
         auto_approved: "",
         fir_no: "",
       });
-      console.log(filter, "filter");
+      
 
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {
@@ -856,6 +856,21 @@ function RequestList() {
                             )}
                           </div>
                         </div>
+                        {item?.acp_status == "REJECT" && (
+                            <button
+                              onClick={() => {
+                                dispatch(openViewLogModal(item?.id));
+                                dispatch(updateRequestList(false));
+                              }}
+                              //   className="bg-red-900 p-2 rounded-lg font-bold"
+                              //   style={{
+                              //     color: "white",
+                              //     boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                              //   }}
+                            >
+                              <EyeFill color="blue" title="view log" />
+                            </button>
+                          )}
                       </td>
                     )}
 
@@ -938,6 +953,7 @@ function RequestList() {
           totalItems={totalPageCount}
           getAllRequest={getAllRequest}
           setCurrent={setCurrent}
+          clearFilter={clearFilter}
         />
       </div>
     </>

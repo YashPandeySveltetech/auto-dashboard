@@ -491,7 +491,6 @@ function RequestList() {
         auto_approved: "",
         fir_no: "",
       });
-      
 
       setDateRange({startDate: null, endDate: null});
       if (res?.responsePayload?.next) {
@@ -856,7 +855,7 @@ function RequestList() {
                             )}
                           </div>
                         </div>
-                        {item?.acp_status == "REJECT" && (
+                        {/* {item?.acp_status == "REJECT" && (
                             <button
                               onClick={() => {
                                 dispatch(openViewLogModal(item?.id));
@@ -870,7 +869,7 @@ function RequestList() {
                             >
                               <EyeFill color="blue" title="view log" />
                             </button>
-                          )}
+                          )} */}
                       </td>
                     )}
 

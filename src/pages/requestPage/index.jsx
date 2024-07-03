@@ -624,7 +624,6 @@ function RequestForm({requestData}) {
         setIsValid(false);
       }
     } else if (name === "pis_no") {
-      console.log("hello");
       if (value.length <= 8) {
         setPisValid(true);
         setApiPayload({
@@ -634,6 +633,11 @@ function RequestForm({requestData}) {
       } else {
         setPisValid(false);
       }
+    } else if (name == "io_name") {
+      setApiPayload({
+        ...apiPayload,
+        [name]: value.toUpperCase(),
+      });
     } else {
       setApiPayload({
         ...apiPayload,
@@ -978,7 +982,7 @@ function RequestForm({requestData}) {
                 name="io_name"
                 required
                 onChange={handleChange}
-                value={apiPayload.io_name.toUpperCase()}
+                value={apiPayload.io_name}
                 disabledSelect={!isEditable && requestData}
               />
             </div>

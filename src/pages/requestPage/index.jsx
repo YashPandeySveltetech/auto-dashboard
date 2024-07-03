@@ -872,12 +872,12 @@ function RequestForm({ requestData }) {
 
           <div className="mt-2">
             <div className="relative flex items-center">
-              <button
+              <div
                 onClick={scrollLeft}
-                className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block"
+                className="absolute left-0 z-10 p-2 bg-gray-300 rounded-full shadow-md focus:outline-none md:hidden block cursor-pointer"
               >
                 &lt;
-              </button>
+              </div>
 
               <div
                 className="flex rounded-lg gap-2 ml-[40px]  mr-[40px] overflow-x-auto scrollbar-thumb-gray-900 scrollbar-track-gray-100 scrollbar-thin"
@@ -923,12 +923,12 @@ function RequestForm({ requestData }) {
                   </div>
                 ))}
               </div>
-              <button
+              <div
                 onClick={scrollRight}
-                className="absolute right-0 z-10 p-2 bg-gray-300 rounded-full shadow-md md:hidden block"
+                className="absolute right-0 z-10 p-2 bg-gray-300 rounded-full shadow-md md:hidden block cursor-pointer"
               >
                 &gt;
-              </button>
+              </div>
             </div>
 
             <div>{formHandler()}</div>

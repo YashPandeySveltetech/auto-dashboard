@@ -684,7 +684,7 @@ function RequestList() {
                   )}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {requestList?.map((item) => (
                   <tr className="bg-white border-b ">
                     <td

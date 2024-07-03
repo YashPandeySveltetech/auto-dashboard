@@ -396,6 +396,7 @@ function RequestList() {
       dateRange = "";
     } else if (dateRange?.startDate === "") {
       Toaster("", "Please Select Date");
+      dispatch(setLoading(false));
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +
@@ -430,6 +431,7 @@ function RequestList() {
       dateRange = "";
     } else if (dateRange?.startDate === "") {
       Toaster("", "Please Select Date");
+      dispatch(setLoading(false));
     } else {
       const res = await ApiHandle(
         EXPORT_DCP_FILE +

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { ApiHandle } from "../../utils/ApiHandle";
-import { REGISTRATION } from "../../utils/constants";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {ApiHandle} from "../../utils/ApiHandle";
+import {REGISTRATION} from "../../utils/constants";
+import {useNavigate, useParams} from "react-router-dom";
 import Title from "../../utils/Title";
-import { setLoading } from "../../redux/reducers/commonReducer";
-import { useDispatch } from "react-redux";
+import {setLoading} from "../../redux/reducers/commonReducer";
+import {useDispatch} from "react-redux";
 
 const UpdateUser = () => {
-
   const [list, setList] = useState([]);
   const [rank, setRank] = useState("ACP");
   const navigate = useNavigate();
@@ -39,12 +38,12 @@ const UpdateUser = () => {
       <Title text={"User List"} />
       <div className="outer-div-whole mx-auto mb-3 px-8 ">
         <div class=" justify-center  m-3 mb-[-12px]">
-          <div class="border-b flex justify-around border-gray-200 ">
-            <nav class="-mb-px   gap-6">
+          <div class="border-b flex justify-start gap-2 border-gray-200 ">
+            <nav className=" gap-6">
               <button
                 onClick={(e) => handleReportingToSelect("ACP")}
                 type="button"
-                className={` border-black shrink-0 border  p-3 rounded-tl-md rounded-tr-md text-sm font-medium 
+                className={` border-black shrink-0 border w-[180px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium 
                  ${
                    rank === "ACP"
                      ? " bg-zinc-500 border-b-white  text-white"
@@ -52,7 +51,7 @@ const UpdateUser = () => {
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
               >
-                <span className="text-white-400">ACP</span>
+                <span className="text-white-400 ">ACP</span>
               </button>
             </nav>
             <nav class="-mb-px flex gap-6">
@@ -68,7 +67,7 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                className={`border-black shrink-0 border p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
+                className={`border-black shrink-0 border p-3  w-[180px] rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
                 ${
                   rank === "DCP"
                     ? " bg-zinc-500  border-b-white  text-white"
@@ -94,7 +93,7 @@ const UpdateUser = () => {
                 //        ?.length > 0)
                 //  }
                 type="button"
-                className={`border-black shrink-0 border p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
+                className={`border-black shrink-0 border w-[180px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
                  ${
                    rank === "SHO"
                      ? " bg-zinc-500  border-b-white  text-white"
@@ -112,11 +111,11 @@ const UpdateUser = () => {
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-center text-gray-500  "
-            style={{ border: "1px solid black" }}
+            style={{border: "1px solid black"}}
           >
             <thead
               className="text-xs text-gray-700 uppercase bg-gray-50  "
-              style={{ backgroundColor: "black", color: "white" }}
+              style={{backgroundColor: "black", color: "white"}}
             >
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -166,19 +165,19 @@ const UpdateUser = () => {
                   </th>
                   <td
                     className="px-6 py-4 font-semibold text-gray-900"
-                    style={{ color: "black" }}
+                    style={{color: "black"}}
                   >
                     {item?.username}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
+                    style={{color: "black"}}
                   >
                     {item?.mobile_no}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
-                    style={{ color: "black" }}
+                    style={{color: "black"}}
                   >
                     {item?.email}
                   </td>

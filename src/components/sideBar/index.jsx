@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Amd,
   Boxes,
@@ -9,20 +9,20 @@ import {
   EnvelopeAt,
   PersonGear,
 } from "react-bootstrap-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { REFRESH, USER_DETAIL } from "../../utils/constants";
-import { ApiHandle } from "../../utils/ApiHandle";
-import { clearUserData, setUserData } from "../../redux/reducers/userReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {REFRESH, USER_DETAIL} from "../../utils/constants";
+import {ApiHandle} from "../../utils/ApiHandle";
+import {clearUserData, setUserData} from "../../redux/reducers/userReducer";
 import {
   PasswordChangeModal,
   commonCloseModal,
 } from "../../redux/reducers/modalsReducer";
 import sidebar from "./sidebar.css";
-import { GoUnverified } from "react-icons/go";
-import { MdDashboard } from "react-icons/md";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
+import {GoUnverified} from "react-icons/go";
+import {MdDashboard} from "react-icons/md";
+import {GiHamburgerMenu} from "react-icons/gi";
+import {RiLogoutBoxLine, RiLockPasswordLine} from "react-icons/ri";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -30,10 +30,8 @@ import StarsIcon from "@mui/icons-material/Stars";
 import Toaster from "../../utils/toaster/Toaster";
 import DoNotDisturbAltIcon from "@mui/icons-material/DoNotDisturbAlt";
 
-function Sidebar({ isOpen, setIsOpen }) {
-  const { rank, email, username } = useSelector(
-    (state) => state.user?.userData
-  );
+function Sidebar({isOpen, setIsOpen}) {
+  const {rank, email, username} = useSelector((state) => state.user?.userData);
   const refresh = localStorage.getItem("refresh")
     ? localStorage.getItem("refresh")
     : null;
@@ -49,19 +47,19 @@ function Sidebar({ isOpen, setIsOpen }) {
       icon: <Boxes />,
       text: "New Request Form",
       url: "/request-form",
-      isShow: !["DCP"].includes(rank),
+      isShow: !["DCP", "ADMIN"].includes(rank),
     },
     {
       icon: <GoUnverified />,
       text: "Un-verified Form",
       url: "/unverified-form",
-      isShow: !["DCP"].includes(rank),
+      isShow: !["DCP", "ADMIN"].includes(rank),
     },
     {
       icon: <XOctagon />,
       text: "Rejected Form",
       url: "/rejected-form",
-      isShow: !["DCP"].includes(rank),
+      isShow: !["DCP", "ADMIN"].includes(rank),
     },
     // {
     //   icon: <Boxes />,
@@ -116,7 +114,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       dispatch(setUserData(res?.responsePayload));
     }
   };
-  const ListItem = ({ icon, text, url, isShow }) => {
+  const ListItem = ({icon, text, url, isShow}) => {
     return (
       <>
         {isShow && (
@@ -232,24 +230,24 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </h2>
                 <div className="mb-2 ml-0 flex justify-start items-center">
                   <label className="block font-medium text-gray-100">
-                    <DriveFileRenameOutlineIcon sx={{ fontSize: 20 }} /> :
+                    <DriveFileRenameOutlineIcon sx={{fontSize: 20}} /> :
                   </label>
                   <p className="text-gray-200  ml-1">{username}</p>
                 </div>
                 <div className="mb-2 flex justify-start items-start">
                   <label className="flex items-start items-center mt-[0px] text-gray-200">
-                    <EnvelopeAt sx={{ fontSize: 20 }} /> &nbsp;:
+                    <EnvelopeAt sx={{fontSize: 20}} /> &nbsp;:
                   </label>
                   <p
                     className="text-gray-200 font-medium ml-1"
-                    style={{ wordBreak: "break-all" }}
+                    style={{wordBreak: "break-all"}}
                   >
                     {email}
                   </p>
                 </div>
                 <div className="mb-2 flex justify-start items-center">
                   <label className="block text-gray-200">
-                    <StarsIcon sx={{ fontSize: 20 }} /> :{" "}
+                    <StarsIcon sx={{fontSize: 20}} /> :{" "}
                   </label>
                   <p className="text-gray-200 font-medium ml-1">{rank}</p>
                 </div>
@@ -257,7 +255,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             </div>
           ) : (
             <div className="close_side_user " title="User Profile">
-              <PermIdentityIcon sx={{ fontSize: 35 }} />
+              <PermIdentityIcon sx={{fontSize: 35}} />
             </div>
           )}
         </div>
@@ -272,7 +270,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             ))}
           </ul>
 
-          <div className={`${isOpen ? 'mt-9' : 'mt-40'}`}>
+          <div className={`${isOpen ? "mt-9" : "mt-40"}`}>
             <li>
               <NavLink
                 onClick={() => {
@@ -284,10 +282,10 @@ function Sidebar({ isOpen, setIsOpen }) {
                 </i>
                 <span className="links_name">Change Password</span>
               </NavLink>
-             
             </li>
 
-            <li className="mt-[160px]"
+            <li
+              className="mt-[160px]"
               onClick={() => {
                 localStorage.clear();
                 dispatch(clearUserData());
@@ -299,9 +297,8 @@ function Sidebar({ isOpen, setIsOpen }) {
                 <i className="bx bx-grid-alt" title="Logout">
                   <RiLogoutBoxLine />
                 </i>
-                <span className="links_name" >Logout</span>
+                <span className="links_name">Logout</span>
               </NavLink>
-              
             </li>
           </div>
         </div>

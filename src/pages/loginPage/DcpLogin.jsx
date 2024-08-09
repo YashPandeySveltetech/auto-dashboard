@@ -14,7 +14,7 @@ import { setUserData } from "../../redux/reducers/userReducer";
 // import Loader from "../../components/loader/Loader";
 import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
 
-function LoginPage() {
+function DcpLoginPage() {
   const [loginWith, setLoginWith] = useState("email");
   const [formValue, setFormValue] = useState({});
   const [isOtp, setIsOtp] = useState(false);
@@ -165,7 +165,7 @@ console.log(name, value )
     <div className=" h-[100vh]  flex justify-center items-center w-[100%] bgimg ">
       <div className="my-3d-watercolor-div">
         <div className="text-2xl font-extrabold	text-center text-white   ">
-          Login
+         DCP Login
         </div>
         <div className=" flex justify-center gap-5 flex-col ">
           <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
@@ -270,4 +270,4 @@ console.log(name, value )
   );
 }
 
-export default LoginPage;
+export default DcpLoginPage;

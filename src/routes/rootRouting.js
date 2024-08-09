@@ -18,6 +18,7 @@ import RejectList from "../pages/requestList/rejectList";
 import Toaster from "../utils/toaster/Toaster";
 import UpdateUser from "../pages/UpdateUser/UpdateUser";
 import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
+import DcpLoginPage from "../pages/loginPage/DcpLogin";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -189,6 +190,7 @@ const AppRoute = memo(() => {
               }
             />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/dcp-login" element={<DcpLoginPage />} />
           </Route>
         </Routes>
       </Suspense>

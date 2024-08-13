@@ -624,7 +624,7 @@ function RequestForm({requestData}) {
         setIsValid(false);
       }
     } else if (name === "pis_no") {
-      if (value.length <= 8) {
+      if (value.length < 8) {
         setPisValid(true);
         setApiPayload({
           ...apiPayload,

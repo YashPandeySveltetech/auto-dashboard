@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
-import ReactPaginate from 'react-paginate';
-import './CustomPagination.css'; // Import the CSS file
+import React, {useState} from "react";
+import ReactPaginate from "react-paginate";
+import "./CustomPagination.css"; // Import the CSS file
 
-const CustomPagination = ({ totalItems, getAllRequest, setCurrent,clearFilter }) => {
+const CustomPagination = ({
+  totalItems,
+  getAllRequest,
+  setCurrent,
+  clearFilter,
+  current,
+}) => {
   const pageCount = Math.ceil(totalItems / 10); // Assuming 10 items per page
-  const [jumpPage, setJumpPage] = useState('');
+  const [jumpPage, setJumpPage] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
 
   const handlePageJump = () => {
     const pageNumber = Number(jumpPage) - 1;
     if (pageNumber >= 0 && pageNumber < pageCount) {
-      handlePageChange({ selected: pageNumber });
+      handlePageChange({selected: pageNumber});
     }
   };
 
-  const handlePageChange = ({ selected }) => {
-    clearFilter({active:selected + 1})
+  const handlePageChange = ({selected}) => {
+    clearFilter({active: selected + 1});
     setCurrentPage(selected);
     setCurrent(selected + 1); // Since selected is zero-based index
-    // getAllRequest({ active: selected + 1 }); // Ensure selected is a number
+    getAllRequest({active: selected + 1}); // Ensure selected is a number
   };
 
   return (
@@ -38,7 +44,7 @@ const CustomPagination = ({ totalItems, getAllRequest, setCurrent,clearFilter })
         previousClassName="custom-pagination-previous"
         nextClassName="custom-pagination-next"
         breakClassName="custom-pagination-break"
-        forcePage={currentPage}
+        forcePage={current ? current - 1 : currentPage}
       />
       <div className="jump-to-container">
         <input

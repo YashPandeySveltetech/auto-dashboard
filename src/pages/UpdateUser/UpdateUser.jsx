@@ -5,14 +5,22 @@ import {useNavigate, useParams} from "react-router-dom";
 import Title from "../../utils/Title";
 import {setLoading} from "../../redux/reducers/commonReducer";
 import {useDispatch} from "react-redux";
+import CustomPagination from "../../components/pagination/CustomPagination";
 
 const UpdateUser = () => {
   const [list, setList] = useState([]);
   const [rank, setRank] = useState("ACP");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const handleReportingToSelect = async (rank) => {
+  const [current, setCurrent] = useState(1);
+  const [isNext, setIsNext] = useState(false);
+  const [isPrevious, setIsPrevious] = useState(false);
+
+  const handleReportingToSelect = async (rank, active) => {
+    console.log(current, "current");
+
     dispatch(setLoading(true));
     const rankType = rank ? rank : "ACP";
     setRank(rankType);
@@ -21,32 +29,61 @@ const UpdateUser = () => {
     // value = isACP ? "DCP" : "ACP";
     // setSelectedReportingTo(value);
     // setSelectedRank("");
-    const res = await ApiHandle(`${REGISTRATION}?rank=${rankType}`, {}, "GET");
+    const res = await ApiHandle(
+      `${REGISTRATION}?rank=${rankType}&page=${active}`,
+      {},
+      "GET"
+    );
 
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
+      setList(res?.responsePayload.results);
+      setTotalPageCount(res?.responsePayload?.count);
       const data = res.responsePayload.results;
       setList(data);
+      console.log(res, "dataaaaaaa");
+      if (res?.responsePayload?.next) {
+        // setCurrent(current + 1);
+        setIsNext(true);
+      }
+      if (!res?.responsePayload?.next) {
+        // setCurrent(current + 1);
+        setIsNext(false);
+      }
+
+      if (res?.responsePayload?.previous) {
+        // setCurrent(current + 1);
+        setIsPrevious(true);
+      }
+      if (!res?.responsePayload?.previous) {
+        // setCurrent(current + 1);
+        setIsPrevious(false);
+      }
+
       //   setUserOptions(data);
     }
   };
+
   useEffect(() => {
-    handleReportingToSelect();
-  }, []);
+    handleReportingToSelect(rank, current);
+  }, [current]);
   return (
     <>
       <Title text={"User List"} />
       <div className="outer-div-whole mx-auto mb-3 px-8 ">
-        <div class=" justify-center  m-3 mb-[-12px]">
+        <div class=" justify-center  m-3 mb-[-16px]">
           <div class="border-b flex justify-start gap-2 border-gray-200 ">
-            <nav className=" gap-6">
+            <nav className=" active gap-6">
               <button
-                onClick={(e) => handleReportingToSelect("ACP")}
+                onClick={(e) => {
+                  handleReportingToSelect("ACP", 1);
+                  setCurrent(1);
+                }}
                 type="button"
                 className={` border-black shrink-0 border w-[180px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium 
                  ${
                    rank === "ACP"
-                     ? " bg-zinc-500 border-b-white  text-white"
+                     ? " bg-black  text-white"
                      : "   hover:text-gray-700 "
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -56,7 +93,10 @@ const UpdateUser = () => {
             </nav>
             <nav class="-mb-px flex gap-6">
               <button
-                onClick={(e) => handleReportingToSelect("DCP")} //  disabled={
+                onClick={(e) => {
+                  setCurrent(1);
+                  handleReportingToSelect("DCP", 1);
+                }} //  disabled={
                 //    (!isEditable &&
                 //      requestData &&
                 //      !requestData?.form_request_for[arry[val?.name]]
@@ -70,7 +110,7 @@ const UpdateUser = () => {
                 className={`border-black shrink-0 border p-3  w-[180px] rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
                 ${
                   rank === "DCP"
-                    ? " bg-zinc-500  border-b-white  text-white"
+                    ? " bg-black    text-white"
                     : "hover:text-gray-700"
                 }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -81,7 +121,10 @@ const UpdateUser = () => {
             </nav>
             <nav class="-mb-px flex gap-6">
               <button
-                onClick={(e) => handleReportingToSelect("SHO")}
+                onClick={(e) => {
+                  setCurrent(1);
+                  handleReportingToSelect("SHO", 1);
+                }}
                 //  disabled={
                 //    (!isEditable &&
                 //      requestData &&
@@ -96,7 +139,7 @@ const UpdateUser = () => {
                 className={`border-black shrink-0 border w-[180px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium mr-1"
                  ${
                    rank === "SHO"
-                     ? " bg-zinc-500  border-b-white  text-white"
+                     ? " bg-black   text-white"
                      : "hover:text-gray-700"
                  }`}
                 // class="shrink-0 border border-transparent p-3 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -118,6 +161,9 @@ const UpdateUser = () => {
               style={{backgroundColor: "black", color: "white"}}
             >
               <tr>
+                <th scope="col" className="px-6 py-3">
+                  S.No.
+                </th>
                 <th scope="col" className="px-6 py-3">
                   Rank
                 </th>
@@ -155,8 +201,14 @@ const UpdateUser = () => {
               </tr>
             </thead>
             <tbody>
-              {list?.map((item) => (
+              {list?.map((item, index) => (
                 <tr className="bg-white border-b ">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                  >
+                    {index + 1}
+                  </th>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
@@ -340,6 +392,15 @@ const UpdateUser = () => {
             </div>
           )}
         </div>
+        <CustomPagination
+          totalItems={totalPageCount}
+          getAllRequest={() => {
+            console.log("handleReportingToSelect");
+          }}
+          setCurrent={setCurrent}
+          clearFilter={() => console.log("clear")}
+          current={current}
+        />
       </div>
     </>
   );

@@ -392,6 +392,7 @@ function UnverifiedFormList() {
           totalItems={unverifiedTotalCount}
           getAllRequest={getAllRequest}
           setCurrent={setCurrent}
+          clearFilter={() => console.log("clear")}
         />
       </div>
     </>

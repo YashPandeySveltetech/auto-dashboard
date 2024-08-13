@@ -48,7 +48,7 @@ const ModalWrapper = ({
     <div className="fixed inset-0 bg-[black] z-10 bg-opacity-80 backdrop-blur-sm flex justify-center items-center">
       <div ref={modalRef}>
         <Card width={width} height="content">
-          <div className="flex justify-between p-2 border-b-2 items-centers">
+          <div className="flex justify-between p-2 border-b-2 items-centers"> 
             <h3 className="text-xl text-[white] font-semibold">{heading}</h3>
             <button
               className="p-1 ml-auto border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"

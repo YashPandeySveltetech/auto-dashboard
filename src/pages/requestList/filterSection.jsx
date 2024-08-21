@@ -174,6 +174,8 @@ function FilterSection({
                   showShortcuts={true}
                   classNames="border border-solid"
                 />
+                {console.log(dateRange,"date")
+                }
               </div>
             </div>
           </div>
@@ -362,10 +364,11 @@ function FilterSection({
                   label="Download Data"
                 />
                 <FaDownload
-                  onClick={downloadData}
-                  size={20}
-                  className="download-icon"
-                />
+      onClick={dateRange.startDate && dateRange.endDate ? downloadData : null} // Only call downloadData if condition is true
+      size={20}
+      className={`download-icon ${dateRange.startDate && dateRange.endDate  ? 'text-blue-500' : 'text-gray-500 cursor-not-allowed'}`}
+      style={{ pointerEvents: dateRange.startDate && dateRange.endDate  ? 'auto' : 'none' }} // Disable pointer events if condition is not true
+    />
               </div>
             )}
           </div>

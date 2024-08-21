@@ -417,6 +417,7 @@ function RequestList() {
         dispatch(setLoading(false));
       } else {
         Toaster("", "No Data Found");
+         dispatch(setLoading(false));
       }
     }
   };

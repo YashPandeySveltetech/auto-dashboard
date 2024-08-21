@@ -1000,6 +1000,7 @@ function RequestForm({requestData}) {
                 maxLength="8"
                 inputMode="numeric"
                 id="pis"
+                disabledSelect={!isEditable && requestData}
               />
               {isPisValid && (
                 <div className=" has-tootip">

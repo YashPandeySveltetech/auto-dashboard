@@ -42,9 +42,9 @@ function RequestList() {
   const {updateReqList, isDcpPassword, dcpStatus} = useSelector(
     (state) => state.modal
   );
-  const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
 
   //   const [value, setValue] = useState({
   //     startDate: new Date(),
@@ -483,6 +483,9 @@ function RequestList() {
     );
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
+      setTotalPageCount(res?.responsePayload?.count);
+      setCurrentPage(0)
+      
       setFilter({
         req_to_provider: "",
         form_status: "",
@@ -519,11 +522,11 @@ function RequestList() {
       return;
     }
   };
-  const handlePageChange = ({selected}) => {
-    const selectedPageIndex = selected;
-    setCurrent(selectedPageIndex + 1); // Since selectedPageIndex is zero-based index
-    getAllRequest({active: selectedPageIndex + 1}); // Ensure selectedPageIndex is a number
-  };
+  // const handlePageChange = ({selected}) => {
+  //   const selectedPageIndex = selected;
+  //   setCurrent(selectedPageIndex + 1); // Since selectedPageIndex is zero-based index
+  //   getAllRequest({active: selectedPageIndex + 1}); // Ensure selectedPageIndex is a number
+  // };
 
   const filtersection = useCallback(() => {
     return (
@@ -954,8 +957,8 @@ function RequestList() {
         <CustomPagination
           totalItems={totalPageCount}
           getAllRequest={getAllRequest}
-          setCurrent={setCurrent}
-          clearFilter={clearFilter}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </>

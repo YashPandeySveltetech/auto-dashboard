@@ -30,7 +30,7 @@ function UnverifiedFormList() {
   const dispatch = useDispatch();
   const {rank} = useSelector((state) => state.user?.userData);
   const {updateReqList} = useSelector((state) => state.modal);
-  const [current, setCurrent] = useState(0);
+  
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [dateRange, setDateRange] = useState({
@@ -38,6 +38,8 @@ function UnverifiedFormList() {
     endDate: "",
   });
   const [unverifiedTotalCount, setUnverifiedTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
 
   useEffect(() => {
     getAllRequest({active: 1});
@@ -94,12 +96,12 @@ function UnverifiedFormList() {
     }
   };
   const handleNext = () => {
-    setCurrent(current + 1);
-    getAllRequest({active: current + 1});
+    setCurrentPage(currentPage + 1);
+    getAllRequest({active: currentPage + 1});
   };
   const handlePrevious = () => {
-    setCurrent(current - 1);
-    getAllRequest({active: current - 1});
+    setCurrentPage(currentPage - 1);
+    getAllRequest({active: currentPage - 1});
   };
   useEffect(() => {
     if (updateReqList) {
@@ -391,8 +393,8 @@ function UnverifiedFormList() {
         <CustomPagination
           totalItems={unverifiedTotalCount}
           getAllRequest={getAllRequest}
-          setCurrent={setCurrent}
-          clearFilter={() => console.log("clear")}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
         />
       </div>
     </>

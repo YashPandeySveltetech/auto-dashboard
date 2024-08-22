@@ -5,13 +5,14 @@ import "./CustomPagination.css"; // Import the CSS file
 const CustomPagination = ({
   totalItems,
   getAllRequest,
-  setCurrent,
-  clearFilter,
-  current,
+  currentPage,
+  setCurrentPage
 }) => {
   const pageCount = Math.ceil(totalItems / 10); // Assuming 10 items per page
+  // console.log(current,"ti",pageCount);
+  
   const [jumpPage, setJumpPage] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
+
 
   const handlePageJump = () => {
     const pageNumber = Number(jumpPage) - 1;
@@ -21,9 +22,9 @@ const CustomPagination = ({
   };
 
   const handlePageChange = ({selected}) => {
-    clearFilter({active: selected + 1});
+    // clearFilter({active: selected + 1});
     setCurrentPage(selected);
-    setCurrent(selected + 1); // Since selected is zero-based index
+    // setCurrent(selected + 1); // Since selected is zero-based index
     getAllRequest({active: selected + 1}); // Ensure selected is a number
   };
 
@@ -44,7 +45,7 @@ const CustomPagination = ({
         previousClassName="custom-pagination-previous"
         nextClassName="custom-pagination-next"
         breakClassName="custom-pagination-break"
-        forcePage={current ? current - 1 : currentPage}
+        forcePage={currentPage}
       />
       <div className="jump-to-container">
         <input

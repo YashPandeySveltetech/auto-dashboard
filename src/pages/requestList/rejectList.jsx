@@ -30,10 +30,12 @@ function RejectList() {
   const dispatch = useDispatch();
   const {rank} = useSelector((state) => state.user?.userData);
   const {updateReqList} = useSelector((state) => state.modal);
-  const [current, setCurrent] = useState(0);
+  
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [rejectPageCount, setRejectPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
 
   useEffect(() => {
     getAllRequest({active: 1});
@@ -513,7 +515,9 @@ function RejectList() {
         </div>
       </div>
       <div className="flex justify-center mb-2 mt-2">
-        <CustomPagination totalItems={rejectPageCount} />
+        <CustomPagination totalItems={rejectPageCount} 
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}/>
       </div>
     </>
   );

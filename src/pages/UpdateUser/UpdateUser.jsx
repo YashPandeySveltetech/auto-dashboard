@@ -13,14 +13,13 @@ const UpdateUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [totalPageCount, setTotalPageCount] = useState(0);
-
-  const [current, setCurrent] = useState(1);
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
 
   const handleReportingToSelect = async (rank, active) => {
-    console.log(current, "current");
-
+  
     dispatch(setLoading(true));
     const rankType = rank ? rank : "ACP";
     setRank(rankType);
@@ -65,8 +64,8 @@ const UpdateUser = () => {
   };
 
   useEffect(() => {
-    handleReportingToSelect(rank, current);
-  }, [current]);
+    handleReportingToSelect(rank, currentPage);
+  }, [currentPage]);
   return (
     <>
       <Title text={"User List"} />
@@ -77,7 +76,7 @@ const UpdateUser = () => {
               <button
                 onClick={(e) => {
                   handleReportingToSelect("ACP", 1);
-                  setCurrent(1);
+                  setCurrentPage(1);
                 }}
                 type="button"
                 className={` border-black shrink-0 border w-[180px] p-3 rounded-tl-md rounded-tr-md text-sm font-medium 
@@ -94,7 +93,7 @@ const UpdateUser = () => {
             <nav class="-mb-px flex gap-6">
               <button
                 onClick={(e) => {
-                  setCurrent(1);
+                  currentPage(1);
                   handleReportingToSelect("DCP", 1);
                 }} //  disabled={
                 //    (!isEditable &&
@@ -122,7 +121,7 @@ const UpdateUser = () => {
             <nav class="-mb-px flex gap-6">
               <button
                 onClick={(e) => {
-                  setCurrent(1);
+                  setCurrentPage(1);
                   handleReportingToSelect("SHO", 1);
                 }}
                 //  disabled={
@@ -397,9 +396,8 @@ const UpdateUser = () => {
           getAllRequest={() => {
             console.log("handleReportingToSelect");
           }}
-          setCurrent={setCurrent}
-          clearFilter={() => console.log("clear")}
-          current={current}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </>

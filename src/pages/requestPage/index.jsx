@@ -615,22 +615,34 @@ function RequestForm({requestData}) {
       });
     } else if (name === "io_mobile_no") {
       if (value.length <= 10) {
-        setIsValid(true);
+        
         setApiPayload({
           ...apiPayload,
           [name]: value,
         });
-      } else {
+      } 
+      if (value.length <10) {
+        setIsValid(true);
+   
+      } 
+      else {
         setIsValid(false);
       }
     } else if (name === "pis_no") {
-      if (value.length < 8) {
-        setPisValid(true);
+      if (value.length <= 8) {
+       
         setApiPayload({
           ...apiPayload,
           [name]: value,
         });
-      } else {
+        
+      } 
+      if (value.length <8) {
+        setPisValid(true);
+      
+        
+      } 
+      else {
         setPisValid(false);
       }
     } else if (name == "io_name") {

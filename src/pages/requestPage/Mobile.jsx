@@ -31,15 +31,25 @@ function Mobile({
 
   const dropdownChange = (e, data, index) => {
     const list = [...MobileList];
-    list[index][data?.name] =
-      e?.length > 0
-        ? e?.map((i) => i.id)
-        : e === null
-        ? []
-        : e.value === "ALL"
-        ? e.id
-        : [e.id];
+    console.log(e[index]?.id, list, "list");
+    
+   
+        if(e[index]?.id==="ALL"){
+          
+          list[index][data?.name]=[1,3,4]
+          
+        }else{
+          list[index][data?.name] =
+          e?.length > 0
+            ? e?.map((i) => i.id)
+            : e === null
+            ? []
+            : e.value === "ALL"
+            ? e.id
+            : [e.id];
+        }
     setMobileList(list);
+
   };
   //  useEffect(()=>{
   // if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
@@ -268,12 +278,24 @@ function Mobile({
           </div> */}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4 items-end">
+             <div className="flex gap-5 items-center mt-4">
+            <label className="form-label me-4 font-bold">Till Date :</label>
+            <input
+              type="checkbox"
+              name="till_date"
+              id=""
+              checked={val?.till_date}
+              onChange={(e) => mobileInputChange(e, i)}
+              disabled={!isEditable && requestData}
+            />
+          </div>
             <div>
               <label className="font-bold">Select TSP</label>
               <Select
                 name="tsp"
                 placeholder="Select TSP"
                 options={tspdata}
+                // value={[{id:1,label:"AIRTEL"}]}
                 value={tspdata?.filter((obj) =>
                   MobileList[i]?.tsp?.includes(obj?.id)
                 )}
@@ -284,7 +306,10 @@ function Mobile({
                 isDisabled={!isEditable && requestData}
                 isClearable={true}
                 required
+                isMulti={true}
               />
+              {console.log(MobileList,'list')
+              }
             </div>
             {!requestData || isEditable ? (
               <div className="flex gap-5 mt-4 sm:mt-0 justify-start align-end">

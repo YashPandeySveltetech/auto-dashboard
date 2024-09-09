@@ -31,6 +31,8 @@ function Ild({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IldList];
+    console.log(list);
+    
     list[index][data?.name] =
       e?.length > 0
         ? e?.map((i) => i.id)
@@ -217,6 +219,7 @@ function Ild({
                   isDisabled={!isEditable && requestData}
                   isClearable={true}
                   required
+                  isMulti={true}
                 />
               </div>
 
@@ -246,7 +249,7 @@ function Ild({
               )}
             </div>
           </div>
-          <hr className="font-bold" />
+          {/* <hr className="font-bold" /> */}
         </>
       ))}
       {/* {      <button

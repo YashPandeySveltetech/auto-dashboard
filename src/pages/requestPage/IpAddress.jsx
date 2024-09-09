@@ -191,6 +191,7 @@ function IpAddress({
                   isDisabled={
                     (!isEditable && requestData) || IpList?.length > 1
                   }
+                  isMulti={true}
                   required
                 />
               </div>

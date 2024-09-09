@@ -193,6 +193,7 @@ function CellId({
                   isClearable={true}
                   isDisabled={!isEditable && requestData}
                   required
+                  isMulti={true}
                 />
               </div>
 

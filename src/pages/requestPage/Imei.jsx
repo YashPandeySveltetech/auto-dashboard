@@ -290,6 +290,7 @@ function Imei({
                   isClearable={true}
                   isDisabled={!isEditable && requestData}
                   required
+                  isMulti={true}  
                 />
               </div>
 

@@ -67,9 +67,9 @@ function Mobile({
         time_to: "00:00",
         mobile_number: "",
         till_date: false,
-        tsp: [],
+        tsp: MobileList[0]?.tsp,
         target_type: activeForm?.target_type_id,
-        request_to_provide: [],
+        request_to_provide: MobileList[0].request_to_provide,
       },
     ]);
   };

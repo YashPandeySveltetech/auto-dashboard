@@ -57,9 +57,9 @@ function CellId({
         time_to: "00:00",
         till_date: false,
         mobile_number: "",
-        tsp: [],
+        tsp: cellIdList[0].tsp,
         target_type: activeForm?.target_type_id,
-        request_to_provide: [],
+        request_to_provide: cellIdList[0].request_to_provide,
       },
     ]);
   };

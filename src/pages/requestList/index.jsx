@@ -417,7 +417,7 @@ function RequestList() {
         dispatch(setLoading(false));
       } else {
         Toaster("", "No Data Found");
-         dispatch(setLoading(false));
+        dispatch(setLoading(false));
       }
     }
   };
@@ -484,8 +484,8 @@ function RequestList() {
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload.results);
       setTotalPageCount(res?.responsePayload?.count);
-      setCurrentPage(0)
-      
+      setCurrentPage(0);
+
       setFilter({
         req_to_provider: "",
         form_status: "",

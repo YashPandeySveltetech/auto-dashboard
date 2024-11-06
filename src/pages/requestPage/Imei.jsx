@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -18,22 +18,22 @@ function Imei({
   isother,
 }) {
   const ImeiInputChange = (e, index) => {
-    const { name, value, checked } = e.target;
+    const {name, value, checked} = e.target;
 
     const list = [...ImeiList];
-    list[index][name] = name == "till_date" ? checked : value;
+    if (name === "till_date") {
+      list[index][name] = checked; // For checkboxes, set checked value
+    } else if (name === "imei") {
+      if (value.length <= 15) {
+        list[index][name] = value; // Set mobile number if length is <= 10
+      } else {
+        return; // Prevent adding more than 10 digits
+      }
+    } else {
+      list[index][name] = value; // For other fields, set the value
+    }
 
     list[index]["target_type"] = activeForm?.target_type_id;
-    if (name === "imei") {
-      if (value.length <= 15) {
-        setImeiList({
-          ...ImeiList,
-          [name]: value,
-        });
-      } else {
-        return;
-      }
-    }
     setImeiList(list);
   };
 
@@ -91,7 +91,7 @@ function Imei({
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
-            style={{ background: "#FFFAFA" }}
+            style={{background: "#FFFAFA"}}
             key={i}
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2  items-center">
@@ -290,7 +290,7 @@ function Imei({
                   isClearable={true}
                   isDisabled={!isEditable && requestData}
                   required
-                  isMulti={true}  
+                  isMulti={true}
                 />
               </div>
 

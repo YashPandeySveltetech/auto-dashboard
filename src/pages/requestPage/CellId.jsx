@@ -11,24 +11,39 @@ function CellId({
   requestprovide,
   isEditable,
 }) {
-  const mobileInputChange = (e, index) => {
-    const { name, value, checked } = e?.target;
-    const list = [...cellIdList];
-    list[index][name] = name == "till_date" ? checked : value;
-    list[index]["target_type"] = activeForm?.target_type_id;
+  // const mobileInputChange = (e, index) => {
+  //   const {name, value, checked} = e?.target;
+  //   const list = [...cellIdList];
+  //   list[index][name] = name == "till_date" ? checked : value;
+  //   list[index]["target_type"] = activeForm?.target_type_id;
 
-    setCellIdList(list);
-  };
+  //   setCellIdList(list);
+  // };
   const dropdownChange = (e, data, index) => {
     const list = [...cellIdList];
     list[index][data?.name] =
       e?.length > 0
         ? e?.map((i) => i.id)
-        : e === null
+        : e?.length === 0
         ? []
         : e.value === "ALL"
         ? e.id
         : [e.id];
+    setCellIdList(list);
+  };
+
+  const mobileInputChange = (e, index) => {
+    const {name, value, checked} = e.target;
+    const list = [...cellIdList];
+
+    if (name === "till_date") {
+      list[index][name] = checked;
+    } else {
+      list[index][name] = value;
+    }
+
+    list[index]["target_type"] = activeForm?.target_type_id;
+
     setCellIdList(list);
   };
 
@@ -63,7 +78,7 @@ function CellId({
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
-            style={{ background: "#FFFAFA" }}
+            style={{background: "#FFFAFA"}}
             key={i}
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
@@ -226,7 +241,6 @@ function CellId({
           <hr className="font-bold" />
         </>
       ))}
-     
     </>
   );
 }

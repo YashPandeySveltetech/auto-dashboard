@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -12,31 +12,33 @@ function Ild({
   isEditable,
 }) {
   const ildInputChange = (e, index) => {
-    const { name, value, checked } = e?.target;
+    const {name, value, checked} = e?.target;
     const list = [...IldList];
-    list[index][name] = name == "till_date" ? checked : value;
-    list[index]["target_type"] = activeForm?.target_type_id;
-    if (name === "mobile_number") {
+    if (name === "till_date") {
+      list[index][name] = checked; // For checkboxes, set checked value
+    } else if (name === "mobile_number") {
       if (value.length <= 10) {
-        setIldList({
-          ...IldList,
-          [name]: value,
-        });
+        list[index][name] = value; // Set mobile number if length is <= 10
       } else {
-        return;
+        return; // Prevent adding more than 10 digits
       }
+    } else {
+      list[index][name] = value;
     }
+
+    list[index]["target_type"] = activeForm?.target_type_id;
+
     setIldList(list);
   };
 
   const dropdownChange = (e, data, index) => {
     const list = [...IldList];
     console.log(list);
-    
+
     list[index][data?.name] =
       e?.length > 0
         ? e?.map((i) => i.id)
-        : e === null
+        : e?.length === 0
         ? []
         : e.value === "ALL"
         ? e.id
@@ -82,7 +84,7 @@ function Ild({
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
-            style={{ background: "#FFFAFA" }}
+            style={{background: "#FFFAFA"}}
             key={i}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4  items-center">

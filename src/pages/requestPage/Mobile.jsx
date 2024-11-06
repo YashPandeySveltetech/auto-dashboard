@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -12,44 +12,43 @@ function Mobile({
   isEditable,
 }) {
   const mobileInputChange = (e, index) => {
-    const { name, value, checked } = e?.target;
+    const {name, value, checked} = e.target;
     const list = [...MobileList];
-    list[index][name] = name == "till_date" ? checked : value;
-    list[index]["target_type"] = activeForm?.target_type_id;
-    if (name === "mobile_number") {
+
+    if (name === "till_date") {
+      list[index][name] = checked; // For checkboxes, set checked value
+    } else if (name === "mobile_number") {
       if (value.length <= 10) {
-        setMobileList({
-          ...MobileList,
-          [name]: value,
-        });
+        list[index][name] = value; // Set mobile number if length is <= 10
       } else {
-        return;
+        return; // Prevent adding more than 10 digits
       }
+    } else {
+      list[index][name] = value; // For other fields, set the value
     }
-    setMobileList(list);
+
+    list[index]["target_type"] = activeForm?.target_type_id;
+
+    setMobileList(list); // Update the list in state
   };
 
   const dropdownChange = (e, data, index) => {
     const list = [...MobileList];
     console.log(e[index]?.id, list, "list");
-    
-   
-        if(e[index]?.id==="ALL"){
-          
-          list[index][data?.name]=[1,3,4]
-          
-        }else{
-          list[index][data?.name] =
-          e?.length > 0
-            ? e?.map((i) => i.id)
-            : e === null
-            ? []
-            : e.value === "ALL"
-            ? e.id
-            : [e.id];
-        }
-    setMobileList(list);
 
+    if (e[index]?.id === "ALL") {
+      list[index][data?.name] = [1, 3, 4];
+    } else {
+      list[index][data?.name] =
+        e?.length > 0
+          ? e?.map((i) => i.id)
+          : e?.length === 0
+          ? []
+          : e.value === "ALL"
+          ? e.id
+          : [e.id];
+    }
+    setMobileList(list);
   };
   //  useEffect(()=>{
   // if(requestData&& Object.keys(requestData?.form_request_for).includes("multiple_mobile")){
@@ -105,7 +104,7 @@ function Mobile({
       {MobileList?.map((val, i) => (
         <div
           className="shadow-lg shadow-gray-500/50 p-5 "
-          style={{ background: "#FFFAFA", border:"" }}
+          style={{background: "#FFFAFA", border: ""}}
           key={i}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
@@ -278,17 +277,17 @@ function Mobile({
           </div> */}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4 items-end">
-             <div className="flex gap-5 items-center mt-4">
-            <label className="form-label me-4 font-bold">Till Date :</label>
-            <input
-              type="checkbox"
-              name="till_date"
-              id=""
-              checked={val?.till_date}
-              onChange={(e) => mobileInputChange(e, i)}
-              disabled={!isEditable && requestData}
-            />
-          </div>
+            <div className="flex gap-5 items-center mt-4">
+              <label className="form-label me-4 font-bold">Till Date :</label>
+              <input
+                type="checkbox"
+                name="till_date"
+                id=""
+                checked={val?.till_date}
+                onChange={(e) => mobileInputChange(e, i)}
+                disabled={!isEditable && requestData}
+              />
+            </div>
             <div>
               <label className="font-bold">Select TSP</label>
               <Select
@@ -308,8 +307,7 @@ function Mobile({
                 required
                 isMulti={true}
               />
-              {console.log(MobileList,'list')
-              }
+              {console.log(MobileList, "list")}
             </div>
             {!requestData || isEditable ? (
               <div className="flex gap-5 mt-4 sm:mt-0 justify-start align-end">
@@ -318,7 +316,7 @@ function Mobile({
                     type="button"
                     className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none "
                     onClick={() => removeMobileClick(i)}
-                    style={{ height: "2.5rem" }}
+                    style={{height: "2.5rem"}}
                   >
                     Remove
                   </button>
@@ -328,7 +326,7 @@ function Mobile({
                     type="button"
                     className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none "
                     onClick={addMobileClick}
-                    style={{ height: "2.5rem" }}
+                    style={{height: "2.5rem"}}
                   >
                     Add New Form
                   </button>

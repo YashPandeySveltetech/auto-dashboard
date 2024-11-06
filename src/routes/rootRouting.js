@@ -1,6 +1,6 @@
 /** @format */
 
-import { memo, Suspense, lazy, useEffect } from "react";
+import { memo, Suspense, lazy, useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AuthRoute, PublicRoute } from "./authRoute";
 import LoginPage from "../pages/loginPage";
@@ -18,10 +18,24 @@ import RejectList from "../pages/requestList/rejectList";
 import Toaster from "../utils/toaster/Toaster";
 import UpdateUser from "../pages/UpdateUser/UpdateUser";
 import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
+import { refreshToken } from "../utils/ApiHandle";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
+  const [isLoading, setIsLoading] = useState(true);
   const Loading = useSelector((state) => state?.common?.loading);
+
+  useEffect(() => {
+    async function fetchToken() {
+      await refreshToken();
+      setIsLoading(false);
+    }
+
+    fetchToken();
+  }, []);
+
+  if (isLoading) return <Loader />;
+
   return (
     <main>
       {Loading && <Loader />}

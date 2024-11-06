@@ -10,6 +10,28 @@ function getNextFiveMinutesDate() {
 
 let isReqProcessing = false;
 
+const refreshToken = async () => {
+  const baseUrl = process.env.REACT_APP_API_KEY;
+  let token = localStorage.getItem("refresh");
+  const expTime = localStorage.getItem("expire_time");
+  const currTime = new Date();
+
+  if (token && currTime >= expTime) {
+    const response = await axios.post(`${baseUrl}${REFRESH}`, {
+      refresh: token,
+    });
+    if (response.status === 200) {
+      token = response.data.access;
+      localStorage.setItem("token", token);
+      localStorage.setItem("expire_time", getNextFiveMinutesDate());
+
+      return true;
+    }
+  }
+
+  return false;
+};
+
 const ApiHandle = async (endPoint, payload, method, isFormData) => {
   let token = localStorage.getItem("token");
   let refresh = localStorage.getItem("refresh");
@@ -20,7 +42,6 @@ const ApiHandle = async (endPoint, payload, method, isFormData) => {
   if (token && !isReqProcessing && currTime >= expTime) {
     isReqProcessing = true;
     const response = await axios.post(`${baseUrl}${REFRESH}`, { refresh });
-    console.log(response);
     if (response.status === 200) {
       token = response.data.access;
       localStorage.setItem("token", token);
@@ -75,4 +96,4 @@ const ApiHandle = async (endPoint, payload, method, isFormData) => {
   }
 };
 
-export { ApiHandle };
+export { ApiHandle, refreshToken };

@@ -1,9 +1,34 @@
 import axios from "axios";
 import { Error400_401 } from "./Error400_401";
 import { toast } from "react-toastify";
+import { REFRESH } from "./constants";
+
+function getNextFiveMinutesDate() {
+  const now = new Date();
+  return now.setMinutes(now.getMinutes() + 5);
+}
+
+let isReqProcessing = false;
+
 const ApiHandle = async (endPoint, payload, method, isFormData) => {
-  const token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
+  let refresh = localStorage.getItem("refresh");
+  const expTime = localStorage.getItem("expire_time");
+  const currTime = new Date();
   const baseUrl = process.env.REACT_APP_API_KEY;
+
+  if (token && !isReqProcessing && currTime >= expTime) {
+    isReqProcessing = true;
+    const response = await axios.post(`${baseUrl}${REFRESH}`, { refresh });
+    console.log(response);
+    if (response.status === 200) {
+      token = response.data.access;
+      localStorage.setItem("token", token);
+      localStorage.setItem("expire_time", getNextFiveMinutesDate());
+      isReqProcessing = false;
+    }
+  }
+
   let headers = {};
   if (!isFormData) {
     headers["Content-Type"] = "application/json";

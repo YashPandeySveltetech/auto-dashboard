@@ -13,11 +13,6 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/reducers/userReducer";
 import Loader from "../../components/loader/Loader";
 
-function getNextFiveMinutesDate() {
-  const now = new Date();
-  return now.setMinutes(now.getMinutes() + 5);
-}
-
 function LoginPage() {
   const [loginWith, setLoginWith] = useState("email");
   const [formValue, setFormValue] = useState({});
@@ -51,7 +46,6 @@ function LoginPage() {
       setIsLoading(false);
       localStorage.setItem("token", res.responsePayload.access);
       localStorage.setItem("refresh", res.responsePayload.refresh);
-      localStorage.setItem("expire_time", getNextFiveMinutesDate());
 
       dispatch(setUserData(res?.responsePayload));
       localStorage.setItem(

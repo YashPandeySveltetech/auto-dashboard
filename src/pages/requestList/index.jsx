@@ -1,7 +1,7 @@
 /** @format */
 
-import React, {useCallback, useEffect, useState} from "react";
-import {ApiHandle} from "../../utils/ApiHandle";
+import React, { useCallback, useEffect, useState } from "react";
+import { ApiHandle } from "../../utils/ApiHandle";
 import {
   FORM_REQUEST,
   APPROVE_REQUEST,
@@ -9,11 +9,11 @@ import {
   EXPORT_DCP_FILE,
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import FilterSection from "./filterSection";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import {setLoading} from "../../redux/reducers/commonReducer";
+import { setLoading } from "../../redux/reducers/commonReducer";
 import {
   DcpPassowrdConfirm,
   openDcpPasswordVerifyModal,
@@ -25,10 +25,10 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Title from "../../utils/Title";
-import {EyeFill} from "react-bootstrap-icons";
-import {Pagination} from "@mui/material";
+import { EyeFill } from "react-bootstrap-icons";
+import { Pagination } from "@mui/material";
 import CustomPagination from "../../components/pagination/CustomPagination";
-import {jsPDF} from "jspdf";
+import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Modal from "react-modal";
 
@@ -37,9 +37,9 @@ function RequestList() {
   const baseUrl = process.env.REACT_APP_API_KEY;
   const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
-  const {rank} = useSelector((state) => state.user?.userData);
+  const { rank } = useSelector((state) => state.user?.userData);
   const Loading = useSelector((state) => state?.common?.loading);
-  const {updateReqList, isDcpPassword, dcpStatus} = useSelector(
+  const { updateReqList, isDcpPassword, dcpStatus } = useSelector(
     (state) => state.modal
   );
   const [isNext, setIsNext] = useState(false);
@@ -59,11 +59,11 @@ function RequestList() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    getAllRequest({active: 1});
+    getAllRequest({ active: 1 });
   }, []);
   const [requestList, setRequestList] = useState([]);
 
-  const getAllRequest = async ({active = 1}) => {
+  const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
@@ -87,6 +87,7 @@ function RequestList() {
     );
 
     if (res.statusCode === 200) {
+      console.log(res, "response code");
       setRequestList(res?.responsePayload.results);
       setTotalPageCount(res?.responsePayload?.count);
       dispatch(setLoading(false));
@@ -126,7 +127,7 @@ function RequestList() {
 
   useEffect(() => {
     if (updateReqList) {
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
     }
   }, [updateReqList]);
 
@@ -148,16 +149,16 @@ function RequestList() {
       });
     }
   }, [isDcpPassword]);
-  const approveRequest = async ({requestId, approved_desion_id}) => {
+  const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
-      {request_form: requestId},
+      { request_form: requestId },
       "PATCH"
     );
     if (res.statusCode === 200) {
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
       dispatch(DcpPassowrdConfirm(false));
       Toaster("success", "Request Approved Successfully!");
 
@@ -165,7 +166,7 @@ function RequestList() {
     }
   };
 
-  const viewAttachment = async ({requets_form_id}) => {
+  const viewAttachment = async ({ requets_form_id }) => {
     const res = await ApiHandle(
       VIEW_ATTACHMENTS + `?request_form=${requets_form_id}`,
       {},
@@ -354,7 +355,7 @@ function RequestList() {
         startY: yOffset,
         head: [filteredHeaders],
         body: tableDataFormatted,
-        margin: {left: 4, right: 5},
+        margin: { left: 4, right: 5 },
         headStyles: {
           fillColor: "#000000",
           textColor: "#FFFFFF",
@@ -370,7 +371,7 @@ function RequestList() {
         columnStyles: (() => {
           let styles = {};
           for (let i = 0; i < numColumns; i++) {
-            styles[i] = {cellWidth: cellWidth};
+            styles[i] = { cellWidth: cellWidth };
           }
           return styles;
         })(),
@@ -468,13 +469,13 @@ function RequestList() {
       bookType: "xlsx",
       type: "array",
     });
-    const fileData = new Blob([excelBuffer], {type: fileType});
+    const fileData = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(
       fileData,
       "file" + new Date().toLocaleDateString("en-GB") + fileExtension
     );
   };
-  const clearFilter = async ({active = 1}) => {
+  const clearFilter = async ({ active = 1 }) => {
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=&page=${active}&is_otp_verified=${true}&sys_date=`,
@@ -482,6 +483,7 @@ function RequestList() {
       "GET"
     );
     if (res.statusCode === 200) {
+      console.log(res, "response");
       setRequestList(res?.responsePayload.results);
       setTotalPageCount(res?.responsePayload?.count);
       setCurrentPage(0);
@@ -498,7 +500,7 @@ function RequestList() {
         fir_no: "",
       });
 
-      setDateRange({startDate: null, endDate: null});
+      setDateRange({ startDate: null, endDate: null });
       if (res?.responsePayload?.next) {
         // setCurrentpage(currentpage+1)
         setIsNext(true);
@@ -571,19 +573,19 @@ function RequestList() {
           },
         }}
       >
-        <h1 style={{textAlign: "center", marginBottom: "20px"}}>
+        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
           <b>
             <u>Select Headers to Export</u>
           </b>
         </h1>
-        <div style={{marginBottom: "20px", marginLeft: "30px"}}>
+        <div style={{ marginBottom: "20px", marginLeft: "30px" }}>
           {Object.keys(selectedHeaders).map((header) => (
-            <div key={header} style={{marginBottom: "10px"}}>
+            <div key={header} style={{ marginBottom: "10px" }}>
               <input
                 type="checkbox"
                 checked={selectedHeaders[header]}
                 onChange={() => handleCheckboxChange(header)}
-                style={{marginRight: "10px"}}
+                style={{ marginRight: "10px" }}
               />
               <label>{header}</label>
             </div>
@@ -649,7 +651,7 @@ function RequestList() {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 border">
               <thead
                 className="text-center text-xs text-gray-700 uppercase bg-gray-50"
-                style={{backgroundColor: "black", color: "white"}}
+                style={{ backgroundColor: "black", color: "white" }}
               >
                 <tr>
                   <th scope="col" className="px-6 py-3">
@@ -696,37 +698,37 @@ function RequestList() {
                     <td
                       scope="row"
                       className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap d"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {new Date(item?.created_on).toLocaleString("en-GB")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.added_by}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.io_name}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.fir_no}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.request_to_provide).replace("_", " ")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.target_type).replace("_", " ")}
                     </td>

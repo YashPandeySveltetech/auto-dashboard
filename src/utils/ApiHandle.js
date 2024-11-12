@@ -12,6 +12,8 @@ function onAccessTokenRefreshed(callback) {
 }
 
 const refreshToken = async () => {
+  console.log("c;;;;");
+
   if (isRefreshing) {
     return new Promise((resolve) => {
       onAccessTokenRefreshed(resolve);

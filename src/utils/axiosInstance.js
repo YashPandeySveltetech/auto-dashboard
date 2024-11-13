@@ -2,7 +2,7 @@ import axios from "axios";
 import { refreshToken } from "./ApiHandle";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_KEY,
+  baseURL: "http://192.168.15.87:8007/api",
 });
 
 // Request interceptor to add the access token to headers

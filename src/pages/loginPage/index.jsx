@@ -122,7 +122,6 @@ function LoginPage() {
           name="otp"
           value={verifyUser?.otp}
           textColor={"text-white"}
-
         />
 
         <div
@@ -157,7 +156,9 @@ function LoginPage() {
   return (
     <div className=" h-[100vh]  flex justify-center items-center w-[100%] bgimg ">
       <div className="my-3d-watercolor-div">
-        <div className="text-2xl font-extrabold	text-center text-white   ">Login</div>
+        <div className="text-2xl font-extrabold	text-center text-white   ">
+          Login
+        </div>
         <div className=" flex justify-center gap-5 flex-col ">
           <form onSubmit={isOtp ? SubmitOTP : handleSubmit} className="">
             {loginWith === "email"
@@ -167,7 +168,6 @@ function LoginPage() {
               : ""}
             <div className="input-group mb-3" style={{ position: "relative" }}>
               <Input
-              
                 onChange={handleChange}
                 className="custom-input"
                 label={"Password"}
@@ -198,7 +198,7 @@ function LoginPage() {
             ) : (
               <>
                 {isLoading ? (
-                 <span className="text-white"> "Otp Sending..."</span>
+                  <span className="text-white"> "Otp Sending..."</span>
                 ) : (
                   <div className="col flex align-items-center justify-center">
                     <button

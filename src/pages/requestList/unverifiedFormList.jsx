@@ -1,36 +1,36 @@
 /** @format */
 
-import React, {useEffect, useState} from "react";
-import {ApiHandle} from "../../utils/ApiHandle";
+import React, { useEffect, useState } from "react";
+import { ApiHandle } from "../../utils/ApiHandle";
 import {
   FORM_REQUEST,
   APPROVE_REQUEST,
   VIEW_ATTACHMENTS,
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import FilterSection from "./filterSection";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
   openViewLogModal,
   otpValidationModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
-import {FiEye} from "react-icons/fi";
-import {async} from "q";
+import { FiEye } from "react-icons/fi";
+import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // import OtpValidationModal from "../../modals/otpValidationModal";
-import {setLoading} from "../../redux/reducers/commonReducer";
+import { setLoading } from "../../redux/reducers/commonReducer";
 import Title from "../../utils/Title";
 import CustomPagination from "../../components/pagination/CustomPagination";
 
 function UnverifiedFormList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {rank} = useSelector((state) => state.user?.userData);
-  const {updateReqList} = useSelector((state) => state.modal);
-  
+  const { rank } = useSelector((state) => state.user?.userData);
+  const { updateReqList } = useSelector((state) => state.modal);
+
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [dateRange, setDateRange] = useState({
@@ -40,13 +40,12 @@ function UnverifiedFormList() {
   const [unverifiedTotalCount, setUnverifiedTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
-
   useEffect(() => {
-    getAllRequest({active: 1});
+    getAllRequest({ active: 1 });
   }, []);
   const [requestList, setRequestList] = useState([]);
 
-  const getAllRequest = async ({active = 1}) => {
+  const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
@@ -64,7 +63,7 @@ function UnverifiedFormList() {
           filter?.target_type
         }&target_type_value=${filter?.target_type_value}`,
       {},
-      "GET"
+      "get"
     );
     console.log(filter, "filter");
     if (res.statusCode === 200) {
@@ -97,15 +96,15 @@ function UnverifiedFormList() {
   };
   const handleNext = () => {
     setCurrentPage(currentPage + 1);
-    getAllRequest({active: currentPage + 1});
+    getAllRequest({ active: currentPage + 1 });
   };
   const handlePrevious = () => {
     setCurrentPage(currentPage - 1);
-    getAllRequest({active: currentPage - 1});
+    getAllRequest({ active: currentPage - 1 });
   };
   useEffect(() => {
     if (updateReqList) {
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
     }
   }, [updateReqList]);
 
@@ -117,27 +116,27 @@ function UnverifiedFormList() {
     target_type: "",
     target_type_value: "",
   });
-  const approveRequest = async ({requestId, approved_desion_id}) => {
+  const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
-      {request_form: requestId},
+      { request_form: requestId },
       "PATCH"
     );
     if (res.statusCode === 200) {
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
       Toaster("success", "Request Approved Successfully!");
 
       return;
     }
   };
 
-  const viewAttachment = async ({requets_form_id}) => {
+  const viewAttachment = async ({ requets_form_id }) => {
     const res = await ApiHandle(
       VIEW_ATTACHMENTS + `?request_form=${requets_form_id}`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       if (res?.responsePayload?.results[0].file) {
@@ -152,7 +151,7 @@ function UnverifiedFormList() {
       return;
     }
   };
-  const clearFilter = async ({active = 1}) => {
+  const clearFilter = async ({ active = 1 }) => {
     setFilter({
       req_to_provider: "",
       form_status: "",
@@ -162,12 +161,12 @@ function UnverifiedFormList() {
       target_type: "",
       target_type_value: "",
     });
-    setDateRange({startDate: null, endDate: null});
+    setDateRange({ startDate: null, endDate: null });
     const res = await ApiHandle(
       FORM_REQUEST +
         `?decision_type=PENDING&page=${active}&is_otp_verified=${false}&sys_date=`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       setRequestList(res?.responsePayload);
@@ -212,7 +211,7 @@ function UnverifiedFormList() {
           <div className=" overflow-x-auto p-3 ">
             <table
               className="w-full text-sm text-left rtl:text-right text-gray-500 "
-              style={{border: "1px solid black"}}
+              style={{ border: "1px solid black" }}
             >
               <thead
                 className="text-center text-xs text-black uppercase bg-red-200 "
@@ -255,25 +254,25 @@ function UnverifiedFormList() {
 
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.request_to_provide).replace("_", " ")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.target_type).replace("_", " ")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.io_name}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.fir_no}
                     </td>
@@ -311,7 +310,7 @@ function UnverifiedFormList() {
                             ? navigate(
                                 `/request/view/${item?.request_to_provide[0]}/${item?.id}`
                               )
-                            : dispatch(otpValidationModal({id: item?.id}));
+                            : dispatch(otpValidationModal({ id: item?.id }));
                         }}
                         className="bg-blue-300 p-2 rounded-lg font-bold"
                         style={{
@@ -327,7 +326,7 @@ function UnverifiedFormList() {
                             ? navigate(
                                 `/request/edit/${item?.request_to_provide[0]}/${item?.id}`
                               )
-                            : dispatch(otpValidationModal({id: item?.id}));
+                            : dispatch(otpValidationModal({ id: item?.id }));
                         }}
                         className="bg-green-300 p-2 rounded-lg font-bold"
                         style={{

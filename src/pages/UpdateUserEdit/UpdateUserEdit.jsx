@@ -23,7 +23,7 @@ const UpdateUserEdit = () => {
   const [modal, setModal] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     setFormField({
       ...formField,
       [name]: value,
@@ -31,11 +31,10 @@ const UpdateUserEdit = () => {
   };
   const getUser = async () => {
     dispatch(setLoading(true));
-    const res = await ApiHandle(`${REGISTRATION}${id}/`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}${id}/`, {}, "get");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
 
-    
       setFormField({
         email: res.responsePayload.email,
         username: res.responsePayload.username,
@@ -50,13 +49,12 @@ const UpdateUserEdit = () => {
       "PATCH"
     );
     if (res.statusCode === 200) {
-
       setFormField({
         email: res.responsePayload.email,
         username: res.responsePayload.username,
         mobile: res.responsePayload.mobile_no,
       });
-      Toaster("success","Update Successfully")
+      Toaster("success", "Update Successfully");
     }
   };
   useEffect(() => {

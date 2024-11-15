@@ -12,8 +12,7 @@ const RequestEdit = () => {
     getAllRequest();
   }, []);
   const getAllRequest = async () => {
-  
-    const res = await ApiHandle(`${FORM_REQUEST}${id}/`, {}, "GET");
+    const res = await ApiHandle(`${FORM_REQUEST}${id}/`, {}, "get");
     if (res.statusCode === 200) {
       setRequestData(res?.responsePayload);
       return;

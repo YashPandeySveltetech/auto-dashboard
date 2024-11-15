@@ -34,9 +34,9 @@ function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email, username } = useSelector(
     (state) => state.user?.userData
   );
-  const refresh = localStorage.getItem("refresh")
-    ? localStorage.getItem("refresh")
-    : null;
+  // const refresh = localStorage.getItem("refresh")
+  //   ? localStorage.getItem("refresh")
+  //   : null;
   // console.log(typeof token)
   const list = [
     {
@@ -90,7 +90,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   //     {
   //       refresh: refresh,
   //     },
-  //     "POST"
+  //     "post"
   //   );
   //   if (res.statusCode === 200) {
   //     localStorage.setItem("token", res?.responsePayload.access);
@@ -110,7 +110,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   }, []);
 
   const handleUserDetail = async () => {
-    const res = await ApiHandle(USER_DETAIL, {}, "GET");
+    const res = await ApiHandle(USER_DETAIL, {}, "get");
 
     if (res.statusCode === 200) {
       dispatch(setUserData(res?.responsePayload));

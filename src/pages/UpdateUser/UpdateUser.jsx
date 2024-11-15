@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {ApiHandle} from "../../utils/ApiHandle";
-import {REGISTRATION} from "../../utils/constants";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { ApiHandle } from "../../utils/ApiHandle";
+import { REGISTRATION } from "../../utils/constants";
+import { useNavigate, useParams } from "react-router-dom";
 import Title from "../../utils/Title";
-import {setLoading} from "../../redux/reducers/commonReducer";
-import {useDispatch} from "react-redux";
+import { setLoading } from "../../redux/reducers/commonReducer";
+import { useDispatch } from "react-redux";
 import CustomPagination from "../../components/pagination/CustomPagination";
 
 const UpdateUser = () => {
@@ -17,9 +17,7 @@ const UpdateUser = () => {
   const [isPrevious, setIsPrevious] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
 
-
   const handleReportingToSelect = async (rank, active) => {
-  
     dispatch(setLoading(true));
     const rankType = rank ? rank : "ACP";
     setRank(rankType);
@@ -31,7 +29,7 @@ const UpdateUser = () => {
     const res = await ApiHandle(
       `${REGISTRATION}?rank=${rankType}&page=${active}`,
       {},
-      "GET"
+      "get"
     );
 
     if (res.statusCode === 200) {
@@ -153,11 +151,11 @@ const UpdateUser = () => {
         <div className="overflow-x-auto p-3 z-[-1]">
           <table
             className="w-full text-sm text-left rtl:text-center text-gray-500  "
-            style={{border: "1px solid black"}}
+            style={{ border: "1px solid black" }}
           >
             <thead
               className="text-xs text-gray-700 uppercase bg-gray-50  "
-              style={{backgroundColor: "black", color: "white"}}
+              style={{ backgroundColor: "black", color: "white" }}
             >
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -216,19 +214,19 @@ const UpdateUser = () => {
                   </th>
                   <td
                     className="px-6 py-4 font-semibold text-gray-900"
-                    style={{color: "black"}}
+                    style={{ color: "black" }}
                   >
                     {item?.username}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
-                    style={{color: "black"}}
+                    style={{ color: "black" }}
                   >
                     {item?.mobile_no}
                   </td>
                   <td
                     className="px-6 py-4 font-semibold"
-                    style={{color: "black"}}
+                    style={{ color: "black" }}
                   >
                     {item?.email}
                   </td>

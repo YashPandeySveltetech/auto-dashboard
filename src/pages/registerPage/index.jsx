@@ -70,7 +70,7 @@
 //     e.preventDefault();
 //     dispatch(setLoading(true));
 //     setSubmitting(true);
-//     const res = await ApiHandle(REGISTRATION, formData, "POST");
+//     const res = await ApiHandle(REGISTRATION, formData, "post");
 //     if (res.statusCode === 201) {
 //       setFormData(defaultFormaData);
 //       setSelectedReportingTo("");
@@ -88,7 +88,7 @@
 //     const { name, value } = e.target;
 //     setSelectedReportingTo(value);
 //     setSelectedRank("");
-//     const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");
+//     const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "get");
 
 //     if (res.statusCode === 200) {
 //       const data = res.responsePayload.results;
@@ -118,7 +118,7 @@
 //     const res = await ApiHandle(
 //       `${GET_POLICE_STATION_LIST}?district_id=${DistrictValue}`,
 //       {},
-//       "GET"
+//       "get"
 //     );
 //     if (res.statusCode === 200) {
 //       const data = res?.responsePayload;
@@ -127,7 +127,7 @@
 //     }
 //   };
 //   const getStates = async () => {
-//     const res = await ApiHandle(GET_STATES, {}, "GET");
+//     const res = await ApiHandle(GET_STATES, {}, "get");
 //     if (res.statusCode === 200) {
 //       const data = res?.responsePayload;
 //       setStateOptions(data);
@@ -365,10 +365,10 @@ const RegisterForm = () => {
   const handleClick = ({ is_ACP }) => {
     dispatch(setRank(is_ACP));
     setIsModalOpen(true);
-    console.log(isACP,"acp");
-    setFormData((prev)=>({...prev,rank:isACP?"ACP":"SHO"}))
+    console.log(isACP, "acp");
+    setFormData((prev) => ({ ...prev, rank: isACP ? "ACP" : "SHO" }));
   };
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
     setFormData(defaultFormaData);
@@ -377,7 +377,7 @@ const RegisterForm = () => {
     e.preventDefault();
     dispatch(setLoading(true));
     setSubmitting(true);
-    const res = await ApiHandle(REGISTRATION, formData, "POST");
+    const res = await ApiHandle(REGISTRATION, formData, "post");
     if (res.statusCode === 201) {
       setFormData(defaultFormaData);
       setSelectedReportingTo("");
@@ -430,7 +430,7 @@ const RegisterForm = () => {
     // value = isACP ? "DCP" : "ACP";
     // setSelectedReportingTo(value);
     setSelectedRank("");
-    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "get");
 
     if (res.statusCode === 200) {
       const data = res.responsePayload.results;
@@ -441,7 +441,7 @@ const RegisterForm = () => {
     const res = await ApiHandle(
       `${GET_POLICE_STATION_LIST}?district_id=${DistrictValue}`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
@@ -456,7 +456,7 @@ const RegisterForm = () => {
   };
 
   const getStates = async () => {
-    const res = await ApiHandle(GET_STATES, {}, "GET");
+    const res = await ApiHandle(GET_STATES, {}, "get");
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
       setStateOptions(data);
@@ -474,30 +474,36 @@ const RegisterForm = () => {
       <Title text={"Registration"} />
       <div
         className="outer-div-whole flex flex-col min-h-screen justify-center bg-img"
-        style={{ margin: "10px", }}
+        style={{ margin: "10px" }}
       >
         <div className="flex justify-center items-center">
-          <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-2 gap-8" 
-            style={{display:"flex",justifyContent:"center",gap:"43px", flexWrap:"wrap"}}  
-   
->
+          <div
+            className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-2 gap-8"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "43px",
+              flexWrap: "wrap",
+            }}
+          >
             <div className="w-[90%] md:w-[30%]">
               <Card
                 title="SHO"
                 imageSrc="./police-officer.png"
-   
-                onclick={(e) =>{ handleClick({ is_ACP: true })
-                 handleReportingToSelect("ACP") }}
-                
+                onclick={(e) => {
+                  handleClick({ is_ACP: true });
+                  handleReportingToSelect("ACP");
+                }}
               />
             </div>
             <div className="w-[90%] md:w-[30%] ">
               <Card
                 title="ACP"
                 imageSrc="./dcp.png"
-                onclick={() => {handleClick({ is_ACP: false })
-                handleReportingToSelect("DCP") 
-              }}
+                onclick={() => {
+                  handleClick({ is_ACP: false });
+                  handleReportingToSelect("DCP");
+                }}
               />
             </div>
           </div>

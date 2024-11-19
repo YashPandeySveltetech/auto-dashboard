@@ -5,117 +5,136 @@ import { toast } from "react-toastify";
 
 const baseUrl = process.env.REACT_APP_API_KEY;
 
-let accessToken = localStorage.getItem("token");
-let refreshToken = localStorage.getItem("refresh");
+// Token management helper functions
+const getAccessToken = () => localStorage.getItem("token");
+const getRefreshToken = () => localStorage.getItem("refresh");
+const setAccessToken = (token) => localStorage.setItem("token", token);
+const clearTokens = () => localStorage.clear();
 
-const ApiHandle = async (endPoint, payload, method, isFormData) => {
-  console.log(endPoint, payload, method, isFormData, "method");
+const redirectToLogin = () => {
+  clearTokens();
+  window.location.href = "/login";
+};
 
-  const axiosInstance = axios.create({
-    baseURL: baseUrl,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: accessToken,
-    },
-  });
+// Create a global axios instance
+const axiosInstance = axios.create({
+  baseURL: baseUrl,
+  headers: { "Content-Type": "application/json" },
+});
 
-  // Add a request interceptor
-  axiosInstance.interceptors.request.use(
-    async function (config) {
-      // Do something before request is sent
-      config.data = payload;
+// Variables for refresh handling
+let isRefreshing = false;
+let refreshSubscribers = [];
 
-      if (localStorage.getItem("token")) {
-        config.headers["Authorization"] = `Bearer ${localStorage.getItem(
-          "token"
-        )}`;
-      }
-      return config;
-    },
-    async function (error) {
-      // Do something with request error
-      return Promise.reject(error);
-    }
-  );
+// Notify all waiting requests that the token is refreshed
+const onTokenRefreshed = (newToken) => {
+  refreshSubscribers.forEach((callback) => callback(newToken));
+  refreshSubscribers = [];
+};
 
-  // Function to refresh the access token using the refresh token
-  async function refreshAccessToken() {
-    try {
-      const response = await axios.post(baseUrl + REFRESH, {
-        refresh: localStorage.getItem("refresh"),
-      });
-      accessToken = response.data.access;
-      localStorage.setItem("token", response.data.access);
-    } catch (err) {
-      console.log("Refresh Token Expired!");
-      localStorage.clear();
-      window.location.href = "/login";
-      // navigate("/");
-      // throw err;
-    }
-  }
+// Add a new request to the queue
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
 
-  // Add a response interceptor
-  axiosInstance.interceptors.response.use(
-    async function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      return response;
-    },
-    async function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
-      const originalRequest = error.config;
-
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        return refreshAccessToken().then(() => {
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return axios(originalRequest);
-        });
-      }
-
-      return Promise.reject(error);
-    }
-  );
-
-  let headers = {};
-
-  if (!isFormData) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
-
-  return axiosInstance[method](endPoint, payload, { headers })
-    .then((res) => {
-      console.log(res, "res!@#");
-      return {
-        statusCode: res?.status,
-        responsePayload: res?.data,
-      };
-    })
-    .catch((err) => {
-      console.log(err, "ERR");
-      if (axios.isAxiosError(err)) {
-        if (err?.response?.data) {
-          const Error = err?.response?.data || "Something went wrong.";
-          let msg = Error400_401(err?.response?.status, Error);
-          toast.error(msg, { autoClose: 2000 });
-        }
-      } else if (err instanceof Error) {
-        let val = err?.message || "Something went wrong.";
-        let msg = Error400_401(500, val);
-        toast.error(msg, { autoClose: 2000 });
-      }
-
-      return {
-        statusCode: err?.response?.status || 500,
-        responsePayload: err?.response?.data || "Something went wrong.",
-      };
+// Function to refresh the access token
+const refreshAccessToken = async () => {
+  try {
+    const response = await axios.post(baseUrl + REFRESH, {
+      refresh: getRefreshToken(),
     });
+    const newAccessToken = response.data.access;
+    setAccessToken(newAccessToken);
+    return newAccessToken;
+  } catch (err) {
+    console.error("Refresh token expired. Redirecting to login.");
+    redirectToLogin();
+    throw err;
+  }
+};
+
+// Request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = getAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor with queue-based refresh logic
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      if (!isRefreshing) {
+        isRefreshing = true;
+        try {
+          const newToken = await refreshAccessToken();
+          onTokenRefreshed(newToken);
+          isRefreshing = false;
+        } catch (err) {
+          isRefreshing = false;
+          return Promise.reject(err);
+        }
+      }
+
+      // Wait for the token to be refreshed
+      return new Promise((resolve) => {
+        addRefreshSubscriber((newToken) => {
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          resolve(axiosInstance(originalRequest));
+        });
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// Main API handler function
+const ApiHandle = async (endPoint, payload, method = "get", isFormData = false) => {
+  const headers = isFormData
+    ? { "Content-Type": "multipart/form-data" }
+    : { "Content-Type": "application/json" };
+
+  try {
+    const response = await axiosInstance({
+      url: endPoint,
+      method,
+      data: payload,
+      headers,
+    });
+
+    return {
+      statusCode: response.status,
+      responsePayload: response.data,
+    };
+  } catch (error) {
+    console.error("API call error:", error);
+
+    let errorMessage = "Something went wrong.";
+    if (axios.isAxiosError(error) && error.response?.data) {
+      const errorData = error.response.data;
+      errorMessage = Error400_401(error.response.status, errorData);
+    } else if (error instanceof Error) {
+      errorMessage = Error400_401(500, error.message);
+    }
+
+    toast.error(errorMessage, { autoClose: 2000 });
+
+    return {
+      statusCode: error.response?.status || 500,
+      responsePayload: error.response?.data || errorMessage,
+    };
+  }
 };
 
 export { ApiHandle };

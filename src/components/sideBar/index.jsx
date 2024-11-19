@@ -38,6 +38,7 @@ function Sidebar({ isOpen, setIsOpen }) {
   //   ? localStorage.getItem("refresh")
   //   : null;
   // console.log(typeof token)
+
   const list = [
     {
       icon: <MdDashboard />,

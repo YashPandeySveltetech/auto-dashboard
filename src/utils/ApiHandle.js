@@ -24,18 +24,7 @@ const axiosInstance = axios.create({
 
 // Variables for refresh handling
 let isRefreshing = false;
-let refreshSubscribers = [];
-
-// Notify all waiting requests that the token is refreshed
-const onTokenRefreshed = (newToken) => {
-  refreshSubscribers.forEach((callback) => callback(newToken));
-  refreshSubscribers = [];
-};
-
-// Add a new request to the queue
-const addRefreshSubscriber = (callback) => {
-  refreshSubscribers.push(callback);
-};
+const refreshAndRetryQueue = [];
 
 // Function to refresh the access token
 const refreshAccessToken = async () => {
@@ -66,41 +55,62 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor with queue-based refresh logic
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
+    if (error.response && error.response.status === 401) {
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          const newToken = await refreshAccessToken();
-          onTokenRefreshed(newToken);
+          // Refresh the access token
+          const newAccessToken = await refreshAccessToken();
+
+          // Update the request headers with the new access token
+          error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+          // Retry all requests in the queue with the new token
+          refreshAndRetryQueue.forEach(({ config, resolve, reject }) => {
+            axiosInstance
+              .request(config)
+              .then((response) => resolve(response))
+              .catch((err) => reject(err));
+          });
+
+          // Clear the queue
+          refreshAndRetryQueue.length = 0;
+
+          // Retry the original request
+          return axiosInstance(originalRequest);
+        } catch (refreshError) {
+          // Handle token refresh error
+          // You can clear all storage and redirect the user to the login page
+          throw refreshError;
+        } finally {
           isRefreshing = false;
-        } catch (err) {
-          isRefreshing = false;
-          return Promise.reject(err);
         }
       }
 
-      // Wait for the token to be refreshed
-      return new Promise((resolve) => {
-        addRefreshSubscriber((newToken) => {
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          resolve(axiosInstance(originalRequest));
-        });
+      // Add the original request to the queue
+      return new Promise((resolve, reject) => {
+        refreshAndRetryQueue.push({ config: originalRequest, resolve, reject });
       });
     }
 
+    // Return a Promise rejection if the status code is not 401
     return Promise.reject(error);
   }
 );
 
 // Main API handler function
-const ApiHandle = async (endPoint, payload, method = "get", isFormData = false) => {
+const ApiHandle = async (
+  endPoint,
+  payload,
+  method = "get",
+  isFormData = false
+) => {
   const headers = isFormData
     ? { "Content-Type": "multipart/form-data" }
     : { "Content-Type": "application/json" };

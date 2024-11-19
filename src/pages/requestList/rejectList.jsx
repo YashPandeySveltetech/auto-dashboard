@@ -9,7 +9,7 @@ import {
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
-import FilterSection from "./filterSection";
+import FilterSection from "./FilterSection";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
@@ -51,6 +51,7 @@ function RejectList() {
       date_range = "";
     }
     console.log(filter, "filter");
+
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
@@ -61,6 +62,7 @@ function RejectList() {
       {},
       "get"
     );
+
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload.results);

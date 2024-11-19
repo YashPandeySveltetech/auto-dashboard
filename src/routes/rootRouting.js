@@ -4,20 +4,19 @@ import { memo, Suspense, lazy, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { AuthRoute, PublicRoute } from "./authRoute";
 import LoginPage from "../pages/loginPage";
-import RoleBaseRouting from "./roleBaseRouting";
 import Layout from "../layout";
 import RequestForm from "../pages/requestPage";
 import RegistrationPage from "../pages/registerPage";
-import RequestList from "../pages/requestList";
 import Loader from "../components/loader/Loader";
 import { useSelector } from "react-redux";
 import RequestView from "../pages/requestView";
 import RequestEdit from "../pages/requestEditpage";
-import UnverifiedFormList from "../pages/requestList/unverifiedFormList";
-import RejectList from "../pages/requestList/rejectList";
 import Toaster from "../utils/toaster/Toaster";
 import UpdateUser from "../pages/UpdateUser/UpdateUser";
 import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
+import RequestList from "../pages/requestList/RequestList";
+import RejectList from "../pages/requestList/RejectList";
+import UnverifiedFormList from "../pages/requestList/UnverifiedFormList";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -184,7 +183,7 @@ const AppRoute = memo(() => {
               path="*"
               element={
                 <>
-                  <img className="w-[100%] h-[100vh]" src="/404.jpg" />
+                  <img className="w-[100%] h-[100vh]" src="/404.jpg" alt="" />
                 </>
               }
             />

@@ -10,7 +10,6 @@ import {
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
-import FilterSection from "./filterSection";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setLoading } from "../../redux/reducers/commonReducer";
@@ -31,6 +30,7 @@ import CustomPagination from "../../components/pagination/CustomPagination";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Modal from "react-modal";
+import FilterSection from "./FilterSection";
 
 function RequestList() {
   const navigate = useNavigate();
@@ -522,6 +522,7 @@ function RequestList() {
       return;
     }
   };
+
   // const handlePageChange = ({selected}) => {
   //   const selectedPageIndex = selected;
   //   setCurrent(selectedPageIndex + 1); // Since selectedPageIndex is zero-based index

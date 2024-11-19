@@ -9,7 +9,7 @@ import {
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
-import FilterSection from "./filterSection";
+import FilterSection from "./FilterSection";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
@@ -65,6 +65,8 @@ function UnverifiedFormList() {
       {},
       "get"
     );
+
+    
     console.log(filter, "filter");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
@@ -92,6 +94,8 @@ function UnverifiedFormList() {
       // Toaster('success', 'OTP SENT Successfully!');
 
       return;
+    } else {
+      dispatch(setLoading(false));
     }
   };
   const handleNext = () => {

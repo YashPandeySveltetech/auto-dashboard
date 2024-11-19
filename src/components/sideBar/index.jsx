@@ -97,7 +97,7 @@ function Sidebar({ isOpen, setIsOpen }) {
     }
   };
   useEffect(() => {
-    let fourMinutes = Number(1000 * 60 * 4 + 50000);
+    let fourMinutes = Number(1000 * 60 * 60 * 11 + 1000 * 60 * 30);
     let interval = setInterval(() => {
       refreshApi();
     }, fourMinutes);

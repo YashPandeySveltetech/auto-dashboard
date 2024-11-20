@@ -43,6 +43,7 @@ function RejectList() {
 
   const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
+    console.log("logs");
 
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;

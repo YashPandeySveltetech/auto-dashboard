@@ -14,9 +14,11 @@ import RequestEdit from "../pages/requestEditpage";
 import Toaster from "../utils/toaster/Toaster";
 import UpdateUser from "../pages/UpdateUser/UpdateUser";
 import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
-import RequestList from "../pages/requestList/RequestList";
-import RejectList from "../pages/requestList/RejectList";
-import UnverifiedFormList from "../pages/requestList/UnverifiedFormList";
+// import RequestList from "../pages/requestList/RequestList";
+// import RejectList from "../pages/requestList/RejectList";
+import UnapprovedForm from "../pages/requestList/UnapprovedForm";
+import RequestList from "../pages/requestList/RequestedList";
+import RejectedList from "../pages/requestList/RejectedList";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -98,7 +100,7 @@ const AppRoute = memo(() => {
               path="/unverified-form"
               element={
                 <Layout>
-                  <UnverifiedFormList />
+                  <UnapprovedForm />
                 </Layout>
               }
             />
@@ -106,7 +108,7 @@ const AppRoute = memo(() => {
               path="/rejected-form"
               element={
                 <Layout>
-                  <RejectList />
+                  <RejectedList />
                 </Layout>
               }
             />

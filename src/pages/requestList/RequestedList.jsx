@@ -30,7 +30,7 @@ import CustomPagination from "../../components/pagination/CustomPagination";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Modal from "react-modal";
-import FilterSection from "./FilterSection";
+import FilterPanel from "./FilterPanel";
 
 function RequestList() {
   const navigate = useNavigate();
@@ -531,7 +531,7 @@ function RequestList() {
 
   const filtersection = useCallback(() => {
     return (
-      <FilterSection
+      <FilterPanel
         filter={filter}
         getAllRequest={getAllRequest}
         setFilter={setFilter}

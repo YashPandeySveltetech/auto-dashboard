@@ -9,7 +9,7 @@ import {
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
-import FilterSection from "./FilterSection";
+import FilterPanel from "./FilterPanel";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
@@ -66,7 +66,6 @@ function UnverifiedFormList() {
       "get"
     );
 
-    
     console.log(filter, "filter");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
@@ -203,7 +202,7 @@ function UnverifiedFormList() {
     <>
       <Title text={"Unverified Form"} />
       <div className="outer-div-whole mx-auto ">
-        <FilterSection
+        <FilterPanel
           filter={filter}
           getAllRequest={getAllRequest}
           setFilter={setFilter}

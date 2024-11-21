@@ -9,7 +9,7 @@ import {
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useNavigate } from "react-router";
-import FilterSection from "./FilterSection";
+import FilterPanel from "./FilterPanel";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
@@ -25,7 +25,7 @@ import Title from "../../utils/Title";
 import { EyeFill } from "react-bootstrap-icons";
 import CustomPagination from "../../components/pagination/CustomPagination";
 
-function RejectList() {
+function RejectedList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { rank } = useSelector((state) => state.user?.userData);
@@ -205,7 +205,7 @@ function RejectList() {
     <>
       <Title text={"Reject List"} />
       <div className="outer-div-whole mx-auto ">
-        <FilterSection
+        <FilterPanel
           filter={filter}
           getAllRequest={getAllRequest}
           setFilter={setFilter}
@@ -527,4 +527,4 @@ function RejectList() {
   );
 }
 
-export default RejectList;
+export default RejectedList;

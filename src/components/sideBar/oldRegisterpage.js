@@ -78,7 +78,7 @@ const RegistrationPage = () => {
     const { name, value } = e.target;
     setSelectedReportingTo(value);
     setSelectedRank("");
-    const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${value}`, {}, "get");
 
     if (res.statusCode === 200) {
       const data = res.responsePayload.results;
@@ -90,7 +90,7 @@ const RegistrationPage = () => {
     e.preventDefault();
     dispatch(setLoading(true));
     setSubmitting(true);
-    const res = await ApiHandle(REGISTRATION, formData, "POST");
+    const res = await ApiHandle(REGISTRATION, formData, "post");
     if (res.statusCode === 201) {
       setFormData(defaultFormaData);
       setSelectedReportingTo("");
@@ -109,7 +109,7 @@ const RegistrationPage = () => {
     const res = await ApiHandle(
       `${GET_DISTRICT}?state_id=${StateValue}`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
@@ -121,7 +121,7 @@ const RegistrationPage = () => {
     const res = await ApiHandle(
       `${GET_POLICE_STATION_LIST}?district_id=${DistrictValue}`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
@@ -130,7 +130,7 @@ const RegistrationPage = () => {
     }
   };
   const getStates = async () => {
-    const res = await ApiHandle(GET_STATES, {}, "GET");
+    const res = await ApiHandle(GET_STATES, {}, "get");
     if (res.statusCode === 200) {
       const data = res?.responsePayload;
       setStateOptions(data);
@@ -147,7 +147,7 @@ const RegistrationPage = () => {
 
   const handleRankClick = async (rank) => {
     setSelectedRank(rank);
-    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "GET");
+    const res = await ApiHandle(`${REGISTRATION}?rank=${rank}`, {}, "get");
 
     if (res.statusCode === 200) {
       const data = res.responsePayload.results;
@@ -158,16 +158,16 @@ const RegistrationPage = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-   
   };
   return (
-    <div className="min-h-screen flex items-center justify-center custom-background from-inherit" >
+    <div className="min-h-screen flex items-center justify-center custom-background from-inherit">
       <div
         className="bg-blue-200 p-8 rounded-lg shadow-md w-full md:w-96 flex flex-col items-center"
-        style={{ width: "35rem"}}
-        
+        style={{ width: "35rem" }}
       >
-      <h1 className="text-2xl font-bold mb-4 text-black">Registration Page</h1>
+        <h1 className="text-2xl font-bold mb-4 text-black">
+          Registration Page
+        </h1>
 
         <form
           onSubmit={handleSubmit}
@@ -251,7 +251,9 @@ const RegistrationPage = () => {
             </label>
           </div>
           <div className="mt-2">
-            <span className="text-[16px] font-bold p-2 border-y-2 block text-center">User Profile</span>
+            <span className="text-[16px] font-bold p-2 border-y-2 block text-center">
+              User Profile
+            </span>
 
             <DropDown
               label="Reporting To"

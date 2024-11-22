@@ -56,7 +56,7 @@ function FilterSection({
     getCaseType();
   }, []);
   const getPoliceStaionList = async () => {
-    const res = await ApiHandle(`${GET_POLICE_STATION_LIST}`, {}, "GET");
+    const res = await ApiHandle(`${GET_POLICE_STATION_LIST}`, {}, "get");
     if (res.statusCode === 200) {
       const data = res?.responsePayload || [];
       const arr = data.map((station) => ({
@@ -113,7 +113,7 @@ function FilterSection({
   };
   const getCaseType = async () => {
     try {
-      const res = await ApiHandle(`${CASE_TYPE}`, "", "GET");
+      const res = await ApiHandle(`${CASE_TYPE}`, "", "get");
       if (res?.statusCode === 200) {
         let data = res?.responsePayload?.map((val) => ({
           id: val.id,

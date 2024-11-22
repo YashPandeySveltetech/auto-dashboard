@@ -46,7 +46,7 @@ function OtpValidationModal() {
     const res = await ApiHandle(
       FORM_OTP_VERIFY,
       { otp: otp, form_id: requestId },
-      "POST"
+      "post"
     );
     if (res.statusCode === 201) {
       dispatch(commonCloseModal());
@@ -60,7 +60,7 @@ function OtpValidationModal() {
     const res = await ApiHandle(
       RESEND_FORM_OTP,
       { form_id: requestId },
-      "POST"
+      "post"
     );
     if (res.statusCode === 201) {
       setTimeLeft(120);
@@ -77,8 +77,8 @@ function OtpValidationModal() {
   };
 
   const handleChange = (e) => {
-      const Value = e.target.value.slice(0,6);
-      setOtp(Value);
+    const Value = e.target.value.slice(0, 6);
+    setOtp(Value);
   };
 
   return (
@@ -86,7 +86,7 @@ function OtpValidationModal() {
       <div className="flex flex-col gap-5">
         <span className="text-xl text-white">Enter Your Otp</span>
         <Input
-          onChange={(e)=>handleChange(e)}
+          onChange={(e) => handleChange(e)}
           type="number"
           name="otp"
           value={otp}

@@ -1,49 +1,49 @@
 /** @format */
 
-import React, {useEffect, useState} from "react";
-import {ApiHandle} from "../../utils/ApiHandle";
+import React, { useEffect, useState } from "react";
+import { ApiHandle } from "../../utils/ApiHandle";
 import {
   FORM_REQUEST,
   APPROVE_REQUEST,
   VIEW_ATTACHMENTS,
 } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
-import {useNavigate} from "react-router";
-import FilterSection from "./filterSection";
-import {useDispatch, useSelector} from "react-redux";
+import { useNavigate } from "react-router";
+import FilterPanel from "./FilterPanel";
+import { useDispatch, useSelector } from "react-redux";
 import {
   openRejectModal,
   openViewLogModal,
   otpValidationModal,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
-import {FiEye} from "react-icons/fi";
-import {async} from "q";
+import { FiEye } from "react-icons/fi";
+import { async } from "q";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {setLoading} from "../../redux/reducers/commonReducer";
+import { setLoading } from "../../redux/reducers/commonReducer";
 import Title from "../../utils/Title";
-import {EyeFill} from "react-bootstrap-icons";
+import { EyeFill } from "react-bootstrap-icons";
 import CustomPagination from "../../components/pagination/CustomPagination";
 
-function RejectList() {
+function RejectedList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {rank} = useSelector((state) => state.user?.userData);
-  const {updateReqList} = useSelector((state) => state.modal);
-  
+  const { rank } = useSelector((state) => state.user?.userData);
+  const { updateReqList } = useSelector((state) => state.modal);
+
   const [isNext, setIsNext] = useState(false);
   const [isPrevious, setIsPrevious] = useState(false);
   const [rejectPageCount, setRejectPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
 
-
   useEffect(() => {
-    getAllRequest({active: 1});
+    getAllRequest({ active: 1 });
   }, []);
   const [requestList, setRequestList] = useState([]);
 
-  const getAllRequest = async ({active = 1}) => {
+  const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
+    console.log("logs");
 
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
@@ -52,6 +52,7 @@ function RejectList() {
       date_range = "";
     }
     console.log(filter, "filter");
+
     const res = await ApiHandle(
       FORM_REQUEST +
         `?case_type=${filter?.case_type}&fir_no=${
@@ -60,8 +61,9 @@ function RejectList() {
           filter.target_type
         }&target_type_value=${filter.target_type_value}`,
       {},
-      "GET"
+      "get"
     );
+
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload.results);
@@ -100,7 +102,7 @@ function RejectList() {
 
   useEffect(() => {
     if (updateReqList) {
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
     }
   }, [updateReqList]);
 
@@ -116,27 +118,27 @@ function RejectList() {
     startDate: "",
     endDate: "",
   });
-  const approveRequest = async ({requestId, approved_desion_id}) => {
+  const approveRequest = async ({ requestId, approved_desion_id }) => {
     const res = await ApiHandle(
       APPROVE_REQUEST + `${approved_desion_id}/`,
-      {request_form: requestId},
+      { request_form: requestId },
       "PATCH"
     );
     if (res.statusCode === 200) {
       // setRequestList(res?.responsePayload);
       // setIsOtp(true);
-      getAllRequest({active: 1});
+      getAllRequest({ active: 1 });
       Toaster("success", "Request Approved Successfully!");
 
       return;
     }
   };
 
-  const viewAttachment = async ({requets_form_id}) => {
+  const viewAttachment = async ({ requets_form_id }) => {
     const res = await ApiHandle(
       VIEW_ATTACHMENTS + `?request_form=${requets_form_id}`,
       {},
-      "GET"
+      "get"
     );
     if (res.statusCode === 200) {
       if (res?.responsePayload?.results[0].file) {
@@ -151,7 +153,7 @@ function RejectList() {
       return;
     }
   };
-  const clearFilter = async ({active = 1}) => {
+  const clearFilter = async ({ active = 1 }) => {
     setDateRange({
       startDate: null,
       endDate: null,
@@ -169,7 +171,7 @@ function RejectList() {
         FORM_REQUEST +
           `?decision_type=REJECT&page=${active}&is_otp_verified=&sys_date=`,
         {},
-        "GET"
+        "get"
       );
       if (res.statusCode === 200) {
         setRequestList(res?.responsePayload.results);
@@ -203,7 +205,7 @@ function RejectList() {
     <>
       <Title text={"Reject List"} />
       <div className="outer-div-whole mx-auto ">
-        <FilterSection
+        <FilterPanel
           filter={filter}
           getAllRequest={getAllRequest}
           setFilter={setFilter}
@@ -215,11 +217,11 @@ function RejectList() {
           <div className=" overflow-x-auto p-3 ">
             <table
               className="w-full text-sm text-left rtl:text-right text-gray-500 "
-              style={{border: "1px solid black"}}
+              style={{ border: "1px solid black" }}
             >
               <thead
                 className="text-center text-xs text-gray-700 uppercase bg-gray-50 "
-                style={{backgroundColor: "black", color: "white"}}
+                style={{ backgroundColor: "black", color: "white" }}
               >
                 <tr>
                   <th scope="col" className="px-6 py-3">
@@ -275,31 +277,31 @@ function RejectList() {
                     </th>
                     <td
                       className="px-6 py-4 font-semibold text-gray-900"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.district}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.io_name}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {item?.fir_no}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.request_to_provide).replace("_", " ")}
                     </td>
                     <td
                       className="px-6 py-4 font-semibold"
-                      style={{color: "black"}}
+                      style={{ color: "black" }}
                     >
                       {String(item?.target_type).replace("_", " ")}
                     </td>
@@ -515,12 +517,14 @@ function RejectList() {
         </div>
       </div>
       <div className="flex justify-center mb-2 mt-2">
-        <CustomPagination totalItems={rejectPageCount} 
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}/>
+        <CustomPagination
+          totalItems={rejectPageCount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </>
   );
 }
 
-export default RejectList;
+export default RejectedList;

@@ -34,10 +34,11 @@ function Sidebar({ isOpen, setIsOpen }) {
   const { rank, email, username } = useSelector(
     (state) => state.user?.userData
   );
-  const refresh = localStorage.getItem("refresh")
-    ? localStorage.getItem("refresh")
-    : null;
+  // const refresh = localStorage.getItem("refresh")
+  //   ? localStorage.getItem("refresh")
+  //   : null;
   // console.log(typeof token)
+
   const list = [
     {
       icon: <MdDashboard />,
@@ -84,33 +85,33 @@ function Sidebar({ isOpen, setIsOpen }) {
   ];
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const refreshApi = async () => {
-    const res = await ApiHandle(
-      REFRESH,
-      {
-        refresh: refresh,
-      },
-      "POST"
-    );
-    if (res.statusCode === 200) {
-      localStorage.setItem("token", res?.responsePayload.access);
-    }
-  };
-  useEffect(() => {
-    let fourMinutes = Number(1000 * 60 * 60 * 11 + 1000 * 60 * 30);
-    let interval = setInterval(() => {
-      refreshApi();
-    }, fourMinutes);
-    return () => clearInterval(interval);
-  }, []);
+  // const refreshApi = async () => {
+  //   const res = await ApiHandle(
+  //     REFRESH,
+  //     {
+  //       refresh: refresh,
+  //     },
+  //     "post"
+  //   );
+  //   if (res.statusCode === 200) {
+  //     localStorage.setItem("token", res?.responsePayload.access);
+  //   }
+  // };
+  // useEffect(() => {
+  //   let fourMinutes = Number(1000 * 60 * 4 + 50000);
+  //   let interval = setInterval(() => {
+  //     refreshApi();
+  //   }, fourMinutes);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   useEffect(() => {
     handleUserDetail();
-    refreshApi();
+    // refreshApi();
   }, []);
 
   const handleUserDetail = async () => {
-    const res = await ApiHandle(USER_DETAIL, {}, "GET");
+    const res = await ApiHandle(USER_DETAIL, {}, "get");
 
     if (res.statusCode === 200) {
       dispatch(setUserData(res?.responsePayload));

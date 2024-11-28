@@ -1,17 +1,14 @@
 /** @format */
 
 import React, { useState } from "react";
-import { EyeFill, EyeSlashFill, XLg } from "react-bootstrap-icons";
+import { EyeFill, EyeSlashFill } from "react-bootstrap-icons";
 import Input from "../../components/input";
-// import { apiHandler } from '../../services/axios';
-// import { sendOTP, verifyOTP } from '../../services/Login';
 import { useNavigate } from "react-router-dom";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { OTP_SEND, OTP_VERIFY } from "../../utils/constants";
 import Toaster from "../../utils/toaster/Toaster";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/reducers/userReducer";
-import Loader from "../../components/loader/Loader";
 
 function LoginPage() {
   const [loginWith, setLoginWith] = useState("email");
@@ -22,13 +19,14 @@ function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [otpResendCooldown, setOtpResendCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(300); // 5 minutes in seconds
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormValue({
       ...formValue,
       [name]: value,
@@ -39,6 +37,7 @@ function LoginPage() {
     const { name, value } = e.target;
     setVerifyUser({ ...formValue, [name]: value });
   };
+
   const SubmitOTP = async (e) => {
     e.preventDefault();
     const res = await ApiHandle(OTP_VERIFY, verifyUser, "post");
@@ -54,7 +53,6 @@ function LoginPage() {
       );
       navigate("/");
       Toaster("success", "User Verify Successfully!");
-
       return;
     }
   };
@@ -69,6 +67,20 @@ function LoginPage() {
         setIsOtp(true);
         setIsLoading(false);
         Toaster("success", "OTP SENT Successfully!");
+        // Start the cooldown timer for the resend OTP button
+        setOtpResendCooldown(true);
+        setCooldownTime(300); // Reset cooldown time to 5 minutes
+        // Start the countdown timer
+        const timer = setInterval(() => {
+          setCooldownTime((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              setOtpResendCooldown(false); // Reset cooldown
+              return 300; // Reset to initial cooldown time
+            }
+            return prev - 1;
+          });
+        }, 1000);
 
         return;
       } else {
@@ -76,6 +88,35 @@ function LoginPage() {
       }
     } catch (error) {
       setIsLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    if (otpResendCooldown) return;
+    setOtpResendCooldown(true);
+    setCooldownTime(300);
+    // Call the API to resend the OTP
+    try {
+      const res = await ApiHandle(OTP_SEND, formValue, "post");
+      if (res.statusCode === 201) {
+        Toaster("success", "OTP Resent Successfully!");
+
+        // Start the cooldown timer
+        const timer = setInterval(() => {
+          setCooldownTime((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              setOtpResendCooldown(false); // Reset cooldown
+              return 300; // Reset to initial cooldown time
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      } else {
+        Toaster("error", "Failed to resend OTP.");
+      }
+    } catch (error) {
+      Toaster("error", "An error occurred while resending OTP.");
     }
   };
 
@@ -114,43 +155,57 @@ function LoginPage() {
   );
 
   const Otp = () => (
-    <div>
-      <div className="input-group mb-3 flex flex-col align-items-center">
-        <Input
-          onChange={handleOTP}
-          label={"Enter OTP"}
-          type="number"
-          name="otp"
-          value={verifyUser?.otp}
-          textColor={"text-white"}
-        />
+    <div className="input-group mb-3 flex flex-col align-items-center">
+      <Input
+        onChange={handleOTP}
+        label={"Enter OTP"}
+        type="number"
+        name="otp"
+        value={verifyUser?.otp}
+        textColor={"text-white"}
+      />
 
-        <div
-          className="col flex align-items-center justify-center mt-3"
+      <div
+        className="col flex align-items-center justify-center mt-3"
+        style={{
+          background: "green",
+          padding: "10px",
+          borderRadius: "5px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <button
+          type="submit"
+          className="btn ms-4"
           style={{
-            background: "green",
-            padding: "10px",
-            borderRadius: "5px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            backgroundColor: "transparent",
+            border: "none",
+            color: "#ffffff",
+            cursor: "pointer",
           }}
         >
-          <button
-            type="submit"
-            className="btn ms-4"
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              color: "#ffffff",
-              cursor: "pointer",
-            }}
-          >
-            Verify OTP
-          </button>
-        </div>
+          Verify OTP
+        </button>
       </div>
+
+      {/* Resend OTP Button */}
+      <button
+        type="button"
+        onClick={handleResendOTP}
+        className={` btn btn-outline-secondary mt-3 text-white rounded border  p-2 ${
+          otpResendCooldown ? "cursor-not-allowed" : ""
+        }`}
+        disabled={otpResendCooldown} // Disable if cooldown is active
+      >
+        {otpResendCooldown
+          ? `Resend OTP (${Math.floor(cooldownTime / 60)}:${
+              cooldownTime % 60 < 10 ? "0" : ""
+            }${cooldownTime % 60})`
+          : "Resend OTP"}
+      </button>
     </div>
   );
 
@@ -180,7 +235,6 @@ function LoginPage() {
                 textColor={"text-white"}
               />
               <button
-                className="btn btn-outline-secondary"
                 type="button"
                 style={{
                   position: "absolute",

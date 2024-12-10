@@ -1,89 +1,143 @@
 import React, { useState } from "react";
 import ModalWrapper from "../components/modalWrapper/ModalWrapper";
-import { CHANGE_PASSWORD } from "../utils/constants";
+import { CHANGE_EMAIL_PASSWORD, CHANGE_PASSWORD } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiHandle } from "../utils/ApiHandle";
 import Toaster from "../utils/toaster/Toaster";
 import { commonCloseModal } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function PasswordChangeModal() {
-  const [password, setPassword] = useState("");
-  const location = useLocation()
-  const { userData } = useSelector((state) => state?.user);
-  const id = location.pathname.includes("edit_user")?location.pathname.split("/").pop():userData?.id
- 
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const dispatch = useDispatch();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loader, setLoader] = useState(false);
-  const verifyPassword = async () => {
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const { userData } = useSelector((state) => state?.user);
+  const { emailPasswordChangeModal, requestId, sendersEmail } = useSelector(
+    (state) => state?.modal
+  );
+
+  const id = location.pathname.includes("edit_user")
+    ? location.pathname.split("/").pop()
+    : userData?.id;
+
+  const handlePasswordChange = async () => {
     setLoader(true);
-    if (!password || !confirmpassword) {
-      Toaster("", "Please fill in both password fields");
+
+    // For `CHANGE_EMAIL_PASSWORD`
+    if (emailPasswordChangeModal) {
+      if (!currentPassword || !newPassword) {
+        Toaster("", "Please fill in both current and new password fields");
+        setLoader(false);
+        return;
+      }
+
+      try {
+        const res = await ApiHandle(
+          `${CHANGE_EMAIL_PASSWORD}${requestId}/`,
+          { old_password: currentPassword, new_password: newPassword },
+          "PATCH"
+        );
+
+        if (res.statusCode === 200) {
+          Toaster("success", "Email password changed successfully");
+          dispatch(commonCloseModal());
+        } else {
+          Toaster("error", res?.message || "Failed to change email password");
+        }
+      } catch (err) {
+        Toaster("error", "An error occurred while changing the password");
+      } finally {
+        setLoader(false);
+      }
+      return;
+    }
+
+    // For `CHANGE_PASSWORD`
+    if (newPassword !== confirmPassword) {
+      Toaster("", "Passwords do not match");
       setLoader(false);
       return;
     }
-    if (password === confirmpassword) {
-      
+
+    try {
       const res = await ApiHandle(
         `${CHANGE_PASSWORD}${id}/`,
-        { password: password },
+        { password: newPassword },
         "PATCH"
       );
+
       if (res.statusCode === 200) {
-        Toaster("success", "Password Change Successfully");
+        Toaster("success", "Password changed successfully");
         dispatch(commonCloseModal());
-        setLoader(false);
-        return;
       } else {
-        setLoader(false);
+        Toaster("error", res?.message || "Failed to change password");
       }
-    } else {
-      Toaster("", "confirm Password not matched");
+    } catch (err) {
+      Toaster("error", "An error occurred while changing the password");
+    } finally {
       setLoader(false);
     }
   };
-  function check() {
-    var passmessage = document.getElementById("passmessage");
-
-    var goodColor = "#0C6";
-    var badColor = "#FF9B37";
-
-    if (confirmpassword !== password) {
-      passmessage.style.color = badColor;
-      passmessage.innerHTML = "password not matched";
-    } else {
-      passmessage.style.color = goodColor;
-      passmessage.innerHTML = "";
-    }
-  }
 
   return (
     <ModalWrapper
-      handleClick={verifyPassword}
+      handleClick={handlePasswordChange}
       loader={loader}
-      btnName={"Submit"}
+      btnName="Submit"
+      heading={sendersEmail ? `Change Password for: ${sendersEmail}` : ""}
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
+        {/* Current Password Input for `CHANGE_EMAIL_PASSWORD` */}
+        {emailPasswordChangeModal && (
+          <div>
+            <label className="text-sm text-white">Current Password</label>
+            <Input
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              type="password"
+              name="currentPassword"
+              placeholder="Enter current password"
+            />
+          </div>
+        )}
+
+        {/* New Password Input */}
         <div>
-          <span className="text-xl text-white">Enter Your New Password</span>
+          <label className="text-sm text-white">New Password</label>
           <Input
-            onChange={(e) => setPassword(e?.target?.value)}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
             type="password"
-            name="password"
+            name="newPassword"
+            placeholder="Enter new password"
           />
         </div>
-        <div>
-          <span className="text-xl text-white">Confirm Password</span>
-          <Input
-            onChange={(e) => setConfirmPassword(e?.target?.value)}
-            type="password"
-            name="changepassword"
-            onKeyUp={check}
-          />
-          <span id="passmessage"></span>
-        </div>
+
+        {/* Confirm Password Input for `CHANGE_PASSWORD` */}
+        {!emailPasswordChangeModal && (
+          <div>
+            <label className="text-sm text-white">Confirm New Password</label>
+            <Input
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm new password"
+            />
+            {newPassword &&
+              confirmPassword &&
+              newPassword !== confirmPassword && (
+                <span className="text-sm text-red-500">
+                  Passwords do not match
+                </span>
+              )}
+          </div>
+        )}
       </div>
     </ModalWrapper>
   );

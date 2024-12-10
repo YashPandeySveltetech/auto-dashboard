@@ -11,10 +11,15 @@ import {
 } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { REFRESH, USER_DETAIL } from "../../utils/constants";
+import {
+  CHANGE_EMAIL_PASSWORD,
+  REFRESH,
+  USER_DETAIL,
+} from "../../utils/constants";
 import { ApiHandle } from "../../utils/ApiHandle";
 import { clearUserData, setUserData } from "../../redux/reducers/userReducer";
 import {
+  EmailPasswordChangeModal,
   PasswordChangeModal,
   commonCloseModal,
 } from "../../redux/reducers/modalsReducer";
@@ -22,7 +27,11 @@ import sidebar from "./sidebar.css";
 import { GoUnverified } from "react-icons/go";
 import { MdDashboard } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { RiLogoutBoxLine, RiLockPasswordLine } from "react-icons/ri";
+import {
+  RiLogoutBoxLine,
+  RiLockPasswordLine,
+  RiLockUnlockFill,
+} from "react-icons/ri";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -107,8 +116,18 @@ function Sidebar({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     handleUserDetail();
-    // refreshApi();
   }, []);
+
+  const handleChangeEmail = async () => {
+    const res = await ApiHandle(CHANGE_EMAIL_PASSWORD, "GET");
+    if (res.statusCode === 200) {
+      const userID = res?.responsePayload?.results[0]?.id;
+      const sendersEmail = res?.responsePayload?.results[0]?.email;
+
+      dispatch(PasswordChangeModal(true));
+      dispatch(EmailPasswordChangeModal({ userID, sendersEmail }));
+    }
+  };
 
   const handleUserDetail = async () => {
     const res = await ApiHandle(USER_DETAIL, {}, "get");
@@ -274,6 +293,16 @@ function Sidebar({ isOpen, setIsOpen }) {
           </ul>
 
           <div className={`${isOpen ? "mt-9" : "mt-40"}`}>
+            {rank === "DCP" && (
+              <li>
+                <NavLink onClick={handleChangeEmail} to="#">
+                  <i className="bx bx-grid-alt" title="Change Email">
+                    <RiLockUnlockFill />
+                  </i>
+                  <span className="links_name">Change Email Password</span>
+                </NavLink>
+              </li>
+            )}
             <li>
               <NavLink
                 onClick={() => {

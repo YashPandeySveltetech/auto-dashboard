@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import ModalWrapper from "../components/modalWrapper/ModalWrapper";
-import { DCP_PASSWORD_VERIFY } from "../utils/constants";
+import {
+  DCP_PASSWORD_VERIFY,
+  DCP_PASSWORD_VERIFY_RESEND,
+} from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiHandle } from "../utils/ApiHandle";
 import Toaster from "../utils/toaster/Toaster";
 import {
   DcpPassowrdConfirm,
   commonCloseModal,
+  resendModalApiCall,
 } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
 import { useNavigate } from "react-router-dom";
@@ -15,14 +19,19 @@ import Loader from "../components/loader/Loader";
 function DcpPasswordVerifyModal() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { requestId, dcpStatus } = useSelector((state) => state?.modal);
+  const { requestId, dcpStatus, approveStatus } = useSelector(
+    (state) => state?.modal
+  );
   const dispatch = useDispatch();
   const [loader, setLoader] = useState(false);
 
   const verifyPassword = async () => {
     setLoader(true);
+    const apiEndPoint = approveStatus
+      ? DCP_PASSWORD_VERIFY_RESEND
+      : DCP_PASSWORD_VERIFY;
     const res = await ApiHandle(
-      DCP_PASSWORD_VERIFY,
+      apiEndPoint,
       { form_id: requestId, password: password },
       "post"
     );
@@ -30,6 +39,7 @@ function DcpPasswordVerifyModal() {
       dispatch(DcpPassowrdConfirm(true));
       dispatch(commonCloseModal());
       setLoader(false);
+      dispatch(resendModalApiCall(false));
       return;
     } else {
       setLoader(false);

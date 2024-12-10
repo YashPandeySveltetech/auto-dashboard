@@ -18,6 +18,7 @@ import {
   openDcpPasswordVerifyModal,
   openRejectModal,
   openViewLogModal,
+  resendModalApiCall,
   updateRequestList,
 } from "../../redux/reducers/modalsReducer";
 import * as FileSaver from "file-saver";
@@ -193,6 +194,10 @@ function RequestList() {
         approved_desion_id: item?.approve_decision_id,
       });
     }
+  };
+  const handleResend = (item) => {
+    dispatch(openDcpPasswordVerifyModal(item));
+    dispatch(resendModalApiCall(true));
   };
 
   const [tableData, setTableData] = useState([]);
@@ -809,6 +814,17 @@ function RequestList() {
                           >
                             {item?.decision}
                           </span>
+                          {/* <div>
+                            {["DCP"].includes(rank) &&
+                              item?.decision === "APPROVE" && (
+                                <button
+                                  onClick={() => handleResend(item)}
+                                  className="text-white bg-red-800 inline-flex items-center rounded-md px-4 py-1 text-xs font-medium ring-1 ring-inset ring-red-700/10 hover:bg-white hover:text-red-500 "
+                                >
+                                  RESEND
+                                </button>
+                              )}
+                          </div> */}
 
                           <div>
                             {item?.decision == "REJECT" && (

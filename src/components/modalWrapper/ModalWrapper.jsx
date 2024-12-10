@@ -14,7 +14,7 @@ const ModalWrapper = ({
   isDisabled,
   isBackBtn,
   width = "w-[35rem]",
-  loader
+  loader,
 }) => {
   const dispatch = useDispatch();
   const modalRef = useRef(null);
@@ -48,8 +48,8 @@ const ModalWrapper = ({
     <div className="fixed inset-0 bg-[black] z-10 bg-opacity-80 backdrop-blur-sm flex justify-center items-center">
       <div ref={modalRef}>
         <Card width={width} height="content">
-          <div className="flex justify-between p-2 border-b-2 items-centers"> 
-            <h3 className="text-xl text-[white] font-semibold">{heading}</h3>
+          <div className="flex justify-between p-2 border-b-2 items-centers">
+            <h3 className="text-sm text-[#ffffff] font-semibold">{heading}</h3>
             <button
               className="p-1 ml-auto border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
               onClick={handleOnClose}
@@ -81,7 +81,7 @@ const ModalWrapper = ({
                   : "bg-[#FFE70B] cursor-pointer"
               } text-black active:${
                 isDisabled ? "bg-gray-300" : "bg-emerald-600"
-              } uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
+              } uppercase text-sm px-3 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150`}
               type="button"
               onClick={handleClick || handleOnClose}
               disabled={isDisabled || loader}

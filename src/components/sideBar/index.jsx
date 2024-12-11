@@ -46,7 +46,6 @@ function Sidebar({ isOpen, setIsOpen }) {
   // const refresh = localStorage.getItem("refresh")
   //   ? localStorage.getItem("refresh")
   //   : null;
-  // console.log(typeof token)
 
   const list = [
     {
@@ -296,7 +295,7 @@ function Sidebar({ isOpen, setIsOpen }) {
             {rank === "DCP" && (
               <li>
                 <NavLink onClick={handleChangeEmail} to="#">
-                  <i className="bx bx-grid-alt" title="Change Email">
+                  <i className="bx bx-grid-alt" title="Change Email Password">
                     <RiLockUnlockFill />
                   </i>
                   <span className="links_name">Change Email Password</span>

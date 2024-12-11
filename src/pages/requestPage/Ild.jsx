@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -12,7 +12,7 @@ function Ild({
   isEditable,
 }) {
   const ildInputChange = (e, index) => {
-    const {name, value, checked} = e?.target;
+    const { name, value, checked } = e?.target;
     const list = [...IldList];
     if (name === "till_date") {
       list[index][name] = checked; // For checkboxes, set checked value
@@ -33,7 +33,6 @@ function Ild({
 
   const dropdownChange = (e, data, index) => {
     const list = [...IldList];
-    console.log(list);
 
     list[index][data?.name] =
       e?.length > 0
@@ -84,7 +83,7 @@ function Ild({
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
-            style={{background: "#FFFAFA"}}
+            style={{ background: "#FFFAFA" }}
             key={i}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4  items-center">

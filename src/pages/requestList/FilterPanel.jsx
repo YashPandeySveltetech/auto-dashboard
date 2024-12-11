@@ -65,8 +65,6 @@ function FilterSection({
         label: station.name, // Assuming 'name' is the label for the dropdown options
       }));
       setPoliceStation(arr);
-    } else {
-      console.error("Failed to fetch police stations:", res.error); // Handle error cases if necessary
     }
 
     return;
@@ -88,8 +86,6 @@ function FilterSection({
       // PdfExport();
     } else if (selectedOption === "excel") {
       exportReport();
-    } else {
-      console.log("Invalid option selected");
     }
   };
   const autoApprovedOptions = [
@@ -174,7 +170,6 @@ function FilterSection({
                   showShortcuts={true}
                   classNames="border border-solid"
                 />
-                {console.log(dateRange, "date")}
               </div>
             </div>
           </div>

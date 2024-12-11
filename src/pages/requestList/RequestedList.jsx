@@ -235,7 +235,6 @@ function RequestList() {
     }));
   };
 
-  console.log(filter, "ghdgsjdgjsgh");
   useEffect(() => {
     if (tableData.length > 0) {
       const doc = new jsPDF();

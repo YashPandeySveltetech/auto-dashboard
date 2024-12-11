@@ -34,6 +34,7 @@ import Ild from "./Ild";
 import Title from "../../utils/Title";
 import { ArrowLeft } from "react-bootstrap-icons";
 import BackButton from "../../components/backButton/BackButton";
+import { toast } from "react-toastify";
 
 function RequestForm({ requestData }) {
   const { pathname } = useLocation();
@@ -602,7 +603,6 @@ function RequestForm({ requestData }) {
     }
   }, [ImeiList, MobileList, IpList, cellIdList, IldList, requestData]);
   const handleChange = (e, callfrom, fromval) => {
-    console.log(isPisValid);
     const { name, value, files, checked } = e.target;
     if (callfrom === "urgent") {
       setApiPayload({
@@ -694,6 +694,13 @@ function RequestForm({ requestData }) {
     e.preventDefault();
     setIsFormCreate(false);
     let formData = new FormData();
+    // if (
+    //   apiPayload?.io_email?.length > 0 &&
+    //   apiPayload?.io_email?.split("@")?.[1] !== "gov.in"
+    // ) {
+    //   toast.warn("Only @gov.in Email Allowed!");
+    //   return;
+    // }
 
     if (apiPayload?.file) {
       for (let key in apiPayload) {
@@ -1044,9 +1051,9 @@ function RequestForm({ requestData }) {
                 </p>
               )}
             </div>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <label className="font-bold">Requesting Officer Email.</label>
-              <div className="flex flex-col items-center">
+              <div className="flex gap-2 items-center">
                 <Input
                   type="email"
                   name="io_email"
@@ -1054,9 +1061,9 @@ function RequestForm({ requestData }) {
                   value={apiPayload.io_email}
                   disabledSelect={!isEditable && requestData}
                 />
-                <span id="message">(.gov & .nic email's only )</span>
+                <span className=" text-sm text-red-500">{"@gov.in"}</span>
               </div>
-            </div>
+            </div> */}
 
             {/* {apiPayload?.io_mobile_no.length===10&& <div> <button type="button" className="bg-green-700 text-white hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none focus:ring-blue-800">
                   send Otp

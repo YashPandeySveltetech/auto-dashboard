@@ -43,7 +43,6 @@ function RejectedList() {
 
   const getAllRequest = async ({ active = 1 }) => {
     dispatch(setLoading(true));
-    console.log("logs");
 
     let date_range =
       dateRange.startDate && dateRange.endDate && "--" + dateRange.endDate;
@@ -51,7 +50,6 @@ function RejectedList() {
     if (date_range === 0) {
       date_range = "";
     }
-    console.log(filter, "filter");
 
     const res = await ApiHandle(
       FORM_REQUEST +
@@ -520,6 +518,7 @@ function RejectedList() {
         <CustomPagination
           totalItems={rejectPageCount}
           currentPage={currentPage}
+          getAllRequest={getAllRequest}
           setCurrentPage={setCurrentPage}
         />
       </div>

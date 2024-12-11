@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
 
@@ -12,7 +12,7 @@ function Mobile({
   isEditable,
 }) {
   const mobileInputChange = (e, index) => {
-    const {name, value, checked} = e.target;
+    const { name, value, checked } = e.target;
     const list = [...MobileList];
 
     if (name === "till_date") {
@@ -34,7 +34,6 @@ function Mobile({
 
   const dropdownChange = (e, data, index) => {
     const list = [...MobileList];
-    console.log(e[index]?.id, list, "list");
 
     if (e[index]?.id === "ALL") {
       list[index][data?.name] = [1, 3, 4];
@@ -104,7 +103,7 @@ function Mobile({
       {MobileList?.map((val, i) => (
         <div
           className="shadow-lg shadow-gray-500/50 p-5 "
-          style={{background: "#FFFAFA", border: ""}}
+          style={{ background: "#FFFAFA", border: "" }}
           key={i}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 items-center">
@@ -307,7 +306,6 @@ function Mobile({
                 required
                 isMulti={true}
               />
-              {console.log(MobileList, "list")}
             </div>
             {!requestData || isEditable ? (
               <div className="flex gap-5 mt-4 sm:mt-0 justify-start align-end">
@@ -316,7 +314,7 @@ function Mobile({
                     type="button"
                     className="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none "
                     onClick={() => removeMobileClick(i)}
-                    style={{height: "2.5rem"}}
+                    style={{ height: "2.5rem" }}
                   >
                     Remove
                   </button>
@@ -326,7 +324,7 @@ function Mobile({
                     type="button"
                     className="text-white bg-green-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none "
                     onClick={addMobileClick}
-                    style={{height: "2.5rem"}}
+                    style={{ height: "2.5rem" }}
                   >
                     Add New Form
                   </button>

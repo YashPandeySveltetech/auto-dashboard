@@ -66,7 +66,6 @@ function UnverifiedFormList() {
       "get"
     );
 
-    console.log(filter, "filter");
     if (res.statusCode === 200) {
       dispatch(setLoading(false));
       setRequestList(res?.responsePayload);

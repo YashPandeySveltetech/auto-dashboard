@@ -62,7 +62,7 @@ function LoginPage() {
     try {
       setIsLoading(true);
       const res = await ApiHandle(OTP_SEND, formValue, "post");
-      console.log(res, "resPOST");
+
       if (res.statusCode === 201) {
         setIsOtp(true);
         setIsLoading(false);

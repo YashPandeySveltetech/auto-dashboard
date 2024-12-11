@@ -7,12 +7,17 @@ import Toaster from "../utils/toaster/Toaster";
 import { commonCloseModal } from "../redux/reducers/modalsReducer";
 import Input from "../components/input";
 import { useLocation } from "react-router-dom";
+import { EyeFill, EyeSlashFill } from "react-bootstrap-icons";
 
 function PasswordChangeModal() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loader, setLoader] = useState(false);
+
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -46,8 +51,6 @@ function PasswordChangeModal() {
         if (res.statusCode === 200) {
           Toaster("success", "Email password changed successfully");
           dispatch(commonCloseModal());
-        } else {
-          Toaster("error", res?.message || "Failed to change email password");
         }
       } catch (err) {
         Toaster("error", "An error occurred while changing the password");
@@ -58,8 +61,14 @@ function PasswordChangeModal() {
     }
 
     // For `CHANGE_PASSWORD`
+
     if (newPassword !== confirmPassword) {
       Toaster("", "Passwords do not match");
+      setLoader(false);
+      return;
+    }
+    if (!newPassword || !confirmPassword) {
+      Toaster("", "Please fill Both New Password and Confirm Password");
       setLoader(false);
       return;
     }
@@ -74,8 +83,6 @@ function PasswordChangeModal() {
       if (res.statusCode === 200) {
         Toaster("success", "Password changed successfully");
         dispatch(commonCloseModal());
-      } else {
-        Toaster("error", res?.message || "Failed to change password");
       }
     } catch (err) {
       Toaster("error", "An error occurred while changing the password");
@@ -94,41 +101,62 @@ function PasswordChangeModal() {
       <div className="flex flex-col gap-3">
         {/* Current Password Input for `CHANGE_EMAIL_PASSWORD` */}
         {emailPasswordChangeModal && (
-          <div>
+          <div className="relative">
             <label className="text-sm text-white">Current Password</label>
             <Input
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
-              type="password"
+              type={showCurrentPassword ? "text" : "password"}
               name="currentPassword"
               placeholder="Enter current password"
             />
+            <button
+              type="button"
+              className="absolute right-3 top-9 text-gray-600"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+            >
+              {showCurrentPassword ? <EyeFill /> : <EyeSlashFill />}
+            </button>
           </div>
         )}
 
         {/* New Password Input */}
-        <div>
+        <div className="relative">
           <label className="text-sm text-white">New Password</label>
           <Input
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            type="password"
+            type={showNewPassword ? "text" : "password"}
             name="newPassword"
             placeholder="Enter new password"
           />
+          <button
+            type="button"
+            className="absolute right-3 top-9 text-gray-600"
+            onClick={() => setShowNewPassword(!showNewPassword)}
+          >
+            {showNewPassword ? <EyeFill /> : <EyeSlashFill />}
+          </button>
         </div>
 
         {/* Confirm Password Input for `CHANGE_PASSWORD` */}
         {!emailPasswordChangeModal && (
-          <div>
+          <div className="relative">
             <label className="text-sm text-white">Confirm New Password</label>
             <Input
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm new password"
             />
+            <button
+              type="button"
+              className="absolute right-3 top-9 text-gray-600"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <EyeFill /> : <EyeSlashFill />}
+            </button>
             {newPassword &&
               confirmPassword &&
               newPassword !== confirmPassword && (

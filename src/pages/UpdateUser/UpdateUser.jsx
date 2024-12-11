@@ -38,7 +38,7 @@ const UpdateUser = () => {
       setTotalPageCount(res?.responsePayload?.count);
       const data = res.responsePayload.results;
       setList(data);
-      console.log(res, "dataaaaaaa");
+
       if (res?.responsePayload?.next) {
         // setCurrent(current + 1);
         setIsNext(true);

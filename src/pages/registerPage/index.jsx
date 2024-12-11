@@ -99,7 +99,7 @@
 
 //   const handleOptionChange = (event) => {
 //     setSelectedOption(event.target.value);
-//     console.log("Selected option:", event.target.value);
+//
 //   };
 //   const handleUserSelect = (e) => {
 //     const { name, value } = e.target;
@@ -365,7 +365,7 @@ const RegisterForm = () => {
   const handleClick = ({ is_ACP }) => {
     dispatch(setRank(is_ACP));
     setIsModalOpen(true);
-    console.log(isACP, "acp");
+
     setFormData((prev) => ({ ...prev, rank: isACP ? "ACP" : "SHO" }));
   };
 
@@ -452,7 +452,6 @@ const RegisterForm = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-    console.log("Selected option:", event.target.value);
   };
 
   const getStates = async () => {

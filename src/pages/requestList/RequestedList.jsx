@@ -813,7 +813,7 @@ function RequestList() {
                           >
                             {item?.decision}
                           </span>
-                          {/* <div>
+                          <div>
                             {["DCP"].includes(rank) &&
                               item?.decision === "APPROVE" && (
                                 <button
@@ -823,7 +823,7 @@ function RequestList() {
                                   RESEND
                                 </button>
                               )}
-                          </div> */}
+                          </div>
 
                           <div>
                             {item?.decision == "REJECT" && (

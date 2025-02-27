@@ -1,6 +1,7 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/input";
 import Select from "react-select";
+import Toaster from "../../utils/toaster/Toaster";
 
 function Imei({
   requestData,
@@ -17,8 +18,10 @@ function Imei({
   handleChange,
   isother,
 }) {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const ImeiInputChange = (e, index) => {
-    const {name, value, checked} = e.target;
+    const { name, value, checked } = e.target;
 
     const list = [...ImeiList];
     if (name === "till_date") {
@@ -38,6 +41,19 @@ function Imei({
   };
 
   const AddImeiClick = () => {
+    const hasRequestToProvide = ImeiList.some(
+      (item) => item.request_to_provide && item.request_to_provide.length > 0
+    );
+
+    console.log("ImeiList:", ImeiList);
+    console.log("hasRequestToProvide:", hasRequestToProvide);
+
+    if (ImeiList.length === 0 || !hasRequestToProvide) {
+      Toaster("", "Please select a request to provide.");
+      return;
+    }
+
+    setErrorMessage("");
     setImeiList([
       ...ImeiList,
       {
@@ -87,11 +103,12 @@ function Imei({
 
   return (
     <>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       {ImeiList?.map((val, i) => (
         <>
           <div
             className="shadow-lg shadow-cyan-500/50 p-5"
-            style={{background: "#FFFAFA"}}
+            style={{ background: "#FFFAFA" }}
             key={i}
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2  items-center">

@@ -156,8 +156,6 @@ function RequestList() {
       "PATCH"
     );
     if (res.statusCode === 200) {
-      // setRequestList(res?.responsePayload);
-      // setIsOtp(true);
       getAllRequest({ active: 1 });
       dispatch(DcpPassowrdConfirm(false));
       Toaster("success", "Request Approved Successfully!");

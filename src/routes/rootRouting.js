@@ -19,6 +19,7 @@ import UpdateUserEdit from "../pages/UpdateUserEdit/UpdateUserEdit";
 import UnapprovedForm from "../pages/requestList/UnapprovedForm";
 import RequestList from "../pages/requestList/RequestedList";
 import RejectedList from "../pages/requestList/RejectedList";
+import NewRequestList from "../pages/requestList/NewRequestList";
 const HomePage = lazy(() => import("../pages/homePage"));
 
 const AppRoute = memo(() => {
@@ -67,7 +68,8 @@ const AppRoute = memo(() => {
               element={
                 <Layout>
                   {/* <HomePage /> */}
-                  <RequestList />
+                  {/* <RequestList /> */}
+                  <NewRequestList />
                 </Layout>
               }
             />
